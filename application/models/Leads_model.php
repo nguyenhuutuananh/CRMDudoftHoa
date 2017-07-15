@@ -803,6 +803,10 @@ class Leads_model extends CRM_Model
         $this->db->insert('tblleadactivitylog', $log);
         return $this->db->insert_id();
     }
+
+    
+
+
     /**
      * Get email integration config
      * @return object

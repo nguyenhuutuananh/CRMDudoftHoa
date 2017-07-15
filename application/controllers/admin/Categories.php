@@ -25,7 +25,8 @@ class Categories extends Admin_controller
             $this->perfex_base->get_table_data('categories');
         }
         $data['roles']=$this->category_model->get_roles();
-        $data['categories'] = $this->category_model->get_all();
+        
+        $data['categories'] = $this->category_model->get_all_parent();
         // var_dump($data['roles']);die();
         $data['title'] = _l('Danh mục sản phẩm');
         $this->load->view('admin/categories/manage', $data);
@@ -71,6 +72,21 @@ class Categories extends Admin_controller
             $message    = '';
             $alert_type = 'warning';
             if ($this->input->post()) {
+                if($this->input->post('category_parent') == $id) {
+                    exit(
+                        json_encode(array(
+                            'success' => true,
+                            'message' => "Không thể chọn danh mục là con của chính nó!",
+                        ))
+                    );
+                }
+                // $max_level = false;
+                // $parent_id = $this->input->post('category_parent');
+                // $i=0;
+                // while($parent_id != 0 && $i < 3) {
+                    
+                // }
+
                 $success = $this->category_model->update_category($this->input->post(), $id);
                 if ($success) {
                     $message    = 'Cập nhật dữ liệu thành công';

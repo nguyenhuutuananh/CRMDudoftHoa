@@ -68,6 +68,10 @@
 //                if($data!="")
                 {
                     $('#category').val(json.category);
+                    if(json.category_parent != 0) {
+                        $('#category_parent').val(json.category_parent);
+                        $('#category_parent').selectpicker('refresh');
+                    }
                     jQuery('#id_type').prop('action',admin_url+'categories/update_category/'+id);
                 }
             }

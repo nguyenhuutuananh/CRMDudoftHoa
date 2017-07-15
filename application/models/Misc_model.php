@@ -217,7 +217,9 @@ class Misc_model extends CRM_Model
 
         $this->db->insert('tblfiles', $data);
         $insert_id = $this->db->insert_id();
-
+        echo $insert_id;
+        print_r($data);
+        exit();
         if ($data['rel_type'] == 'customer' && isset($data['contact_id'])) {
             if (get_option('only_own_files_contacts') == 1) {
                 $this->db->insert('tblcustomerfiles_shares', array(

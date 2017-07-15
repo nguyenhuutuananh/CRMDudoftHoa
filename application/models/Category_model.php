@@ -12,14 +12,18 @@ class Category_model extends CRM_Model
      * @param  mixed $id task id
      * @return object
      */
-    public function get_all($except = []) {
+    public function get_all_parent($except = []) {
         if(is_admin()) {
-            $where = [];
+            $where = "";
+            
             foreach($except as $value) {
-                $where["id !="] = $value;
+                $where .= " and id!=".$value." ";
             }
-            $this->db->where($where);
-            return $this->db->get('tblcategories')->result_array();
+            $query = 'select * from tblcategories where category_parent=0 or category_parent in (SELECT id from tblcategories where category_parent=0) '.$where;
+            $result_query =$this->db->query($query);
+            $parents =  $result_query->result_array();
+            
+            return $parents;
         }
     }
     public function get_roles()
