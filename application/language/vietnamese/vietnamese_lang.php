@@ -3604,6 +3604,7 @@ $lang['purchase_suggested_date']         = "Ngày đề xuất";
 $lang['purchase_suggested_status']       = "Trạng thái";
 $lang['purchase_total_items']            = "Tổng số sản phẩm";
 $lang['purchase_total_price']            = "Tổng giá";
+$lang['purchase_user']                   = "Người đề xuất";
 $lang['user_head']                       = "Trưởng bộ phận";
 $lang['user_admin']                      = "Lãnh đạo";
 $lang['abc'] = "abc";

@@ -32,6 +32,7 @@ $rResult          = $result['rResult'];
 
 foreach ($rResult as $aRow) {
     $row = array();
+    $approval = false;
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         $array_fields = ['tblpurchase_suggested.user_head_id', 'tblpurchase_suggested.user_admin_id'];
@@ -49,13 +50,17 @@ foreach ($rResult as $aRow) {
             }
             else {
                 $_data = "Đã duyệt";
+                $approval = true;
             }
         }
         $row[] = $_data;
     }
     $options = '';
     // if(has_permission('items','','edit')){
-        $options .= icon_btn('purchase_suggested/detail/' . $aRow['tblpurchase_suggested.id'], 'pencil-square-o', 'btn-default');
+        $options .= icon_btn('purchase_suggested/detail_pdf/' . $aRow['tblpurchase_suggested.id'], 'file-pdf-o', 'btn-default');
+        if(!$approval)
+            $options .= icon_btn('purchase_suggested/detail/' . $aRow['tblpurchase_suggested.id'], 'pencil-square-o', 'btn-default');
+
     // }
     // if(has_permission('items','','delete')){
        $options .= icon_btn('purchase_suggested/delete/' . $aRow['tblpurchase_suggested.id'], 'remove', 'btn-danger _delete');

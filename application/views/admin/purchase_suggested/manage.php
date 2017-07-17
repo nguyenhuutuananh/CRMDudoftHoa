@@ -6,7 +6,7 @@
         <?php if(has_permission('items','','create')){ ?>
         <div class="panel_s">
           <div class="panel-body _buttons">
-            <a href="<?php echo admin_url('purchase-suggested/detail') ?>" class="btn btn-info pull-left"><?php echo _l('purchase_suggested_add_heading'); ?></a>
+            <a href="<?php echo admin_url('purchase_suggested/detail') ?>" class="btn btn-info pull-left"><?php echo _l('purchase_suggested_add_heading'); ?></a>
           </div>
 
         </div>

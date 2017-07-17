@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $aColumns     = array(
     'id',
     'category',
-    'category_parent',
+    '(select category from tblcategories a where a.id=tblcategories.category_parent)',
 
 );
 $sIndexColumn = "id";

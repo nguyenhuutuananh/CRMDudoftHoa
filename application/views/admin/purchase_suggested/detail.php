@@ -20,6 +20,9 @@
   <div class="row">
     <div class="additional"></div>
     <div class="col-md-12">
+        <?php if(isset($item) && $item->status == 1) { ?>
+        <div class="ribbon success"><span>Đã duyệt</span></div>
+        <?php } ?>
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
@@ -197,10 +200,11 @@
                 <!-- End Customize from invoice -->
                 </div>
                 
-                
+                <?php if(isset($item) && $item->status != 1) { ?>
                   <button class="btn btn-info mtop20 only-save customer-form-submiter">
                     <?php echo _l('submit'); ?>
                 </button>
+                <?php } ?>
               </div>
             <?php echo form_close(); ?>
             </div>

@@ -25,14 +25,14 @@ class Purchase_suggested extends Admin_controller
                 
                 if(isset($data_post['items']) && count($data_post['items']) > 0) {
                     $data_post['create_by'] = get_staff_user_id();
+
                     $result_id = $this->purchase_suggested_model->add($data_post);
                     set_alert('success', _l('added_successfuly', _l('purchase_suggested')));
                     redirect(admin_url('purchase_suggested/detail/' . $result_id));
                 }
             }
             else {
-                // print_r($this->input->post());
-                // exit();
+                
                 $result = $this->purchase_suggested_model->edit($this->input->post(),$id);
                 if($result)
                     set_alert('success', _l('updated_successfuly', _l('purchase_suggested')));
@@ -44,8 +44,7 @@ class Purchase_suggested extends Admin_controller
         else {
             $data['title'] = _l('purchase_suggested_edit_heading');
             $data['item'] = $this->purchase_suggested_model->get($id);
-            // print_r($data['item']);
-            // exit();
+            
         }
         
         $this->load->view('admin/purchase_suggested/detail', $data);

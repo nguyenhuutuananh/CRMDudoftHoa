@@ -96,6 +96,10 @@ class Purchase_suggested_model extends CRM_Model
         return false;
     }
     public function edit($data, $id) {
+        $item_temp = $this->get($id);
+        // Approval cannot edit
+        if(!$item_temp || ($item_temp && $item_temp->status == 1))
+            return false;
         if(is_array($data[items]) && count($data['items']) > 0) {
             $items = $data['items'];
             unset($data['items']);
@@ -118,8 +122,11 @@ class Purchase_suggested_model extends CRM_Model
     }
     public function get($id) {
         if(is_numeric($id)) {
-            $this->db->where('id', $id);
-            $item = $this->db->get('tblpurchase_suggested')->row();
+            $sql = "select *,(select fullname from tblstaff where user_admin_id=staffid) as user_admin_name, (select fullname from tblstaff where user_head_id=staffid) as user_head_name, (select fullname from tblstaff where create_by=staffid) as user_name  from tblpurchase_suggested where id=". $id;
+            $query = $this->db->query($sql);
+            $item = $query->row();
+            // $this->db->where('id', $id);
+            // $item = $this->db->get('tblpurchase_suggested')->row();
             $item->items = $this->get_detail($id);
             return $item;
         }
