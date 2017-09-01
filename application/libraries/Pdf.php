@@ -11,6 +11,8 @@ class Pdf extends TCPDF
 	function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false,$pdf_type = '')
 	{
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding, $diskcache, $pdfa);
+		$this->SetTopMargin(PDF_MARGIN_TOP);
+
 		$this->pdf_type = $pdf_type;
 		$lg = array();
 		$lg['a_meta_charset'] = 'UTF-8';
@@ -26,6 +28,12 @@ class Pdf extends TCPDF
 
 	public function Header() {
 		$this->SetFont('helvetica', 'B', 20);
+		// if(get_option('show_page_number_on_pdf') == 1){
+		// 	$this->SetTextColor(142,142,142);
+		// 	$y            = $this->getY();
+		// $this->writeHTMLCell('', '', '', $y, _l('divider'), 0, 0, false, true, 'J', true);
+		// 	$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		// }
 	}
 
 	public function Footer() {
@@ -46,7 +54,9 @@ class Pdf extends TCPDF
 		$this->SetFont('helvetica', 'I', 8);
 		if(get_option('show_page_number_on_pdf') == 1){
 			$this->SetTextColor(142,142,142);
-			$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+			// $y            = $this->getY();
+		// $this->writeHTMLCell('', '', '', $y, _l('divider'), 0, 0, false, true, 'J', true);
+		$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
 		}
 	}
 

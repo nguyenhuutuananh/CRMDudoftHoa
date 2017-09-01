@@ -110,7 +110,9 @@ class Exports_model extends CRM_Model
 
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
                 
                 $item_data=array(
                     'export_id'=>$insert_id,
@@ -120,7 +122,11 @@ class Exports_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
                  $this->db->insert('tblexport_items', $item_data);
                  // var_dump($data);die();

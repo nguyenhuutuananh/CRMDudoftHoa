@@ -3517,6 +3517,7 @@ class TCPDF {
 		if (!$this->print_header OR ($this->state != 2)) {
 			return;
 		}
+
 		$this->InHeader = true;
 		$this->setGraphicVars($this->default_graphic_vars);
 		$temp_thead = $this->thead;
@@ -3534,6 +3535,8 @@ class TCPDF {
 			$this->SetXY($this->original_lMargin, $this->header_margin);
 		}
 		$this->SetFont($this->header_font[0], $this->header_font[1], $this->header_font[2]);
+		// var_dump($this->InHeader);die();
+
 		$this->Header();
 		//restore position
 		if ($this->rtl) {

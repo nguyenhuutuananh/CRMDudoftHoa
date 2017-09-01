@@ -136,6 +136,17 @@
                     <div class="panel-body mtop10">
                         <div class="row">
                             <div class="col-md-4">
+                                <?php 
+
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?php 
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                ?>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group mbot25">
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>

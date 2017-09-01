@@ -1,1 +1,0 @@
-ALTER TABLE `tblwarehouses` ADD `warehouse_can_export` BOOLEAN NOT NULL DEFAULT FALSE AFTER `kindof_warehouse`;

@@ -1,1 +1,0 @@
-INSERT INTO `dudoffhoa`.`tblpermissions` (`permissionid`, `name`, `shortname`) VALUES (NULL, 'Quote Items', 'quote_items');

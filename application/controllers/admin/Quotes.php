@@ -25,6 +25,7 @@ class Quotes extends Admin_controller
     {
         if(!$id)
         {
+            
             set_alert('warning', _l('info_not_found'));
             redirect(admin_url('quotes'));
         }
@@ -86,6 +87,7 @@ class Quotes extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
+                // var_dump($data);die();
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->quotes_model->add($data);
@@ -116,7 +118,6 @@ class Quotes extends Admin_controller
 
         } else {
             $data['item'] = $this->quotes_model->getQuoteByID($id);
-            // var_dump($data['item']);die();
             $i=0;
             foreach ($data['item']->items as $key => $value) {       
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
@@ -127,6 +128,10 @@ class Quotes extends Admin_controller
                 blank_page('Quote Not Found');
             }
         }
+        $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
+        $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+        $data['warehouses']=$this->warehouse_model->getWarehousesArrayByType($data['warehouse_type_id']);
+        // var_dump($data['warehouses']);die();
         $data['items']= $this->invoice_items_model->get_full();
 
         $where_clients = 'tblclients.active=1';
@@ -136,7 +141,7 @@ class Quotes extends Admin_controller
         }
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['customers'] = $this->clients_model->get('', $where_clients);
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        // $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['title'] = $title;
         $this->load->view('admin/quotes/detail', $data);
     }

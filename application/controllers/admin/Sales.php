@@ -85,7 +85,8 @@ class Sales extends Admin_controller
                 $i++;
             }
 
-            // var_dump($data['item']);die();
+            $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+            $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
             
             if (!$data['item']) {
                 blank_page('Sale Not Found');
@@ -97,7 +98,7 @@ class Sales extends Admin_controller
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full();
         

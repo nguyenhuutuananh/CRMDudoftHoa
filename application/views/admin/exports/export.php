@@ -40,7 +40,7 @@
                     
                 </div>
                 
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons" style="display: none;">
                     <div class="pull-right">
                         <?php if( isset($item) ) { ?>
                         <a href="<?php echo admin_url('exports/pdf/' . $item->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
@@ -115,8 +115,19 @@
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
-                        <div class="row" style="display: none;">
-                            <div class="col-md-4" >
+                        <div class="row">
+                            <div class="col-md-4">
+                                <?php 
+
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?php 
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                ?>
+                            </div>
+                            <div class="col-md-4"  style="display: none;">
                                 <div class="form-group mbot25">
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
@@ -150,9 +161,10 @@
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+
+                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -211,20 +223,31 @@
                                         <input style="width: 100px; <?=$style?>" min="0" max="<?=$value->quantity-$value->export_quantity?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?=($value->quantity==$value->export_quantity)? 0 : $value->quantity-$value->export_quantity ?>">
                                         <?php 
                                         $export_quantity=0;
-                                            if($value->export_quantity!=NULL || $value->export_quantity!='')
-                                                $export_quantity=$value->export_quantity;
-                                                echo "(".$export_quantity.'/'.$value->quantity.')';
+                                        $max=0;
+                                            // if($value->export_quantity!=NULL || $value->export_quantity!='')
+                                            {
+                                                $max=$value->quantity-$value->export_quantity;
+                                                $export_quantity=($value->export_quantity?$export_quantity:0);
+                                                $sub_total=$max*$value->unit_cost;
+                                                $tax=$sub_total*$value->tax_rate/100;
+                                                $amount=$sub_total+$tax;
+                                                
+                                            }
+                                            echo "(".$export_quantity.'/'.$value->quantity.')';
+
                                         ?>
                                         </td>
-                                            
+<!-- <input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"> -->
                                         <td><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo $value->warehouse_type->kindof_warehouse_name ?></td>
-                                    <td><input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"><?php echo $value->warehouse_type->warehouse ?>(có <?=$value->warehouse_type->product_quantity?>)</td>
+                                        <td><?php echo number_format($sub_total); ?></td>
+                                        <td><?php echo number_format($tax) ?>
+                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td><?php echo number_format($amount) ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->sub_total;
+                                            $totalPrice += $amount;
                                             $i++;
                                         }
                                     }
@@ -384,11 +407,12 @@
         refreshTotal();
     };
     var refreshTotal = () => {
-        $('.total').text(formatNumber(total));
+         $('.total').text(formatNumber(total));
         var items = $('table.item-export tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += $(value).find('td:nth-child(4) > input').val() * $(value).find('td:nth-child(5)').text().replace(/\,/g, '');
+            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            // * 
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
@@ -456,8 +480,14 @@
         }
         
         var Gia = currentQuantityInput.parent().find(' + td');
-        var Tong = Gia.find(' + td');
-        Tong.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        var GiaTri = Gia.find(' + td');
+        var Thue = GiaTri.find(' + td');
+        var Tong = Thue.find(' + td');
+        var inputTax=Thue.find('input');        
+        GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
+        Thue.append(inputTax);
+        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
         refreshTotal();
     });
     $('#select_kindof_warehouse').change(function(e){

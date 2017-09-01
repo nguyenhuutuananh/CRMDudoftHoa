@@ -298,7 +298,7 @@ function get_client_contact_merge_fields($client_id, $contact_id = '', $password
     $fields['{client_city}']        = $client->city;
     $fields['{client_zip}']         = $client->zip;
     $fields['{client_state}']       = $client->state;
-    $fields['{client_address}']     = $client->address;
+    $fields['{client_address}']     = getClient($client_id,1);
 
     if ($password != '') {
         $fields['{password}'] = $password;
@@ -505,7 +505,7 @@ function get_contract_merge_fields($contract_id)
                 $item_list.='<td>'._l('item_code').'</td>';  
                 $item_list.='<td>'._l('sl').'</td>';  
                 $item_list.='<td>'._l('unit_cost').'</td>';  
-                $item_list.='<td>'._l('item_amount').'</td>';  
+                $item_list.='<td>'._l('sub_amount').'</td>';  
             $item_list.='</tr>';
         $item_list.='</thead>';
 
@@ -523,7 +523,7 @@ function get_contract_merge_fields($contract_id)
                 $item_list.='<td style="text-align: left;">'._l($item->prefix.$item->code).'</td>';
                 $item_list.='<td style="text-align: right;">'._format_number($item->quantity).'</td>';
                 $item_list.='<td style="text-align: right;">'.format_money($item->unit_cost).'</td>';
-                $item_list.='<td style="text-align: right;">'.format_money($item->sub_total).'</td>';
+                $item_list.='<td style="text-align: right;">'.format_money($item->amount).'</td>';
             $item_list.='</tr>';
             $i++;
         }

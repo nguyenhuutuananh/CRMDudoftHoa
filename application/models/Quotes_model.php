@@ -32,7 +32,7 @@ class Quotes_model extends CRM_Model
 
     public function getQuoteItems($id)
     {
-        $this->db->select('tblquote_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id, tblitems.prefix,tblitems.code, tblitems.warranty, tblitems.specification,tblcountries.short_name as made_in,tblitems.avatar as image,tbltaxes.name as tax_name,tbltaxes.taxrate as taxrate');
+        $this->db->select('tblquote_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id, tblitems.prefix,tblitems.code, tblitems.warranty, tblitems.specification,tblcountries.short_name as made_in,tblitems.avatar as image,tbltaxes.name as tax_name');
         $this->db->from('tblquote_items');
         $this->db->join('tblitems','tblitems.id=tblquote_items.product_id','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
@@ -91,8 +91,9 @@ class Quotes_model extends CRM_Model
 
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
-                
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
                 $item_data=array(
                     'quote_id'=>$insert_id,
                     'product_id'=>$item['id'],
@@ -101,7 +102,11 @@ class Quotes_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
                  $this->db->insert('tblquote_items', $item_data);
                  if($this->db->affected_rows()>0)
@@ -118,14 +123,16 @@ class Quotes_model extends CRM_Model
     
     public function getProductById($id)
     {       
-            $this->db->select('tblitems.*,tblunits.unit as unit_name');
+            $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate');
             $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
-            $this->db->where('id', $id);
+            $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
+            $this->db->where('tblitems.id', $id);
             return $this->db->get('tblitems')->row();
     }
 
     public function update($data,$id)
    { 
+    // var_dump($data);die();
         $affected=false;
         $quote=array(
             'prefix'=>$data['prefix'],
@@ -150,7 +157,9 @@ class Quotes_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
                 $itm=$this->getQuoteItem($id,$item['id']);
                 $item_data=array(
                     'quote_id'=>$id,
@@ -160,7 +169,11 @@ class Quotes_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
 
                 if($itm)

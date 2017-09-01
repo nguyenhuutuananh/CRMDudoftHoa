@@ -946,6 +946,41 @@ function pdf_logo_url()
     }
     return $logo_url;
 }
+
+function pdf_header_url()
+{
+    $header_url='';
+    if ($width == '') 
+    {
+        // $width = '100%';
+        $width = '900px';
+    }
+    // var_dump($width);die();
+    if(get_option('pdf_header'))
+    {
+        // var_dump(get_upload_path_by_type('company') . get_option('company_logo_header'));die();
+        $header_url = '<img width="' . $width . '" src="' . get_upload_path_by_type('company') . get_option('pdf_header') . '">';
+    }
+    return $header_url;
+}
+
+function pdf_footer_url()
+{
+    $header_url='';
+    if ($width == '') 
+    {
+        // $width = '100%';
+        $width = '900px';
+    }
+    // var_dump($width);die();
+    if(get_option('pdf_header'))
+    {
+        // var_dump(get_upload_path_by_type('company') . get_option('company_logo_header'));die();
+        $header_url = '<img width="' . $width . '" src="' . get_upload_path_by_type('company') . get_option('pdf_footer') . '">';
+    }
+    return $header_url;
+}
+
 /**
  * Fetch curl image and returns as data base64
  * @param  string $url

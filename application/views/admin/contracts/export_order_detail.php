@@ -123,6 +123,17 @@
                             <!-- <div class="panel-body mtop10"> -->
                             
                         <div class="row">
+                            <div class="col-md-4">
+                                <?php 
+
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?php 
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                ?>
+                            </div>
                             <div class="col-md-4" <?=$display?> >
                                 <div class="form-group mbot25">
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
@@ -157,9 +168,9 @@
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -216,12 +227,15 @@
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo $value->warehouse_type->kindof_warehouse_name ?></td>
-                                    <td><input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"><?php echo $value->warehouse_type->warehouse ?>(có <?=$value->warehouse_type->product_quantity?>)</td>
+                                        <td>
+                                            <?php echo number_format($value->tax); ?>
+                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td><?php echo number_format($value->amount); ?></td>
                                         <td><a <?=$display?> href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->sub_total;
+                                            $totalPrice += $value->amount;
                                             $i++;
                                         }
                                     }
@@ -419,6 +433,31 @@
         return x1 + x2;
     }
 
+    $('#warehouse_type').change(function(e){
+        var warehouse_type = $(e.currentTarget).val();
+        if(warehouse_type != '') {
+            getWarehouses(warehouse_type); 
+        }
+    });
+    function getWarehouses(warehouse_type){
+        var warehouse_id=$('#warehouse_name');
+        warehouse_id.find('option:gt(0)').remove();
+        warehouse_id.selectpicker('refresh');
+        if(warehouse_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type ,
+                dataType : 'json',
+            })
+            .done(function(data){  
+                $.each(data, function(key,value){
+                    warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
+                });
+
+                warehouse_id.selectpicker('refresh');
+            });
+        }
+    }
+
     var findItem = (id) => {
         var itemResult;
         $.each(itemList, (index,value) => {
@@ -513,11 +552,12 @@
 
         $('.total').text(formatNumber(total));
 
+        $('.total').text(formatNumber(total));
         var items = $('table.item-purchase tbody tr:gt(0)');
-        console.log(items);
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += $(value).find('td:nth-child(4) > input').val() * $(value).find('td:nth-child(5)').text().replace(/\,/g, '');
+            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            // * 
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
@@ -697,9 +737,20 @@
             currentQuantityInput.focus();
         }
 
+        // var Gia = currentQuantityInput.parent().find(' + td');
+        // var Tong = Gia.find(' + td');
+        // Tong.text( formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        // refreshTotal();
+        
         var Gia = currentQuantityInput.parent().find(' + td');
-        var Tong = Gia.find(' + td');
-        Tong.text( formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        var GiaTri = Gia.find(' + td');
+        var Thue = GiaTri.find(' + td');
+        var Tong = Thue.find(' + td');
+        var inputTax=Thue.find('input');        
+        GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
+        Thue.append(inputTax);
+        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
         refreshTotal();
         refreshTotalR();
     });

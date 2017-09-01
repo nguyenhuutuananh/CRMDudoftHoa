@@ -114,6 +114,9 @@ class Exports extends Admin_controller
             blank_page('Export Not Found');
         }  
 
+        $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+        $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+
         $where_clients = 'tblclients.active=1';
 
         if (!has_permission('customers', '', 'view')) {
@@ -121,7 +124,7 @@ class Exports extends Admin_controller
         }
 
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
         $data['receivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         
         $data['customers'] = $this->clients_model->get('', $where_clients);

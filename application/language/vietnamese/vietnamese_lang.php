@@ -3608,7 +3608,7 @@ $lang['purchase_suggested_name']         = "Tên đề xuất";
 $lang['purchase_suggested_date']         = "Ngày đề xuất";
 $lang['purchase_suggested_status']       = "Trạng thái";
 $lang['purchase_total_items']            = "Tổng loại sản phẩm";
-$lang['purchase_total_price']            = "Tổng giá";
+$lang['purchase_total_price']            = "Tổng giá trị";
 $lang['purchase_user']                   = "Người đề xuất";
 $lang['user_head']                       = "Trưởng bộ phận";
 $lang['user_admin']                      = "Lãnh đạo";
@@ -3820,6 +3820,7 @@ $lang['item_code'] = "Mã số SP";
 $lang['sl'] = "S.L";
 $lang['unit_cost'] = "Đơn giá";
 $lang['item_amount'] = "Thành tiền";
+// $lang['item_amount'] = "Thành tiền";
 $lang['info_not_found'] = "Không tìm thấy thông tin";
 
 $lang['contract_code'] = "Mã hợp đồng";
@@ -3856,7 +3857,24 @@ $lang['view_delivery'] = "Xem phiếu giao hàng";
 $lang['converted_contract'] = "Hóa đơn đã tạo đơn đặt hàng";
 
 $lang['company_bank_account'] = "Số tài khoản: ";
-$lang['print_delivery'] = "In phiếu giao hàng";
+
+$lang['sub_amount'] = "Giá trị";
+// $lang['total_amount'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+// $lang['total_value'] = "In phiếu giao hàng";
+
 
 
 
