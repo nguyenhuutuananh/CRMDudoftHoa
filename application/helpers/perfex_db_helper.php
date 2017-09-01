@@ -312,7 +312,6 @@ function getWareHouse($id)
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
     }
-    
     return $CI->perfex_base->getWareHouse($id);
 }
 

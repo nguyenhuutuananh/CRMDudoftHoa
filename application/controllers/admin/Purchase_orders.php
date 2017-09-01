@@ -29,6 +29,8 @@ class Purchase_orders extends Admin_controller
         }
         $data['currencies'] = $this->currencies_model->get();
         $data['purchase_suggested'] = $purchase_suggested;
+        $data['warehouses'] = $this->orders_model->get_warehouses();
+        $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         foreach($data['purchase_suggested']->items as $key=>$value) {
             $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
         }
@@ -102,6 +104,7 @@ class Purchase_orders extends Admin_controller
             if($order) {
                 if($this->input->post()) {
                     $data = $this->input->post();
+
                     $this->orders_model->update($id, $data);
                     $order = $this->orders_model->get($id);
                 }
@@ -217,6 +220,9 @@ class Purchase_orders extends Admin_controller
 
     public function update_status()
     {
+        if (!has_permission('invoices', '', 'delete')) {
+            access_denied('invoices');
+        }
         $id = $this->input->post('id');
         $status = $this->input->post('status');
         
@@ -256,9 +262,54 @@ class Purchase_orders extends Admin_controller
         exit();
     }
     public function getCurrencyIDFromSupplier($idSupplier) {
+        if (!has_permission('invoices', '', 'delete')) {
+            access_denied('invoices');
+        }
         $value = $this->currencies_model->getCurrencyIDFromSupplier($idSupplier);
         $result = new stdClass();
         $result->id = $value;
         echo json_encode($result);
+    }
+    public function getExchangeRate() {
+        if (!has_permission('invoices', '', 'delete')) {
+            access_denied('invoices');
+        }
+        $currencies = $this->currencies_model->get();
+        header('Content-type: application/json');
+        $array_currencies = array();
+        if(count($currencies) > 0) {
+            
+            
+            $url = "http://www.mycurrency.net/service/rates";
+            $content = file_get_contents($url);
+            $result = new stdClass();
+            $result->error = false;
+            $result->currencies = array();
+            $data_currencies = array();
+            if($content) {
+                $object_currencies = json_decode($content);
+                
+                foreach($currencies as $key=>$value) {
+                    foreach($object_currencies as $item_currency) {
+                        if(str_replace("Đ", "D", $value['name']) == $item_currency->currency_code) {
+                            $data_currencies[$item_currency->currency_code] = $item_currency->rate;
+                            break;
+                        }
+                    }
+                }
+                $result->currencies['USD'] = $data_currencies['VND'];
+                foreach($currencies as $key=>$value) {
+                    if($key != 'VND' && isset($data_currencies[$value['name']])) {
+                        if($key != 'USD') {
+                            $result->currencies[$value['name']] = $result->currencies['USD'] / $data_currencies[$value['name']];
+                        }
+                    }
+                }
+            }
+            else {
+                $result->error = true;
+            }
+        }
+        exit(json_encode($result));
     }
 }

@@ -44,21 +44,22 @@ class Purchases extends Admin_controller
     /* Edit client or add new client*/
     public function purchase($id = '')
     {
-        
         if (!has_permission('customers', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('customers');
             }
         }
+        
         if ($this->input->post() && !$this->input->is_ajax_request()) {
-            // print_r($this->input->post());
-            // exit();
+            
             if ($id == '') {
                 if (!has_permission('customers', '', 'create')) {
                     access_denied('customers');
                 }
 
                 $data                 = $this->input->post();
+                print_r($data);
+                exit();
                 if(isset($data['item']) && count($data['item']) > 0)
                 {
                     
@@ -124,12 +125,13 @@ class Purchases extends Admin_controller
     /* Convert to Suggested */
     public function convert_to_suggested($id)
     {
+        $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
+        $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['items'] = $this->invoice_items_model->get_full();
+        $data['currencies'] = $this->currencies_model->get();
         $data['item'] = $this->purchases_model->getPurchaseByID($id);
         foreach ($data['item']->items as $key => $value) {
-
             $data['item']->items[$key]['warehouse_type']= (object)$this->warehouse_model->getWarehouseProduct($value['warehouse_id'],$value['product_id'], true);
-            $data['item']->items[$key] = (object)$data['item']->items[$key];
         }
         // print_r($data['item']);
         // exit();
