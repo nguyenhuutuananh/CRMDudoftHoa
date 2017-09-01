@@ -166,7 +166,7 @@
                     <?php
                       $groups = get_item_groups();
                       $default_group = (isset($item) ? $item->group_id : "");
-                      echo render_select('group_id', $groups, array('id','name'), 'item_group_id', $default_group, array(), array(), '', '', false);
+                      echo render_select('group_id', $groups, array('id','name'), 'item_group_id', $default_group);
                     ?>
                     
                     <div class="form-group">

@@ -94,7 +94,7 @@
                     $district = "";
                     // print_r($areas);
                     foreach($districts as $district_item) {
-                        if($district_item['districtid'] == $client->city) {
+                        if($district_item['districtid'] == $client->state) {
                             $district = $district_item['name'];
                             break;
                         }

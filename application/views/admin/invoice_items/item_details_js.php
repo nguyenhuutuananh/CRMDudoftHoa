@@ -41,7 +41,6 @@ $(function() {
         unit: 'required',
         minimum_quantity: 'required',
         maximum_quantity: 'required',
-        group_id: 'required',
         country_id: 'required',
         code: 'required',
         name: 'required',

@@ -13,6 +13,7 @@
 				<div class="panel_s">
 					<div class="panel-body">
 						<div class="clearfix"></div>
+						<a href="<?php echo admin_url('staff/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel (new)'); ?></a>
 						<?php
 						$table_data = array(
 							_l('item_avatar'),

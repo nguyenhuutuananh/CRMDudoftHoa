@@ -3236,7 +3236,7 @@ $lang['custom_field_company_info'] = 'Chỉnh sửa các trường tùy chỉnh 
 
 # Version 1.2.8
 $lang['show_transactions_on_invoice_pdf'] = 'Hiển thị thanh toán hóa đơn (giao dịch) trên PDF';
-$lang['bulk_actions'] = 'Hành động số lượng lớn';
+$lang['bulk_actions'] = 'Tác vụ';
 $lang['additional_filters'] = 'Bộ lọc bổ sung';
 $lang['expenses_available_to_bill'] = 'Chi phí có sẵn để lập hoá đơn';
 $lang['bulk_action_customers_groups_warning'] = 'Nếu bạn không chọn bất kỳ nhóm nào, tất cả các nhóm được chỉ định cho khách hàng đã chọn sẽ bị xóa.';

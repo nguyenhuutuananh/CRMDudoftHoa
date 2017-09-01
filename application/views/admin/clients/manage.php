@@ -217,6 +217,7 @@
                  </div><!-- /.modal -->
 
                  <div class="clearfix"></div>
+                 <a href="<?php echo admin_url('clients/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel (new)'); ?></a>
                  <?php
                  $table_data = array();
                  $_table_data = array(

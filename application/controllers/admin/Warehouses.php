@@ -173,4 +173,132 @@ class Warehouses extends Admin_controller
             echo json_encode($this->warehouse_model->getWarehousesByType($warehouse_type, $filterByProduct, $includeDoesntContain));
         }
     }
+    public  function exportexcel()
+    {
+        $categori=$this->db->get('tblcategories')->result_array();
+
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+
+        $this->db->select('tblclients.*,tblcontacts.firstname as contact_firstname,tblcontacts.lastname as contact_lastname');
+        $this->db->join('tblcontacts','tblcontacts.userid=tblclients.userid','left');
+        $client=$this->db->get('tblclients')->result_array();
+        $colum_array=array('I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        for($row = 1; $row <= 100; $row++)
+        {
+            $styleArray = [
+                'font' => [
+                    'size' => 12
+                ]
+            ];
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A1:N1")
+                ->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+            $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        }
+        $objPHPExcel->getActiveSheet()->setCellValue('A2','ID')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B2','STT')->getStyle('B2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C2','MÃ SẢN PHẨM')->getStyle('C2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D2','SẢN PHẨM')->getStyle('D2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E2','ĐƠN VỊ TÍNH')->getStyle('E2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F2','GIÁ BÁN')->getStyle('F2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('G2','GIÁ VỐN')->getStyle('G2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H2','HÀNG CÓ THỂ BÁN')->getStyle('H2')->applyFromArray($BStyle);
+        $warehouses=$this->db->get('tblwarehouses')->result_array();
+        foreach($warehouses as $num_ware=> $warehouse)
+        {
+            $objPHPExcel->getActiveSheet()->setCellValue($colum_array[$num_ware].'2',$warehouse['warehouse'])->getStyle($colum_array[$num_ware].'2')->applyFromArray($BStyle);
+        }
+        $rom=3;
+        foreach($categori as $rom_cate => $value_categori)
+        {
+            $this->db->select('tblitems.*,tblunits.unit as name_unit');
+            $this->db->where('category_id',$value_categori['id']);
+            $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
+            $product=$this->db->get('tblitems')->result_array();
+            if($product!=array()){
+
+                $rom++;
+                for($row = 1; $row <= 100; $row++)
+                {
+                    $styleArray = [
+                        'font' => [
+                            'size' => 12
+                        ]
+                    ];
+                    $objPHPExcel->getActiveSheet()
+                        ->getStyle("A".$rom.":N".$rom)
+                        ->applyFromArray($styleArray);
+                    $objPHPExcel->getActiveSheet()->SetCellValue('A'.$rom,$value_categori['category']);
+                    $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+                    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+                    $objPHPExcel->getActiveSheet()->mergeCells("A".$rom.":N".$rom);
+                }
+                foreach($product as $r=>$value)
+                {
+                    $rom=($rom+1);
+                    $objPHPExcel->getActiveSheet()->setCellValue('A'.$rom,$value['id']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$rom,($r+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$rom,$value['code']);
+                    $objPHPExcel->getActiveSheet()->setCellValueExplicit('D'.$rom,$value['name']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$rom,$value['name_unit']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$rom,$value['price']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$rom,$value['price_buy']);
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$rom,$value['price_buy']);
+                    foreach($warehouses as $num_ware=> $warehouse)
+                    {
+                        $this->db->where('tblwarehouses_products.product_id',$value['id']);
+                        $this->db->where('tblwarehouses_products.warehouse_id',$warehouse['warehouseid']);
+                        $this->db->join('tblwarehouses','tblwarehouses.warehouseid=tblwarehouses_products.warehouse_id');
+                        $warehouse_product=$this->db->get('tblwarehouses_products')->row();
+                        if($warehouse_product)
+                        {
+                            $objPHPExcel->getActiveSheet()->setCellValue($colum_array[$num_ware].$rom,$warehouse_product->product_quantity);
+                        }
+                    }
+
+                }
+            }
+        }
+//        die();
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="filexuat.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+
+    }
 }

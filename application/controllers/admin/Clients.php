@@ -695,9 +695,12 @@ class Clients extends Admin_controller
             if (isset($_FILES['file_csv']['name']) && $_FILES['file_csv']['name'] != '') {
                 // Get the temp file path
                 $tmpFilePath = $_FILES['file_csv']['tmp_name'];
+                
                 // Make sure we have a filepath
                 if (!empty($tmpFilePath) && $tmpFilePath != '') {
                     // Setup our new file path
+                    $ext = strtolower(pathinfo($_FILES['file_csv']['name'], PATHINFO_EXTENSION));
+                    $type = $_FILES["file_csv"]["type"];
                     $newFilePath = TEMP_FOLDER . $_FILES['file_csv']['name'];
                     if (!file_exists(TEMP_FOLDER)) {
                         mkdir(TEMP_FOLDER, 777);
@@ -706,6 +709,7 @@ class Clients extends Admin_controller
                         $import_result = true;
                         $fd            = fopen($newFilePath, 'r');
                         $rows          = array();
+                        
                         if($ext == 'csv') {
                             while ($row = fgetcsv($fd)) {
                                 $rows[] = $row;
@@ -730,44 +734,48 @@ class Clients extends Admin_controller
                                 
                                 $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
                                 
-                                for ($row = 2; $row <= $highestRow; ++$row) {
+                                for ($row = 1; $row <= $highestRow; ++$row) {
                                     for ($col = 0; $col < $highestColumnIndex; ++$col) {
-                                        $value                     = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();
-                                        $rows[$row - 2][$col] = $value;
+                                        $value                     = $objWorksheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+                                        $rows[$row - 1][$col] = $value;
                                     }
                                 }
                             }
                         }
                         $data['total_rows_post'] = count($rows);
                         fclose($fd);
+
                         if (count($rows) <= 1) {
                             set_alert('warning', 'Not enought rows for importing');
                             redirect(admin_url('clients/import'));
                         }
+                        
                         unset($rows[0]);
+                        
                         if ($this->input->post('simulate')) {
                             if (count($rows) > 500) {
                                 set_alert('warning', 'Recommended splitting the CSV file into smaller files. Our recomendation is 500 row, your CSV file has ' . count($rows));
                             }
                         }
-                        $client_contacts_fields = $this->db->list_fields('tblcontacts');
-                        $i                      = 0;
-                        foreach ($client_contacts_fields as $cf) {
-                            if ($cf == 'phonenumber') {
-                                $client_contacts_fields[$i] = 'contact_phonenumber';
-                            }
-                            $i++;
-                        }
-                        $db_temp_fields = $this->db->list_fields('tblclients');
-                        $db_temp_fields = array_merge($client_contacts_fields, $db_temp_fields);
-                        $db_fields      = array();
-                        foreach ($db_temp_fields as $field) {
-                            if (in_array($field, $this->not_importable_clients_fields)) {
-                                continue;
-                            }
-                            $db_fields[] = $field;
-                        }
-                        $custom_fields = get_custom_fields('customers');
+                        
+                        // $client_contacts_fields = $this->db->list_fields('tblcontacts');
+                        // $i                      = 0;
+                        // foreach ($client_contacts_fields as $cf) {
+                        //     if ($cf == 'phonenumber') {
+                        //         $client_contacts_fields[$i] = 'contact_phonenumber';
+                        //     }
+                        //     $i++;
+                        // }
+                        // $db_temp_fields = $this->db->list_fields('tblclients');
+                        // $db_temp_fields = array_merge($client_contacts_fields, $db_temp_fields);
+                        // $db_fields      = array();
+                        // foreach ($db_temp_fields as $field) {
+                        //     if (in_array($field, $this->not_importable_clients_fields)) {
+                        //         continue;
+                        //     }
+                        //     $db_fields[] = $field;
+                        // }
+                        // $custom_fields = get_custom_fields('customers');
                         $_row_simulate = 0;
 
                         $required = array(
@@ -779,98 +787,113 @@ class Clients extends Admin_controller
                         if (get_option('company_is_required') == 1) {
                             array_push($required, 'company');
                         }
-                        foreach ($rows as $row) {
-                            // do for db fields
-                            $insert    = array();
-                            $duplicate = false;
-                            for ($i = 0; $i < count($db_fields); $i++) {
-                                if (!isset($row[$i])) {
-                                    continue;
-                                }
-                                if ($db_fields[$i] == 'email') {
-                                    $email_exists = total_rows('tblcontacts', array(
-                                        'email' => $row[$i]
-                                    ));
-                                    // dont insert duplicate emails
-                                    if ($email_exists > 0) {
-                                        $duplicate = true;
-                                    }
-                                }
-                                // Avoid errors on required fields;
-                                if (in_array($db_fields[$i], $required) && $row[$i] == '') {
-                                    $row[$i] = '/';
-                                } else if ($db_fields[$i] == 'country' || $db_fields[$i] == 'billing_country' || $db_fields[$i] == 'shipping_country') {
-                                    if ($row[$i] != '') {
-                                        $this->db->where('iso2', $row[$i]);
-                                        $this->db->or_where('short_name', $row[$i]);
-                                        $this->db->or_where('long_name', $row[$i]);
-                                        $country = $this->db->get('tblcountries')->row();
-                                        if ($country) {
-                                            $row[$i] = $country->country_id;
-                                        } else {
-                                            $row[$i] = 0;
-                                        }
-                                    } else {
-                                        $row[$i] = 0;
-                                    }
-                                }
-                                $insert[$db_fields[$i]] = $row[$i];
-                            }
+                        // print_r($rows);
+                        // exit();
+                        foreach($rows as $row) {
+                            $data_customer = array(
+                                'company' => $row[0],
+                                'client_type' => (!empty($row[1]) ? 1 : 2),
+                                'phonenumber' => $row[4],
+                                'id_card' => $row[5],
+                                'mobilephone_number' => $row[6],
+                                'fax' => $row[7],
+                                'email' => $row[8],
+                                'website' => $row[9],
+                                'business' => $row[10],
+                                'city' => $row[11],
+                                'state' => $row[12],
+                                'address_ward' => $row[13],
+                                'address_room_number' => $row[14],
+                                'address_town' => $row[15],
+                                'address' => $row[16],
+                                'country' => $row[17],
+                                'bussiness_registration_number' => $row[18],
+                            );
+                            $contact_first_name = 'N/A';
+                            $contact_last_name = 'N/A';
 
-                            if ($duplicate == true) {
+                            if(isset($row[19]) && trim($row[19]) != '') {
+                                $split_name = split(' ', $row[19]);
+                                if(count($split_name) >= 2) {
+                                    $contact_first_name = $split_name[0];
+                                    $contact_last_name = substr($row[19], strpos($row[19], $contact_first_name) + strlen($contact_first_name) + 1);
+                                }
+                            }
+                            $data_contact = false;
+                            if(trim($row[19]) != '') {
+                                $data_contact = array(
+                                    'userid' => '',
+                                    'is_primary' => '1',
+                                    'firstname' => $contact_first_name,
+                                    'lastname' => $contact_last_name,
+                                    'title' => $row[20],
+                                    'phonenumber' => $row[21],
+                                    'email' => $row[22],
+                                    'address' => $row[23],
+                                );
+                            }
+                            
+                            // Check exists email
+                            $exists_email = $this->db->where('email', $data_customer['email'])->get('tblclients')->row() || $this->db->where('email', $data_customer['email'])->get('tblcontacts')->row() ? true : false ;
+                            if($exists_email) {
+                                $duplicate = true;
+                            }
+                            else {
+                                $duplicate = false;
+                            }
+                            if($duplicate) {
                                 continue;
                             }
-                            if (count($insert) > 0) {
-                                $total_imported++;
-                                $insert['datecreated'] = date('Y-m-d H:i:s');
-                                if ($this->input->post('default_pass_all')) {
-                                    $insert['password'] = $this->input->post('default_pass_all');
-                                }
-                                if (!$this->input->post('simulate')) {
-                                    $insert['donotsendwelcomeemail'] = true;
-                                    $clientid                        = $this->clients_model->add($insert, true);
-                                    if ($clientid) {
-                                        if ($this->input->post('groups_in[]')) {
-                                            $groups_in = $this->input->post('groups_in[]');
-                                            foreach ($groups_in as $group) {
-                                                $this->db->insert('tblcustomergroups_in', array(
-                                                    'customer_id' => $clientid,
-                                                    'groupid' => $group
-                                                ));
-                                            }
-                                        }
-                                        if (!has_permission('customers', '', 'view')) {
-                                            $assign['customer_admins']   = array();
-                                            $assign['customer_admins'][] = get_staff_user_id();
-                                            $this->clients_model->assign_admins($assign, $clientid);
-                                        }
-                                    }
-                                } else {
-                                    $simulate_data[$_row_simulate] = $insert;
-                                    $clientid                      = true;
-                                }
-                                if ($clientid) {
-                                    $insert = array();
-                                    foreach ($custom_fields as $field) {
-                                        if (!$this->input->post('simulate')) {
-                                            if ($row[$i] != '') {
-                                                $this->db->insert('tblcustomfieldsvalues', array(
-                                                    'relid' => $clientid,
-                                                    'fieldid' => $field['id'],
-                                                    'value' => $row[$i],
-                                                    'fieldto' => 'customers'
-                                                ));
-                                            }
-                                        } else {
-                                            $simulate_data[$_row_simulate][$field['name']] = $row[$i];
-                                        }
-                                        $i++;
-                                    }
-                                }
+                            
+                            // Get country, province, district, ward
+                            // Country
+                            $this->db->like('short_name', $data_customer['country']);
+                            $country = $this->db->get('tblcountries')->row();
+                            if($country) {
+                                $data_customer['country'] = $country->country_id;
                             }
-                            $_row_simulate++;
-                            if ($this->input->post('simulate') && $_row_simulate >= 100) {
-                                break;
+                            else {
+                                $data_customer['country'] = 0;
+                            }
+                            // City
+                            $this->db->like('name', $data_customer['city']);
+                            $city = $this->db->get('province')->row();
+                            if($city) {
+                                $data_customer['city'] = $city->provinceid;
+                            }
+                            else {
+                                $data_customer['city'] = 0;
+                            }
+                            // district
+                            $this->db->like('name', $data_customer['state']);
+                            $state = $this->db->get('district')->row();
+                            if($state) {
+                                $data_customer['state'] = $state->districtid;
+                            }
+                            else {
+                                $data_customer['state'] = 0;
+                            }
+                            // ward
+                            $this->db->like('name', $data_customer['address_ward']);
+                            $address_ward = $this->db->get('ward')->row();
+                            if($address_ward) {
+                                $data_customer['address_ward'] = $address_ward->wardid;
+                            }
+                            else {
+                                $data_customer['address_ward'] = 0;
+                            }
+
+                            // Insert database
+                            $customer_id = 0;
+                            $this->db->insert('tblclients', $data_customer);
+                            if($this->db->affected_rows()) {
+                                $customer_id = $this->db->insert_id();
+                                $total_imported++;
+                            }
+                            if($customer_id > 0 && $data_contact) {
+                                // insert contact
+                                $data_contact['userid'] = $customer_id;
+                                $this->db->insert('tblcontacts', $data_contact);
                             }
                         }
                         unlink($newFilePath);
@@ -975,4 +998,105 @@ class Clients extends Admin_controller
             set_alert('success', _l('total_clients_deleted', $total_deleted));
         }
     }
+
+    public  function exportexcel()
+    {
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+
+        $this->db->select('tblclients.*,tblcontacts.firstname as contact_firstname,tblcontacts.lastname as contact_lastname');
+        $this->db->join('tblcontacts','tblcontacts.userid=tblclients.userid','left');
+        $client=$this->db->get('tblclients')->result_array();
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->setCellValue('A2','STT')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B2','MÃ KH')->getStyle('B2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C2','Công ty')->getStyle('C2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D2','Điện thoại')->getStyle('D2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E2','% CHIẾT KHẤU')->getStyle('E2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F2','Liên hệ chính')->getStyle('F2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('G2','Email chính')->getStyle('G2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H2','Địa chỉ')->getStyle('H2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('I2','Mã Nhân viên')->getStyle('I2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('J2','Hoạt động')->getStyle('J2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('K2','NHÓM KH')->getStyle('K2')->applyFromArray($BStyle);
+
+        foreach($client as $rom=>$value)
+        {
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+3),($rom+1));
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+3),$value['userid']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+3),$value['company']);
+            $objPHPExcel->getActiveSheet()->setCellValueExplicit('D'.($rom+3),$value['phonenumber']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+3),'chiết khấu');
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+3),$value['contact_firstname'].' '.$value['contact_lastname']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.($rom+3),$value['email']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.($rom+3),$value['address']);
+
+            $code_staff="";
+            $this->db->select('staff_code');
+            $this->db->join('tblstaff','tblstaff.staffid=tblcustomeradmins.staff_id')->where('tblcustomeradmins.customer_id',$value['userid']);
+            $codestaff=$this->db->get('tblcustomeradmins')->result_array();
+            foreach($codestaff as $code)
+            {
+                $code_staff.=$code['staff_code'];
+            }
+
+
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.($rom+3),$code_staff);
+            if($value['active']==1)
+            {
+                $active='Có';
+            }
+            else
+            {
+                $active="Không";
+            }
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.($rom+3),$active);
+
+            $this->db->select('tblcustomersgroups.name as namegroup');
+            $this->db->where('tblcustomergroups_in.customer_id',$value['userid']);
+            $this->db->join('tblcustomersgroups','tblcustomersgroups.id=tblcustomergroups_in.groupid');
+            $group=$this->db->get('tblcustomergroups_in')->result_array();
+            $group_clients="";
+            foreach($group as $group_name)
+            {
+                $group_clients.=$group_name['namegroup'].' ';
+            }
+
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.($rom+3),$group_clients);
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="filexuat.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+    }
+
 }
