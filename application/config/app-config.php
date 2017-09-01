@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-define('APP_BASE_URL','http://192.168.1.18/DudoftHoa');
+define('APP_BASE_URL','http://192.168.1.10/DudoftHoa');
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ define('APP_ENC_KEY','201b6c90724362dcda86e8dca9face77');
 /* Database credentials - Auto added on install */
 
 /* The hostname of your database server. */
-define('APP_DB_HOSTNAME','localhost');
+define('APP_DB_HOSTNAME','192.168.1.18');
 /* The username used to connect to the database */
 define('APP_DB_USERNAME','root');
 /* The password used to connect to the database */
