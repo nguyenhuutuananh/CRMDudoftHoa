@@ -1,1 +1,0 @@
-ALTER TABLE `tblsale_items` ADD `export_quantity` INT NOT NULL AFTER `quantity`;

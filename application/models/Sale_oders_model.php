@@ -61,7 +61,7 @@ class Sale_oders_model extends CRM_Model
     }
 
     public function add($data)
-   {
+    {
         $import=array(
             'rel_type'=>$data['rel_type'],
             'rel_id'=>$data['rel_id'],
@@ -85,8 +85,9 @@ class Sale_oders_model extends CRM_Model
             foreach ($items as $key => $item) {
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
-                // var_dump("expression");die();
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
                 $item_data=array(
                     'sale_id'=>$insert_id,
                     'product_id'=>$item['id'],
@@ -95,7 +96,11 @@ class Sale_oders_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
                  $this->db->insert('tblsale_order_items', $item_data);
                  if($this->db->affected_rows()>0)
@@ -103,6 +108,7 @@ class Sale_oders_model extends CRM_Model
                     logActivity('Insert Sale Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
                  }
             }
+
             $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$insert_id));
             $this->db->update('tblcontracts',array('export_status'=>1),array('id'=>$data['rel_id']));
             return $insert_id;
@@ -110,8 +116,8 @@ class Sale_oders_model extends CRM_Model
         return false;
     }
 
-     public function update($data,$id)
-   {
+    public function update($data,$id)
+    {
         $affected=0;
          $import=array(
             'rel_type'=>$data['rel_type'],
@@ -121,7 +127,7 @@ class Sale_oders_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
-            'export_status'=>NULL
+            // 'export_status'=>NULL
             );
          // var_dump($import);die();
         
@@ -142,8 +148,10 @@ class Sale_oders_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
-                $itm=$this->getSaleItem($id,$item['id']);
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
+
                 $item_data=array(
                     'sale_id'=>$id,
                     'product_id'=>$item['id'],
@@ -152,8 +160,14 @@ class Sale_oders_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
+                $itm=$this->getSaleItem($id,$item['id']);
+
                 if($itm)
                 {
                     $this->db->update('tblsale_order_items', $item_data,array('id'=>$itm->id));
@@ -173,11 +187,11 @@ class Sale_oders_model extends CRM_Model
             }
 
             if(!empty($affected_id))
-                {
-                    $this->db->where('sale_id', $id);
-                    $this->db->where_not_in('product_id', $affected_id);
-                    $this->db->delete('tblsale_order_items');
-                }
+            {
+                $this->db->where('sale_id', $id);
+                $this->db->where_not_in('product_id', $affected_id);
+                $this->db->delete('tblsale_order_items');
+            }
 
             $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$id));
 
@@ -186,7 +200,7 @@ class Sale_oders_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $itm=$this->getSaleItemReturn($id,$item['id']);
-                $item_data=array(
+                $item_dataa=array(
                     'reject_id'=>$id,
                     'product_id'=>$item['id'],
                     'serial_no'=>$item['serial_no'],
@@ -198,7 +212,7 @@ class Sale_oders_model extends CRM_Model
                     );
                 if($itm)
                 {
-                    $this->db->update('tblsale_order_items', $item_data,array('id'=>$itm->id));
+                    $this->db->update('tblsale_order_items', $item_dataa,array('id'=>$itm->id));
                     if($this->db->affected_rows()>0)
                      {
                         logActivity('Edit  Item Return Updated [ID:' . $id . ', Item ID' . $item['id'] . ']');
@@ -206,7 +220,7 @@ class Sale_oders_model extends CRM_Model
                 }
                 else
                 {
-                    $this->db->insert('tblsale_order_items', $item_data);
+                    $this->db->insert('tblsale_order_items', $item_dataa);
                     if($this->db->affected_rows()>0)
                      {
                         logActivity('Insert Sale Item Return Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
@@ -217,7 +231,7 @@ class Sale_oders_model extends CRM_Model
             if(!empty($affected_idR))
                 {
                     $this->db->where('reject_id', $id);
-                    $this->db->where_not_in('product_id', $affected_id);
+                    $this->db->where_not_in('product_id', $affected_idR);
                     $this->db->delete('tblsale_order_items');
                 }
             else       
@@ -269,9 +283,10 @@ class Sale_oders_model extends CRM_Model
 
     public function getProductById($id)
     {       
-            $this->db->select('tblitems.*,tblunits.unit as unit_name');
+            $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate');
             $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
-            $this->db->where('id', $id);
+            $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
+            $this->db->where('tblitems.id', $id);
             return $this->db->get('tblitems')->row();
     }
     

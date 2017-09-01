@@ -1,1 +1,0 @@
-INSERT INTO `dudoffhoa`.`tbloptions` (`id`, `name`, `value`) VALUES (NULL, 'invoice_company_faxnumber', '(08) 38 453 052');

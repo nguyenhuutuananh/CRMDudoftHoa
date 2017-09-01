@@ -150,17 +150,19 @@ class Contracts extends Admin_controller
         } else {
             $title = _l('add_new', _l('sale_orders'));
             $data['item'] = $this->contracts_model->getContractByID($id);
-            // $data['item_returns'] = $this->sale_oders_model->getReturnSaleItems($id);
-            // var_dump($data['item']);die();
 
             $i=0;
             foreach ($data['item']->items as $key => $value) { 
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
+                
                 $i++;
             }
 
-            // var_dump($data['item']);die();
             
+            $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+            $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+            
+
             if (!$data['item']) {
                 blank_page('Sale Not Found');
             }
