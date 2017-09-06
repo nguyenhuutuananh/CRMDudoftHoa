@@ -1,4 +1,5 @@
 <?php init_head(); ?>
+<link rel="stylesheet" href="<?=base_url('assets/treegrid/')?>css/jquery.treegrid.css">
 <div id="wrapper">
     <div class="content">
         <div class="row">
@@ -13,11 +14,19 @@
                 <div class="panel_s">
                     <div class="panel-body">
                         <div class="clearfix"></div>
-                        <?php render_datatable(array(
-                            _l('id'),
-                            _l('Tên loại kho'),
-                            _l('options'),
-                        ),'kind-of-warehouses'); ?>
+                        <table class="table tree">
+                            <thead>
+                                <th>Số tài khoản</th>
+                                <th>Tên tài khoản</th>
+                                <th>Tính chất</th>
+                                <th>Tên tiếng anh</th>
+                                <th><?=_l('actions')?></th>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                            
+                        </table>
                     </div>
                 </div>
             </div>
@@ -83,21 +92,77 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <?php init_tail(); ?>
+<script type="text/javascript" src="<?=base_url('assets/treegrid/')?>js/jquery.treegrid.js"></script>
 <script>
-    function view_init_department(id)
+    let TreeGridLoad = () => {
+        $.ajax({
+            url: admin_url + 'accounts/getAccounts',
+            dataType: 'json',
+        }).done((data) => {
+            $('.table.tree tbody').find('tr').remove();
+            data.forEach(obj => {
+                let newTr = $('<tr class="treegrid-'+obj.idAccount+'"></tr>');
+                
+                newTr.append('<td>'+obj.accountCode+'</td>');
+                newTr.append('<td>'+obj.accountName+'</td>');
+                newTr.append('<td>'+obj.attributeName+'</td>');
+                newTr.append('<td>'+obj.accountEnglishName+'</td>');
+                newTr.append('<td>' 
+                + '<a href="#" data-loading-text="<i class=\'fa fa-circle-o-notch fa-spin\'></i>" class="btn btn-default btn-icon" onclick="view_init_department('+obj.idAccount+', this); return false;"><i class="fa fa-eye"></i></a>'
+                + '<a href="' + admin_url +'accounts/delete/' + obj.idAccount + '" class="btn btn-danger btn-icon delete-reminder-other"><i class="fa fa-remove"></i></a></td>');
+                if(obj.generalAccount != 0)
+                {
+                    newTr.addClass('treegrid-parent-' + obj.generalAccount);
+                }
+                else {
+                    newTr.find('td').wrapInner('<b></b>');
+                }
+                $('.table.tree').append(newTr);
+                $('.tree').treegrid({
+                    //initialState: 'collapsed',
+                });
+            });
+        });
+    };
+    $(() => {
+        $('body').on('click', '.delete-reminder-other', (e) => {
+            var r = confirm(confirm_action_prompt);
+            if (r == false) {
+                return false;
+            } else {
+                $.get($(e.currentTarget).attr('href'), function(response) {
+                    alert_float(response.alert_type, response.message);
+                    TreeGridLoad();
+                }, 'json');
+            }
+            return false;
+        });
+        TreeGridLoad();
+        
+    });
+    
+    function view_init_department(id, button)
     {
-        $('#type').modal('show');
-        $('.add-title').addClass('hide');
+        $(button).button('loading');
         jQuery.ajax({
             type: "post",
-            url:admin_url+"kind_of_warehouse/get_row/"+id,
+            url:admin_url+"accounts/get_row/"+id,
             data: '',
             cache: false,
+            dataType: 'json',
             success: function (data) {
-                var json = JSON.parse(data);
-//                if($data!="")
+               if(data!="")
                 {
-                    $('#name').val(json.name);
+                    console.log(data);
+                    $(button).button('reset');
+                    $('#type').modal('show');
+                    $('.add-title').addClass('hide');
+                    $('#accountCode').val(data.accountCode);
+                    $('#accountName').val(data.accountName);
+                    $('#accountEnglishName').val(data.accountEnglishName);
+                    $('#generalAccount').selectpicker('val', data.generalAccount);
+                    $('#idAccountAttribute').selectpicker('val', data.idAccountAttribute);
+                    $('#accountExplain').val(data.accountExplain);
                     jQuery('#id_type').prop('action',admin_url+'accounts/ajax/'+id);
                 }
             }
@@ -127,6 +192,7 @@
             response = JSON.parse(response);
             if(response.success == true){
                 alert_float('success',response.message);
+                TreeGridLoad();
             }
             $('#type').modal('hide');
         });
@@ -146,9 +212,6 @@
         $('#type').modal('show');
         $('.add-title').addClass('hide');
     }
-
-    
-
 </script>
 </body>
 </html>

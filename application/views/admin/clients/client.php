@@ -182,7 +182,6 @@
     var default_ward_dkkd  = '<?php echo isset($client) ? $client->dkkd_ward : 0?>';
 
     var loadFromCity = (city_id, currentTarget, default_value_state, default_value_ward) => {
-      console.log();
       var objState = $(currentTarget).parent().parent().next().find('select');
       var objWard = $(currentTarget).parent().parent().next().next().find('select');
       objState.find('option').remove();
@@ -214,6 +213,21 @@
           if(foundSelected) {
             loadFromState(default_value_state, objState, default_value_ward);
           }
+
+          <?php
+          if(!isset($client)) {
+          ?>
+          /**
+          * Auto fill up
+          */
+          if(currentTarget == $('#city')[0]) {
+            $('.billing-same-as-customer').click();
+            $('.customer-copy-billing-address').click();
+            $('.customer-copy-billing-address-dkkd').click();
+          }
+          <?php
+          }
+          ?>
         });
       }
     };
@@ -237,6 +251,21 @@
             objWard.append('<option value="' + value.wardid + '"' + stringSelected + '>' + value.name + '</option>');
           });
           objWard.selectpicker('refresh');
+
+          <?php
+          if(!isset($client)) {
+          ?>
+          /**
+          * Auto fill up
+          */
+          if(currentTarget == $('#state')[0]) {
+            $('.billing-same-as-customer').click();
+            $('.customer-copy-billing-address').click();
+            $('.customer-copy-billing-address-dkkd').click();
+          }
+          <?php
+          }
+          ?>
         });
       }
     };
@@ -275,6 +304,42 @@
       loadFromState(state_id, e.currentTarget, default_ward_dkkd);
     });
 
+    <?php
+    if(!isset($client)) {
+    ?>
+    /**
+    * Auto fill up
+    */
+    $('#address_ward, #country, #address_area').change((e) => {
+      
+      $('.billing-same-as-customer').click();
+      $('.customer-copy-billing-address').click();
+      $('.customer-copy-billing-address-dkkd').click();
+      
+    });
+
+    $('#address_room_number').change((e) => {
+      $('#billing_room_number, #dkkd_room_number').val($(e.currentTarget).val());
+    });
+
+    $('#address_building').change((e) => {
+      $('#billing_building, #dkkd_building').val($(e.currentTarget).val());
+    });
+
+    $('#address').change((e) => {
+      $('#billing_street, #dkkd_street').val($(e.currentTarget).val());
+    });
+
+    $('#address_town').change((e) => {
+      $('#billing_town, #dkkd_town').val($(e.currentTarget).val());
+    });
+
+    $('#zip').change((e) => {
+      $('#billing_zip, #dkkd_zip').val($(e.currentTarget).val());
+    });
+    <?php
+    }
+    ?>
     loadFromCity(default_city, $('#city'), default_state, default_ward);
     loadFromCity(default_city_billing, $('#billing_city'), default_state_billing, default_ward_billing);
     loadFromCity(default_city_shipping, $('#shipping_city'), default_state_shipping, default_ward_shipping);
@@ -282,7 +347,6 @@
     
     $('#client_type').change((e)=>{
       client_type = $(e.currentTarget).find('option:selected').val();
-      console.log(client_type);
       switchMode();
     });
 
@@ -303,35 +367,35 @@
     });
     $('.customer-copy-billing-address').on('click', function(e) {
       e.preventDefault();
-      $('select[name="shipping_area"]').selectpicker('val', $('select[name="billing_area"]').selectpicker('val'));
-      $('select[name="shipping_country"]').selectpicker('val', $('select[name="billing_country"]').selectpicker('val'));
+      $('select[name="shipping_area"]').selectpicker('val', $('select[name="address_area"]').selectpicker('val'));
+      $('select[name="shipping_country"]').selectpicker('val', $('select[name="country"]').selectpicker('val'));
       
-      $('select[name="shipping_city"]').selectpicker('val', $('select[name="billing_city"]').selectpicker('val'));
-      loadFromCity($('select[name="shipping_city"]').selectpicker('val'), $('select[name="shipping_city"]'), $('select[name="billing_state"]').selectpicker('val'), $('select[name="billing_ward"]').selectpicker('val'));
+      $('select[name="shipping_city"]').selectpicker('val', $('select[name="city"]').selectpicker('val'));
+      loadFromCity($('select[name="city"]').selectpicker('val'), $('select[name="shipping_city"]'), $('select[name="state"]').selectpicker('val'), $('select[name="address_ward"]').selectpicker('val'));
 
 
-      $('input[name="shipping_room_number"]').val($('input[name="billing_room_number"]').val());
-      $('input[name="shipping_building"]').val($('input[name="billing_building"]').val());
-      $('input[name="shipping_home_number"]').val($('input[name="billing_home_number"]').val());
-      $('input[name="shipping_street"]').val($('input[name="billing_street"]').val());
-      $('input[name="shipping_town"]').val($('input[name="billing_town"]').val());
-      $('input[name="shipping_zip"]').val($('input[name="billing_zip"]').val());
+      $('input[name="shipping_room_number"]').val($('input[name="address_room_number"]').val());
+      $('input[name="shipping_building"]').val($('input[name="address_building"]').val());
+      $('input[name="shipping_home_number"]').val($('input[name="address_home_number"]').val());
+      $('input[name="shipping_street"]').val($('input[name="address"]').val());
+      $('input[name="shipping_town"]').val($('input[name="address_town"]').val());
+      $('input[name="shipping_zip"]').val($('input[name="zip"]').val());
     });
     $('.customer-copy-billing-address-dkkd').on('click', function(e) {
       e.preventDefault();
-      $('select[name="dkkd_area"]').selectpicker('val', $('select[name="billing_area"]').selectpicker('val'));
-      $('select[name="dkkd_country"]').selectpicker('val', $('select[name="billing_country"]').selectpicker('val'));
+      $('select[name="dkkd_area"]').selectpicker('val', $('select[name="address_area"]').selectpicker('val'));
+      $('select[name="dkkd_country"]').selectpicker('val', $('select[name="country"]').selectpicker('val'));
       
-      $('select[name="dkkd_city"]').selectpicker('val', $('select[name="billing_city"]').selectpicker('val'));
-      loadFromCity($('select[name="dkkd_city"]').selectpicker('val'), $('select[name="dkkd_city"]'), $('select[name="billing_state"]').selectpicker('val'), $('select[name="billing_ward"]').selectpicker('val'));
+      $('select[name="dkkd_city"]').selectpicker('val', $('select[name="city"]').selectpicker('val'));
+      loadFromCity($('select[name="city"]').selectpicker('val'), $('select[name="dkkd_city"]'), $('select[name="state"]').selectpicker('val'), $('select[name="address_ward"]').selectpicker('val'));
 
 
-      $('input[name="dkkd_room_number"]').val($('input[name="billing_room_number"]').val());
-      $('input[name="dkkd_building"]').val($('input[name="billing_building"]').val());
+      $('input[name="dkkd_room_number"]').val($('input[name="address_room_number"]').val());
+      $('input[name="dkkd_building"]').val($('input[name="address_building"]').val());
       $('input[name="dkkd_home_number"]').val($('input[name="billing_home_number"]').val());
-      $('input[name="dkkd_street"]').val($('input[name="billing_street"]').val());
-      $('input[name="dkkd_town"]').val($('input[name="billing_town"]').val());
-      $('input[name="dkkd_zip"]').val($('input[name="billing_zip"]').val());
+      $('input[name="dkkd_street"]').val($('input[name="address"]').val());
+      $('input[name="dkkd_town"]').val($('input[name="address_town"]').val());
+      $('input[name="dkkd_zip"]').val($('input[name="zip"]').val());
     });
 
   });

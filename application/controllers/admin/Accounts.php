@@ -30,8 +30,19 @@ class Accounts extends Admin_controller {
             }
         }
         if($this->input->is_ajax_request()) {
-            $accounts = $this->accounts_model->get_accounts(array(), true);
+            $accounts = $this->accounts_model->get_accounts_tree();
             exit(json_encode($accounts));
+        }
+    }
+    public function get_row($id) {
+        if (!has_permission('customers', '', 'view')) {
+            if ($id != '' && !is_customer_admin($id)) {
+                access_denied('customers');
+            }
+        }
+        if($this->input->is_ajax_request()) {
+            $account = $this->accounts_model->get_single($id);
+            exit(json_encode($account));
         }
     }
     public function ajax($id='') {
@@ -71,6 +82,23 @@ class Accounts extends Admin_controller {
         if($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('account_attributes');
         }
+    }
+
+    public function delete($id='') {
+        if (!$id) {
+            die('Không tìm thấy mục nào');
+        }
+        $success    = $this->accounts_model->delete($id);
+        $alert_type = 'warning';
+        $message    = _l('Không thể xóa dữ liệu');
+        if ($success) {
+            $alert_type = 'success';
+            $message    = _l('Xóa dữ liệu thành công');
+        }
+        echo json_encode(array(
+            'alert_type' => $alert_type,
+            'message' => $message
+        ));
     }
     
 }
