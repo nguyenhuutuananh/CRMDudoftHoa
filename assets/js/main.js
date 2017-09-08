@@ -4702,7 +4702,6 @@ function get_main_values() {
 }
 // Calculate invoice total - NOT RECOMENDING EDIT THIS FUNCTION BECUASE IS VERY SENSITIVE
 function calculate_total() {
-
     var calculated_tax,
         taxrate,
         item_taxes,

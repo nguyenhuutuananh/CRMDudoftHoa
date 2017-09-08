@@ -26,6 +26,7 @@
                             _l('#'),
                             _l('Mã phiếu báo giá'),
                             _l('Khách hàng'),
+                            _l('total_amount'),
                             _l('Người tạo'),
                             _l('Trạng thái'),
                             _l('Được duyệt bởi'),

@@ -238,6 +238,8 @@ class Exports_model extends CRM_Model
             'date'=>to_sql_date($data['date'])
             );
 
+
+
         
         if($this->db->update('tblexports',$export,array('id'=>$id)) && $this->db->affected_rows()>0)
         {
@@ -253,7 +255,9 @@ class Exports_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $total+=$sub_total;
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total+=$amount;
                 $itm=$this->getExportItem($id,$item['id']);
                 $item_data=array(
                     'export_id'=>$id,
@@ -263,7 +267,11 @@ class Exports_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$data['warehouse_name']
                     );
                 if($itm)
                 {
@@ -330,9 +338,10 @@ class Exports_model extends CRM_Model
 
     public function getProductById($id)
     {       
-            $this->db->select('tblitems.*,tblunits.unit as unit_name');
+            $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate');
             $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
-            $this->db->where('id', $id);
+            $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
+            $this->db->where('tblitems.id', $id);
             return $this->db->get('tblitems')->row();
     }
     

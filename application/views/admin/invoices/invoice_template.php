@@ -1,5 +1,5 @@
 
-<div class="panel_s<?php if(!isset($invoice) || (isset($invoice) && count($invoices_to_merge) == 0 && (isset($invoice) && !isset($invoice_from_project) && count($expenses_to_bill) == 0))){echo ' hide';} ?>" id="invoice_top_info">
+<!-- <div class="panel_s<?php if(!isset($invoice) || (isset($invoice) && count($invoices_to_merge) == 0 && (isset($invoice) && !isset($invoice_from_project) && count($expenses_to_bill) == 0))){echo ' hide';} ?>" id="invoice_top_info">
  <div class="panel-body">
   <div class="row">
    <div id="merge" class="col-md-6">
@@ -18,7 +18,7 @@
 <?php } ?>
 </div>
 </div>
-</div>
+</div> -->
 <div class="panel_s invoice accounting-template">
  <div class="additional"></div>
  <div class="panel-body">
@@ -69,64 +69,7 @@
     </select>
   </div>
   <?php } ?>
-  <div class="row">
-   <div class="col-md-12">
-    <a href="#" class="edit_shipping_billing_info" data-toggle="modal" data-target="#billing_and_shipping_details"><i class="fa fa-pencil-square-o"></i></a>
-    <?php include_once(APPPATH .'views/admin/invoices/billing_and_shipping_template.php'); ?>
-  </div>
-  <div class="col-md-6">
-    <p class="bold"><?php echo _l('invoice_bill_to'); ?></p>
-    <address>
-     <span class="billing_street">
-       <?php $billing_street = (isset($invoice) ? $invoice->billing_street : '--'); ?>
-       <?php $billing_street = ($billing_street == '' ? '--' :$billing_street); ?>
-       <?php echo $billing_street; ?></span><br>
-       <span class="billing_city">
-         <?php $billing_city = (isset($invoice) ? $invoice->billing_city : '--'); ?>
-         <?php $billing_city = ($billing_city == '' ? '--' :$billing_city); ?>
-         <?php echo $billing_city; ?></span>,
-         <span class="billing_state">
-           <?php $billing_state = (isset($invoice) ? $invoice->billing_state : '--'); ?>
-           <?php $billing_state = ($billing_state == '' ? '--' :$billing_state); ?>
-           <?php echo $billing_state; ?></span>
-           <br/>
-           <span class="billing_country">
-             <?php $billing_country = (isset($invoice) ? get_country_short_name($invoice->billing_country) : '--'); ?>
-             <?php $billing_country = ($billing_country == '' ? '--' :$billing_country); ?>
-             <?php echo $billing_country; ?></span>,
-             <span class="billing_zip">
-               <?php $billing_zip = (isset($invoice) ? $invoice->billing_zip : '--'); ?>
-               <?php $billing_zip = ($billing_zip == '' ? '--' :$billing_zip); ?>
-               <?php echo $billing_zip; ?></span>
-             </address>
-           </div>
-           <div class="col-md-6">
-            <p class="bold"><?php echo _l('ship_to'); ?></p>
-            <address>
-             <span class="shipping_street">
-               <?php $shipping_street = (isset($invoice) ? $invoice->shipping_street : '--'); ?>
-               <?php $shipping_street = ($shipping_street == '' ? '--' :$shipping_street); ?>
-               <?php echo $shipping_street; ?></span><br>
-               <span class="shipping_city">
-                 <?php $shipping_city = (isset($invoice) ? $invoice->shipping_city : '--'); ?>
-                 <?php $shipping_city = ($shipping_city == '' ? '--' :$shipping_city); ?>
-                 <?php echo $shipping_city; ?></span>,
-                 <span class="shipping_state">
-                   <?php $shipping_state = (isset($invoice) ? $invoice->shipping_state : '--'); ?>
-                   <?php $shipping_state = ($shipping_state == '' ? '--' :$shipping_state); ?>
-                   <?php echo $shipping_state; ?></span>
-                   <br/>
-                   <span class="shipping_country">
-                     <?php $shipping_country = (isset($invoice) ? get_country_short_name($invoice->shipping_country) : '--'); ?>
-                     <?php $shipping_country = ($shipping_country == '' ? '--' :$shipping_country); ?>
-                     <?php echo $shipping_country; ?></span>,
-                     <span class="shipping_zip">
-                       <?php $shipping_zip = (isset($invoice) ? $invoice->shipping_zip : '--'); ?>
-                       <?php $shipping_zip = ($shipping_zip == '' ? '--' :$shipping_zip); ?>
-                       <?php echo $shipping_zip; ?></span>
-                     </address>
-                   </div>
-                 </div>
+  
                  <?php
                  $next_invoice_number = get_option('next_invoice_number');
                  $format = get_option('invoice_number_format');
@@ -158,6 +101,7 @@
                  $data_original_number = 'false';
                }
                ?>
+               <div class="col-md-6">
                <div class="form-group">
                  <label for="number"><?php echo _l('invoice_add_edit_number'); ?></label>
                  <div class="input-group">
@@ -169,15 +113,16 @@
                     <input type="text" name="number" class="form-control" value="<?php echo $_invoice_number; ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>">
                   </div>
                 </div>
+                </div>
                 <div class="row">
                  <div class="col-md-6">
                   <?php $value = (isset($invoice) ? _d($invoice->date) : _d(date('Y-m-d'))); ?>
                   <?php echo render_date_input('date','invoice_add_edit_date',$value); ?>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                   <?php $value = (isset($invoice) ? _d($invoice->duedate) : (get_option('invoice_due_after') != 0) ? _d(date('Y-m-d', strtotime('+' . get_option('invoice_due_after') . ' DAY', strtotime(date('Y-m-d'))))) : ''); ?>
                   <?php echo render_date_input('duedate','invoice_add_edit_duedate',$value); ?>
-                </div>
+                </div> -->
               </div>
               <?php $rel_id = (isset($invoice) ? $invoice->id : false); ?>
               <?php echo render_custom_fields('invoice',$rel_id); ?>
@@ -229,7 +174,7 @@
              </div>
            </div>
            <?php } ?>
-           <div class="row">
+           <!-- <div class="row">
             <div class="col-md-6">
              <?php
              $s_attrs = array('disabled'=>true);
@@ -327,9 +272,10 @@
   <?php echo render_date_input('recurring_ends_on','recurring_ends_on',$value); ?>
 </div>
 </div>
-</div>
+</div> -->
+
 <?php $value = (isset($invoice) ? $invoice->adminnote : ''); ?>
-<?php echo render_textarea('adminnote','invoice_add_edit_admin_note',$value); ?>
+<?php echo render_textarea('adminnote','invoice_add_edit_admin_note',$value,array('rows'=>5)); ?>
 </div>
 </div>
 <?php // Check if any recuring invoices are made from this invoice
@@ -353,25 +299,20 @@ if(isset($invoice) && ($invoice->recurring !== 0 && $invoice->last_recurring_dat
   <div class="row">
    <div class="col-md-4">
      <div class="form-group mbot25">
-      <select name="item_select" class="selectpicker no-margin" data-width="100%" id="item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
+      <select name="invoice_item_select" class="selectpicker no-margin" data-width="100%" id="invoice_item_select" data-none-selected-text="<?php echo _l('add_sale'); ?>" data-live-search="true">
         <option value=""></option>
-        <?php foreach($items as $group_id=>$_items){ ?>
-        <optgroup data-group-id="<?php echo $group_id; ?>" label="<?php echo $_items[0]['group_name']; ?>">
-         <?php foreach($_items as $item){ ?>
-         <option value="<?php echo $item['id']; ?>" data-subtext="<?php echo strip_tags(mb_substr($item['long_description'],0,200)).'...'; ?>">(<?php echo _format_number($item['rate']); ; ?>) <?php echo $item['description']; ?></option>
-         <?php } ?>
-       </optgroup>
-       <?php } ?>
-       <?php if(has_permission('items','','create')){ ?>
-       <option data-divider="true"></option>
-       <option value="newitem" data-content="<span class='text-info'><?php echo _l('new_invoice_item'); ?></span>"></option>
-       <?php } ?>
+        <?php foreach ($sales as $sale) { ?>
+        <?php var_dump($sale); ?>
+          <option value="<?php echo $sale->id; ?>" data-subtext="<?php echo _d($sale->date); ?>"> <?php echo $sale->prefix.$sale->code; ?></option>
+        <?php } ?>
+       
      </select>
    </div>
  </div>
+
  <?php if(!isset($invoice_from_project) && isset($billable_tasks)){ ?>
  <div class="col-md-3">
-  <div class="form-group" data-toggle="tooltip" data-title="<?php echo _l('invoice_task_item_project_tasks_not_included'); ?>">
+  <div class="form-group hide" data-toggle="tooltip" data-title="<?php echo _l('invoice_task_item_project_tasks_not_included'); ?>">
    <select name="task_select" data-live-search="true" id="task_select" class="selectpicker no-margin" data-width="100%" data-none-selected-text="<?php echo _l('bill_tasks'); ?>">
     <option value=""></option>
     <?php foreach($billable_tasks as $task_billable){ ?>
@@ -385,7 +326,7 @@ if(isset($invoice) && ($invoice->recurring !== 0 && $invoice->last_recurring_dat
  </div>
 </div>
 <?php } ?>
-<div class="col-md-<?php if(!isset($invoice_from_project)){ echo 5; }else {echo 8;} ?> text-right show_quantity_as_wrapper">
+<!-- <div class="col-md-<?php if(!isset($invoice_from_project)){ echo 5; }else {echo 8;} ?> text-right show_quantity_as_wrapper">
   <div class="mtop10">
    <span><?php echo _l('show_quantity_as'); ?> </span>
    <div class="radio radio-primary radio-inline">
@@ -401,33 +342,29 @@ if(isset($invoice) && ($invoice->recurring !== 0 && $invoice->last_recurring_dat
     <label for="sq_3"><?php echo _l('invoice_table_quantity_heading'); ?>/<?php echo _l('invoice_table_hours_heading'); ?></label>
   </div>
 </div>
-</div>
+</div> -->
+
 </div>
 <?php if(isset($invoice_from_project)){ echo '<hr />'; } ?>
+
 <div class="table-responsive s_table">
  <table class="table invoice-items-table items table-main-invoice-edit no-mtop">
   <thead>
    <tr>
     <th></th>
-    <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_description_new_lines_notice'); ?>"></i> <?php echo _l('invoice_table_item_heading'); ?></th>
-    <th width="25%" class="text-left"><?php echo _l('invoice_table_item_description'); ?></th>
-    <?php
-    $qty_heading = _l('invoice_table_quantity_heading');
-    if(isset($invoice) && $invoice->show_quantity_as == 2 || isset($hours_quantity)){
-     $qty_heading = _l('invoice_table_hours_heading');
-   } else if(isset($invoice) && $invoice->show_quantity_as == 3){
-     $qty_heading = _l('invoice_table_quantity_heading') .'/'._l('invoice_table_hours_heading');
-   }
-   ?>
-   <th width="10%" class="text-left qty" ><?php echo $qty_heading; ?></th>
-   <th width="15%" class="text-left"><?php echo _l('invoice_table_rate_heading'); ?></th>
-   <th width="20%" class="text-left"><?php echo _l('invoice_table_tax_heading'); ?></th>
-   <th width="10%" class="text-left"><?php echo _l('invoice_table_amount_heading'); ?></th>
+    <th width="" class="text-left"><?php echo _l('invoice_table_item_heading'); ?></th>
+    <th width="" class="text-left"><?php echo _l('invoice_table_item_code'); ?></th>
+   <th width="" class="text-left qty" ><?php echo _l('invoice_table_quantity_heading') ?></th>
+   <th width="" class="text-left qty" ><?php echo _l('invoice_table_item_price') ?></th>
+   <th width="" class="text-left"><?php echo _l('invoice_table_sub_total'); ?></th>
+   <th width="" class="text-left"><?php echo _l('invoice_table_tax'); ?></th>
+   <th width="" class="text-left"><?php echo _l('invoice_table_discount').'(%)'; ?></th>
+   <th width="" class="text-left"><?php echo _l('invoice_table_amount'); ?></th>
    <th></th>
  </tr>
 </thead>
 <tbody>
- <tr class="main">
+ <!-- <tr class="main">
   <td></td>
   <td>
    <textarea name="description" class="form-control" placeholder="<?php echo _l('item_description_placeholder'); ?>"></textarea>
@@ -476,7 +413,8 @@ echo $select;
 ?>
 <button type="button" onclick="add_item_to_table('undefined','undefined',<?php echo $new_item; ?>); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
 </td>
-</tr>
+</tr> -->
+
 <?php if (isset($invoice) || isset($add_items)) {
   $i               = 1;
   $items_indicator = 'newitems';
@@ -548,38 +486,11 @@ echo $select;
   </tr>
   <tr id="discount_percent">
     <td>
-     <div class="row">
-      <div class="col-md-5">
-       <span class="bold"><?php echo _l('invoice_discount'); ?> (%)</span>
-     </div>
-     <div class="col-md-7">
-       <?php
-       $discount_percent = 0;
-       if(isset($invoice)){
-        if($invoice->discount_percent != 0){
-          $discount_percent =  $invoice->discount_percent;
-        }
-      }
-      ?>
-      <input type="number" value="<?php echo $discount_percent; ?>" class="form-control pull-left" min="0" max="100" name="discount_percent">
-    </div>
-  </div>
-</td>
-<td class="discount_percent"></td>
+     <span class="bold"><?php echo _l('invoice_discount'); ?> :</span>
+    </td>
+    <td class="discount_percent"></td>
 </tr>
-<tr>
-  <td>
-   <div class="row">
-    <div class="col-md-5">
-     <span class="bold"><?php echo _l('invoice_adjustment'); ?></span>
-   </div>
-   <div class="col-md-7">
-     <input type="number" value="<?php if(isset($invoice)){echo $invoice->adjustment; } else { echo _format_number(0); } ?>" class="form-control pull-left" name="adjustment">
-   </div>
- </div>
-</td>
-<td class="adjustment"></td>
-</tr>
+
 <tr>
   <td><span class="bold"><?php echo _l('invoice_total'); ?> :</span>
   </td>
@@ -604,12 +515,13 @@ echo $select;
     <button class="btn-tr btn btn-info mleft10 text-right pull-right invoice-form-submit">
       <?php echo _l('submit'); ?>
     </button>
-    <?php if(!isset($invoice)){ ?>
+    <!-- <?php if(!isset($invoice)){ ?>
     <button class="btn-tr btn btn-default mleft10 text-right pull-right invoice-form-submit save-as-draft">
       <?php echo _l('save_as_draft'); ?>
     </button>
-    <?php } ?>
+    <?php } ?> -->
   </div>
 </div>
 </div>
 </div>
+

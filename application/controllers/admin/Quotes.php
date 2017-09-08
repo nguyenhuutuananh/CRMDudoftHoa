@@ -32,7 +32,6 @@ class Quotes extends Admin_controller
         else
         {
            $data['quote']        = $this->quotes_model->getQuoteByID($id);      
-           // var_dump($data['customer_id'])  ;die();     
         }
         if ($data['quote']->customer_id) {
             $data['customer_id']        = $data['quote']->customer_id;
@@ -130,9 +129,9 @@ class Quotes extends Admin_controller
         }
         $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
         $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+
         $data['warehouses']=$this->warehouse_model->getWarehousesArrayByType($data['warehouse_type_id']);
-        // var_dump($data['warehouses']);die();
-        $data['items']= $this->invoice_items_model->get_full();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
 
         $where_clients = 'tblclients.active=1';
 

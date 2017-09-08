@@ -73,6 +73,9 @@ class Exports extends Admin_controller
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
                 $i++;
             }
+
+            $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+            $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
             
             if (!$data['item']) {
                 blank_page('Export Not Found');
@@ -166,6 +169,10 @@ class Exports extends Admin_controller
 
             $i++;
         }
+
+        $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+        $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+            
         if (!$data['item']) {
             blank_page('Export Not Found');
         }  

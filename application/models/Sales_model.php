@@ -8,6 +8,42 @@ class Sales_model extends CRM_Model
         parent::__construct();
     }
 
+    public function get($id = '', $where = array())
+    {
+        $this->db->select('*,tblclients.company');
+        $this->db->from('tblsales');
+        $this->db->join('tblclients', 'tblclients.userid = tblsales.customer_id', 'left');
+        $this->db->where($where);
+
+        if (is_numeric($id)) {
+            $this->db->where('tblsales.id', $id);
+            $sale = $this->db->get()->row();
+            
+            return $sale;
+        }
+        $this->db->order_by('date', 'desc');
+        return $this->db->get()->result();
+    }
+
+    public function getAllSalesByCustomerID($customer_id = '')
+    {
+
+        $this->db->select('*,tblclients.company');
+        $this->db->from('tblsales');
+        $this->db->join('tblclients', 'tblclients.userid = tblsales.customer_id', 'left');
+        $this->db->where('tblsales.customer_id', $customer_id);
+        $this->db->where('tblsales.invoice_status <>', 1);
+        if (is_numeric($customer_id)) 
+        {
+            $sales = $this->db->get()->result();
+            if($sales)
+            {
+                return $sales;
+            }
+        }
+        return false;
+    }
+
     public function getSaleByID($id = '')
     {
         $this->db->select('tblsales.*,tblstaff.fullname as creater,(SELECT fullname  FROM tblstaff WHERE user_head_id=tblstaff.staffid) as head,(SELECT fullname  FROM tblstaff WHERE user_admin_id=tblstaff.staffid) as admin');

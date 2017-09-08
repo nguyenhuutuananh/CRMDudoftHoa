@@ -89,15 +89,6 @@
                     echo form_hidden('name', _l('sale_name'), $default_name);
                     ?>
 
-                    <!-- <?php
-                    $selected=(isset($item) ? $warehouse_type : '');
-                    echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                    ?>
-
-                    <?php
-                    $selected=(isset($item) ? $warehouse_id : '');
-                    echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
-                    ?> -->
 
                     <?php
 
@@ -126,12 +117,14 @@
                             <div class="col-md-4">
                                 <?php 
 
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,array('disabled'=>true));
+                                    echo form_hidden('warehouse_type',$warehouse_type_id);
                                 ?>
                             </div>
                             <div class="col-md-4">
                                 <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,array('disabled'=>true));
+                                    echo form_hidden('warehouse_name',$warehouse_id);
                                 ?>
                             </div>
                             <div class="col-md-4" <?=$display?> >
@@ -223,7 +216,7 @@
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
                                         <td><?php echo $value->unit_name; ?></td>
-                                        <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
+                                        <td><input style="width: 100px" class="mainQuantity" min="<?=$value->quantity?>" max="<?=$value->quantity?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" readonly></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
@@ -524,23 +517,23 @@
         // refreshAll();
     };
     var refreshAll = () => {
-        
         isNew = false;
         $('#btnAdd').hide();
         $('#custom_item_select').val('');
         $('#custom_item_select').selectpicker('refresh');
         var trBar = $('tr.main');
-        //console.log(trBar.find('td:nth-child(2) > input'));
-        
+
         trBar.find('td:first > input').val("");
-        trBar.find('td:nth-child(2) ').text('<?=_l('item_name')?>');
-        trBar.find('td:nth-child(3) ').text('');
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) ').text('<?=_l("item_price")?>');
-        trBar.find('td:nth-child(6) ').text('<?=_l("0")?>');
-        trBar.find('td:nth-child(7) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(8) > select').find('option:gt(0)').remove().selectpicker('refresh');
+        // trBar.find('td:nth-child(1) > input').val('');
+        trBar.find('td:nth-child(2)').text("<?=_l('item_name')?>");
+        trBar.find('td:nth-child(3)').text("<?=_l('item_unit')?>");
+        trBar.find('td:nth-child(4) > input').val('1');
+        trBar.find('td:nth-child(5)').text("<?=_l('item_price')?>");
+        trBar.find('td:nth-child(6)').text(0);
+        trBar.find('td:nth-child(7)').text("<?=_l('tax')?>");
+        trBar.find('td:nth-child(8)').text(0);
     };
+
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
         totalPrice -= current.find('td:nth-child(4) > input').val() * current.find('td:nth-child(5)').text().replace(/\,/g, '');
@@ -561,6 +554,15 @@
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
+
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        refreshAll();
+        refreshTotal();
+    });
+
+
     $('#custom_item_select').change((e)=>{
         
         var id = $(e.currentTarget).val();

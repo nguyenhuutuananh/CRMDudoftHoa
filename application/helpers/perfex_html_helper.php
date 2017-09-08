@@ -1491,7 +1491,6 @@ if(!function_exists('get_table_items_and_taxes')) {
 
                 $tr_attrs .= ' style="font-size:'.($font_size+4).'px;"';
             }
-
             $_item .= '<tr' . $tr_attrs . '>';
             $_item .= '<td' . $td_first_sortable . ' align="center">' . $i . '</td>';
             $_item .= '<td class="description" align="left;"><span class="bold">' . $item['description'] . '</span><br /><span style="color:#777;">' . $item['long_description'] . '</span></td>';

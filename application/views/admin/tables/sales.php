@@ -8,8 +8,10 @@ $plan_status=array(
 
 $aColumns     = array(
     '1',
-    'code',
+    'code',  
+    'rel_code',  
     'company',
+    'total',
     '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
     'status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
@@ -49,6 +51,7 @@ $join         = array(
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'prefix',
+    'rel_id',
     'export_status',
     'tblstaff.fullname',
     'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
@@ -73,6 +76,10 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);
         }
+        if ($aColumns[$i] == 'total') {
+            $_data=format_money($aRow['total']);
+        }
+
         if ($aColumns[$i] == 'status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['status']).'" task-status-table="'.$aRow['status'].'">' . format_status_sale($aRow['status'],false,true).'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))

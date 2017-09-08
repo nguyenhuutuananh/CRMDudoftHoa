@@ -218,17 +218,6 @@
                                         <td>
                                             0
                                         </td>
-                                        <!-- <td>
-                                            <?php 
-                                                echo render_select('select_kindof_warehouse', $warehouse_types, array('id', 'name'));
-                                            ?>
-                                        
-                                        </td>
-                                        <td>
-                                        <?php 
-                                            echo render_select('select_warehouse', array(), array('id', 'name'));
-                                        ?>
-                                        </td> -->
                                         <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                         </td>
@@ -291,7 +280,12 @@
                 
                 <?php { ?>
                   <button class="btn btn-info mtop20 only-save customer-form-submiter" style="margin-left: 15px">
-                    <?php echo _l('submit'); ?>
+                  <?php if($item->rel_id){
+                    echo _l('return');
+                    }
+                    else
+                        echo _l('submit');
+                     ?>
                 </button>
                 <?php } ?>
               </div>
@@ -320,6 +314,36 @@
             getWarehouses(warehouse_type); 
         }
     });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){          
+                $.each(data, function(key,value){
+                    
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
+
+
     function getWarehouses(warehouse_type){
         var warehouse_id=$('#warehouse_name');
         warehouse_id.find('option:gt(0)').remove();
@@ -417,7 +441,6 @@
         // refreshAll();
     };
     var refreshAll = () => {
-        alert('dfgbvfd');
         isNew = false;
         $('#btnAdd').hide();
         $('#custom_item_select').val('');

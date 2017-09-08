@@ -70,8 +70,10 @@ class Invoices_model extends CRM_Model
      */
     public function get_invoice_items($id)
     {
-        $this->db->select();
+        $this->db->select('tblitems_in.*,tblitems.code,tblitems.name');
         $this->db->from('tblitems_in');
+        $this->db->join('tblitems','tblitems.id=tblitems_in.product_id','left');
+        $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
         $this->db->where('rel_id', $id);
         $this->db->where('rel_type', 'invoice');
         $this->db->order_by('item_order', 'asc');
@@ -228,6 +230,8 @@ class Invoices_model extends CRM_Model
      */
     public function add($data, $expense = false)
     {
+
+
         $data['prefix']        = get_option('invoice_prefix');
         $data['number_format'] = get_option('invoice_number_format');
         if (isset($data['save_as_draft'])) {
@@ -273,7 +277,7 @@ class Invoices_model extends CRM_Model
             'taxid',
             'rate',
             'quantity',
-            'item_select',
+            'invoice_item_select',
             'billed_tasks',
             'task_select',
             'task_id',
@@ -282,6 +286,8 @@ class Invoices_model extends CRM_Model
             'repeat_type_custom',
             'bill_expenses'
         );
+
+        $rel_id=$data['invoice_item_select'];
 
         if (isset($data['recurring'])) {
             if ($data['recurring'] == 'custom') {
@@ -293,7 +299,6 @@ class Invoices_model extends CRM_Model
             $data['custom_recurring'] = 0;
             $data['recurring']        = 0;
         }
-
         foreach ($unsetters as $unseter) {
             if (isset($data[$unseter])) {
                 unset($data[$unseter]);
@@ -303,6 +308,8 @@ class Invoices_model extends CRM_Model
             $custom_fields = $data['custom_fields'];
             unset($data['custom_fields']);
         }
+
+
         $data['hash'] = md5(rand() . microtime());
         // Check if the key exists
         $this->db->where('hash', $data['hash']);
@@ -349,10 +356,11 @@ class Invoices_model extends CRM_Model
             $data['addedfrom'] = get_staff_user_id();
         }
         $items = array();
-        if (isset($data['newitems'])) {
-            $items = $data['newitems'];
-            unset($data['newitems']);
+        if (isset($data['items'])) {
+            $items = $data['items'];
+            unset($data['items']);
         }
+
         if (!isset($data['include_shipping'])) {
             foreach ($this->shipping_fields as $_s_field) {
                 if (isset($data[$_s_field])) {
@@ -384,11 +392,29 @@ class Invoices_model extends CRM_Model
         $data  = $_data['data'];
         $items = $_data['items'];
 
+            $sub_total=0;
+            $total=0;
+            $total_discount=0;
+            $grand_total=0;
+            foreach ($items as $key => $item) {
+                $product=$this->getProductById($item['id']);
+                $sub_total=$product->price*$item['quantity'];
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
+                $total_discount+=$item['discount'];
+                $total+=$amount;
+            }
+            $grand_total=$total-$total_discount;
+            $data['subtotal']=$total;
+            $data['discount_total']=$total_discount;
+            $data['total']=$grand_total;
 
         $this->db->insert('tblinvoices', $data);
         $insert_id = $this->db->insert_id();
+
         if ($insert_id) {
 
+            $this->db->update('tblsales',array('invoice_status'=>1),array('id'=>$rel_id));
             // Update next invoice number in settings
             $this->db->where('name', 'next_invoice_number');
             $this->db->set('value', 'value+1', FALSE);
@@ -487,23 +513,37 @@ class Invoices_model extends CRM_Model
                 }
             }
 
-            update_invoice_status($insert_id);
+            
 
+            update_invoice_status($insert_id);
             if (count($items) > 0) {
+                $total=0;
+                $i=1;
                 foreach ($items as $key => $item) {
+                    $product=$this->getProductById($item['id']);
+                    $sub_total=$product->price*$item['quantity'];
+                    $tax=$sub_total*$product->tax_rate/100;
+                    $amount=$sub_total+$tax;
+                    $total+=$amount;
                     $this->db->insert('tblitems_in', array(
-                        'description' => $item['description'],
-                        'long_description' => nl2br($item['long_description']),
-                        'qty' => $item['qty'],
-                        'rate' => number_format($item['rate'], 2, '.', ''),
+                        'product_id' => $item['id'],
+                        'qty' => $item['quantity'],
+                        'tax_id'=>$product->tax,
+                        'tax_rate'=>$product->tax_rate,
+                        'tax'=>$tax,
                         'rel_id' => $insert_id,
                         'rel_type' => 'invoice',
-                        'item_order' => $item['order'],
-                        'unit' => $item['unit']
+                        'item_order' => $i,
+                        'unit' => $product->unit,
+                        'unit_cost' => $product->price,
+                        'item_order' => $i,
+                        'sub_total' => $sub_total,
+                        'amount'=>$amount,
+                        'discount_percent'=>$item['discount_percent'],
+                        'discount'=>$item['discount'],
                     ));
 
                     $itemid = $this->db->insert_id();
-
                     if ($itemid) {
                         if (isset($billed_tasks[$key])) {
                             foreach ($billed_tasks[$key] as $_task_id) {
@@ -540,6 +580,7 @@ class Invoices_model extends CRM_Model
                         }
                     }
                 }
+
             }
 
 
@@ -560,6 +601,16 @@ class Invoices_model extends CRM_Model
         }
         return false;
     }
+
+    public function getProductById($id)
+    {       
+            $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate');
+            $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
+            $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
+            $this->db->where('tblitems.id', $id);
+            return $this->db->get('tblitems')->row();
+    }
+
     public function update_total_tax($id)
     {
         $total_tax         = 0;
@@ -610,6 +661,17 @@ class Invoices_model extends CRM_Model
         }
         return $this->expenses_model->get('', $where);
     }
+
+    public function get_sales_to_bill($clientid)
+    {
+        $this->load->model('sales_model');
+        $where = 'billable=1 AND clientid=' . $clientid . ' AND invoiceid IS NULL';
+        if (!has_permission('expenses', '', 'view')) {
+            $where .= ' AND addedfrom=' . get_staff_user_id();
+        }
+        return $this->sales_model->get('', $where);
+    }
+
     public function check_for_merge_invoice($client_id, $current_invoice)
     {
         if ($current_invoice != 'undefined') {

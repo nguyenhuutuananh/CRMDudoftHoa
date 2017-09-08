@@ -35,9 +35,10 @@ $lang['invoice_table_quantity_heading']        = 'Số lượng';
 $lang['invoice_table_rate_heading']            = 'Tỷ lệ';
 $lang['invoice_table_tax_heading']             = 'Thuế';
 $lang['invoice_table_amount_heading']          = 'Số tiền';
-$lang['invoice_subtotal']                      = 'Tổng tiền phụ';
+$lang['invoice_subtotal']                      = 'Tổng tiền';
+$lang['invoice_discount_total']                      = 'Tổng chiết khấu';
 $lang['invoice_adjustment']                    = 'Điều chỉnh';
-$lang['invoice_total']                         = 'Tổng cộng';
+$lang['invoice_total']                         = 'Tổng giá trị';
 $lang['invoice_vat']                           = 'VAT';
 $lang['invoice_bill_to']                       = 'Hóa đơn để';
 $lang['invoice_data_date']                     = 'Ngày Hóa Đơn:';
@@ -150,6 +151,7 @@ $lang['contract_attach']          = 'Đính kèm tài liệu';
 
 $lang['contract_list_client']     = 'Khách hàng';
 $lang['contract_list_subject']    = 'Chủ đề';
+$lang['contract_list_code']       = 'Mã hợp đồng ';
 $lang['contract_list_start_date'] = 'Ngày bắt đầu';
 $lang['contract_list_end_date']   = 'Ngày kết thúc';
 
@@ -280,7 +282,7 @@ $lang['invoice_add_edit_date']        = 'Ngày Hóa Đơn';
 $lang['invoice_add_edit_duedate']     = 'Ngày Đáo Hạn';
 $lang['invoice_add_edit_currency']    = 'Tiền tệ';
 $lang['invoice_add_edit_client_note'] = 'Lưu ý khách hàng';
-$lang['invoice_add_edit_admin_note']  = 'Lưu ý quản trị viên';
+$lang['invoice_add_edit_admin_note']  = 'Ghi chú quản trị viên';
 
 $lang['invoice_add_edit_search_item']  = 'Tìm kiếm sản phẩm/Dịch vụ';
 $lang['invoices_toggle_table_tooltip'] = 'Toggle Table';
@@ -1719,6 +1721,14 @@ $lang['email_template_contracts_fields_heading'] = 'Hợp đồng';
 # Invoices General
 $lang['invoice_estimate_general_options']        = 'Tùy chọn Chung';
 $lang['invoice_table_item_description']          = 'Mô tả';
+$lang['invoice_table_item_code']                 = 'Mã sản phẩm';
+$lang['invoice_table_sub_total']                 = 'Số tiền';
+$lang['invoice_table_tax']                       = 'Thuế';
+$lang['invoice_table_amount']                    = 'Giá trị';
+$lang['invoice_table_item_price']                = 'Giá bán';
+$lang['invoice_table_discount_%']                = "Chiết khấu(%)";
+$lang['invoice_table_discount']                = 'Chiết khấu';
+
 $lang['invoice_recurring_indicator']             = 'Định kỳ';
 
 # Estimates
@@ -1952,6 +1962,7 @@ $lang['clients_nav_support']   = 'Hổ trợ';
 # General
 $lang['more']                  = 'Thêm';
 $lang['add_item']              = 'Thêm sản phẩm';
+$lang['add_sale']              = 'Thêm đơn hàng';
 $lang['goto_admin_area']       = 'Đi đến khu vực quản trị';
 $lang['click_here_to_edit']    = 'Nhấp vào đây để chỉnh sửa';
 $lang['delete']                = 'Xóa %s';
@@ -2114,7 +2125,7 @@ $lang['proposal_converted_to_estimate_fail']    = 'Không thể chuyển đổi 
 $lang['proposal_converted_to_invoice_fail']     = 'Không thể chuyển đổi đề xuất sang hóa đơn';
 
 # Proposals - view proposal template
-$lang['proposal_total_info']   = 'Tổng cộng% s';
+$lang['proposal_total_info']   = 'Tổng cộng %s';
 $lang['proposal_accept_info']  = 'Chấp nhận';
 $lang['proposal_decline_info'] = 'Từ chối';
 $lang['proposal_pdf_info']     = 'PDF';
@@ -2714,6 +2725,7 @@ $lang['home_project_activity'] = 'Hoạt động dự án mới nhất';
 $lang['home_project_activity_not_found'] = 'Không tìm thấy hoạt động dự án';
 $lang['view_tracking'] = 'Theo dõi lượt xem';
 $lang['view_date'] = 'Ngày';
+$lang['create_date'] = 'Ngày tạo đơn hàng';
 $lang['view_ip'] = 'Địa chỉ IP';
 $lang['article_total_views'] = 'Tổng số lần xem';
 $lang['leads_source'] = 'Nguồn';
@@ -3859,8 +3871,8 @@ $lang['converted_contract'] = "Hóa đơn đã tạo đơn đặt hàng";
 $lang['company_bank_account'] = "Số tài khoản: ";
 
 $lang['sub_amount'] = "Giá trị";
-// $lang['total_amount'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['return'] = "Quay lại";
+$lang['total_amount'] = "Tổng giá trị";
 // $lang['total_value'] = "In phiếu giao hàng";
 // $lang['total_value'] = "In phiếu giao hàng";
 

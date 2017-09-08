@@ -1,0 +1,15 @@
+ALTER TABLE `tblsales` ADD `invoice_status` TINYINT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `tblitems_in` CHANGE `product_id` `product_id` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `tblitems_in` ADD `tax_id` INT NULL AFTER `qty`, ADD `tax_rate` DECIMAL(15,0) NULL AFTER `tax_id`, ADD `tax` DECIMAL(25,0) NULL AFTER `tax_rate`;
+
+ALTER TABLE `tblitems_in` CHANGE `rate` `discount_percent` DECIMAL(15,2) NULL;
+
+ALTER TABLE `tblitems_in` ADD `discount` DECIMAL(25,0) NULL AFTER `discount_percent`;
+
+ALTER TABLE `tblitems_in` ADD `sub_total` DECIMAL(25,0) NULL AFTER `item_order`, ADD `amount` DECIMAL(25,0) NULL AFTER `sub_total`;
+
+ALTER TABLE `tblitems_in` ADD `unit_cost` DECIMAL(25,0) NULL AFTER `qty`;
+
+ALTER TABLE `tblinvoices` ADD `rel_id` INT NULL AFTER `id`;

@@ -544,7 +544,6 @@ function update_invoice_status($id, $force_update = false, $prevent_logging = fa
     $payments = $CI->payments_model->get_invoice_payments($id);
 
     $original_status = $invoice->status;
-
     if ($original_status == 6 && $force_update == false) {
         return false;
     }
@@ -583,6 +582,7 @@ function update_invoice_status($id, $force_update = false, $prevent_logging = fa
             }
         }
     } else {
+        
         if ($invoice->total == 0) {
             $status = 2;
         } else {

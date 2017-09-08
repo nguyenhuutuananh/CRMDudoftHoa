@@ -18,6 +18,7 @@
                             _l('Mã phiếu giao hàng'),
                             _l('Mã đơn hàng'),
                             _l('Khách hàng'),
+                            _l('total_amount'),
                             _l('Nhân viên giao hàng'),
                             _l('Trạng thái'),
                             // _l('Giao hàng'),

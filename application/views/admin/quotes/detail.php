@@ -201,17 +201,6 @@
                                         <td>
                                             0
                                         </td>
-                                        <!-- <td>
-                                            <?php 
-                                                echo render_select('select_kindof_warehouse', $warehouse_types, array('id', 'name'));
-                                            ?>
-                                        
-                                        </td>
-                                        <td>
-                                        <?php 
-                                            echo render_select('select_warehouse', array(), array('id', 'name'));
-                                        ?>
-                                        </td> -->
                                         <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                         </td>
@@ -392,12 +381,14 @@
         var trBar = $('tr.main');
         
         trBar.find('td:first > input').val("");
-        trBar.find('td:nth-child(2) > input').val('');
-        trBar.find('td:nth-child(3) > input').val(1);
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) > textarea').text('');
-
-
+        // trBar.find('td:nth-child(1) > input').val('');
+        trBar.find('td:nth-child(2)').text("<?=_l('item_name')?>");
+        trBar.find('td:nth-child(3)').text("<?=_l('item_unit')?>");
+        trBar.find('td:nth-child(4) > input').val('1');
+        trBar.find('td:nth-child(5)').text("<?=_l('item_price')?>");
+        trBar.find('td:nth-child(6)').text(0);
+        trBar.find('td:nth-child(7)').text("<?=_l('tax')?>");
+        trBar.find('td:nth-child(8)').text(0);
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
@@ -416,6 +407,14 @@
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
@@ -506,6 +505,26 @@
             getWarehouses(warehouse_type); 
         }
     });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){          
+                $.each(data, function(key,value){
+                    
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
     function getWarehouses(warehouse_type){
         var warehouse_id=$('#warehouse_name');
         warehouse_id.find('option:gt(0)').remove();

@@ -50,7 +50,7 @@ class Clients_model extends CRM_Model
         $this->db->where($where);
         $this->db->order_by('company', 'asc');
         return $this->db->get('tblclients')->result_array();
-    }
+    } 
     /**
      * Get customers contacts
      * @param  mixed $customer_id

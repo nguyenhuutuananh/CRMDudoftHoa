@@ -18,6 +18,7 @@
                             _l('Mã phiếu xuất kho'),
                             _l('Mã đơn hàng'),
                             _l('Khách hàng'),
+                            _l('total_amount'),
                             _l('Người tạo'),
                             _l('Trạng thái'),
                             // _l('Giao hàng'),

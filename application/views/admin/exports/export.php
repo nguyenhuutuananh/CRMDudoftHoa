@@ -108,23 +108,25 @@
                     echo render_textarea('reason', 'note', $reason, array(), array(), '', 'tinymce');
                     ?>
                 </div>
-
-                
-                
-                
+  
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                         <div class="row">
                             <div class="col-md-4">
                                 <?php 
-
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                    if($item->rel_id)
+                                    {
+                                        $arr=array('disabled'=>true);
+                                        echo form_hidden('warehouse_type',$warehouse_type_id);
+                                        echo form_hidden('warehouse_name',$warehouse_id);
+                                    }
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
                                 ?>
                             </div>
                             <div class="col-md-4">
                                 <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
                                 ?>
                             </div>
                             <div class="col-md-4"  style="display: none;">

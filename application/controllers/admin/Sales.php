@@ -31,6 +31,7 @@ class Sales extends Admin_controller
 
     public function sale_detail($id='') 
     {
+       
         if (!has_permission('sale_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('sale_items');
@@ -97,17 +98,27 @@ class Sales extends Admin_controller
         if (!has_permission('customers', '', 'view')) {
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
+        $data['customers'] = $this->clients_model->get('', $where_clients);
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
-        $data['customers'] = $this->clients_model->get('', $where_clients);
-        $data['items']= $this->invoice_items_model->get_full();
         
-        // $data['warehouse_types']= $this->sales_model->getWarehouseTypes();
-        // $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['title'] = $title;
         $this->load->view('admin/sales/detail', $data);
     }
 
+
+    public function getAllSalesByCustomerID($customer_id) {
+        if(is_numeric($customer_id) && $this->input->is_ajax_request()) {
+            echo json_encode($this->sales_model->getAllSalesByCustomerID($customer_id));
+        }
+    }
+
+    public function getAllItemsBySaleID($sale_id) {
+        if(is_numeric($sale_id) && $this->input->is_ajax_request()) {
+            echo json_encode($this->sales_model->getSaleItems($sale_id));
+        }
+    }
 
 
     /* Get task data in a right pane */

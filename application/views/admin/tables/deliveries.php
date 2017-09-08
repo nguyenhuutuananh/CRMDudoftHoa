@@ -11,6 +11,7 @@ $aColumns     = array(
     'code',
     'rel_code',
     'company',
+    'total',
     '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
     'delivery_status',
     // 'status',
@@ -61,6 +62,10 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'delivery_date') {
             $_data=_d($aRow['delivery_date']);
         }
+        if ($aColumns[$i] == 'total') {
+            $_data=format_money($aRow['total']);
+        }
+
         if ($aColumns[$i] == 'delivery_status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['delivery_status']).'" task-status-table="'.$aRow['delivery_status'].'">' . format_status_delivery($aRow['delivery_status'],false,true).'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))
