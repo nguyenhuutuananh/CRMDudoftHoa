@@ -271,7 +271,7 @@ class Purchase_orders extends Admin_controller
         echo json_encode($result);
     }
     public function getExchangeRate() {
-        if (!has_permission('invoices', '', 'delete')) {
+        if (!has_permission('invoices', '', 'view')) {
             access_denied('invoices');
         }
         $currencies = $this->currencies_model->get();

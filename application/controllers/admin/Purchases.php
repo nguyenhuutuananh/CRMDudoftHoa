@@ -58,8 +58,7 @@ class Purchases extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
-                print_r($data);
-                exit();
+                
                 if(isset($data['item']) && count($data['item']) > 0)
                 {
                     

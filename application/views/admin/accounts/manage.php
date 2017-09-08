@@ -68,7 +68,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-                <button type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
+                <button data-loading-text="<i class=\'fa fa-circle-o-notch fa-spin\'></i> Đang xử lý" type="submit" class="btn btn-info"><?php echo _l('submit'); ?></button>
             </div>
         </div><!-- /.modal-content -->
         <?php echo form_close(); ?>
@@ -118,9 +118,10 @@
                     newTr.find('td').wrapInner('<b></b>');
                 }
                 $('.table.tree').append(newTr);
-                $('.tree').treegrid({
-                    //initialState: 'collapsed',
-                });
+                
+            });
+            $('.tree').treegrid({
+                //initialState: 'collapsed',
             });
         });
     };
@@ -190,10 +191,12 @@
         var url = form.action;
         $.post(url, data).done(function(response) {
             response = JSON.parse(response);
+            $(form).find('button[type="submit"]').button('loading');
             if(response.success == true){
                 alert_float('success',response.message);
                 TreeGridLoad();
             }
+            $(form).find('button[type="submit"]').button('reset');
             $('#type').modal('hide');
         });
         return false;

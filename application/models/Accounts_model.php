@@ -38,6 +38,7 @@ class Accounts_model extends CRM_Model
     }
     public function get_accounts_tree($parent='') {
         $accounts = array();
+        $this->db->join('tblaccount_attributes', 'tblaccount_attributes.idAttribute = tblaccounts.idAccountAttribute', 'left');
         if($parent=='') {
             $accounts = $this->db->where('generalAccount', '0')->get('tblaccounts')->result();
         }

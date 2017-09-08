@@ -120,6 +120,10 @@
                 $reason = (isset($item) ? $item->reason : "");
                 echo render_textarea('explan', 'orders_explan', $reason, array(), array(), '', 'tinymce');
                 ?>
+                <?php 
+                    $default_warehouse = "";
+                    echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse);
+                ?>
             </div>
                 <div class="row">
 
@@ -357,18 +361,25 @@
     var currentRate = {error: true};
     var loadCurrencyRate = () => {
         $.ajax({
-            url: admin_url + '/purchase_orders/getExchangeRate/',
+            url: admin_url + 'purchase_orders/getExchangeRate/',
             dataType: 'json',
         }).done((data) => {
             currentRate = data;
             if(!currentRate.error) {
                 
                 $('select[id*="[currency]"]').toArray().forEach(v => {
-                    console.log($(v).find('option:selected').text());
-                    $(v).parents('td').prev().find('input').val( currentRate.currencies[$(v).find('option:selected').text()].toFixed(2).replace('.', ',') );
+                    if($(v).find('option:selected').text() != 'VNĐ') {
+                        $(v).parents('td').prev().find('input').val( (currentRate.currencies[$(v).find('option:selected').text()]).toFixed(2).replace('.', ',') );
+                    }
+                    else {
+                        $(v).parents('td').prev().find('input').val(1);
+                    }
+                    
                 });
             }
-            $('select[id*="[currency]"]')
+            $('select[id="id_warehouse"]').on('change', (e) => {
+                
+            });
         });
     };
     loadCurrencyRate();
@@ -380,6 +391,41 @@
             date_import: 'required',
             explan: 'required',
             currency_id: 'required',
+        });
+        $('#id_warehouse').change((e) => {
+            // Reset row table_purchase_suggested, table_purchase_orders
+            $('.table_purchase_orders table tbody tr').find('select').attr('disabled', 'disabled');
+            if($('.table_purchase_orders table tbody tr').hasClass('from-another')) return;
+            $('.table_purchase_orders table tbody tr').find('a.btn').attr('onclick', 'return addTrItem(this);');
+            $('.table_purchase_orders table tbody tr').find('a.btn').addClass('btn-success').removeClass('btn-danger');
+            $('.table_purchase_orders table tbody tr').find('a.btn i').addClass('fa-plus').removeClass('fa-times');
+            
+            $('.table_purchase_suggested tbody').append($('.table_purchase_orders table tbody tr'));
+            $('.table_purchase_suggested').find('input,select').attr('name', '');
+            
+            let currencyElement = $('#currency_id');
+            if($(e.currentTarget).val() != '') {
+                if(currencyElement.val() == '') {
+                    $('tr:has(input[id*="[warehouse]"][value!=' + $(e.currentTarget).val() +'])').hide();
+                    $('tr:has(input[id*="[warehouse]"][value=' + $(e.currentTarget).val() +'])').show();
+                }
+                else {
+                    $('tr:has(input[id*="[warehouse]"])').hide();
+                    $('tr:has(input[id*="[warehouse]"][value=' + $(e.currentTarget).val() +'])').find('td:has(select[id*="[currency]"] option[value='+currencyElement.val()+']:selected)').parents('tr').show();
+                }
+                
+                changeStatics();
+            }
+            else {
+                if(currencyElement.val() == '') {
+                    $('tr:has(input[id*="[warehouse]"])').show();
+                }
+                else {
+                    $('tr:has(input[id*="[warehouse]"])').hide();
+                    $('tr:has(input[id*="[warehouse]"])').find('td:has(select[id*="[currency]"] option[value='+currencyElement.val()+']:selected)').parents('tr').show();
+                }
+                changeStatics();
+            }
         });
         $('.table_purchase_suggested').find('input,select').attr('name', '');
     });
@@ -411,15 +457,40 @@
         });
     };
     var changeByCurrencyID = (currency_id) => {
-        $('.table_purchase_suggested').find('select[id*="currency"]').each((index, item) => {
-            item = $(item).parents('tr');
-            if(item.find('select').val() != currency_id) {
-                item.hide();
+        // Reset row table_purchase_suggested, table_purchase_orders
+        $('.table_purchase_orders table tbody tr').find('select').attr('disabled', 'disabled');
+        if($('.table_purchase_orders table tbody tr').hasClass('from-another')) return;
+        $('.table_purchase_orders table tbody tr').find('a.btn').attr('onclick', 'return addTrItem(this);');
+        $('.table_purchase_orders table tbody tr').find('a.btn').addClass('btn-success').removeClass('btn-danger');
+        $('.table_purchase_orders table tbody tr').find('a.btn i').addClass('fa-plus').removeClass('fa-times');
+        
+        $('.table_purchase_suggested tbody').append($('.table_purchase_orders table tbody tr'));
+        $('.table_purchase_suggested').find('input,select').attr('name', '');
+        
+        let warehouseElement = $('#id_warehouse');
+        if(typeof(currency_id) == 'undefined' || currency_id == '') {
+            if(typeof(warehouseElement.val()) == 'undefined' || warehouseElement.val() == '')
+            {
+                $('.table_purchase_suggested tr:has(select[id*="currency"])').hide();
+                $('.table_purchase_suggested tr:has(select[id*="currency"])').show();
             }
             else {
-                item.show();
+                $('.table_purchase_suggested tr:has(select[id*="currency"])').hide();
+                $('.table_purchase_suggested tr:has(input[id*="[warehouse]"][value=' + warehouseElement.val() +'])').show();
             }
-        });
+            changeStatics();
+            return;
+        }
+        if(typeof(warehouseElement.val()) == 'undefined' || warehouseElement.val() == '')
+        {
+            $('.table_purchase_suggested tr:has(select[id*="currency"])').hide();
+            $('.table_purchase_suggested tr:has(select[id*="currency"] option[value='+currency_id+']:selected)').show();
+        }
+        else {
+            $('.table_purchase_suggested tr:has(select[id*="currency"])').hide();
+            $('.table_purchase_suggested tr:has(select[id*="currency"] option[value='+currency_id+']:selected):has(input[id*="[warehouse]"][value=' + warehouseElement.val() +'])').show();
+        }
+        
         changeStatics();
     };
     $('#currency_id').on('change', (e) => {
@@ -447,6 +518,11 @@
     }
     var addTrItem = (trItem) => {
         let currencyElement = $('#currency_id');
+        let warehouseElement = $('#id_warehouse');
+        if(typeof(warehouseElement.val()) == 'undefined' || warehouseElement.val() == '' || warehouseElement.val() == 0) {
+            alert_float('danger', 'Vui lòng chọn kho nhập mua!');
+            return false;
+        }
         if(typeof(currencyElement.val()) != 'undefined' && currencyElement.val() != '' && currencyElement.val() != 0) {
             $(trItem).parents('tr').find('select').removeAttr('disabled');
             $(trItem).parents('tr').find('select,input').each((index, item) => {
@@ -457,10 +533,10 @@
             $(trItem).parents('tr').find('a.btn i').removeClass('fa-plus').addClass('fa-times');
             
             $('.table_purchase_orders tbody').append($(trItem).parents('tr'));
-            currencyElement.prev().prev().attr('disabled', 'disabled');
+            // currencyElement.prev().prev().attr('disabled', 'disabled');
         }
         else {
-            alert_float('danger', 'Vui lòng chọn tiền tệ trước!');
+            alert_float('danger', 'Vui lòng chọn tiền tệ!');
         
         }
         

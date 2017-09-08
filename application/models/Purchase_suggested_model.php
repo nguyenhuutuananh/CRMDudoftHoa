@@ -154,9 +154,11 @@ class Purchase_suggested_model extends CRM_Model
             tblpurchase_suggested_details.id as id,
             tblpurchase_suggested_details.price_buy as price_buy,
             (select unit from tblunits where tblunits.unitid=tblitems.unit) as unit_name,
+            tblitems.name as name,
             ");
             $this->db->where('purchase_suggested_id', $purchase_suggested_id);
             $this->db->join('tblitems', 'tblitems.id = tblpurchase_suggested_details.product_id', 'left');
+            $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
             return $this->db->get('tblpurchase_suggested_details')->result();
         }
         return [];

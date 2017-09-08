@@ -119,6 +119,10 @@
                     $reason = $item->explan;
                     echo render_textarea('explan', 'orders_explan', $reason, $array_attribute_lock, array(), '', 'tinymce');
                     ?>
+                    <?php 
+                        $default_warehouse = $item->id_warehouse;
+                        echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse, array('disabled'=>'disabled'));
+                    ?>
                 </div>
                 
                 
