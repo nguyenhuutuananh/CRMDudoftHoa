@@ -49,9 +49,11 @@ class Purchases_model extends CRM_Model
         tblitems.minimum_quantity,
         tblitems.specification,
         (select tblwarehouses.warehouse from tblwarehouses where tblwarehouses.warehouseid = tblpurchase_plan_details.warehouse_id) as warehouse,
-        tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id');
+        tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,
+        tbltaxes.taxrate as tax_rate');
         $this->db->from('tblpurchase_plan_details');
         $this->db->join('tblitems','tblitems.id=tblpurchase_plan_details.product_id','left');
+        $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
         $this->db->where('purchase_plan_id', $id);
         $items = $this->db->get()->result_array();

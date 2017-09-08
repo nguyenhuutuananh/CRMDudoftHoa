@@ -1016,6 +1016,27 @@ class Clients extends Admin_controller
         $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','DANH SÁCH KHÁCH HÀNG')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
 
         $this->db->select('tblclients.*,tblcontacts.firstname as contact_firstname,tblcontacts.lastname as contact_lastname');
         $this->db->join('tblcontacts','tblcontacts.userid=tblclients.userid','left');
@@ -1033,28 +1054,28 @@ class Clients extends Admin_controller
                 'name'  => 'Times New Roman'
             )
         );
-        $objPHPExcel->getActiveSheet()->setCellValue('A2','STT')->getStyle('A2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('B2','MÃ KH')->getStyle('B2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('C2','Công ty')->getStyle('C2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('D2','Điện thoại')->getStyle('D2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('E2','% CHIẾT KHẤU')->getStyle('E2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('F2','Liên hệ chính')->getStyle('F2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('G2','Email chính')->getStyle('G2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('H2','Địa chỉ')->getStyle('H2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('I2','Mã Nhân viên')->getStyle('I2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('J2','Hoạt động')->getStyle('J2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('K2','NHÓM KH')->getStyle('K2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('A3','STT')->getStyle('A3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B3','MÃ KH')->getStyle('B3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C3','Công ty')->getStyle('C3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D3','Điện thoại')->getStyle('D3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E3','% CHIẾT KHẤU')->getStyle('E3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F3','Liên hệ chính')->getStyle('F3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('G3','Email chính')->getStyle('G3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H3','Địa chỉ')->getStyle('H3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('I3','Mã Nhân viên')->getStyle('I3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('J3','Hoạt động')->getStyle('J3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('K3','NHÓM KH')->getStyle('K3')->applyFromArray($BStyle);
 
         foreach($client as $rom=>$value)
         {
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+3),($rom+1));
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+3),$value['userid']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+3),$value['company']);
-            $objPHPExcel->getActiveSheet()->setCellValueExplicit('D'.($rom+3),$value['phonenumber']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+3),'chiết khấu');
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+3),$value['contact_firstname'].' '.$value['contact_lastname']);
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.($rom+3),$value['email']);
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.($rom+3),$value['address']);
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+4),($rom+1));
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+4),$value['userid']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+4),$value['company']);
+            $objPHPExcel->getActiveSheet()->setCellValueExplicit('D'.($rom+4),$value['phonenumber']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+4),'chiết khấu');
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+4),$value['contact_firstname'].' '.$value['contact_lastname']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.($rom+4),$value['email']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.($rom+4),$value['address']);
 
             $code_staff="";
             $this->db->select('staff_code');
@@ -1066,7 +1087,7 @@ class Clients extends Admin_controller
             }
 
 
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.($rom+3),$code_staff);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.($rom+4),$code_staff);
             if($value['active']==1)
             {
                 $active='Có';
@@ -1075,7 +1096,7 @@ class Clients extends Admin_controller
             {
                 $active="Không";
             }
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.($rom+3),$active);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.($rom+4),$active);
 
             $this->db->select('tblcustomersgroups.name as namegroup');
             $this->db->where('tblcustomergroups_in.customer_id',$value['userid']);
@@ -1087,12 +1108,12 @@ class Clients extends Admin_controller
                 $group_clients.=$group_name['namegroup'].' ';
             }
 
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.($rom+3),$group_clients);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.($rom+4),$group_clients);
         }
         $objPHPExcel->getActiveSheet()->freezePane('A3');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="filexuat.xls"');
+        header('Content-Disposition: attachment;filename="Danh_sach_khach_hang.xls"');
         header('Cache-Control: max-age=0');
 
         $objWriter->save('php://output');

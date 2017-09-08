@@ -56,6 +56,22 @@
                         echo render_select('client_type', $client_type_value, array('id','name'),'client_type', (isset($client) ? $client->client_type : 1), array(), array(), '', '', false);
                     ?>
                     
+                    <?php 
+                        $s_attrs = array('data-none-selected-text'=>_l('system_default_string'));
+                        $client_title_value = array(
+                            array(
+                                'id' => 'Anh',
+                                'name' => 'Anh',
+                            ),
+                            array(
+                                'id' => 'Chị',
+                                'name' => 'Chị',
+                            ),
+                        );
+                        echo render_select('title', $client_title_value, array('id','name'),'Danh xưng', (isset($client) ? $client->title : ''), array(), array(), '', '', true);
+                    ?>
+                    
+
                     <?php
                     $value= ( isset($client) ? $client->company : ''); 
                     $attrs = (isset($client) ? array() : array('autofocus'=>true));
@@ -113,8 +129,12 @@
                         echo render_select('address_area', $areas, array('id','name'),'client_area', !isset($client) ? $default_source_id : $client->address_area, array('data-none-selected-text'=>_l('dropdown_non_selected_tex'))); 
                     ?>
 
-                    <?php $value=( isset($client) ? $client->zip : ''); ?>
-                    <?php echo render_input( 'zip', 'client_postal_code',$value, 'text', array(), $group_attrs_company); ?>
+                    <?php 
+                        // $value=( isset($client) ? $client->zip : ''); 
+                    ?>
+                    <?php 
+                        // echo render_input( 'zip', 'client_postal_code',$value, 'text', array(), $group_attrs_company); 
+                    ?>
                     
                     <?php $value=( isset($client) ? $client->city : ''); ?>
                     <?php echo render_select( 'city', get_all_province(), array('provinceid','name') , 'client_city',$value,array('data-none-selected-text'=>_l('dropdown_non_selected_tex'))); ?>

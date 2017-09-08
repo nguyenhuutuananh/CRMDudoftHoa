@@ -179,6 +179,7 @@
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
                                         <th></th>
                                         
                                     </tr>
@@ -218,6 +219,9 @@
                                         </td>
                                         <td>
                                             0
+                                        </td>
+                                        <td>
+                                            0 %
                                         </td>
                                         <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
@@ -261,6 +265,9 @@
                                         </td>
                                         <td>
                                             <?php echo number_format($value['price_buy']*$value['product_quantity']) ?>
+                                        </td>
+                                        <td>
+                                            <?php echo ($value['taxrate']) ?> %
                                         </td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
@@ -378,6 +385,7 @@
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
 		var td9 = $('<td></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -399,6 +407,7 @@
 		objPriceBuy.removeAttr('id');
 		td8.append(objPriceBuy);
         td9.append($('tr.main').find('td:nth-child(9)').text());
+        td10.append($('tr.main').find('td:nth-child(10)').text());
 
 		newTr.append(td1);
         newTr.append(td2);
@@ -409,6 +418,7 @@
         newTr.append(td7);
         newTr.append(td8);
 		newTr.append(td9);
+        newTr.append(td10);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -471,6 +481,7 @@
             trBar.find('td:nth-child(6)');
             trBar.find('td:nth-child(7)');
             trBar.find('td:nth-child(8)');
+            trBar.find('td:nth-child(10)').text(itemFound.tax_rate + " %");
             isNew = true;
             $('#btnAdd').show();
         }

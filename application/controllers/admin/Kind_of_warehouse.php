@@ -124,34 +124,35 @@ class Kind_of_warehouse extends Admin_controller
                 ]
             ];
             $objPHPExcel->getActiveSheet()
-                ->getStyle("A1:N1")
+                ->getStyle("A1:N2")
                 ->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+            $objPHPExcel->getActiveSheet()->SetCellValue('A2','DANH SÁCH LOẠI KHO')->getStyle('A2')->applyFromArray($BStyle);
             $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
             $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
         }
-        $objPHPExcel->getActiveSheet()->setCellValue('A2','STT')->getStyle('A2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('B2','MÃ KHO')->getStyle('B2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('C2','TÊN LOẠI KHO')->getStyle('C2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('D2','ĐỊA CHỈ')->getStyle('D2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('E2','BỘ PHẬN QUẢN LÝ')->getStyle('E2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('F2','DÒNG LƯU CHUYỂN')->getStyle('F2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('A3','STT')->getStyle('A3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B3','MÃ KHO')->getStyle('B3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C3','TÊN LOẠI KHO')->getStyle('C3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D3','ĐỊA CHỈ')->getStyle('D3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E3','BỘ PHẬN QUẢN LÝ')->getStyle('E3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F3','DÒNG LƯU CHUYỂN')->getStyle('F3')->applyFromArray($BStyle);
 
         foreach($warehouses as $rom => $value_warehouse)
         {
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+3),($rom+1));
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+3),$value_warehouse['code']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+3),$value_warehouse['name']);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.($rom+3),$value_warehouse['address']);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+3),'');
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+3),'');
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+4),($rom+1));
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+4),$value_warehouse['code']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+4),$value_warehouse['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.($rom+4),$value_warehouse['address']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+4),'');
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+4),'');
 
         }
-        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="filexuat.xls"');
+        header('Content-Disposition: attachment;filename="Danh_sach_kho_hang.xls"');
         header('Cache-Control: max-age=0');
 
         $objWriter->save('php://output');

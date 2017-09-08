@@ -155,7 +155,6 @@ $tblHtml = '
 
 $i=0;
 $totalPrice = 0;
-
 foreach($purchase_order->products as $value) {
     // print_r($value);
     // exit();
@@ -163,12 +162,12 @@ foreach($purchase_order->products as $value) {
     $tblHtml .= '
         <tr>
             <td>'.$i.'</td>
-            <td>'.$value->product_code.'</td>
-            <td>'.$value->product_code.'</td>
+            <td>'.$value->code.'</td>
+            <td>'.$value->name.'</td>
             <td>'.$value->unit.'</td>
             <td style="text-align:center">'.number_format($value->product_quantity).'</td>
             <td style="text-align:right">'.number_format($value->product_price_buy).'</td>
-            <td>'.$value->rate.'</td>
+            <td>'.$value->rate.' %</td>
             <td style="text-align:right">'.number_format($value->product_quantity*$value->product_price_buy + ($value->product_quantity*$value->product_price_buy)* ($value->rate)/100).'</td>
         </tr>
     ';

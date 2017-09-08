@@ -218,25 +218,27 @@ class Warehouses extends Admin_controller
                 ]
             ];
             $objPHPExcel->getActiveSheet()
-                ->getStyle("A1:N1")
+                ->getStyle("A1:N2")
                 ->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+            $objPHPExcel->getActiveSheet()->SetCellValue('A2','DANH SÁCH KHO')->getStyle('A2')->applyFromArray($BStyle);
             $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
             $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
             $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
         }
-        $objPHPExcel->getActiveSheet()->setCellValue('A2','ID')->getStyle('A2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('B2','STT')->getStyle('B2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('C2','MÃ SẢN PHẨM')->getStyle('C2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('D2','SẢN PHẨM')->getStyle('D2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('E2','ĐƠN VỊ TÍNH')->getStyle('E2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('F2','GIÁ BÁN')->getStyle('F2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('G2','GIÁ VỐN')->getStyle('G2')->applyFromArray($BStyle);
-        $objPHPExcel->getActiveSheet()->setCellValue('H2','HÀNG CÓ THỂ BÁN')->getStyle('H2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('A3','ID')->getStyle('A3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B3','STT')->getStyle('B3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C3','MÃ SẢN PHẨM')->getStyle('C3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D3','SẢN PHẨM')->getStyle('D3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E3','ĐƠN VỊ TÍNH')->getStyle('E3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F3','GIÁ BÁN')->getStyle('F3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('G3','GIÁ VỐN')->getStyle('G3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H3','HÀNG CÓ THỂ BÁN')->getStyle('H3')->applyFromArray($BStyle);
         $warehouses=$this->db->get('tblwarehouses')->result_array();
         foreach($warehouses as $num_ware=> $warehouse)
         {
-            $objPHPExcel->getActiveSheet()->setCellValue($colum_array[$num_ware].'2',$warehouse['warehouse'])->getStyle($colum_array[$num_ware].'2')->applyFromArray($BStyle);
+            $objPHPExcel->getActiveSheet()->setCellValue($colum_array[$num_ware].'3',$warehouse['warehouse'])->getStyle($colum_array[$num_ware].'3')->applyFromArray($BStyle);
         }
         $rom=3;
         foreach($categori as $rom_cate => $value_categori)
@@ -290,10 +292,10 @@ class Warehouses extends Admin_controller
             }
         }
 //        die();
-        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="filexuat.xls"');
+        header('Content-Disposition: attachment;filename="Danh_sach_Kho.xls"');
         header('Cache-Control: max-age=0');
 
         $objWriter->save('php://output');
