@@ -170,9 +170,10 @@
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+
+                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -235,17 +236,19 @@
                                             }
                                         ?>
                                         <td>
-                                        <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" disabled />
+                                        <input style="width: 100px; <?=$stylee?>" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" disabled />
                                         </td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo $value->warehouse_type->kindof_warehouse_name ?></td>
-                                        <td><input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"><?php echo $value->warehouse_type->warehouse ?>(có <?=$value->warehouse_type->product_quantity?>)</td>
+                                        <td><?php echo number_format($value->tax) ?>
+                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td><?php echo number_format($value->amount) ?></td>
                                         <td <?=$display?>><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->sub_total;
+                                            $totalPrice += $value->amount;
                                             $i++;
                                         }
                                     }

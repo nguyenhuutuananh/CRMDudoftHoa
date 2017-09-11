@@ -247,14 +247,15 @@ class Invoices extends Admin_controller
             $data['do_not_auto_toggle'] = true;
         }
 
+        $this->load->model('sales_model');
+        $data['sales']=$this->sales_model->get();
         $this->load->model('payment_modes_model');
         $data['payment_modes'] = $this->payment_modes_model->get('', array(
             'expenses_only !=' => 1
         ));
         $this->load->model('taxes_model');
         $data['taxes'] = $this->taxes_model->get();
-        // echo "<pre>";
-        // var_dump($data['taxes']);die();
+        
         $this->load->model('invoice_items_model');
         $data['items']        = $this->invoice_items_model->get_grouped();
         $data['items_groups'] = $this->invoice_items_model->get_groups();
@@ -318,11 +319,11 @@ class Invoices extends Admin_controller
             echo _l('access_denied');
             die;
         }
+
         if (!$id) {
             die('No invoice found');
         }
         $invoice = $this->invoices_model->get($id);
-
         if (!$invoice || (!has_permission('invoices', '', 'view') && $invoice->addedfrom != get_staff_user_id())) {
             echo _l('invoice_not_found');
             die;

@@ -8,22 +8,25 @@ class Imports extends Admin_controller
         $this->load->model('imports_model');
         $this->load->model('invoice_items_model');
         $this->load->model('warehouse_model');
+        $this->load->model('accounts_model');
+        $this->load->model('purchase_contacts_model');
+        $this->load->model('suppliers_model');
     }
     public function index() {
         // var_dump($this->imports_model->getImportByID(64));die();
         // var_dump($this->db->query("SHOW COLUMNS FROM tbloptions")->result_array());die();
     }
 
-    public function imp_adjustment() 
+    public function imp_contract() 
     {
         if ($this->input->is_ajax_request()) {
-            $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'adjustment'));
+            $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'contract'));
         }
-        $data['title'] = _l('Điều chỉnh kho hàng');
-        $this->load->view('admin/imports/adjustments/adjustment', $data);
+        $data['title'] = _l('importfromcontract');
+        $this->load->view('admin/imports/contracts/contracts', $data);
     }
 
-    public function adjustment_detail($id='') 
+    public function contract_detail($id='') 
     {
         if (!has_permission('import_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
@@ -37,7 +40,6 @@ class Imports extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
-                // var_dump($data);die();
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->imports_model->add($data);
@@ -70,14 +72,93 @@ class Imports extends Admin_controller
             $data['item'] = $this->imports_model->getImportByID($id);
             $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
             $data['warehouse_type']=$this->warehouse_model->getWarehouses($data['warehouse_id'])->kindof_warehouse;
+
             if (!$data['item']) {
                 blank_page('Purchase Not Found');
             }
         }
-        $data['items']= $this->invoice_items_model->get_full();
-        
+
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['suppliers']=$this->suppliers_model->get();
+        $data['contracts']=$this->purchase_contacts_model->get();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
+
+        $data['title'] = $title;
+        $this->load->view('admin/imports/contracts/detail', $data);
+    }
+
+    public function imp_adjustment() 
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'adjustment'));
+        }
+        $data['title'] = _l('Điều chỉnh kho hàng');
+        $this->load->view('admin/imports/adjustments/adjustment', $data);
+    }
+
+
+
+    public function adjustment_detail($id='') 
+    {
+        if (!has_permission('import_items', '', 'view')) {
+            if ($id != '' && !is_customer_admin($id)) {
+                access_denied('import_items');
+            }
+        }
+        if ($this->input->post() && !$this->input->is_ajax_request()) {
+            if ($id == '') {
+                if (!has_permission('import_items', '', 'create')) {
+                    access_denied('import_items');
+                }
+
+                $data                 = $this->input->post();
+                if(isset($data['items']) && count($data['items']) > 0)
+                {
+                    $id = $this->imports_model->add($data);
+                }
+                
+                if ($id) {
+                    set_alert('success', _l('added_successfuly', _l('adjustments')));
+                    redirect(admin_url('imports/imp_adjustment'));
+                }
+            } else {
+
+                if (!has_permission('import_items', '', 'edit')) {
+                        access_denied('import_items');
+                }
+                $success = $this->imports_model->update($this->input->post(), $id);
+                if ($success == true) {
+                    set_alert('success', _l('updated_successfuly', _l('adjustments')));
+                    redirect(admin_url('imports/imp_adjustment'));
+                }
+                else
+                {
+                    redirect(admin_url('imports/adjustment_detail/'.$id));
+                }
+            }
+        }
+        if ($id == '') {
+            $title = _l('add_new', _l('adjustments'));
+
+        } else {
+            $data['item'] = $this->imports_model->getImportByID($id);
+            $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
+            $data['warehouse_type']=$this->warehouse_model->getWarehouses($data['warehouse_id'])->kindof_warehouse;
+
+            if (!$data['item']) {
+                blank_page('Purchase Not Found');
+            }
+        }
+
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
+
         $data['title'] = $title;
         $this->load->view('admin/imports/adjustments/detail', $data);
     }
@@ -144,10 +225,11 @@ class Imports extends Admin_controller
                 blank_page('Purchase Not Found');
             }
         }
-        $data['items']= $this->invoice_items_model->get_full();
-        
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
         $data['title'] = $title;
         $this->load->view('admin/imports/internals/detail', $data);
     }

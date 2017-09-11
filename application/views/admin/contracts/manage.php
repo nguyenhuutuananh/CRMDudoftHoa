@@ -134,7 +134,7 @@
                     <?php echo form_hidden('custom_view'); ?>
                             <?php
                             $table_data = array('#',
-                               _l('contract_list_subject'),
+                               _l('contract_list_code'),
                                _l('contract_list_client'),
                                _l('contract_types_list_name'),
                                 _l('contract_value'),

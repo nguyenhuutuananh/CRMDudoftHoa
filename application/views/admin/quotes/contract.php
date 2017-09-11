@@ -33,7 +33,10 @@
                     <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
                   </div>
             </div>
-            
+            <div class="form-group">
+                 <label for="rel_code"><?php echo _l('quote_code'); ?></label>
+                    <input type="text" name="rel_code" class="form-control" id="rel_code" value="<?=$quote->prefix.$quote->code ?>" data-isedit="<?php echo $isedit; ?>" readonly>
+            </div>
             <?php
             $selected = (isset($contract) ? $contract->client :'');
             if($selected == '')

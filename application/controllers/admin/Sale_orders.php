@@ -31,6 +31,7 @@ class Sale_orders extends Admin_controller
 
     public function sale_detail($id='') 
     {
+          
         if (!has_permission('sale_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('sale_items');
@@ -70,36 +71,46 @@ class Sale_orders extends Admin_controller
         }
         if ($id == '') {
             $title = _l('add_new', _l('sales'));
-
-        } else {
-
+      
+        } 
+        else 
+        {
             $data['item'] = $this->sale_oders_model->getSaleByID($id);
+            if($data['item']->rel_id)
+            {
+                $data['khoa']=true;
+            }
+            
             $data['item_returns'] = $this->sale_oders_model->getReturnSaleItems($id);
             $i=0;
             foreach ($data['item']->items as $key => $value) {       
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
                 $i++;
             }
-
+            $data['isedit']='1';
             $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
             $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
-            
+           
+            if(isset($data['item']->rel_id))
+            {
+                $data['isedit']=false;
+            }
             if (!$data['item']) {
                 blank_page('Sale Not Found');
             }
-        }       
+        }  
+
         $where_clients = 'tblclients.active=1';
 
         if (!has_permission('customers', '', 'view')) {
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
+
+        $data['customers']= $this->clients_model->get('',$where_clients);
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
         $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
-        $data['customers'] = $this->clients_model->get('', $where_clients);
-        $data['items']= $this->invoice_items_model->get_full();
-        
-        // $data['warehouse_types']= $this->sale_oders_model->getWarehouseTypes();
-        // $data['warehouses']= $this->warehouse_model->getWarehouses();
+
         $data['title'] = $title;
         $this->load->view('admin/sales/order_detail', $data);
     }

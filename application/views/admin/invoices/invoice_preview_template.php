@@ -1,4 +1,4 @@
-<?php if(count($invoices_to_merge) > 0){ ?>
+<!-- <?php if(count($invoices_to_merge) > 0){ ?>
 <div class="panel_s no-padding">
  <div class="panel-body">
   <h4 class="no-margin text-success"><?php echo _l('invoices_available_for_merging'); ?></h4>
@@ -13,7 +13,7 @@
 <?php } ?>
 </div>
 </div>
-<?php } ?>
+<?php } ?> -->
 <?php echo form_hidden('_attachment_sale_id',$invoice->id); ?>
 <?php echo form_hidden('_attachment_sale_type','invoice'); ?>
 <div class="col-md-12 no-padding">
@@ -35,11 +35,11 @@
   </a>
 </li>
 <?php } ?>
-<li role="presentation">
+<!-- <li role="presentation">
  <a href="#tab_tasks" aria-controls="tab_tasks" role="tab" data-toggle="tab">
   <?php echo _l('tasks'); ?>
 </a>
-</li>
+</li> -->
 <li role="presentation">
  <a href="#tab_activity" aria-controls="tab_activity" role="tab" data-toggle="tab">
   <?php echo _l('invoice_view_activity_tooltip'); ?>
@@ -82,14 +82,14 @@
     <?php } ?>
     <a href="<?php echo admin_url('invoices/pdf/'.$invoice->id.'?print=true'); ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="<?php echo _l('print'); ?>" data-placement="bottom"><i class="fa fa-print"></i></a>
     <a href="<?php echo admin_url('invoices/pdf/'.$invoice->id); ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="<?php echo _l('view_pdf'); ?>" data-placement="bottom"><i class="fa fa-file-pdf-o"></i></a>
-    <a href="#" class="invoice-send-to-client btn-with-tooltip btn btn-default" data-toggle="tooltip" title="<?php echo $_tooltip; ?>" data-placement="bottom"><span data-toggle="tooltip" data-title="<?php echo $_tooltip_already_send; ?>"><i class="fa fa-envelope"></i></span></a>
+    <!-- <a href="#" class="invoice-send-to-client btn-with-tooltip btn btn-default" data-toggle="tooltip" title="<?php echo $_tooltip; ?>" data-placement="bottom"><span data-toggle="tooltip" data-title="<?php echo $_tooltip_already_send; ?>"><i class="fa fa-envelope"></i></span></a> -->
     <!-- Single button -->
     <div class="btn-group">
       <button type="button" class="btn btn-default pull-left dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
        <?php echo _l('more'); ?> <span class="caret"></span>
      </button>
      <ul class="dropdown-menu dropdown-menu-right">
-       <li><a href="<?php echo site_url('viewinvoice/' . $invoice->id . '/' .  $invoice->hash) ?>" target="_blank"><?php echo _l('view_invoice_as_customer_tooltip'); ?></a></li>
+       <!-- <li><a href="<?php echo site_url('viewinvoice/' . $invoice->id . '/' .  $invoice->hash) ?>" target="_blank"><?php echo _l('view_invoice_as_customer_tooltip'); ?></a></li> -->
        <li>
         <?php if($invoice->status == 4 || ($invoice->status == 3 && date('Y-m-d') > date('Y-m-d',strtotime(to_sql_date($invoice->duedate))))){ ?>
         <a href="<?php echo admin_url('invoices/send_overdue_notice/'.$invoice->id); ?>"><?php echo _l('send_overdue_notice_tooltip'); ?></a>
@@ -98,11 +98,11 @@
       <li>
         <a href="#" data-toggle="modal" data-target="#sales_attach_file"><?php echo _l('invoice_attach_file'); ?></a>
       </li>
-      <?php if(has_permission('invoices','','create')){ ?>
+      <!-- <?php if(has_permission('invoices','','create')){ ?>
       <li>
         <a href="<?php echo admin_url('invoices/copy/'.$invoice->id); ?>"><?php echo _l('invoice_copy'); ?></a>
       </li>
-      <?php } ?>
+      <?php } ?> -->
       <?php if($invoice->sent == 0){ ?>
       <li>
         <a href="<?php echo admin_url('invoices/mark_as_sent/'.$invoice->id); ?>"><?php echo _l('invoice_mark_as_sent'); ?></a>
@@ -272,7 +272,7 @@
  }
  ?>
  <?php
-                              // check for invoice custom fields which is checked show on pdf
+  // check for invoice custom fields which is checked show on pdf
  $pdf_custom_fields = get_custom_fields('invoice',array('show_on_pdf'=>1));
  foreach($pdf_custom_fields as $field){
   $value = get_custom_field_value($invoice->id,$field['id'],'invoice');
@@ -294,29 +294,37 @@
      <thead>
       <tr>
        <th>#</th>
-       <th class="description" width="50%"><?php echo _l('invoice_table_item_heading'); ?></th>
-       <?php
-       $qty_heading = _l('invoice_table_quantity_heading');
-       if($invoice->show_quantity_as == 2){
-        $qty_heading = _l('invoice_table_hours_heading');
-      } else if($invoice->show_quantity_as == 3){
-        $qty_heading = _l('invoice_table_quantity_heading') .'/'._l('invoice_table_hours_heading');
-      }
-      ?>
-      <th><?php echo $qty_heading; ?></th>
-      <th><?php echo _l('invoice_table_rate_heading'); ?></th>
-      <?php if(get_option('show_tax_per_item') == 1){ ?>
-      <th><?php echo _l('invoice_table_tax_heading'); ?></th>
-      <?php } ?>
-      <th><?php echo _l('invoice_table_amount_heading'); ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_item_heading'); ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_item_code'); ?></th>
+       <th width="" class="text-left qty" ><?php echo _l('invoice_table_quantity_heading') ?></th>
+       <th width="" class="text-left qty" ><?php echo _l('invoice_table_item_price') ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_sub_total'); ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_tax'); ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_discount').'(%)'; ?></th>
+       <th width="" class="text-left"><?php echo _l('invoice_table_amount'); ?></th>
     </tr>
   </thead>
   <tbody>
-   <?php
+  <!--  <?php
    $items_data = get_table_items_and_taxes($invoice->items,'invoice',true);
    $taxes = $items_data['taxes'];
    echo $items_data['html'];
-   ?>
+   ?> -->
+
+   <?php $i=1; foreach ($invoice->items as $key => $item) { ?>
+    <tr class="sortable" data-item-id="<?=$item['id']?>">
+     <td class="dragger item_no" align="center"><?=$i?>
+     </td>
+     <td class="name" align="left;"><span class="bold"><?=$item['name']?></span></td>
+     <td align="right"><?=$item['code']?></td><td align="right"><?=_format_number($item['qty'])?></td>
+     <td align="right"><?=format_money($item['unit_cost'])?></td>
+     <td class="sub_total" align="right"><?=format_money($item['sub_total'])?></td>
+     <td class="tax" align="right"><?=format_money($item['tax'])?></td>
+     <td class="amount" align="right"><?=_format_number($item['discount_percent'])?>%</td>
+     <td class="amount" align="right"><?=format_money($item['amount'])?></td>
+   </tr>
+   <?php $i++; } ?>
+
  </tbody>
 </table>
 </div>
@@ -331,16 +339,14 @@
       <?php echo format_money($invoice->subtotal,$invoice->symbol); ?>
     </td>
   </tr>
-  <?php if($invoice->discount_percent != 0){ ?>
   <tr>
    <td>
-    <span class="bold"><?php echo _l('invoice_discount'); ?> (<?php echo _format_number($invoice->discount_percent,true); ?>%)</span>
+    <span class="bold"><?php echo _l('invoice_discount_total'); ?></span>
   </td>
   <td class="discount">
-    <?php echo '-' . format_money($invoice->discount_total,$invoice->symbol); ?>
+    <?php echo format_money($invoice->discount_total,$invoice->symbol); ?>
   </td>
 </tr>
-<?php } ?>
 <?php
 foreach($taxes as $tax){
  $total = array_sum($tax['total']);
@@ -448,9 +454,9 @@ echo '<tr class="tax-area"><td>'.$_tax_name[0].'('._format_number($tax['taxrate'
 </div>
 </div>
 </div>
-<div role="tabpanel" class="tab-pane" id="tab_tasks">
+<!-- <div role="tabpanel" class="tab-pane" id="tab_tasks">
   <?php init_relation_tasks_table(array('data-new-rel-id'=>$invoice->id,'data-new-rel-type'=>'invoice')); ?>
-</div>
+</div> -->
 <div role="tabpanel" class="tab-pane" id="tab_reminders">
   <a href="#" class="btn btn-info btn-xs" data-toggle="modal" data-target=".reminder-modal-invoice-<?php echo $invoice->id; ?>"><i class="fa fa-bell-o"></i> <?php echo _l('invoice_set_reminder_title'); ?></a>
   <hr />

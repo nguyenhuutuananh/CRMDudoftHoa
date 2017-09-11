@@ -158,7 +158,6 @@ class Contracts extends Admin_controller
                 $i++;
             }
 
-            
             $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
             $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
             
@@ -176,9 +175,10 @@ class Contracts extends Admin_controller
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['customers'] = $this->clients_model->get('', $where_clients);
-        // $data['items']= $this->invoice_items_model->get_full();
-        
-        // $data['warehouse_types']= $this->sale_oders_model->getWarehouseTypes();
+        $data['items']= $this->invoice_items_model->get_full();
+        var_dump($this->clients_model->get('', $where_clients));die();
+
+        var_dump($data['customers']);die();
         
         $data['convert']= $data['item']->export_status ? false : true ;
         

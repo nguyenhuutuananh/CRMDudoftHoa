@@ -108,17 +108,19 @@ $tblhtml = '
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
         <th scope="col"  width="5%" align="center">STT</th>
         <th scope="col"  width="20%" align="center">' . _l('Sản phẩm') . '</th>
-        <th scope="col"  width="17%" align="center">' . _l('Mã số') . '</th>
-        <th scope="col"  width="18%" align="center">' . _l('Số lượng') . '</th>';
-$tblhtml .='<th  width="20%" align="center">' . _l('Đơn giá') . '</th>
-            <th  width="20%" align="center">' . _l('Thành tiền') . '</th>';
+        <th scope="col"  width="10%" align="center">' . _l('Mã số') . '</th>
+        <th scope="col"  width="9%" align="center">' . _l('Số lượng') . '</th>';
+$tblhtml .='<th  width="13%" align="center">' . _l('Đơn giá') . '</th>
+            <th  width="14%" align="center">' . _l('sub_amount') . '</th>
+            <th  width="13%" align="center">' . _l('tax') . '</th>
+            <th  width="15%" align="center">' . _l('amount') . '</th>';
 $tblhtml .= '</tr>';
 // Items
 $tblhtml .= '<tbody>';
 $grand_total=0;
 for ($i=0; $i < count($invoice->items) ; $i++) { 
     // var_dump($invoice->items[$i]);die();
-    $grand_total+=$invoice->items[$i]->sub_total;
+    $grand_total+=$invoice->items[$i]->amount;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
@@ -126,12 +128,14 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
+    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->tax).'</td>';
+     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
 
 
     $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="4" align="right">Tổng tiền</td>';
+    $tblhtml.='<td colspan="6" align="right">'._l('total_amount').'</td>';
     $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total,get_option('default_currency')).'</td>';
     $tblhtml.='</tr>';
 $tblhtml .= '</tbody>';

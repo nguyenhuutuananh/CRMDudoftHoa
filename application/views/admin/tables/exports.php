@@ -11,6 +11,7 @@ $aColumns     = array(
     'code',
     'rel_code',
     'company',
+    'total',
     '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
     'status',
     // 'delivery_status',
@@ -20,8 +21,31 @@ $aColumns     = array(
 $sIndexColumn = "id";
 $sTable       = 'tblexports';
 $where        = array(
-    // 'AND rel_type="'.$rel_type.'"',
+    'AND canceled_at is null',
 );
+
+//fillter
+if($this->_instance->input->post()) {
+    $filter_status = $this->_instance->input->post('filterStatus');
+    if(is_numeric($filter_status)) {
+        
+        if($filter_status == 2)
+            array_push($where, 'AND status='.$filter_status);
+        elseif($filter_status == 3)
+            array_push($where, 'AND delivery_code is null');
+        elseif($filter_status == 4)
+            array_push($where, 'AND delivery_code<>"'.NULL.'"');
+        elseif($filter_status == 5)
+        {
+            $where=array();
+            array_push($where, 'AND canceled_at<>"'.NULL.'"');
+        }            
+        else {
+            array_push($where, 'AND status<>2');
+        }
+    }
+}
+
 if(!empty($sale_id))
 {
     $where[]='AND rel_id="'.$sale_id.'"';
@@ -30,12 +54,15 @@ $join         = array(
     'LEFT JOIN tblstaff  ON tblstaff.staffid=tblexports.create_by',
     'LEFT JOIN tblclients  ON tblclients.userid=tblexports.customer_id'
 );
+// print_r($where);
+// exit();
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'rel_id',
     'prefix',
     'delivery_code',
     'tblstaff.fullname',
+    'canceled_at',
     'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
 ));
 $output       = $result['output'];
@@ -56,11 +83,15 @@ foreach ($rResult as $aRow) {
             $_data='<a href="'.admin_url('sales/sale_detail/'.$aRow['rel_id']).'">'.$aRow['rel_code'].'</a>';
         }
         if ($aColumns[$i] == 'code') {
-            $_data=$aRow['prefix'].$aRow['code'];
+            $_data='<a href="'.admin_url('exports/export_detail/'.$aRow['id']).'">'.$aRow['prefix'].$aRow['code'].'</a>';
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);
         }
+        if ($aColumns[$i] == 'total') {
+            $_data=format_money($aRow['total']);
+        }
+
         if ($aColumns[$i] == 'status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['status']).'" task-status-table="'.$aRow['status'].'">' . format_status_export($aRow['status'],false,true).'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))
@@ -146,10 +177,22 @@ foreach ($rResult as $aRow) {
             $_data .= icon_btn('exports/export_detail/'. $aRow['id'] , 'eye', 'btn-default',array('data-toggle'=>'tooltip',
             'title'=>_l('view'),
             'data-placement'=>'top'));
-        }      
-        $row[] =$_data.icon_btn('exports/delete/'. $aRow['id'] , 'remove', 'btn-danger delete-remind',array('data-toggle'=>'tooltip',
-            'title'=>_l('delete'),
+        }
+        if(empty($aRow['canceled_at']))
+        {
+            $_data.=icon_btn('exports/delete/'. $aRow['id'] , 'remove', 'btn-danger delete-remind',array('data-toggle'=>'tooltip',
+            'title'=>_l('cancel'),
             'data-placement'=>'top'));
+        }
+        else
+        {
+            $_data.=icon_btn('exports/restore/'. $aRow['id'] , 'refresh', 'btn-info restore-remind',array('data-toggle'=>'tooltip',
+            'title'=>_l('restore'),
+            'data-placement'=>'top'));
+        }      
+        
+
+        $row[] =$_data;
     } else {
         $row[] = '';
     }

@@ -10,6 +10,7 @@ $aColumns     = array(
     '1',
     'code',
     'company',
+    'total',
     '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
     'status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
@@ -72,6 +73,9 @@ foreach ($rResult as $aRow) {
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);
+        }
+        if ($aColumns[$i] == 'total') {
+            $_data=format_money($aRow['total']);
         }
         if ($aColumns[$i] == 'status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['status']).'" task-status-table="'.$aRow['status'].'">' . format_status_quote($aRow['status'],false,true).'';

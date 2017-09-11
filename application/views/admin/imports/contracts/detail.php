@@ -16,7 +16,7 @@
         <!-- Product information -->
         
 
-  <h4 class="bold no-margin"><?php echo (isset($item) ? (($item->status==2)?_l('Xem phiếu điều chỉnh kho'):_l('Sửa phiếu điều chỉnh kho')) : _l('Tạo phiếu điều chỉnh kho')); ?></h4>
+  <h4 class="bold no-margin"><?php echo (isset($item) ? (($item->status==2)?_l('Xem phiếu phiếu nhập hàng'):_l('Sửa phiếu phiếu nhập hàng')) : _l('Tạo phiếu phiếu nhập hàng')); ?></h4>
   <hr class="no-mbot no-border" />
   <div class="row">
     <div class="additional"></div>
@@ -57,7 +57,7 @@
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
-                    <?php echo _l('Chi tiết phiếu điều chỉnh kho'); ?>
+                    <?php echo _l('Chi tiết phiếu phiếu nhập hàng'); ?>
                 </a>
             </li>
         </ul>
@@ -89,9 +89,9 @@
                          <label for="number"><?php echo _l('code_noo'); ?></label>
                          <div class="input-group">
                           <span class="input-group-addon">
-                          <?php $prefix =($item) ? $item->prefix : get_option('prefix_adjustment'); ?>
+                          <?php $prefix =($item) ? $item->prefix : get_option('prefix_import_contract'); ?>
                             <?=$prefix?>
-                            <?php echo form_hidden('rel_type', 'adjustment'); ?>
+                            <?php echo form_hidden('rel_type', 'contract'); ?>
                             <?=form_hidden('prefix',$prefix)?>    
                             </span>
                             <?php 
@@ -114,6 +114,12 @@
                     <?php $value = (isset($item) ? _d($item->account_date) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('account_date','account_date',$value); ?>
 
+                    <?php $selected = (isset($item) ? $item->supplier_id : ''); ?>
+                    <?php echo render_select('supplier_id',$suppliers,array('userid','company'),'suppliers',$selected); ?>
+
+                    <?php $selected = (isset($item) ? $item->rel_id : ''); ?>
+                    <?php echo render_select('rel_id',$contracts,array('id',array('prefix','code')),'contracts',$selected); ?>
+
                     <?php
                     $default_name = (isset($item) ? $item->name : "");
                     echo render_input('name', _l('import_name'), $default_name);
@@ -133,7 +139,7 @@
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
-                        <div class="row">
+                        <div class="row" style="display: none;">
                             <div class="col-md-4">
                             <?php
                             $selected=(isset($item) ? $warehouse_type : '');
@@ -179,7 +185,7 @@
                                         <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th width="10%" class="text-left"><?php echo _l('item_warehouse'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="10%" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -211,7 +217,7 @@
                                         </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
-                                            <?php echo _l('item_unit'); ?>
+                                            <?php echo _l('item_warehouse'); ?>
                                         </td>
 
                                         <td>
@@ -317,7 +323,105 @@
 <script>
     _validate_form($('.client-form'),{code:'required',warehouse_type:'required',warehouse_id:'required'});
     
+
     var itemList = <?php echo json_encode($items);?>;
+
+    $('#supplier_id').change(function(e){
+        $('table tr.item').remove();
+        total=0;
+        var supplier_id=$(this).val();
+        loadContractsBySuppID(supplier_id)
+        refreshAll();
+        refreshTotal();
+    }); 
+
+    function loadContractsBySuppID(supplier_id){
+        var rel_id=$('#rel_id');
+        rel_id.find('option:gt(0)').remove();
+        rel_id.selectpicker('refresh');
+        if(rel_id.length) {
+            $.ajax({
+                url : admin_url + 'purchase_contracts/getContractsBySuppID/' + supplier_id,
+                dataType : 'json',
+            })
+            .done(function(data){         
+                $.each(data, function(key,value){
+
+                    rel_id.append('<option value="' + value.id + '">'+ value.code + '</option>');
+                });
+                rel_id.selectpicker('refresh');
+            });
+        }
+    } 
+
+    $('#rel_id').change(function(e){
+        $('table.item-purchase tr.item').remove();
+        total=0;
+        var contract_id=$(this).val();
+        loadAllItemsByContractID(contract_id)
+        // refreshAll();
+        // refreshTotal();
+    }); 
+
+    function loadAllItemsByContractID(contract_id){
+        $('table.item-purchase tbody tr.sortable.item').remove();
+        if(contract_id) {
+            $.ajax({
+                url : admin_url + 'purchase_contracts/getAllItemsByContractID/' + contract_id,
+                dataType : 'json',
+            })
+            .done(function(data){ 
+                console.log(data);
+                total=0;
+                $.each(data, function(key,value){
+                    var newTr = $('<tr class="item"></tr>');
+                    var td1 = $('<td class="dragger"><input type="hidden" name="items[' + uniqueArray + '][id]" value="'+value.product_id+'" /></td>');
+                    var td2 = $('<td>'+value.name+'</td>');
+                    var td3 = $('<td></td>');
+                    var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
+                    selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+                    selectTd3.removeAttr('id');
+                    var tk_no='items['+uniqueArray+'][tk_no]';
+                    selectTd3.attr('name',tk_no);
+                    td3.append(selectTd3);
+
+                    var td4 = $('<td></td>');
+                    var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
+                    selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+                    selectTd4.removeAttr('id');
+                    var tk_co='items['+uniqueArray+'][tk_co]';
+                    selectTd4.attr('name',tk_co);
+                    td4.append(selectTd4);
+
+                    var td5 = $('<td>'+value.warehouse_name+'</td>');
+                    var td6 = $('<td>'+formatNumber(value.product_quantity)+'</td>');
+                    var td7 = $('<td>'+formatNumber(value.price_buy)+'</td>');
+                    var amount=parseFloat(value.product_quantity)*parseFloat(value.price_buy)*parseFloat(value.exchange_rate);
+                    if(isNaN(parseFloat(amount)))
+                    {
+                        amount=0;
+                    }
+                    
+                    var td8 = $('<td>'+formatNumber(amount)+'</td>');
+
+                    newTr.append(td1);
+                    newTr.append(td2);
+                    newTr.append(td3);
+                    newTr.append(td4);
+                    newTr.append(td5);
+                    newTr.append(td6);
+                    newTr.append(td7);
+                    newTr.append(td8);
+                    $('table.item-purchase tbody').append(newTr);
+                    uniqueArray++;
+                    total+=amount;
+                    
+                });
+                $('.selectpicker').selectpicker('refresh');
+            });
+        }
+    }
+
     $('#warehouse_id').change(function(e){
         $('table tr.sortable.item').remove();
         total=0;

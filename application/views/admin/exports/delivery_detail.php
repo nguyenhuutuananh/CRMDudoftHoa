@@ -137,8 +137,24 @@
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                     <?php if(!empty($item->rel_id) || !empty($item->rel_code)){ $display='style="display: none;"';  }?>
-                        <div class="row" <?=$display?> >
+                        <div class="row"  >
                             <div class="col-md-4">
+                                <?php 
+                                    if($item->rel_id)
+                                    {
+                                        $arr=array('disabled'=>true);
+                                        echo form_hidden('warehouse_type',$warehouse_type_id);
+                                        echo form_hidden('warehouse_name',$warehouse_id);
+                                    }
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?php 
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
+                                ?>
+                            </div>
+                            <div class="col-md-4" <?=$display?>>
                                 <div class="form-group mbot25">
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
@@ -240,8 +256,10 @@
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo $value->warehouse_type->kindof_warehouse_name ?></td>
-                                        <td><input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"><?php echo $value->warehouse_type->warehouse ?>(có <?=$value->warehouse_type->product_quantity?>)</td>
+                                        <td><?php echo number_format($value->tax) ?>
+                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td><?php echo number_format($value->amount) ?></td>
                                         <td <?=$display?>><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
@@ -301,6 +319,36 @@
     _validate_form($('.sales-form'),{code:'required',date:'required',customer_id:'required',receiver_id:'required'});
     
     var itemList = <?php echo json_encode($items);?>;
+
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){         
+                $.each(data, function(key,value){
+
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
+
     //format currency
     function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
         nStr += '';

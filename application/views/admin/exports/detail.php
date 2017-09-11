@@ -120,7 +120,12 @@
 
                     <?php
                     $selected=(isset($item) ? $item->customer_id : '');
-                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,$frmattrs);
+                    if($item->rel_id)
+                    {
+                        $arr=array('disabled'=>true);
+                        echo form_hidden('customer_id',$selected);
+                    }
+                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,$arr);
                     ?>
 
                     <?php
@@ -149,17 +154,24 @@
                         <div class="row"  >
                         <div class="col-md-4">
                                 <?php 
+                                    if($item->rel_id)
+                                        {
+                                            $arr=array('disabled'=>true);
+                                            echo form_hidden('warehouse_type',$warehouse_type_id);
+                                            echo form_hidden('warehouse_name',$warehouse_id);
+                                        }
 
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
                                 ?>
                             </div>
                             <div class="col-md-4">
                                 <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
                                 ?>
                             </div>
                             <div class="col-md-4" <?=$display?>>
                                 <div class="form-group mbot25">
+                                    <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
 
@@ -216,19 +228,16 @@
                                         <td>
                                             <?php echo _l('item_price'); ?>
                                         </td>
+                                        
                                         <td>
                                             0
                                         </td>
                                         <td>
-                                            <?php 
-                                                echo render_select('select_kindof_warehouse', $warehouse_types, array('id', 'name'));
-                                            ?>
-                                        
+                                            <?php echo _l('tax'); ?>
+                                            <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
                                         </td>
                                         <td>
-                                        <?php 
-                                            echo render_select('select_warehouse', array(), array('id', 'name'));
-                                        ?>
+                                            0
                                         </td>
                                         <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
@@ -256,7 +265,7 @@
                                             }
                                         ?>
                                         <td>
-                                        <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
+                                        <input style="width: 100px;" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
                                         </td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
@@ -268,7 +277,7 @@
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->sub_total;
+                                            $totalPrice += $value->amount;
                                             $i++;
                                         }
                                     }
@@ -325,6 +334,62 @@
     _validate_form($('.sales-form'),{code:'required',date:'required',customer_id:'required',receiver_id:'required'});
     
     var itemList = <?php echo json_encode($items);?>;
+
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){         
+                $.each(data, function(key,value){
+
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
+
+    $('#warehouse_type').change(function(e){
+        var warehouse_type = $(e.currentTarget).val();
+        if(warehouse_type != '') {
+            getWarehouses(warehouse_type); 
+        }
+    });
+    function getWarehouses(warehouse_type){
+        var warehouse_id=$('#warehouse_name');
+        warehouse_id.find('option:gt(0)').remove();
+        warehouse_id.selectpicker('refresh');
+        if(warehouse_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type ,
+                dataType : 'json',
+            })
+            .done(function(data){  
+                console.log(data)
+                $.each(data, function(key,value){
+                    warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
+                });
+
+                warehouse_id.selectpicker('refresh');
+            });
+        }
+    }
+
     //format currency
     function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
         nStr += '';
@@ -354,7 +419,7 @@
     var isNew = false;
     var createTrItem = () => {
         if(!isNew) return;
-        if(!$('tr.main #select_warehouse option:selected').length || $('tr.main #select_warehouse option:selected').val() == '') {
+        if(!$('div #warehouse_name option:selected').length || $('div #warehouse_name option:selected').val() == '') {
             alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
             return;
         }
@@ -385,9 +450,10 @@
         
         td5.text( $('tr.main').find('td:nth-child(5)').text());
         td6.text( $('tr.main').find('td:nth-child(6)').text());
-        td7.text( $('tr.main').find('td:nth-child(7) select option:selected').text());
-        td8.append( '<input type="hidden" data-store="'+$('tr.main').find('td:nth-child(8) select option:selected').data('store')+'" name="items[' + uniqueArray + '][warehouse]" value="'+$('tr.main').find('td:nth-child(8) select option:selected').val()+'" />');
-        td8.append($('tr.main').find('td:nth-child(8) select option:selected').text());
+        var inputTax=$('tr.main').find('td:nth-child(7) > input');
+        td7.text( $('tr.main').find('td:nth-child(7)').text());
+        td7.append(inputTax);
+        td8.text($('tr.main').find('td:nth-child(8)').text());
         newTr.append(td1);
         newTr.append(td2);
         newTr.append(td3);
@@ -458,8 +524,11 @@
             
             trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
             trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1) );
-            trBar.find('td:nth-child(7)');
-            trBar.find('td:nth-child(8)');
+            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
+            var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
+            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(7)').append(inputTax);
+            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }

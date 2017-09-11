@@ -43,7 +43,9 @@
                                                 <?php render_datatable(array(
                                                     _l('#'),
                                                     _l('Mã đơn hàng'),
+                                                    _l('Mã hợp đồng'),
                                                     _l('Khách hàng'),
+                                                    _l('total_amount'),
                                                     _l('Người tạo'),
                                                     _l('Trạng thái'),
                                                     _l('Được duyệt bởi'),
@@ -75,7 +77,9 @@
                                                 <?php render_datatable(array(
                                                     _l('#'),
                                                     _l('Mã đơn hàng'),
+                                                    _l('Mã đơn hàng(PO)'),
                                                     _l('Khách hàng'),
+                                                    _l('total_amount'),
                                                     _l('Người tạo'),
                                                     _l('Trạng thái'),
                                                     _l('Được duyệt bởi'),

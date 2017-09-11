@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$aColumns = array('tblcontracts.id','subject', 'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company', 'contract_type', 'contract_value' , 'datestart','dateend');
+$aColumns = array('tblcontracts.id','CONCAT(prefix,code) as code', 'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company', 'contract_type', 'contract_value' , 'datestart','dateend');
 $sIndexColumn = "id";
 $sTable = 'tblcontracts';
 $additionalSelect = array('tblcontracts.id','tblcontracttypes.name','trash','client','export_status');
@@ -100,6 +100,11 @@ foreach ( $rResult as $aRow )
             $_data = $aRow[ strafter($aColumns[$i],'as ')];
         } else {
             $_data = $aRow[ $aColumns[$i] ];
+        }
+        //strpos($aColumns[$i],'as') !== false && !isset($aRow[ $aColumns[$i] ]) && strafter($aColumns[$i],'as ')=='code'
+        if($aColumns[$i]=='rel_id')
+        {
+            $_data='<a href="'.admin_url('contracts/contract/'.$aRow['rel_id']).'">'. $aRow['rel_id'] . '</a>';
         }
         if($aColumns[$i]=='contract_value')
         {

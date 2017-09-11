@@ -97,28 +97,28 @@
                             <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
                           </div>
                     </div>
+                    <?php if(isset($item->rel_id)){ ?>
+                    <?=render_input('rel_code','contract_code',$item->rel_code,'text',array('readonly'=>true))?>
+
+                    <?php } ?>
+
 
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
-                    <?php echo render_date_input('date','view_date',$value); ?>
+                    <?php echo render_date_input('date','create_date',$value); ?>
                     
                     <?php
                     $default_name = (isset($item) ? $item->name : _l('sale_name'));
                     echo form_hidden('name', _l('sale_name'), $default_name);
                     ?>
 
-                    <!-- <?php
-                    $selected=(isset($item) ? $warehouse_type : '');
-                    echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                    ?>
-
                     <?php
-                    $selected=(isset($item) ? $warehouse_id : '');
-                    echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
-                    ?> -->
-
-                    <?php
+                    $arr=array();
+                    if($item->rel_id)
+                    {
+                        $arr['disabled']=true;
+                    }
                     $selected=(isset($item) ? $item->customer_id : '');
-                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected); 
+                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,$arr); 
                     ?>
 
 
@@ -140,19 +140,28 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <?php 
+                                    
+                                    $arr=array();
 
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
+                                    if($khoa)
+                                    {
+                                        echo form_hidden('warehouse_type',$warehouse_type_id);
+                                        echo form_hidden('warehouse_name',$warehouse_id);
+                                        $arr['disabled']=true;
+                                    }
+                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
+
                                 ?>
                             </div>
                             <div class="col-md-4">
                                 <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
                                 ?>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group mbot25">
                                 <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
-                                    <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
+                                    <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true" <?=($khoa? 'disabled': '')?> >
                                         <option value=""></option>
 
                                         <?php foreach ($items as $product) { ?>
@@ -229,7 +238,6 @@
                                     $i=0;
                                     $totalPrice=0;
                                     if(isset($item) && count($item->items) > 0) {
-                                        
                                         foreach($item->items as $value) {
                                         ?>
                                     <tr class="sortable item">
@@ -238,7 +246,7 @@
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
                                         <td><?php echo $value->unit_name; ?></td>
-                                        <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
+                                        <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" <?=($khoa? 'readonly': '')?> ></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
@@ -246,7 +254,7 @@
                                             <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
                                         </td>
                                         <td><?php echo number_format($value->amount) ?></td>
-                                        <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
+                                        <td><a href="#" class="btn btn-danger pull-right" <?=(!$isedit? 'style="display: none;"': 'style="display: block;"')?> onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
                                             $totalPrice += $value->amount;
@@ -441,6 +449,34 @@
             getWarehouses(warehouse_type); 
         }
     });
+    $('#warehouse_name').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){          
+                $.each(data, function(key,value){
+                    
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
     function getWarehouses(warehouse_type){
         var warehouse_id=$('#warehouse_name');
         warehouse_id.find('option:gt(0)').remove();
@@ -578,8 +614,9 @@
     };
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
-        var itemFound = findItem(id);
 
+        var itemFound = findItem(id);
+        console.log(itemFound)
         $('#select_kindof_warehouse').val('');
         $('#select_kindof_warehouse').selectpicker('refresh');
         var warehouse_id=$('#select_warehouse');

@@ -2,13 +2,85 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b0d3ec6-4fa1-499d-92ec-f86274547e0c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/uploads/invoices/40/SO-00087.pdf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DB Change/11_9.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DB Change/7_9.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/imports/contracts/contracts.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/imports/contracts/detail.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/sales/detail_old.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/uploads/invoices/40/index.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa (1).sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa 2017.08.01.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.07.22.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.07.27.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.03.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.09.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.17.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.22.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.23.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.25.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.31.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.09.01.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.7.10.sql" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/app-config.php" afterPath="$PROJECT_DIR$/application/config/app-config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Contracts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Deliveries.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Deliveries.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Exports.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Exports.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Imports.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Imports.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Invoices.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Invoices.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Quotes.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Quotes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Receipts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Receipts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Sale_orders.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Sale_orders.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Sales.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Sales.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Warehouses.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Warehouses.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_db_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_db_helper.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_html_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_html_helper.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_sales_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_sales_helper.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" afterPath="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/orders/convert_to_contract.php" afterPath="$PROJECT_DIR$/application/views/admin/orders/convert_to_contract.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/orders/view.php" afterPath="$PROJECT_DIR$/application/views/admin/orders/view.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/purchase_contracts/view.php" afterPath="$PROJECT_DIR$/application/views/admin/purchase_contracts/view.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/purchases/purchase.php" afterPath="$PROJECT_DIR$/application/views/admin/purchases/purchase.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/Perfex_base.php" afterPath="$PROJECT_DIR$/application/libraries/Perfex_base.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Accounts_model.php" afterPath="$PROJECT_DIR$/application/models/Accounts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Clients_model.php" afterPath="$PROJECT_DIR$/application/models/Clients_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Contracts_model.php" afterPath="$PROJECT_DIR$/application/models/Contracts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Exports_model.php" afterPath="$PROJECT_DIR$/application/models/Exports_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Imports_model.php" afterPath="$PROJECT_DIR$/application/models/Imports_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Invoice_items_model.php" afterPath="$PROJECT_DIR$/application/models/Invoice_items_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Invoices_model.php" afterPath="$PROJECT_DIR$/application/models/Invoices_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Purchase_contacts_model.php" afterPath="$PROJECT_DIR$/application/models/Purchase_contacts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Receipts_model.php" afterPath="$PROJECT_DIR$/application/models/Receipts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Sales_model.php" afterPath="$PROJECT_DIR$/application/models/Sales_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Warehouse_model.php" afterPath="$PROJECT_DIR$/application/models/Warehouse_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/Receipts/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/Receipts/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/contracts/export_order_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/contracts/export_order_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/contracts/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/contracts/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/deliveries/delivery_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/deliveries/delivery_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/deliveries/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/deliveries/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/delivery_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/delivery_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/export.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/export.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/adjustments/adjustment.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/adjustments/adjustment.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/adjustments/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/adjustments/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/internals/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/internals/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice_preview_template.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice_preview_template.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice_template.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice_template.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/contract.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/contract.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/order_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/order_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/contracts.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/deliveries.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/deliveries.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/exports.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/exports.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/quotes.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/quotes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/sale_orders.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/sale_orders.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/sales.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/sales.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/themes/perfex/views/delivery_detail_pdf.php" afterPath="$PROJECT_DIR$/application/views/themes/perfex/views/delivery_detail_pdf.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/main.js" afterPath="$PROJECT_DIR$/assets/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/main.min.js" afterPath="$PROJECT_DIR$/assets/js/main.min.js" />
     </list>
     <ignored path="01917F.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,19 +105,34 @@
       <file leaf-file-name="Receipts_model.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/models/Receipts_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-17.653847">
-              <caret line="27" column="48" selection-start-line="27" selection-start-column="48" selection-end-line="27" selection-end-column="48" />
+            <state vertical-scroll-proportion="-18.307692">
+              <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
+              <folding>
+                <marker date="1505122404541" expanded="true" signature="108:4773" placeholder="{...}" />
+                <marker date="1505122404541" expanded="true" signature="137:180" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Receipts.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.730769">
+              <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Receipts.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
+      <file leaf-file-name="vietnamese_lang.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7447619">
-              <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
-              <folding />
+            <state vertical-scroll-proportion="0.45904762">
+              <caret line="2834" column="47" selection-start-line="2834" selection-start-column="47" selection-end-line="2834" selection-end-column="47" />
+              <folding>
+                <marker date="1505122634631" expanded="true" signature="227844:227918" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -91,6 +178,7 @@
         <option value="$PROJECT_DIR$/application/views/admin/Votes/detail.php" />
         <option value="$PROJECT_DIR$/application/views/admin/Receipts/detail.php" />
         <option value="$PROJECT_DIR$/application/controllers/admin/Receipts.php" />
+        <option value="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" />
       </list>
     </option>
   </component>
@@ -317,6 +405,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vietnamese" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -409,7 +537,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -470,13 +598,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="518" column="61" selection-start-line="513" selection-start-column="7" selection-end-line="518" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_orders.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -691,25 +812,25 @@
         <state vertical-scroll-proportion="0.1871345">
           <caret line="2129" column="25" selection-start-line="2129" selection-start-column="25" selection-end-line="2129" selection-end-column="25" />
           <folding>
-            <marker date="1505104220553" expanded="false" signature="67865:67960" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="67961:68622" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="67979:68020" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68038:68087" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68105:68161" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68179:68240" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68258:68333" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68351:68405" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68423:68604" placeholder="..." />
-            <marker date="1505104220553" expanded="false" signature="68680:68775" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68776:68973" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68819:68833" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68858:68889" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="68911:68959" placeholder="..." />
-            <marker date="1505104220553" expanded="false" signature="68994:69089" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="69090:69290" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="69133:69147" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="69172:69203" placeholder="..." />
-            <marker date="1505104220553" expanded="true" signature="69225:69276" placeholder="..." />
+            <marker date="1505122404166" expanded="false" signature="67865:67960" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="67961:68622" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="67979:68020" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68038:68087" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68105:68161" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68179:68240" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68258:68333" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68351:68405" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68423:68604" placeholder="..." />
+            <marker date="1505122404166" expanded="false" signature="68680:68775" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68776:68973" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68819:68833" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68858:68889" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68911:68959" placeholder="..." />
+            <marker date="1505122404166" expanded="false" signature="68994:69089" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69090:69290" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69133:69147" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69172:69203" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69225:69276" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -927,17 +1048,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/Receipts_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.653847">
-          <caret line="27" column="48" selection-start-line="27" selection-start-column="48" selection-end-line="27" selection-end-column="48" />
-          <folding />
+        <state vertical-scroll-proportion="-18.307692">
+          <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
+          <folding>
+            <marker date="1505122404541" expanded="true" signature="108:4773" placeholder="{...}" />
+            <marker date="1505122404541" expanded="true" signature="137:180" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7447619">
-          <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
+        <state vertical-scroll-proportion="-13.730769">
+          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45904762">
+          <caret line="2834" column="47" selection-start-line="2834" selection-start-column="47" selection-end-line="2834" selection-end-column="47" />
+          <folding>
+            <marker date="1505122634631" expanded="true" signature="227844:227918" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

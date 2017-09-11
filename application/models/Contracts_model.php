@@ -137,9 +137,9 @@ class Contracts_model extends CRM_Model
             unset($data['custom_fields']);
         }
         $data = do_action('before_contract_added', $data);
-
         $this->db->insert('tblcontracts', $data);
         $insert_id = $this->db->insert_id();
+
         if ($insert_id) {
             if(isset($data['rel_id']))
             {            
@@ -169,7 +169,7 @@ class Contracts_model extends CRM_Model
         }
         else
         {
-            $this->db->select('"contract_id",product_id, serial_no, unit_id, quantity, tax, discount, unit_cost, sub_total, warehouse_id');
+            $this->db->select('"contract_id",product_id, serial_no, unit_id, quantity, tax_id,tax_rate,tax, discount, unit_cost, sub_total,amount, warehouse_id');
             $items=$this->db->get_where('tblquote_items',array('quote_id'=>$rel_id))->result_array();
             if(!$items)
             {

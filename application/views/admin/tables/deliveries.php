@@ -11,6 +11,7 @@ $aColumns     = array(
     'code',
     'rel_code',
     'company',
+    'total',
     '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
     'delivery_status',
     // 'status',
@@ -26,6 +27,23 @@ if(!empty($sale_id))
 {
     $where[]='AND rel_id="'.$sale_id.'"';
 }
+$where[]='AND delivery_code<>"'.NULL.'"';
+
+//fillter
+if($this->_instance->input->post()) {
+    $filter_status = $this->_instance->input->post('filterStatus');
+    if(is_numeric($filter_status)) {
+        
+        if($filter_status == 2)
+            array_push($where, 'AND delivery_status='.$filter_status);
+        elseif($filter_status == 3)
+            array_push($where, 'AND delivery_status='.$filter_status);       
+        else {
+            array_push($where, 'AND delivery_status<>2');
+        }
+    }
+}
+
 $join         = array(
     'LEFT JOIN tblstaff  ON tblstaff.staffid=tblexports.create_by',
     'LEFT JOIN tblclients  ON tblclients.userid=tblexports.customer_id'
@@ -56,11 +74,15 @@ foreach ($rResult as $aRow) {
             $_data='<a href="'.admin_url('sales/sale_detail/'.$aRow['rel_id']).'">'.$aRow['rel_code'].'</a>';
         }
         if ($aColumns[$i] == 'code') {
-            $_data=$aRow['prefix'].$aRow['code'];
+            $_data=$aRow['delivery_code'].$aRow['code'];
         }
         if ($aColumns[$i] == 'delivery_date') {
             $_data=_d($aRow['delivery_date']);
         }
+        if ($aColumns[$i] == 'total') {
+            $_data=format_money($aRow['total']);
+        }
+
         if ($aColumns[$i] == 'delivery_status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['delivery_status']).'" task-status-table="'.$aRow['delivery_status'].'">' . format_status_delivery($aRow['delivery_status'],false,true).'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))

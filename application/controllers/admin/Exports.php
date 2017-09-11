@@ -73,6 +73,9 @@ class Exports extends Admin_controller
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
                 $i++;
             }
+
+            $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+            $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
             
             if (!$data['item']) {
                 blank_page('Export Not Found');
@@ -166,6 +169,10 @@ class Exports extends Admin_controller
 
             $i++;
         }
+
+        $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
+        $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
+            
         if (!$data['item']) {
             blank_page('Export Not Found');
         }  
@@ -195,12 +202,32 @@ class Exports extends Admin_controller
             die('Không tìm thấy mục nào');
         }
 
-        $success    = $this->exports_model->delete($id);
+        $success    = $this->exports_model->calcel($id);
         $alert_type = 'warning';
-        $message    = _l('Không thể xóa dữ liệu');
+        $message    = _l('unsuccessfull_cancel');
         if ($success) {
             $alert_type = 'success';
-            $message    = _l('Xóa dữ liệu thành công');
+            $message    = _l('successfull_cancel');
+        }
+        echo json_encode(array(
+            'alert_type' => $alert_type,
+            'message' => $message
+        ));
+
+    }
+
+    public function restore($id)
+    {
+        if (!$id) {
+            die('Không tìm thấy mục nào');
+        }
+
+        $success    = $this->exports_model->restore($id);
+        $alert_type = 'warning';
+        $message    = _l('unsuccessfull_restore');
+        if ($success) {
+            $alert_type = 'success';
+            $message    = _l('successfull_restore');
         }
         echo json_encode(array(
             'alert_type' => $alert_type,
