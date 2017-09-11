@@ -190,6 +190,7 @@ class Imports_model extends CRM_Model
             'code'=>$data['code'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
+            'account_date'=>to_sql_date($data['account_date']),
             'create_by'=>get_staff_user_id()
             );
     // var_dump($import);die();
@@ -213,6 +214,8 @@ class Imports_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
+                    'tk_no'=>$item['tk_no'],
+                    'tk_co'=>$item['tk_co'],
                     'warehouse_id'=>$data['warehouse_id']
                     );
                  $this->db->insert('tblimport_items', $item_data);
@@ -234,6 +237,8 @@ class Imports_model extends CRM_Model
             'prefix'=>$data['prefix'],
             'name'=>$data['name'],
             'code'=>$data['code'],
+            'date'=>to_sql_date($data['date']),
+            'account_date'=>to_sql_date($data['account_date']),
             'reason'=>$data['reason']
             );
         
@@ -261,6 +266,8 @@ class Imports_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
+                    'tk_no'=>$item['tk_no'],
+                    'tk_co'=>$item['tk_co'],
                     'warehouse_id'=>$data['warehouse_id']
                     );
                 if($itm)

@@ -27,6 +27,23 @@ if(!empty($sale_id))
 {
     $where[]='AND rel_id="'.$sale_id.'"';
 }
+$where[]='AND delivery_code<>"'.NULL.'"';
+
+//fillter
+if($this->_instance->input->post()) {
+    $filter_status = $this->_instance->input->post('filterStatus');
+    if(is_numeric($filter_status)) {
+        
+        if($filter_status == 2)
+            array_push($where, 'AND delivery_status='.$filter_status);
+        elseif($filter_status == 3)
+            array_push($where, 'AND delivery_status='.$filter_status);       
+        else {
+            array_push($where, 'AND delivery_status<>2');
+        }
+    }
+}
+
 $join         = array(
     'LEFT JOIN tblstaff  ON tblstaff.staffid=tblexports.create_by',
     'LEFT JOIN tblclients  ON tblclients.userid=tblexports.customer_id'
@@ -57,7 +74,7 @@ foreach ($rResult as $aRow) {
             $_data='<a href="'.admin_url('sales/sale_detail/'.$aRow['rel_id']).'">'.$aRow['rel_code'].'</a>';
         }
         if ($aColumns[$i] == 'code') {
-            $_data=$aRow['prefix'].$aRow['code'];
+            $_data=$aRow['delivery_code'].$aRow['code'];
         }
         if ($aColumns[$i] == 'delivery_date') {
             $_data=_d($aRow['delivery_date']);

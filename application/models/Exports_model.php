@@ -48,12 +48,16 @@ class Exports_model extends CRM_Model
 
         if ($this->db->affected_rows() > 0) 
         {
+            if($data['status']==2)
+            {
+                $this->decreaseWarehouse($id);
+            }
             return true;
         }
         return false;
     }
 
-    public function updateWarehouse($id)
+    public function decreaseWarehouse($id)
     {
         $export=$this->getExportByID($id);
         $count=0;
@@ -62,17 +66,71 @@ class Exports_model extends CRM_Model
             foreach ($export->items as $key => $value) 
             {
                 $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
+
                 if($item)
                 {
+                    //Temp: >0 con hang <0 Thieu hang
                     $total_quantity=$item->product_quantity-$value->quantity;
-                    // $total_quantity=($item->product_quantity-$value->quantity)? ($item->product_quantity-$value->quantity): 0 ;
+                    // $total_quantity=(($item->product_quantity-$value->quantity)>0)? ($item->product_quantity-$value->quantity): 0 ;
                     $data=array('product_quantity'=>$total_quantity);
                     $this->db->update('tblwarehouses_products',$data,array('id'=>$item->id));
                     $count++;
                 }
                 else
                 {
-                    return -1;
+                    //Temp: ko co hang(Thieu hang <0)
+                    $data=array(
+                        'product_id'=>$value->product_id,
+                        'warehouse_id'=>$value->warehouse_id,
+                        'product_quantity'=>$value->quantity*(-1)
+                        );
+                    $this->db->insert('tblwarehouses_products',$data);
+                    $insert_id=$this->db->insert_id();
+                    if($insert_id)
+                    {
+                        logActivity('Insert Warehouse Product [ID:' . $insert_id . ', Item ID' . $value->product_id . ']');
+                        $count++;
+                    }
+                }
+                
+            }
+        }        
+        if ($count > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function increaseWarehouse($id)
+    {
+        $exports=$this->getExportByID($id);
+        $count=0;
+        if($exports)
+        {
+            foreach ($exports->items as $key => $value) 
+            {
+                $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
+                if($item)
+                {
+                    $total_quantity=$value->quantity+$item->product_quantity;
+                    $data=array('product_quantity'=>$total_quantity);
+                    $this->db->update('tblwarehouses_products',$data,array('id'=>$item->id));
+                    $count++;
+                }
+                else
+                {
+                    $data=array(
+                        'product_id'=>$value->product_id,
+                        'warehouse_id'=>$value->warehouse_id,
+                        'product_quantity'=>$value->quantity
+                        );
+                    $this->db->insert('tblwarehouses_products',$data);
+                    $insert_id=$this->db->insert_id();
+                    if($insert_id)
+                    {
+                        logActivity('Insert Warehouse Product [ID:' . $insert_id . ', Item ID' . $value->product_id . ']');
+                        $count++;
+                    }
                 }
                 
             }
@@ -369,6 +427,41 @@ class Exports_model extends CRM_Model
         if ($this->db->affected_rows() > 0) {
             $this->db->where('export_id', $id);
             $this->db->delete('tblexport_items');
+            return true;
+        }
+        return false;
+    }
+    public function calcel($id)
+    {
+        $export=$this->getExportByID($id);
+        $data=array('canceled_at'=>date('Y-m-d H:i:s'));
+        $this->db->where('id', $id);
+        $this->db->update('tblexports',$data,array('id'=>$id));
+        if ($this->db->affected_rows() > 0) {
+            if($export->status==2)
+            {
+                $this->increaseWarehouse($id);
+            }
+            // $this->db->where('export_id', $id);
+            // $this->db->delete('tblexport_items');
+            return true;
+        }
+        return false;
+    }
+
+    public function restore($id)
+    {
+        $export=$this->getExportByID($id);
+        $data=array('canceled_at'=>NULL);
+        $this->db->where('id', $id);
+        $this->db->update('tblexports',$data,array('id'=>$id));
+        if ($this->db->affected_rows() > 0) {
+            if($export->status==2)
+            {
+                $this->decreaseWarehouse($id);
+            }
+            // $this->db->where('export_id', $id);
+            // $this->db->delete('tblexport_items');
             return true;
         }
         return false;

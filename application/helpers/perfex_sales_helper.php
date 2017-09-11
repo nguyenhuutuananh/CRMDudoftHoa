@@ -311,6 +311,45 @@ function format_purchase_status($status, $classes = '', $label = true)
     }
 }
 
+function format_sale_status($status, $classes = '', $label = true)
+{
+    $id          = $status;
+    $label_class = get_sale_status_label($status);
+    if ($status == 1) {
+        $status = _l('receipt_status_invoice_unestablished');
+    } else if ($status == 2) {
+        $status = _l('receipt_status_invoice_established');
+    }
+    if ($label == true) {
+        return '<span class="label label-' . $label_class . ' ' . $classes . ' s-status invoice-status-' . $id . '">' . $status . '</span>';
+    } else {
+        return $status;
+    }
+}
+
+function get_sale_status_label($status)
+{
+    $label_class = '';
+    if ($status == 1) {
+        $label_class = 'danger';
+    } else if ($status == 2) {
+        $label_class = 'success';
+    } else if ($status == 3) {
+        $label_class = 'warning';
+    } else if ($status == 4) {
+        $label_class = 'warning';
+    } else if ($status == 5 || $status == 6) {
+        $label_class = 'default';
+    } else {
+        if (!is_numeric($status)) {
+            if ($status == 'not_sent') {
+                $label_class = 'default';
+            }
+        }
+    }
+    return $label_class;
+}
+
 /**
  * Format invoice status
  * @param  integer  $status
@@ -342,6 +381,8 @@ function format_invoice_status($status, $classes = '', $label = true)
         return $status;
     }
 }
+
+
 /**
  * Return invoice status label class baed on twitter bootstrap classses
  * @param  mixed $status invoice status id

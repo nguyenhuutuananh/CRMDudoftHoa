@@ -8,6 +8,7 @@ class Imports extends Admin_controller
         $this->load->model('imports_model');
         $this->load->model('invoice_items_model');
         $this->load->model('warehouse_model');
+        $this->load->model('accounts_model');
     }
     public function index() {
         // var_dump($this->imports_model->getImportByID(64));die();
@@ -37,7 +38,6 @@ class Imports extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
-                // var_dump($data);die();
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->imports_model->add($data);
@@ -70,14 +70,18 @@ class Imports extends Admin_controller
             $data['item'] = $this->imports_model->getImportByID($id);
             $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
             $data['warehouse_type']=$this->warehouse_model->getWarehouses($data['warehouse_id'])->kindof_warehouse;
+
             if (!$data['item']) {
                 blank_page('Purchase Not Found');
             }
         }
-        $data['items']= $this->invoice_items_model->get_full();
-        
+
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
+
         $data['title'] = $title;
         $this->load->view('admin/imports/adjustments/detail', $data);
     }
@@ -144,10 +148,11 @@ class Imports extends Admin_controller
                 blank_page('Purchase Not Found');
             }
         }
-        $data['items']= $this->invoice_items_model->get_full();
-        
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
-        $data['warehouses']= $this->warehouse_model->getWarehouses();
+        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
         $data['title'] = $title;
         $this->load->view('admin/imports/internals/detail', $data);
     }

@@ -102,23 +102,17 @@
                     </div>
 
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
-                    <?php echo render_date_input('date','Ngày',$value); ?>
+                    <?php echo render_date_input('date','view_date',$value); ?>
+
+                    <?php $value = (isset($item) ? _d($item->account_date) : _d(date('Y-m-d')));?>
+                    <?php echo render_date_input('account_date','account_date',$value); ?>
                     
                     <?php
                     $default_name = (isset($item) ? $item->name : "");
                     echo render_input('name', _l('import_name'), $default_name);
                     ?>
 
-                    <?php
-                    $selected=(isset($item) ? $warehouse_type : '');
-                    echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                    ?>
-
-                    <?php
-                    $selected=(isset($item) ? $warehouse_id : '');
-                    echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
-                    ?>
-
+                    
                     <?php 
                     $reason = (isset($item) ? $item->reason : "");
                     echo render_textarea('reason', 'note', $reason, array(), array(), '', 'tinymce');
@@ -133,7 +127,20 @@
                     <div class="panel-body mtop10">
                         <div class="row">
                             <div class="col-md-4">
+                            <?php
+                            $selected=(isset($item) ? $warehouse_type : '');
+                            echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
+                            ?>
+                            </div>
+                            <div class="col-md-4">
+                            <?php
+                            $selected=(isset($item) ? $warehouse_id : '');
+                            echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
+                            ?>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group mbot25">
+                                    <label for="custom_item_select"><?=_l('item_name')?></label>
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
 
@@ -162,12 +169,13 @@
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="10%" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
-                                        <th width="15%" class="text-left"><?php echo _l('item_specification'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -177,6 +185,21 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                         <td>
                                             <?php echo _l('item_name'); ?>
+                                        </td>
+                                        <!-- TKno -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_no : '');
+                                            echo render_select('tk_no',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TKCo -->
+
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_co : '');
+                                            echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
                                         </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
@@ -194,9 +217,6 @@
                                             0
                                         </td>
                                         <td>
-                                            <?php echo _l('item_specification'); ?>
-                                        </td>
-                                        <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                         </td>
                                     </tr>
@@ -212,12 +232,25 @@
                                             <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name; ?></td>
+                                        <!-- TK NO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '');
+                                            echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_co : '');
+                                            echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
                                         <td><?php echo $value->unit_name; ?></td>
                                         <td><input class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo $value->product_specifications	; ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
@@ -277,6 +310,34 @@
     _validate_form($('.client-form'),{code:'required',warehouse_type:'required',warehouse_id:'required'});
     
     var itemList = <?php echo json_encode($items);?>;
+    $('#warehouse_id').change(function(e){
+        $('table tr.sortable.item').remove();
+        total=0;
+        var warehouse_id=$(this).val();
+        loadProductsInWarehouse(warehouse_id)
+        refreshAll();
+        refreshTotal();
+    });
+
+    function loadProductsInWarehouse(warehouse_id){
+        var product_id=$('#custom_item_select');
+        product_id.find('option:gt(0)').remove();
+        product_id.selectpicker('refresh');
+        if(product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductsInWH/' + warehouse_id,
+                dataType : 'json',
+            })
+            .done(function(data){         
+                $.each(data, function(key,value){
+
+                    product_id.append('<option data-store="'+value.product_quantity+'" value="' + value.product_id + '">'+'('+ value.code +') '  + value.name + '</option>');
+                });
+                product_id.selectpicker('refresh');
+            });
+        }
+    }
+
 
     //format currency
     function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
@@ -316,20 +377,38 @@
         
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
+
         var td3 = $('<td></td>');
-        var td4 = $('<td><input class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td></td>');
+
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
+        var td6 = $('<td><input class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td7 = $('<td></td>');
+        var td8 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
-        td3.text($('tr.main').find('td:nth-child(3)').text());
-        td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
+
+        var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
+        selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+        selectTd3.removeAttr('id');
+        var tk_no='items['+uniqueArray+'][tk_no]';
+        selectTd3.attr('name',tk_no);
+        td3.append(selectTd3);
+
+
+        var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
+        selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+        selectTd4.removeAttr('id');
+        var tk_co='items['+uniqueArray+'][tk_co]';
+        selectTd4.attr('name',tk_co);
+        td4.append(selectTd4);
+
+        td5.text($('tr.main').find('td:nth-child(5)').text());
+        td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
         
-        td5.text( $('tr.main').find('td:nth-child(5)').text() );
-        td6.text( $('tr.main').find('td:nth-child(6)').text() );
         td7.text( $('tr.main').find('td:nth-child(7)').text() );
+        td8.text( $('tr.main').find('td:nth-child(8)').text() );
         
         newTr.append(td1);
         newTr.append(td2);
@@ -338,6 +417,7 @@
         newTr.append(td5);
         newTr.append(td6);
         newTr.append(td7);
+        newTr.append(td8);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-purchase tbody').append(newTr);
@@ -371,11 +451,12 @@
         refreshTotal();
     };
     var refreshTotal = () => {
+        $('.selectpicker').selectpicker('refresh');
         $('.total').text(formatNumber(total));
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += $(value).find('td:nth-child(4) > input').val() * $(value).find('td:nth-child(5)').text().replace(/\,/g, '');
+            totalPrice += $(value).find('td:nth-child(6) > input').val() * $(value).find('td:nth-child(7)').text().replace(/\,/g, '');
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
@@ -388,12 +469,12 @@
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name);
-            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
-            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-            trBar.find('td:nth-child(4) > input').val(1);
-            trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price_buy));
-            trBar.find('td:nth-child(6)').text(  formatNumber(itemFound.price_buy * 1) );
-            trBar.find('td:nth-child(7)').text(itemFound.specification);
+
+            trBar.find('td:nth-child(5)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(5) > input').val(itemFound.unit);
+            trBar.find('td:nth-child(6) > input').val(1);
+            trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price_buy));
+            trBar.find('td:nth-child(8)').text(  formatNumber(itemFound.price_buy * 1) );
             isNew = true;
             $('#btnAdd').show();
         }
@@ -437,6 +518,16 @@
         });
       }
     }
+
+    $('.customer-form-submiter').on('click', function(e){
+        var warehouse_id=$('#warehouse_id').val();
+        if(!warehouse_id)
+        {
+            alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
+            e.preventDefault(); 
+        }
+        
+    });
     
 </script>
 </body>

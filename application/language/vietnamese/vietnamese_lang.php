@@ -2724,7 +2724,8 @@ $lang['home_tickets'] = 'Tickets';
 $lang['home_project_activity'] = 'Hoạt động dự án mới nhất';
 $lang['home_project_activity_not_found'] = 'Không tìm thấy hoạt động dự án';
 $lang['view_tracking'] = 'Theo dõi lượt xem';
-$lang['view_date'] = 'Ngày';
+$lang['view_date'] = 'Ngày chứng từ';
+$lang['account_date'] = 'Ngày hạch toán';
 $lang['create_date'] = 'Ngày tạo đơn hàng';
 $lang['view_ip'] = 'Địa chỉ IP';
 $lang['article_total_views'] = 'Tổng số lần xem';
@@ -3714,7 +3715,8 @@ $lang['add_sale_order_'] = "Thêm đơn hàng bán lẻ";
 $lang['sales'] = "Đơn hàng bán";
 $lang['sale'] = "Đơn đặt hàng";
 $lang['sale_detail'] = "Chi tiết đơn hàng";
-$lang['sale_code'] = "Mã phiếu đặt hàng";
+$lang['sale_code'] = "Mã đơn hàng";
+$lang['code_noo'] = "Số chứng từ";
 $lang['sale_name'] = "Phiếu Đặt Hàng";
 $lang['edit_sale_order'] = "Sửa đơn hàng";
 $lang['code_no'] = "Phiếu số: ";
@@ -3873,13 +3875,22 @@ $lang['company_bank_account'] = "Số tài khoản: ";
 $lang['sub_amount'] = "Giá trị";
 $lang['return'] = "Quay lại";
 $lang['total_amount'] = "Tổng giá trị";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
 
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+//Receipts
+$lang['receipt_status_invoice_unestablished']              = 'Chưa lập hóa đơn';
+$lang['receipt_status_invoice_established']              = 'Đã lập hóa đơn';
 
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['tk_no'] = "TK Nợ";
+$lang['tk_co'] = "TK Có";
+$lang['cancel'] = "Hủy";
+
+$lang['successfull_cancel'] = "Hủy phiếu thành công";
+$lang['unsuccessfull_cancel'] = "Không thể hủy phiếu";
+
+$lang['successfull_restore'] = "Khôi phục phiếu thành công";
+$lang['unsuccessfull_restore'] = "Không thể khôi phục phiếu";
+
+$lang['restore'] = "Khôi phục";
 // $lang['total_value'] = "In phiếu giao hàng";
 // $lang['total_value'] = "In phiếu giao hàng";
 // $lang['total_value'] = "In phiếu giao hàng";

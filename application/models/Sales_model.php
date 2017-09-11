@@ -97,6 +97,7 @@ class Sales_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
+            'account_date'=>to_sql_date($data['account_date']),
             'create_by'=>get_staff_user_id()
             );
         
@@ -126,7 +127,9 @@ class Sales_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'tk_no'=>$item['tk_no'],
+                    'tk_co'=>$item['tk_co']
                     );
                  $this->db->insert('tblsale_items', $item_data);
                  if($this->db->affected_rows()>0)
@@ -213,7 +216,8 @@ class Sales_model extends CRM_Model
             'code'=>$data['code'],
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
-            'date'=>to_sql_date($data['date'])
+            'date'=>to_sql_date($data['date']),
+            'account_date'=>to_sql_date($data['account_date'])
             );
         
         if($this->db->update('tblsales',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
@@ -247,7 +251,9 @@ class Sales_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'tk_no'=>$item['tk_no'],
+                    'tk_co'=>$item['tk_co']
                     );
                 if($itm)
                 {

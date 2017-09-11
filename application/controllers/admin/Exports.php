@@ -202,12 +202,32 @@ class Exports extends Admin_controller
             die('Không tìm thấy mục nào');
         }
 
-        $success    = $this->exports_model->delete($id);
+        $success    = $this->exports_model->calcel($id);
         $alert_type = 'warning';
-        $message    = _l('Không thể xóa dữ liệu');
+        $message    = _l('unsuccessfull_cancel');
         if ($success) {
             $alert_type = 'success';
-            $message    = _l('Xóa dữ liệu thành công');
+            $message    = _l('successfull_cancel');
+        }
+        echo json_encode(array(
+            'alert_type' => $alert_type,
+            'message' => $message
+        ));
+
+    }
+
+    public function restore($id)
+    {
+        if (!$id) {
+            die('Không tìm thấy mục nào');
+        }
+
+        $success    = $this->exports_model->restore($id);
+        $alert_type = 'warning';
+        $message    = _l('unsuccessfull_restore');
+        if ($success) {
+            $alert_type = 'success';
+            $message    = _l('successfull_restore');
         }
         echo json_encode(array(
             'alert_type' => $alert_type,

@@ -1,0 +1,1 @@
+ALTER TABLE `tblexports` ADD `deleted_at` TIMESTAMP NULL AFTER `total`, ADD `canceled_at` TIMESTAMP NULL AFTER `deleted_at`;

@@ -64,6 +64,25 @@ class Accounts_model extends CRM_Model
             return $reSortAccounts;
         }
     }
+
+    public function get_tk_no() {
+        $this->db->where('idAccountAttribute',1);
+        $this->db->or_where('idAccountAttribute',3);
+        $account=$this->db->get('tblaccounts');
+        if($account->num_rows()>0)
+            return $account->result_array();
+        else return false;
+    }
+
+    public function get_tk_co() {
+        $this->db->where('idAccountAttribute',2);
+        $this->db->or_where('idAccountAttribute',3);
+        $account=$this->db->get('tblaccounts');
+        if($account->num_rows()>0)
+            return $account->result_array();
+        else return false;
+    }
+
     public function get_accounts($except_id = array(), $ARRAY_RESULT = FALSE) {
         if(is_array($except_id) && count($except_id) > 0) {
             $this->db->where_not_in('idAccount', $except_id);

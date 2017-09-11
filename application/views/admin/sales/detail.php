@@ -13,6 +13,7 @@
         <?php 
         } ?>
   <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_sale_order_') : _l('add_sale_order_')); ?></h4>
+
   <hr class="no-mbot no-border" />
   <div class="row">
     <div class="additional"></div>
@@ -35,6 +36,13 @@
                     $type='success';
                     $status='Đã duyệt';
                 }
+                
+                if($item->invoice_status==1)
+                {
+                    $type='success';
+                    $status='Đã lập hóa đơn';
+                    $style='style="font-size: 8px"';
+                }
             }
             else
             {
@@ -43,7 +51,7 @@
             }
 
         ?>
-        <div class="ribbon <?=$type?>"><span><?=$status?></span></div>
+        <div class="ribbon <?=$type?>"><span <?=$style?>><?=$status?></span></div>
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
@@ -76,7 +84,7 @@
                     $attrs_not_select = array('data-none-selected-text' => _l('system_default_string'));
                     ?>
                     <div class="form-group">
-                         <label for="number"><?php echo _l('sale_code'); ?></label>
+                         <label for="number"><?php echo _l('code_noo'); ?></label>
                          <div class="input-group">
                           <span class="input-group-addon">
                           <?php $prefix =($item) ? $item->prefix : get_option('prefix_sale'); ?>
@@ -98,8 +106,12 @@
                           </div>
                     </div>
 
+
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','view_date',$value); ?>
+
+                    <?php $value = (isset($item) ? _d($item->account_date) : _d(date('Y-m-d')));?>
+                    <?php echo render_date_input('account_date','account_date',$value); ?>
                     
                     <?php
                     $default_name = (isset($item) ? $item->name : _l('sale_name'));
@@ -171,13 +183,15 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table no-dt" style="overflow-x: auto;overflow-y: hidden;">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="25%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th width="200px !important" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
@@ -194,6 +208,21 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                         <td>
                                             <?php echo _l('item_name'); ?>
+                                        </td>
+                                        <!-- TKno -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_no : '');
+                                            echo render_select('tk_no',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TKCo -->
+
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_co : '');
+                                            echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
                                         </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
@@ -233,7 +262,22 @@
                                         <td>
                                             <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
                                         </td>
+
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
+                                        <!-- TK NO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '');
+                                            echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_co : '');
+                                            echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
                                         <td><?php echo $value->unit_name; ?></td>
                                         <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
                                             
@@ -354,7 +398,6 @@
                 dataType : 'json',
             })
             .done(function(data){  
-                console.log(data)
                 $.each(data, function(key,value){
                     warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
                 });
@@ -406,31 +449,53 @@
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
+        var td6 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
+        var td9 = $('<td></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
-        td3.text($('tr.main').find('td:nth-child(3)').text());
-        td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
-        
-        td5.text( $('tr.main').find('td:nth-child(5)').text() );
-        td6.text( $('tr.main').find('td:nth-child(6)').text() );
-        var inputTax=$('tr.main').find('td:nth-child(7) > input');
-        td7.text( $('tr.main').find('td:nth-child(7)').text());
-        td7.append(inputTax);
-        td8.text($('tr.main').find('td:nth-child(8)').text());
+
+        var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
+        selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+        selectTd3.removeAttr('id');
+        var tk_no='items['+uniqueArray+'][tk_no]';
+        selectTd3.attr('name',tk_no);
+        td3.append(selectTd3);
+
+
+        var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
+        selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+        selectTd4.removeAttr('id');
+        var tk_co='items['+uniqueArray+'][tk_co]';
+        selectTd4.attr('name',tk_co);
+        td4.append(selectTd4);
+
+        td5.text($('tr.main').find('td:nth-child(5)').text());
+        td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());        
+        td7.text( $('tr.main').find('td:nth-child(7)').text() );
+        td8.text( $('tr.main').find('td:nth-child(8)').text() );
+        var inputTax=$('tr.main').find('td:nth-child(9) > input');
+        td9.text( $('tr.main').find('td:nth-child(9)').text());
+        td9.append(inputTax);
+        td10.text($('tr.main').find('td:nth-child(10)').text());
+
         newTr.append(td1);
         newTr.append(td2);
+
         newTr.append(td3);
         newTr.append(td4);
+
         newTr.append(td5);
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
+        newTr.append(td10);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-purchase tbody').append(newTr);
@@ -450,12 +515,12 @@
         
         trBar.find('td:first > input').val("");
         trBar.find('td:nth-child(2) ').text('<?=_l('item_name')?>');
-        trBar.find('td:nth-child(3) ').text('');
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) ').text('<?=_l("item_price")?>');
-        trBar.find('td:nth-child(6) ').text('<?=_l("0")?>');
-        trBar.find('td:nth-child(7) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(8) > select').find('option:gt(0)').remove().selectpicker('refresh');
+        trBar.find('td:nth-child(5) ').text('');
+        trBar.find('td:nth-child(6) > input').val('');
+        trBar.find('td:nth-child(7) ').text('<?=_l("item_price")?>');
+        trBar.find('td:nth-child(8) ').text('<?=_l("0")?>');
+        trBar.find('td:nth-child(9) ').text('Thuế');
+        trBar.find('td:nth-child(10) ').text('0');
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
@@ -465,12 +530,12 @@
         refreshTotal();
     };
     var refreshTotal = () => {
-
+        $('.selectpicker').selectpicker('refresh');
         $('.total').text(formatNumber(total));
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            totalPrice += parseFloat($(value).find('td:nth-child(8)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(9)').text().replace(/\,/g, ''));
             // * 
         });
         $('.totalPrice').text(formatNumber(totalPrice));
@@ -490,16 +555,18 @@
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
-            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
-            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-            trBar.find('td:nth-child(4) > input').val(1);
-            trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
-            trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1) );
+
+
+            trBar.find('td:nth-child(5)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(5) > input').val(itemFound.unit);
+            trBar.find('td:nth-child(6) > input').val(1);
+            trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
+            trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price * 1) );
             var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
-            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
-            trBar.find('td:nth-child(7)').append(inputTax);
-            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(9)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(9)').append(inputTax);
+            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }

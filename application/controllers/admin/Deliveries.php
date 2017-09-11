@@ -16,7 +16,7 @@ class Deliveries extends Admin_controller
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('deliveries',array('sale_id'=>$sale_id));
         }
-        $data['title'] = _l('export_orders');
+        $data['title'] = _l('deliveries');
         $this->load->view('admin/deliveries/manage', $data);
     }
 

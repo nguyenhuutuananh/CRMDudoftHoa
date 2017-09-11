@@ -9,6 +9,7 @@ class Sales extends Admin_controller
         $this->load->model('invoice_items_model');
         $this->load->model('clients_model');
         $this->load->model('warehouse_model');
+        $this->load->model('accounts_model');
     }
     
 
@@ -44,7 +45,6 @@ class Sales extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
-
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->sales_model->add($data);
@@ -98,6 +98,8 @@ class Sales extends Admin_controller
         if (!has_permission('customers', '', 'view')) {
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();

@@ -13,6 +13,13 @@
                 <div class="clearfix"></div>
                 <div class="panel_s">
                     <div class="panel-body">
+                    <input type="hidden" id="filterStatus" value="" />
+                    <div data-toggle="btn" class="btn-group mbot15">
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa giao hàng</button>
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã giao hàng</button>
+                        
+                    </div>
                     <?php render_datatable(array(
                             _l('#'),
                             _l('Mã phiếu giao hàng'),
@@ -34,8 +41,8 @@
 </div>
 <?php init_tail(); ?>
 <script type="text/javascript">
-    $(function(){
-        initDataTable('.table-deliveries', window.location.href, [1], [1]);
+    // $(function(){
+    //     initDataTable('.table-deliveries', window.location.href, [1], [1]);
     //     _validate_form($('form'),{unit:'required'},manage_contract_types);
     //     $('#adjustment_type').on('hidden.bs.modal', function(event) {
     //         $('#additional').html('');
@@ -56,7 +63,37 @@
     //     });
     //     return false;
     // }
+    // });
+
+    $(function(){
+         $('[data-toggle="btn"] .btn').on('click', function(){
+            var $this = $(this);
+            $this.parent().find('.active').removeClass('active');
+            $this.addClass('active');
+        });
+        $('#btnDatatableFilterAll').click(() => {
+            $('#filterStatus').val('');
+            $('#filterStatus').change();
+        });
+        $('#btnDatatableFilterNotApproval').click(() => {
+            $('#filterStatus').val(1);
+            $('#filterStatus').change();
+        });
+        $('#btnDatatableFilterApproval').click(() => {
+            $('#filterStatus').val(2);
+            $('#filterStatus').change();
+        });
+        var filterList = {
+            'filterStatus' : '[id="filterStatus"]',
+        };
+        initDataTable('.table-deliveries', window.location.href, [1], [1], filterList);
+        $.each(filterList, (filterIndex, filterItem) => {
+            $('input' + filterItem).on('change', () => {
+                $('.table-deliveries').DataTable().ajax.reload();
+            });
+        });
     });
+    
     function var_status(status,id)
     {
         // alert("<?=admin_url()?>deliveries/update_status");

@@ -13,3 +13,7 @@ ALTER TABLE `tblitems_in` ADD `sub_total` DECIMAL(25,0) NULL AFTER `item_order`,
 ALTER TABLE `tblitems_in` ADD `unit_cost` DECIMAL(25,0) NULL AFTER `qty`;
 
 ALTER TABLE `tblinvoices` ADD `rel_id` INT NULL AFTER `id`;
+
+ALTER TABLE `tblimports` ADD `invoice_status` TINYINT NULL DEFAULT '0' ;
+
+ALTER TABLE `tblimport_items` ADD `tk_no` INT NULL AFTER `specifications`, ADD `tk_co` INT NULL AFTER `tk_no`;
