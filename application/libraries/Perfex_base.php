@@ -154,6 +154,56 @@ class Perfex_Base
         }
         return false;
     }
+// Increase Quanity Product In Warehouse
+    public function increaseProductQuantity($warehouse_id,$product_id,$quantity)
+    {     
+        if (isset($product_id) && isset($warehouse_id) && is_numeric($quantity)) {
+            $product=$this->_instance->db->get_where('tblwarehouses_products',array('product_id'=>$product_id,'warehouse_id'=>$warehouse_id))->row();
+            if($product)
+            {
+                $total_quantity=$quantity+$product->product_quantity;
+                $this->_instance->db->update('tblwarehouses_products',array('product_quantity'=>$total_quantity),array('id'=>$product->id));
+            }
+            else
+            {
+                $data=array(
+                    'product_id'=>$product_id,
+                    'warehouse_id'=>$warehouse_id,
+                    'product_quantity'=>$quantity
+                    );
+                $this->_instance->db->insert('tblwarehouses_products',$data);
+            }
+            if($this->_instance->db->affected_rows()>0) 
+                return true;
+        }
+        return false;
+    }
+
+// Decrease Quanity Product In Warehouse
+    public function decreaseProductQuantity($warehouse_id,$product_id,$quantity)
+    {     
+        if (isset($product_id) && isset($warehouse_id) && is_numeric($quantity)) {
+            $product=$this->_instance->db->get_where('tblwarehouses_products',array('product_id'=>$product_id,'warehouse_id'=>$warehouse_id))->row();
+            if($product)
+            {
+                $total_quantity=$product->product_quantity-$quantity;
+                $this->_instance->db->update('tblwarehouses_products',array('product_quantity'=>$total_quantity),array('id'=>$product->id));
+            }
+            else
+            {
+                $data=array(
+                    'product_id'=>$product_id,
+                    'warehouse_id'=>$warehouse_id,
+                    'product_quantity'=>$quantity*(-1)
+                    );
+                $this->_instance->db->insert('tblwarehouses_products',$data);
+            }
+            if($this->_instance->db->affected_rows()>0) 
+                return true;
+        }
+        return false;
+    }
+
     public function getClient($id,$address_type=NULL)
     {        
         if (isset($id) && empty($address_type)) {

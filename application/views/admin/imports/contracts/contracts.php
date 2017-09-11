@@ -5,9 +5,9 @@
             <div class="col-md-12">
                 <div class="panel_s">
                     <div class="panel-body _buttons">                   
-                    <h4 class="bold no-margin">Điều chỉnh số lượng kho</h4>
+                    <h4 class="bold no-margin"><?=_l('importfromcontract')?></h4>
                     <hr class="no-mbot no-border">
-                    <a href="<?=admin_url('imports/adjustment_detail')?>" class="btn btn-info pull-left display-block"><?php echo _l('Thêm phiếu điều chỉnh'); ?></a>
+                    <a href="<?=admin_url('imports/contract_detail')?>" class="btn btn-info pull-left display-block"><?php echo _l('Thêm phiếu phiếu nhập kho'); ?></a>
                     </div>
                 </div>
                 <div class="clearfix"></div>

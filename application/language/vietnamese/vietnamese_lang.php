@@ -3891,8 +3891,8 @@ $lang['successfull_restore'] = "Khôi phục phiếu thành công";
 $lang['unsuccessfull_restore'] = "Không thể khôi phục phiếu";
 
 $lang['restore'] = "Khôi phục";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['importfromcontract'] = "Nhập hàng từ hợp đồng";
+$lang['item_warehouse'] = "Kho hàng";
 // $lang['total_value'] = "In phiếu giao hàng";
 // $lang['total_value'] = "In phiếu giao hàng";
 // $lang['total_value'] = "In phiếu giao hàng";

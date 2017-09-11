@@ -72,6 +72,27 @@ function getWard($id)
     }
     return $CI->perfex_base->getWard($id);
 }
+// Increase Quanity Product In Warehouse
+function increaseProductQuantity($warehouse_id,$product_id,$quantity)
+{
+    $CI =& get_instance();
+    if (!class_exists('perfex_base')) {
+        $CI->load->library('perfex_base');
+    }
+    return $CI->perfex_base->increaseProductQuantity($warehouse_id,$product_id,$quantity);
+}
+
+// Decrease Quanity Product In Warehouse
+function decreaseProductQuantity($warehouse_id,$product_id,$quantity)
+{
+    $CI =& get_instance();
+    if (!class_exists('perfex_base')) {
+        $CI->load->library('perfex_base');
+    }
+    return $CI->perfex_base->decreaseProductQuantity($warehouse_id,$product_id,$quantity);
+}
+
+
 function getClient($id,$address_type=NULL)
 {
    

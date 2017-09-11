@@ -2103,8 +2103,8 @@ EOL;
     $contract->template = str_replace("{terms_of_payment}", $contract->shipping_terms, $contract->template);
 
     // Supplier
-    print_r($contract);
-    exit();
+    // print_r($contract);
+    // exit();
 
     // Tcpdf does not support float css we need to adjust this here
     $contract->template = str_replace('float: right', 'text-align: right', $contract->template);

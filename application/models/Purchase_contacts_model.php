@@ -34,18 +34,45 @@ class Purchase_contacts_model extends CRM_Model
                 return $item;
             }
         }
+        else
+        {
+            $items=$this->db->get('tblpurchase_contracts')->result_array();
+            if($items)
+                return $items;
+        }
         return false;
     }
     public function get_detail($order_id) {
         if(is_numeric($order_id)) {
-            $this->db->select('*, tblorders_detail.product_price_buy as price_buy, tbltaxes.name as tax_name, tblitems.id as id, tblitems.name as name');
+            $this->db->select('*, tblorders_detail.product_price_buy as price_buy, tbltaxes.name as tax_name, tblitems.id as id, tblitems.name as name,tblwarehouses.warehouse as warehouse_name');
             $this->db->where('order_id', $order_id);
             $this->db->join('tblitems',     'tblitems.id = tblorders_detail.product_id', 'left');
             $this->db->join('tblunits',     'tblunits.unitid = tblitems.unit', 'left');
             $this->db->join('tbltaxes',     'tbltaxes.id = tblitems.tax', 'left');
+            $this->db->join('tblwarehouses',     'tblwarehouses.warehouseid = tblorders_detail.warehouse_id', 'left');
             $items = $this->db->get('tblorders_detail')->result();
             return $items;
         }
         return array();
     }
+
+    public function getContractsBySupplierID($supplier_id = '')
+    {
+
+        $this->db->select('tblpurchase_contracts.*');
+        $this->db->from('tblpurchase_contracts');
+        if (is_numeric($supplier_id)) 
+        {
+            $this->db->where('tblpurchase_contracts.id_supplier', $supplier_id);
+        }
+        $products= $this->db->get()->result();
+        if($products)
+            {
+                return $products;
+            }
+        return false;
+    }
+
+
+
 }

@@ -93,6 +93,7 @@ class Purchase_contracts extends Admin_controller
             redirect(admin_url('contracts'));
         }
         $contract = $this->purchase_contacts_model->get($id);
+
         $pdf      = contract_purchase_pdf($contract);
         
         $type     = 'D';
@@ -133,5 +134,18 @@ class Purchase_contracts extends Admin_controller
             'success' => $success,
             'message' => $message
         ));
+    }
+
+    public function getContractsBySuppID($supplier_id) {
+        if(is_numeric($supplier_id) && $this->input->is_ajax_request()) {
+            echo json_encode($this->purchase_contacts_model->getContractsBySupplierID($supplier_id));
+        }
+    }
+
+    public function getAllItemsByContractID($contract_id) {
+        if(is_numeric($contract_id) && $this->input->is_ajax_request()) {
+            $items=$this->purchase_contacts_model->get($contract_id)->products;
+            echo json_encode($items);
+        }
     }
 }
