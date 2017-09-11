@@ -132,6 +132,8 @@
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
                                         <th></th>
                                         
                                     </tr>
@@ -141,7 +143,8 @@
                                     <?php
                                     $i=0;
                                     $totalPrice=0;
-                                    
+                                    $total_money_tax=0;
+                                    $total_money=0;
                                     if(isset($item) && count($item->products) > 0) {
                                         
                                         foreach($item->products as $value) {
@@ -185,6 +188,14 @@
                                         </td>
                                         <td>
                                             <?php echo number_format($value['price_buy']*$value['product_quantity']) ?>
+                                            <?php $total_money=$total_money+($value['price_buy']*$value['product_quantity']); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $value['taxrate'] ?>%
+                                        </td>
+                                        <td>
+                                            <?php echo number_format((($value['price_buy']*$value['product_quantity'])*$value['taxrate']/100)) ?>
+                                            <?php $total_money_tax=$total_money_tax+(($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100?>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -205,6 +216,20 @@
                                         </td>
                                         <td class="total">
                                             <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('purchase_totalmoneytax_items'); ?> :</span>
+                                        </td>
+                                        <td class="total_money_tax">
+                                            <?php echo number_format($total_money_tax) ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('purchase_totalmoney_items'); ?> :</span>
+                                        </td>
+                                        <td class="total_money_money">
+                                            <?php echo number_format($total_money) ?>
                                         </td>
                                     </tr>
                                 </tbody>

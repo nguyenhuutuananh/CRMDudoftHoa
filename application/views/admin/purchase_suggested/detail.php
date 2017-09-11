@@ -180,6 +180,7 @@
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
                                         <th></th>
                                         
                                     </tr>
@@ -222,6 +223,9 @@
                                         </td>
                                         <td>
                                             0 %
+                                        </td>
+                                        <td>
+                                            0
                                         </td>
                                         <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
@@ -268,6 +272,9 @@
                                         </td>
                                         <td>
                                             <?php echo ($value['taxrate']) ?> %
+                                        </td>
+                                        <td>
+                                            <?php echo number_format((($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100) ?>
                                         </td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
@@ -386,6 +393,7 @@
         var td8 = $('<td></td>');
 		var td9 = $('<td></td>');
         var td10 = $('<td></td>');
+        var td11 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -419,6 +427,7 @@
         newTr.append(td8);
 		newTr.append(td9);
         newTr.append(td10);
+        newTr.append(td11);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -482,6 +491,7 @@
             trBar.find('td:nth-child(7)');
             trBar.find('td:nth-child(8)');
             trBar.find('td:nth-child(10)').text(itemFound.tax_rate + " %");
+            trBar.find('td:nth-child(11)');
             isNew = true;
             $('#btnAdd').show();
         }
@@ -501,6 +511,12 @@
 		let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
 		let tdTong = gia.parent().find(' + td');
 		tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
+        let tdtax = gia.parent().find(' + td + td');
+        let tdmoneytax = gia.parent().find(' + td + td +td');
+        let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
+        let vartax=$(tdtax).html().replace(/\,|%/g, '');
+        tdTong.text(formatNumber( tong ) );
+        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
         refreshTotal();
 	};
 	$(document).on('keyup', '.mainPriceBuy', (e)=>{

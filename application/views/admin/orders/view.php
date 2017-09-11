@@ -171,6 +171,8 @@
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
                                         <th></th>
                                         
                                     </tr>
@@ -217,15 +219,21 @@
                                             0
                                         </td>
                                         <td>
+                                            0 %
+                                        </td>
+                                        <td>
+                                            0
+                                        </td>
+                                        <td>
                                             <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                         </td>
                                     </tr>
                                     <?php
                                     $i=0;
                                     $totalPrice=0;
-                                    
+                                    $total_money_tax=0;
+                                    $total_money=0;
                                     if(isset($item) && count($item->products) > 0) {
-                                        
                                         foreach($item->products as $value) {
                                             $value = (array)$value;
                                         ?>
@@ -267,6 +275,14 @@
                                         </td>
                                         <td>
                                             <?php echo number_format($value['price_buy']*$value['product_quantity']) ?>
+                                            <?php $total_money=$total_money+($value['price_buy']*$value['product_quantity']); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $value['taxrate'] ?>%
+                                        </td>
+                                        <td>
+                                            <?php echo number_format((($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100) ?>
+                                            <?php $total_money_tax=$total_money_tax+(($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100?>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -287,6 +303,20 @@
                                         </td>
                                         <td class="total">
                                             <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('purchase_totalmoneytax_items'); ?> :</span>
+                                        </td>
+                                        <td class="total_money_tax">
+                                            <?php echo number_format($total_money_tax) ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('purchase_totalmoney_items'); ?> :</span>
+                                        </td>
+                                        <td class="total_money_money">
+                                            <?php echo number_format($total_money) ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -320,7 +350,8 @@
 <script>
     var itemList = <?php echo json_encode($products);?>;
     //format currency
-    function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
+    function formatNumber(nStr, decSeperate=".", groupSeperate=",")
+    {
         nStr += '';
         x = nStr.split(decSeperate);
         x1 = x[0];
@@ -384,7 +415,9 @@
         var td7 = $('<td><input class="mainExchange_Rate" type="number" name="items[' + uniqueArray + '][exchange_rate]" value="" /></td>');
         var td8 = $('<td></td>');
 		var td9 = $('<td></td>');
-        var td10 = $('<td></td>')
+        var td10 = $('<td></td>');
+        var td11 = $('<td></td>');
+        var td12 = $('<td></td>')
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -410,6 +443,8 @@
 		objPriceBuy.removeAttr('id');
 		td9.append(objPriceBuy);
         td10.append($('tr.main').find('td:nth-child(10)').text());
+        td11.append($('tr.main').find('td:nth-child(11)').text());
+        td12.append($('tr.main').find('td:nth-child(12)').text());
 
 		newTr.append(td1);
         newTr.append(td2);
@@ -421,6 +456,8 @@
         newTr.append(td8);
 		newTr.append(td9);
         newTr.append(td10);
+        newTr.append(td11);
+        newTr.append(td12);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -478,11 +515,13 @@
             trBar.find('td:nth-child(3)').text(itemFound.unit_name);
             trBar.find('td:nth-child(3) > input').val(itemFound.unit);
             trBar.find('td:nth-child(4) > input').val(1);
-
             trBar.find('td:nth-child(5)');
             trBar.find('td:nth-child(6)');
             trBar.find('td:nth-child(7)');
             trBar.find('td:nth-child(8)');
+            trBar.find('td:nth-child(10)');
+            trBar.find('td:nth-child(11)').text(itemFound.tax_rate+'%');
+            trBar.find('td:nth-child(12)');
             isNew = true;
             $('#btnAdd').show();
         }
@@ -502,6 +541,22 @@
 		let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
 		let tdTong = gia.parent().find(' + td');
 		tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
+
+        let tdtax = gia.parent().find(' + td + td');
+        let tdmoneytax = gia.parent().find(' + td + td +td');
+        let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
+        let vartax=$(tdtax).html().replace(/\,|%/g, '');
+        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
+        let price=$('.mainPriceBuy');
+        let total_money_tax=0;
+        let total_money=0;
+        $.each($(price), function( index, value ) {
+            total_money=parseFloat((total_money))+parseFloat($(value).parent().find(' + td').html().replace(/\,|%/g, ''));
+            total_money_tax=parseFloat(total_money_tax)+parseFloat($(value).parent().find(' + td + td +td').html().replace(/\,|%/g, ''));
+        })
+
+        $('.total_money_tax').html(formatNumber(total_money_tax));
+        $('.total_money_money').html(formatNumber(total_money));
         refreshTotal();
 	};
 	$(document).on('keyup', '.mainPriceBuy', (e)=>{
@@ -572,6 +627,9 @@
             alert_float('danger', 'Giá trị không hợp lệ!');    
         }
         
+    });
+    $(function() {
+        $('table.item-export tbody td select').removeAttr('disabled');
     });
 </script>
 </body>

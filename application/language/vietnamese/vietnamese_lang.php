@@ -695,6 +695,9 @@ $lang['acs_sales_payment_modes_submenu']       = 'Phương thức thanh toán';
 $lang['acs_email_templates']                   = 'Mẫu Email';
 $lang['acs_roles']                             = 'Phòng ban';
 $lang['acs_settings']                          = 'Cài Đặt';
+$lang['als_accounts']                          = 'Hệ thống tài khoản';
+$lang['als_votes']                          	= 'Phiếu chi';
+$lang['als_debit']                          	= 'Báo nợ';
 
 # Tickets
 $lang['new_ticket']                                         = 'Mở vé mới';
@@ -3600,6 +3603,8 @@ $lang['item_avatar']            = "Ảnh đại diện";
 $lang['purchase_suggested']              = "Đề xuất mua hàng";
 $lang['purchase_suggested_edit_heading'] = "Sửa đề xuất mua hàng";
 $lang['purchase_suggested_add_heading']  = "Tạo đề xuất mua hàng";
+$lang['votes_add_heading']  			 = "Tạo phiếu chi";
+$lang['votes_update_heading']  			 = "Cập nhật phiếu chi";
 $lang['purchase_suggested_information']  = "Thông tin";
 $lang['remarks_for_approval']            = "Ý kiến phê duyệt";
 $lang['purchase_suggested_reason']       = "Ý kiến giải trình";
@@ -3859,21 +3864,42 @@ $lang['converted_contract'] = "Hóa đơn đã tạo đơn đặt hàng";
 $lang['company_bank_account'] = "Số tài khoản: ";
 
 $lang['sub_amount'] = "Giá trị";
-// $lang['total_amount'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['moneytax'] = "Tiền thuế";
+$lang['purchase_totalmoneytax_items']    = "Tổng tiền thuế";
+$lang['purchase_totalmoney_items']       = "Tổng tiền sản phẩm";
+$lang['lblsupplier']            		= "Nhà cung cấp";
+$lang['receiver']            			= "Người nhận";
+$lang['votesreason'] 					= "Lý do chi";
+$lang['file_votes'] 					= "File đính kèm";
+$lang['date_of_accounting'] = "Ngày hạch toán";
 
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['day_vouchers'] = "Ngày chứng từ";
+$lang['code_vouchers'] = "Số chứng từ";
 
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
-// $lang['total_value'] = "In phiếu giao hàng";
+$lang['purchase_contracts'] = "Hợp đồng mua";
+$lang['contract_buy'] = "Hợp đồng mua";
+$lang['contract_ban'] = "Hợp đồng bán";
+$lang['total_money'] = "Tổng tiền";
+$lang['tk_no'] = "Tài khoản nợ";
+$lang['tk_co'] = "Tài khoản có";
+$lang['votes'] = "Phiếu chi";
+$lang['no_data_found'] = "Không tìm thấy dữ liệu";
+$lang['date_create'] = "Ngày tạo";
+$lang['reason'] 	 = "Lý do";
+$lang['staff_browse'] = "Nhân viên duyệt";
+$lang['staff_create'] = "Nhân viên tạo";
+$lang['status_votes'] = "Trạng thái";
+$lang['status_debit'] = "Trạng thái";
+$lang['debit_add_heading']  			 = "Tạo phiếu báo nợ";
+$lang['debit_update_heading']  			 = "Cập nhật phiếu báo nợ";
+
+$lang['debit']  			 = "Phiếu báo nợ";
+$lang['als_receipts']  			 = "Phiếu thu";
+$lang['als_report_have']  			 = "Phiếu báo có";
+$lang['invoices']  			 	= "Hóa đơn";
+$lang['receipts_add_heading']  			= "Tạo phiếu thu";
+$lang['receipts_update_heading']  		= "Cập nhật phiếu thu";
+
 
 
 

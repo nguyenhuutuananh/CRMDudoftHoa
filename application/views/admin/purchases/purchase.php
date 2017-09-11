@@ -154,6 +154,7 @@
 												<th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
 												<th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
 												<th width="" class="text-left"><?php echo _l('tax'); ?></th>
+												<th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
 												<th></th>
 												
 											</tr>
@@ -196,6 +197,9 @@
 												</td>
 												<td>
 													0 %
+												</td>
+												<td>
+													0
 												</td>
 												<td>
 													<button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
@@ -242,6 +246,9 @@
 												</td>
 												<td>
 													<?php echo ($value['tax_rate']) ?> %
+												</td>
+												<td>
+													<?php echo number_format((($value['tax_rate']*($value['price_buy']*$value['quantity_required']))/100)) ?>
 												</td>
 												<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
 												
@@ -363,6 +370,7 @@
         var td8 = $('<td></td>');
 		var td9 = $('<td></td>');
 		var td10 = $('<td></td>');
+		var td11 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -385,6 +393,7 @@
 		td8.append(objPriceBuy);
 		td9.append($('tr.main').find('td:nth-child(9)').text());
 		td10.append($('tr.main').find('td:nth-child(10)').text());
+		td11.append($('tr.main').find('td:nth-child(11)').text());
 
 		newTr.append(td1);
         newTr.append(td2);
@@ -396,6 +405,7 @@
         newTr.append(td8);
 		newTr.append(td9);
 		newTr.append(td10);
+		newTr.append(td11);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -447,7 +457,7 @@
 
         if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.main');
-            
+
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
             trBar.find('td:nth-child(3)').text(itemFound.unit_name);
@@ -459,7 +469,8 @@
             trBar.find('td:nth-child(7)');
             trBar.find('td:nth-child(8)');
 			trBar.find('td:nth-child(10)').text(itemFound.tax_rate + " %");
-			
+			trBar.find('td:nth-child(11)');
+
             isNew = true;
             $('#btnAdd').show();
         }
@@ -478,7 +489,13 @@
 		let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
 		let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
 		let tdTong = gia.parent().find(' + td');
-		tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
+		let tdtax = gia.parent().find(' + td + td');
+		let tdmoneytax = gia.parent().find(' + td + td +td');
+		let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
+		let vartax=$(tdtax).html().replace(/\,|%/g, '');
+		tdTong.text(formatNumber( tong ) );
+		tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
+
         refreshTotal();
 	};
 	$(document).on('keyup', '.mainPriceBuy', (e)=>{
