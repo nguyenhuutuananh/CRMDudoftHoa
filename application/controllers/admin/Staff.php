@@ -110,7 +110,7 @@ class Staff extends Admin_controller
 
         }
         $this->load->model('currencies_model');
-        $data['maxid']=sprintf('%05d',$this->staff_model->maxID());
+        $data['maxid']=sprintf('%06d',$this->staff_model->maxID());
         
         $data['base_currency'] = $this->currencies_model->get_base_currency();
         $data['roles']       = $this->roles_model->get();

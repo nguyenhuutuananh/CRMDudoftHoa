@@ -101,7 +101,7 @@
                                 }
                                 else
                                 {
-                                    $number=sprintf('%05d',getMaxID('id','tblimports')+1);
+                                    $number=sprintf('%06d',getMaxID('id','tblimports')+1);
                                 }
                             ?>
                             <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
@@ -121,7 +121,7 @@
                     <?php echo render_select('rel_id',$contracts,array('id',array('prefix','code')),'contracts',$selected); ?>
 
                     <?php
-                    $default_name = (isset($item) ? $item->name : "");
+                    $default_name = (isset($item) ? $item->name : "Phiếu nhập kho");
                     echo render_input('name', _l('import_name'), $default_name);
                     ?>
 
@@ -177,7 +177,7 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;min-height: 500px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
@@ -186,7 +186,7 @@
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_warehouse'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                        <th width="15%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="10%" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
@@ -195,7 +195,7 @@
                                 </thead>
                                 
                                 <tbody>
-                                    <tr class="main">
+                                    <tr class="main" style="display: none;">
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                         <td>
                                             <?php echo _l('item_name'); ?>
@@ -260,10 +260,17 @@
                                             echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
-                                        <td><?php echo $value->unit_name; ?></td>
-                                        <td><input class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
-                                            
-                                        <td><?php echo number_format($value->unit_cost); ?></td>
+                                        <td><?php echo $value->warehouse_name; ?></td>
+                                        <?php
+                                            $max=$value->quantity-$value->quantity_net;
+                                         ?>
+                                        <td><input class="mainQuantity" type="number" min="0" max="<?=$max?>" name="items[<?php echo $i; ?>][quantity_net]" value="<?php echo $value->quantity; ?>"></td>
+                                        <?php 
+                                        // var_dump($value);
+                                            $amount=0;
+                                            // $amount=$value->
+                                         ?>
+                                        <td><input type="hidden" class="exchange_rate" name="items[<?=$i?>][exchange_rate]" value="<?=$value->exchange_rate?>" /><input type="hidden" class="price_buy" name="items[<?=$i?>][price_buy]" value="<?=$value->unit_cost?>" /><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
@@ -321,7 +328,7 @@
 </div>
 <?php init_tail(); ?>
 <script>
-    _validate_form($('.client-form'),{code:'required',warehouse_type:'required',warehouse_id:'required'});
+    _validate_form($('.client-form'),{code:'required',warehouse_id:'required'});
     
 
     var itemList = <?php echo json_encode($items);?>;
@@ -371,7 +378,6 @@
                 dataType : 'json',
             })
             .done(function(data){ 
-                console.log(data);
                 total=0;
                 $.each(data, function(key,value){
                     var newTr = $('<tr class="item"></tr>');
@@ -394,8 +400,8 @@
                     td4.append(selectTd4);
 
                     var td5 = $('<td>'+value.warehouse_name+'</td>');
-                    var td6 = $('<td>'+formatNumber(value.product_quantity)+'</td>');
-                    var td7 = $('<td>'+formatNumber(value.price_buy)+'</td>');
+                    var td6 = $('<td><input type="hidden" name="items['+uniqueArray+'][quantity]" value="'+value.product_quantity+'" /><input type="number" min="0" max="'+value.product_quantity+'" class="mainQuantity" name="items['+uniqueArray+'][quantity_net]" value="'+value.product_quantity+'" /></td>');
+                    var td7 = $('<td><input type="hidden" class="exchange_rate" name="items['+uniqueArray+'][exchange_rate]" value="'+value.exchange_rate+'" /><input type="hidden" class="price_buy" name="items['+uniqueArray+'][price_buy]" value="'+value.price_buy+'" />'+formatNumber(value.price_buy)+'</td>');
                     var amount=parseFloat(value.product_quantity)*parseFloat(value.price_buy)*parseFloat(value.exchange_rate);
                     if(isNaN(parseFloat(amount)))
                     {
@@ -403,7 +409,8 @@
                     }
                     
                     var td8 = $('<td>'+formatNumber(amount)+'</td>');
-
+                    $('#warehouse_id').selectpicker('val',value.warehouse_id);
+                    $('#warehouse_id').selectpicker('refresh');
                     newTr.append(td1);
                     newTr.append(td2);
                     newTr.append(td3);
@@ -414,10 +421,11 @@
                     newTr.append(td8);
                     $('table.item-purchase tbody').append(newTr);
                     uniqueArray++;
-                    total+=amount;
+                    total++;
                     
                 });
                 $('.selectpicker').selectpicker('refresh');
+                refreshTotal();
             });
         }
     }
@@ -568,7 +576,7 @@
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += $(value).find('td:nth-child(6) > input').val() * $(value).find('td:nth-child(7)').text().replace(/\,/g, '');
+            totalPrice += $(value).find('td:nth-child(6) > input').val() * $(value).find('td:nth-child(7)').text().replace(/\,/g, '')*$(value).find('td:nth-child(7) > input.exchange_rate').val();
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
@@ -595,12 +603,19 @@
             $('#btnAdd').hide();
         }
     });
-    $(document).on('keyup', '.mainQuantity',(e)=>{
+    $(document).on('keyup', '.mainQuantity,.quantity',(e)=>{
         
         var currentQuantityInput = $(e.currentTarget);
-        var Gia = currentQuantityInput.parent().find(' + td');
-        var Tong = Gia.find(' + td');
-        Tong.text( formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        var Giatd = currentQuantityInput.parent().find(' + td');
+        
+        var Gia=Giatd.text().replace(/\,/g, '');
+        var Tygia=Giatd.find('input.exchange_rate').val();
+        console.log(Giatd);
+        console.log(Gia);
+        console.log(Tygia);
+
+        var Tong = Giatd.find(' + td');
+        Tong.text(formatNumber(Gia * currentQuantityInput.val()*Tygia));
         refreshTotal();
     });
     $('#warehouse_type').change(function(e){
@@ -634,12 +649,21 @@
 
     $('.customer-form-submiter').on('click', function(e){
         var warehouse_id=$('#warehouse_id').val();
+        var tk=$('select[name^="items"]');
         if(!warehouse_id)
         {
             alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
             e.preventDefault(); 
         }
-        
+        $.each(tk, function(key,value){
+        if($(value).val()=='')
+        {
+            alert_float('danger', "Vui lòng chọn tài khoản hạch toán!");
+            e.preventDefault();
+            
+            return;
+        }
+        });
     });
         
 </script>

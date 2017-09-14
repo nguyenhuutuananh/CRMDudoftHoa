@@ -13,6 +13,13 @@
                 <div class="clearfix"></div>
                 <div class="panel_s">
                     <div class="panel-body">
+                    <input type="hidden" id="filterStatus" value="" />
+                    <div data-toggle="btns" class="btn-group mbot15">
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>
+                        <button style=" font-size: 11px;" type="button" id="btnDatatableFilterCancel" data-toggle="tab" class="btn btn-info">Phiếu hủy</button>
+                    </div>
                     <?php render_datatable(array(
                             _l('#'),
                             _l('Mã phiếu'),
@@ -22,7 +29,7 @@
                             _l('Được duyệt bởi'),
                             _l('Ngày tạo'),
                             _l('options')
-                        ),'adjustment'); ?>
+                        ),'contract'); ?>
                     </div>
                 </div>
             </div>
@@ -31,8 +38,40 @@
 </div>
 <?php init_tail(); ?>
 <script type="text/javascript">
+    // $(function(){
+    //     initDataTable('.table-contract', window.location.href, [1], [1]);
+    // });
     $(function(){
-        initDataTable('.table-adjustment', window.location.href, [1], [1]);
+        $('[data-toggle="btns"] .btn').on('click', function(){
+            var $this = $(this);
+            $this.parent().find('.active').removeClass('active');
+            $this.addClass('active');
+        });
+        $('#btnDatatableFilterAll').click(() => {
+            $('#filterStatus').val('');
+            $('#filterStatus').change();
+        });
+        $('#btnDatatableFilterNotApproval').click(() => {
+            $('#filterStatus').val(1);
+            $('#filterStatus').change();
+        });
+        $('#btnDatatableFilterApproval').click(() => {
+            $('#filterStatus').val(2);
+            $('#filterStatus').change();
+        });
+        $('#btnDatatableFilterCancel').click(() => {
+            $('#filterStatus').val(3);
+            $('#filterStatus').change();
+        });
+        var filterList = {
+            'filterStatus' : '[id="filterStatus"]',
+        };
+        initDataTable('.table-contract', window.location.href, [1], [1], filterList);
+        $.each(filterList, (filterIndex, filterItem) => {
+            $('input' + filterItem).on('change', () => {
+                $('.table-contract').DataTable().ajax.reload();
+            });
+        });
     });
     function var_status(status,id)
     {
@@ -45,7 +84,7 @@
             success: function (response) {
                 response = JSON.parse(response);
                 if (response.success == true) {
-                    $('.table-adjustment').DataTable().ajax.reload();
+                    $('.table-contract').DataTable().ajax.reload();
                     alert_float('success', response.message);
                 }
                 return false;
@@ -72,9 +111,9 @@
 //             }
 //         });
 //     }
-    $('body').on('click', '.delete-remind', function() {
+    $('body').on('click', '.delete-remind,.restore-remind', function() {
         var r = confirm(confirm_action_prompt);
-        var table='.table-adjustment';
+        var table='.table-contract';
         if (r == false) {
             return false;
         } else {

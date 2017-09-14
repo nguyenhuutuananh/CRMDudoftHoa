@@ -97,7 +97,7 @@
                             }
                             else
                             {
-                                $number=sprintf('%05d',getMaxID('id','tblpurchase_costs')+1);
+                                $number=sprintf('%06d',getMaxID('id','tblpurchase_costs')+1);
                             }
                         ?>
                         <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
@@ -176,8 +176,16 @@
                 
                 
                 </div>
-                
-
+                <div id="tk" style="display: none;">
+                <?php
+                $selected=(isset($item) ? $item->tk_no : '');
+                echo render_select('tk_no',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                ?>
+                <?php
+                $selected=(isset($item) ? $item->tk_co : '');
+                echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                ?>
+                </div>
                 <!-- Edited -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <!-- Cusstomize from invoice -->
@@ -188,8 +196,10 @@
                                     <tr>
                                         <th width="10%" style="text-align: center !important;">Thứ tự</th>
                                         <th width="15%" class="text-left"><?php echo _l('Phân bố theo'); ?></th>
-                                        <th width="30%" style="text-align: right !important;"><?php echo _l('Chi phí'); ?></th>
-                                        <th width="40%" style="text-align: left !important;"><?php echo _l('Ghi chú'); ?></th>
+                                        <th width="20%" style="text-align: right !important;"><?php echo _l('Chi phí'); ?></th>
+                                        <th width="15%" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="15%" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th width="20%" style="text-align: left !important;"><?php echo _l('Ghi chú'); ?></th>
                                         <th width="5%"></th>
                                     </tr>
                                 </thead>
@@ -211,6 +221,22 @@
                                         <td><?=($stt+1)?></td>
                                         <td><?=($item['cost_type'] == 1 ? 'Giá trị' : 'Số lượng')?> <input type="hidden" name="items[<?=$stt?>][cost_type]" value="<?=$item['cost_type']?>"></td>
                                         <td><?=number_format($item['cost_value'])?> <input type="hidden" name="items[<?=$stt?>][cost_value]" value="<?=$item['cost_value']?>"></td>
+
+                                        <!-- TK NO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item['tk_no'] : '');
+                                            echo render_select('items['.$stt.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item['tk_co'] : '');
+                                            echo render_select('items['.$stt.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+
                                         <td style="text-align: left"><?=$item['cost_note']?><input type="hidden" name="items[<?=$stt?>][cost_note]" value="<?=$item['cost_note']?>"></td>
                                         <td><button type="button" class="btn btn-danger removeTr"><i class="fa fa-times"></i></button></td>
                                     </tr>
@@ -320,6 +346,21 @@
             var inputCostValue = $('<input type="hidden" name="items['+stt+'][cost_value]" value="'+Number(costValue.val())+'" />');
             var tdCostValue = $('<td></td>');
             var inputCostType = $('<input type="hidden" name="items['+stt+'][cost_type]" value="'+costType.val()+'" />');
+
+            var tdtk_no = $('<td></td>');
+            var cbotk_no=$('#tk').find('select[id="tk_no"]').clone();
+            cbotk_no.removeAttr('id');
+            var tk_no='items['+stt+'][tk_no]';
+            cbotk_no.attr('name',tk_no);
+            tdtk_no.append(cbotk_no);
+
+            var tdtk_co = $('<td></td>');
+            var cbotk_co=$('#tk').find('select[id="tk_co"]').clone();
+            cbotk_co.removeAttr('id');
+            var tk_co='items['+stt+'][tk_co]';
+            cbotk_co.attr('name',tk_co);
+            tdtk_co.append(cbotk_co);
+
             var tdCostType = $('<td></td>');
             var inputCostNote = $('<input type="hidden" name="items['+stt+'][cost_note]" value="'+costNote.val()+'" />');
             var tdCostNote = $('<td style="text-align: left"></td>');
@@ -338,6 +379,8 @@
             newTr.append(tdStt);
             newTr.append(tdCostType);
             newTr.append(tdCostValue);
+            newTr.append(tdtk_no);
+            newTr.append(tdtk_co);
             newTr.append(tdCostNote);
             newTr.append('<td><button type="button" class="btn btn-danger removeTr"><i class="fa fa-times"></i></button></td>');
             stt++;
@@ -350,6 +393,7 @@
             refreshAll();
 
             $('table.item-export tbody').append(newTr);
+            $('.selectpicker').selectpicker('refresh');
         });
         
     });

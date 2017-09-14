@@ -27,7 +27,7 @@ class Invoice_items_model extends CRM_Model
 
     public function get_full($id = '',$warehouse_id='')
     {
-        $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate');
+        $this->db->select('tblitems.*,tblunits.unit as unit_name,tbltaxes.name as tax_name, tbltaxes.taxrate as tax_rate')->distinct();
         $this->db->from('tblitems');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
         $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');

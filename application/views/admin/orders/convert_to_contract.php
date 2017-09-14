@@ -84,7 +84,7 @@
                                     }
                                     else
                                         {
-                                        $number = sprintf('%05d', getMaxID('id', 'tblpurchase_contracts') + 1);
+                                        $number = sprintf('%06d', getMaxID('id', 'tblpurchase_contracts') + 1);
                                     }
                                     ?>
                                     <input type="text" name="code" class="form-control" value="<?= $number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>

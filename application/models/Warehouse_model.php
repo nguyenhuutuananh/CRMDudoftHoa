@@ -65,7 +65,7 @@ class Warehouse_model extends CRM_Model
 
     public function getWarehouses($id = '')
     {
-
+        
         $this->db->select('tblwarehouses.*,tbl_kindof_warehouse.name as kindof_warehouse_name');
         $this->db->join('tbl_kindof_warehouse', 'tbl_kindof_warehouse.id = tblwarehouses.kindof_warehouse', 'left');
         $this->db->from('tblwarehouses');
@@ -75,7 +75,7 @@ class Warehouse_model extends CRM_Model
             return $this->db->get()->row();
         }
         else 
-        {
+        {   
             return $this->db->get()->result_array();
         }
 
@@ -146,6 +146,18 @@ class Warehouse_model extends CRM_Model
             $warehouses = $this->db->get()->result();
         }
         return $warehouses;
+    }
+
+    public function getProductQuantity($warehouse_id = '', $product_id='')
+    {
+        $this->db->select('tblwarehouses_products.*');
+        $this->db->from('tblwarehouses_products');
+        $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
+        $this->db->where('tblwarehouses_products.product_id', $product_id);
+        $product=$this->db->get()->row();
+        if($product)
+            return $product;
+        else return false;
     }
 
     public function getProductsByWarehouseID($warehouse_id = '')

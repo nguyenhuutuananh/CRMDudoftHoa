@@ -128,6 +128,16 @@ class Perfex_Base
         return '';
     }
 
+    public function getRow($table,$where)
+    {
+        $table = trim($table);
+        if (isset($where)) {
+            $this->_instance->db->where($where);
+            return $this->_instance->db->get($table)->row();
+        }
+        return false;
+    }
+
     public function getProvince($id)
     {
         
@@ -151,6 +161,15 @@ class Perfex_Base
         if (isset($id)) {
             $this->_instance->db->where('wardid',$id);
             return $this->_instance->db->get('ward')->row();
+        }
+        return false;
+    }
+
+    public function getWHTIDByWHID($warehouse_id)
+    {        
+        if (isset($warehouse_id)) {
+            $this->_instance->db->where('warehouseid',$warehouse_id);
+            return $this->_instance->db->get('tblwarehouses')->row()->kindof_warehouse;
         }
         return false;
     }

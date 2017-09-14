@@ -43,6 +43,16 @@ function getMaxID($id,$table)
     return $CI->perfex_base->getMaxID($id,$table);
 }
 
+function getRow($table,$where=array())
+{
+   
+    $CI =& get_instance();
+    if (!class_exists('perfex_base')) {
+        $CI->load->library('perfex_base');
+    }
+    return $CI->perfex_base->getRow($table,$where);
+}
+
 function getProvince($id)
 {
    
@@ -90,6 +100,15 @@ function decreaseProductQuantity($warehouse_id,$product_id,$quantity)
         $CI->load->library('perfex_base');
     }
     return $CI->perfex_base->decreaseProductQuantity($warehouse_id,$product_id,$quantity);
+}
+
+function getWHTIDByWHID($warehouse_id)
+{
+    $CI =& get_instance();
+    if (!class_exists('perfex_base')) {
+        $CI->load->library('perfex_base');
+    }
+    return $CI->perfex_base->getWHTIDByWHID($warehouse_id);
 }
 
 

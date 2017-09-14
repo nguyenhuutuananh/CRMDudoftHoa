@@ -45,7 +45,7 @@
                                 }
                                 else
                                 {
-                                  $number=sprintf('%05d',getMaxID('userid','tblsuppliers')+1);
+                                  $number=sprintf('%06d',getMaxID('userid','tblsuppliers')+1);
                                 }
                               ?>
                               <input type="text" name="supplier_code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>

@@ -11,6 +11,7 @@ class Purchase_cost extends Admin_controller
         $this->load->model('orders_model');
         $this->load->model('currencies_model');
         $this->load->model('warehouse_model');
+        $this->load->model('accounts_model');
 
         $this->load->library('form_validation');
         $this->form_validation->set_message('required', _l('form_validation_required'));
@@ -108,6 +109,8 @@ class Purchase_cost extends Admin_controller
             $purchase_cost = $this->purchase_cost_model->get($id);
             $data['purchase_cost'] = $purchase_cost;
         }
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['title'] = isset($purchase_cost) ? ($purchase_cost->status == 1 ? str_replace("Sửa", "Xem", _l('cost_edit_heading')) : _l('cost_edit_heading')) : _l('cost_add_heading');
         $data['contracts'] = $this->purchase_contacts_model->get_list();
         foreach($data['contracts'] as $key=>$value) {

@@ -7,6 +7,8 @@ class Purchase_cost_model extends CRM_Model
         parent::__construct();
     }
     public function insert($data) {
+        unset($data['tk_no']);
+        unset($data['tk_co']);
         if(isset($data['items'])) {
             $items = $data['items'];
             unset($data['items']);
@@ -22,6 +24,8 @@ class Purchase_cost_model extends CRM_Model
                         'cost' => $item['cost_value'],
                         'type' => $item['cost_type'],
                         'note' => $item['cost_note'],
+                        'tk_no' => $item['tk_no'],
+                        'tk_co' => $item['tk_co'],
                     );
                     $this->db->insert('tblpurchase_costs_detail', $data);
                 }
@@ -55,6 +59,8 @@ class Purchase_cost_model extends CRM_Model
         return array();
     }
     public function edit($id, $data) {
+        unset($data['tk_no']);
+        unset($data['tk_co']);
         if(isset($data['items'])) {
             $items = $data['items'];
             unset($data['items']);
@@ -70,6 +76,8 @@ class Purchase_cost_model extends CRM_Model
                         'cost' => $item['cost_value'],
                         'type' => $item['cost_type'],
                         'note' => $item['cost_note'],
+                        'tk_no' => $item['tk_no'],
+                        'tk_co' => $item['tk_co']
                     );
                     $this->db->insert('tblpurchase_costs_detail', $data);
                 }
