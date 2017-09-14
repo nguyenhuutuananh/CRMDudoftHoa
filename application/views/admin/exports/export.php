@@ -68,7 +68,7 @@
                             </span>
                             <?php 
                                 
-                                    $number=sprintf('%05d',getMaxID('id','tblexports')+1);
+                                    $number=sprintf('%06d',getMaxID('id','tblexports')+1);
                                 
                             ?>
                             <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>

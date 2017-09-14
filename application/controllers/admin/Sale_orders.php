@@ -245,6 +245,11 @@ class Sale_orders extends Admin_controller
         die;
     }
 
+    public function test($order_id)
+    {
+        $this->sale_oders_model->createReturnItems($order_id);
+    }
+
     
     public function pdf($id)
     {

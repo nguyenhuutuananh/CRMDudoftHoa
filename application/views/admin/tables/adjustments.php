@@ -19,14 +19,34 @@ $aColumns     = array(
 $sIndexColumn = "id";
 $sTable       = 'tblimports';
 $where        = array(
-    'AND rel_type="'.$rel_type.'"',
+    'AND rel_type="'.$rel_type.'"','AND canceled_at is null'
 );
+if($this->_instance->input->post()) {
+    $filter_status = $this->_instance->input->post('filterStatus');
+    if(is_numeric($filter_status)) {
+        
+        if($filter_status == 2)
+        {
+            $where = array('AND rel_type="'.$rel_type.'"','AND canceled_at is null');
+            array_push($where, 'AND status='.$filter_status);
+        }
+        elseif($filter_status == 3)
+            {
+                $where = array('AND rel_type="'.$rel_type.'"');
+                array_push($where, 'AND canceled_at is not null');
+            }
+        else {
+            array_push($where, 'AND status<>2');
+        }
+    }
+}
 $join         = array(
     'LEFT JOIN tblstaff  ON tblstaff.staffid=tblimports.create_by'
 );
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'prefix',
+    'canceled_at',
     'tblstaff.fullname',
     'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
 ));
@@ -108,8 +128,16 @@ foreach ($rResult as $aRow) {
         else
         {
             $_data .= icon_btn('imports/'.$rel_type.'_detail/'. $aRow['id'] , 'eye');
-        }     
-        $row[] =$_data.icon_btn('imports/delete_import/'. $aRow['id'] , 'remove', 'btn-danger delete-remind');
+        }
+        if($aRow['canceled_at'])
+        {
+            $_data .=icon_btn('imports/restore_import/'. $aRow['id'] , 'refresh', 'btn-info restore-remind');
+        }
+        else 
+        {
+           $_data.=icon_btn('imports/delete_import/'. $aRow['id'] , 'remove', 'btn-danger delete-remind');
+        }   
+         $row[] =$_data;
     } else {
         $row[] = '';
     }

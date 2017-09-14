@@ -91,7 +91,7 @@
                                 }
                                 else
                                 {
-                                    $number=sprintf('%05d',getMaxID('id','tblsale_orders')+1);
+                                    $number=sprintf('%06d',getMaxID('id','tblsale_orders')+1);
                                 }
                             ?>
                             <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
@@ -325,7 +325,10 @@
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+
+                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -348,6 +351,14 @@
                                         <td>
                                             <?php echo _l('item_price'); ?>
                                         </td>
+                                        
+                                        <td>
+                                            0
+                                        </td>
+                                        <td>
+                                            <?php echo _l('tax'); ?>
+                                            <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
+                                        </td>
                                         <td>
                                             0
                                         </td>
@@ -366,6 +377,13 @@
                                     if(isset($item_returns) && count($item_returns) > 0) {
                                         
                                         foreach($item_returns as $value) {
+                                            foreach ($item->items as $key => $val) {
+                                                if($value->product_id==$val->product_id)
+                                                {
+                                                    $maxQ=$val->quantity;
+                                                    break;
+                                                }
+                                            }
                                         ?>
                                     <tr class="sortable item">
                                         <td>
@@ -373,14 +391,18 @@
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
                                         <td><?php echo $value->unit_name; ?></td>
-                                        <td><input style="width: 100px" class="mainQuantity" type="number" min="0" max="<?=$value->quantity?>" name="itemsR[<?php echo $j; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
+                                        <td><input style="width: 100px" class="mainQuantity" type="number" min="0" max="<?=$maxQ?>" name="itemsR[<?php echo $j; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>                                        
+                                        <td><?php echo number_format($value->sub_total); ?></td>
+                                        <td><?php echo number_format($value->tax) ?>
+                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td><?php echo number_format($value->amount) ?></td>                                        
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItemR(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPriceR += $value->sub_total;
+                                            $totalPriceR += $value->amount;
                                             $j++;
                                         }
                                     }
@@ -660,19 +682,21 @@
         // console.log(itemFound);
         if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.mains');
-            //console.log(trBar.find('td:nth-child(2) > input'));
-            
             trBar.find('td:first > input').val(itemFound.product_id);
             trBar.find('td:nth-child(2)').text(itemFound.product_name+' ('+itemFound.prefix+itemFound.code+')');
             trBar.find('td:nth-child(3)').text(itemFound.unit_name);
             trBar.find('td:nth-child(3) > input').val(itemFound.unit);
             trBar.find('td:nth-child(4) > input').val(1);
-            trBar.find('td:nth-child(4) > input').attr('min',0);
+            //max min =>1 quantity
             trBar.find('td:nth-child(4) > input').attr('max',itemFound.quantity);
+
             trBar.find('td:nth-child(5)').text(formatNumber(itemFound.unit_cost));
             trBar.find('td:nth-child(6)').text(formatNumber(itemFound.unit_cost * 1) );
-            // trBar.find('td:nth-child(7)').text(itemFound.specification);
-            // trBar.find('td:nth-child(8)').text(itemFound.specification);
+            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.unit_cost)/100);
+            var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax_id+'" />');
+            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(7)').append(inputTax);
+            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.unit_cost)));
             isNewR = true;
             $('#btnRAdd').show();
         }
@@ -688,7 +712,8 @@
         var items = $('table.item-return tbody tr:gt(0)');
         totalPriceR = 0;
         $.each(items, (index,value)=>{
-            totalPriceR += $(value).find('td:nth-child(4) > input').val() * $(value).find('td:nth-child(5)').text().replace(/\,/g, '');
+            totalPriceR += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            // * 
         });
         $('.totalPriceR').text(formatNumber(totalPriceR));
     };
@@ -715,18 +740,18 @@
         if(!isNewR) return;
         $('table.item-return tbody tr.empty').remove();
         var min=$('tr.mains').find('td:nth-child(4) > input').attr('min');
-        var max=$('tr.mains').find('td:nth-child(4) > input').attr('max')
+        var max=$('tr.mains').find('td:nth-child(4) > input').attr('max');
+
         if( $('table.item-return tbody tr:gt(0)').find('input[value=' + $('tr.mains').find('td:nth-child(1) > input').val() + ']').length ) {
             $('table.item-return tbody tr:gt(0)').find('input[value=' + $('tr.mains').find('td:nth-child(1) > input').val() + ']').parent().find('td:nth-child(2) > input').focus();
             alert('Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!');
             return;
         }
-        var newTr = $('<tr class="sortable item"></tr>');
-        
-        var td1 = $('<td><input type="hidden" name="itemsR[' + uniqueArrayR + '][id]" value="" /></td>');
+        var newTr = $('<tr class="sortable item"></tr>');        
+        var td1 = $('<td><input type="hidden" name="itemsR[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" min="'+min+'" max="'+max+'" name="itemsR[' + uniqueArrayR + '][quantity]" value="" /></td>');
+        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="itemsR[' + uniqueArray + '][quantity]" value="" /></td>');
         var td5 = $('<td></td>');
         var td6 = $('<td></td>');
         var td7 = $('<td></td>');
@@ -735,22 +760,26 @@
         td1.find('input').val($('tr.mains').find('td:nth-child(1) > input').val());
         td2.text($('tr.mains').find('td:nth-child(2)').text());
         td3.text($('tr.mains').find('td:nth-child(3)').text());
+
         td4.find('input').val($('tr.mains').find('td:nth-child(4) > input').val());
-        
+        td4.find('input').attr('min',min);
+        td4.find('input').attr('max',max);
+
         td5.text( $('tr.mains').find('td:nth-child(5)').text() );
         td6.text( $('tr.mains').find('td:nth-child(6)').text() );
-        // td7.text( $('tr.main').find('td:nth-child(7) select option:selected').text() );
-        // td8.append( '<input type="hidden" data-store="'+$('tr.main').find('td:nth-child(8) select option:selected').data('store')+'" name="items[' + uniqueArrayR + '][warehouse]" value="'+$('tr.main').find('td:nth-child(8) select option:selected').val()+'" />');
-        // td8.append($('tr.main').find('td:nth-child(8) select option:selected').text());
-        
+        var inputTax=$('tr.mains').find('td:nth-child(7) > input');
+        td7.text( $('tr.mains').find('td:nth-child(7)').text());
+        td7.append(inputTax);
+        td8.text($('tr.mains').find('td:nth-child(8)').text());
+
         newTr.append(td1);
         newTr.append(td2);
         newTr.append(td3);
         newTr.append(td4);
         newTr.append(td5);
         newTr.append(td6);
-        // newTr.append(td7);
-        // newTr.append(td8);
+        newTr.append(td7);
+        newTr.append(td8);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItemR(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-return tbody').append(newTr);

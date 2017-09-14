@@ -28,7 +28,7 @@
                     <?=form_hidden('rel_id',$quote->id)?>   
                     </span>
                     <?php 
-                        $number=sprintf('%05d',getMaxID('id','tblcontracts')+1);
+                        $number=sprintf('%06d',getMaxID('id','tblcontracts')+1);
                     ?>
                     <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
                   </div>

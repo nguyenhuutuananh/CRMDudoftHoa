@@ -118,6 +118,7 @@ class Sale_oders_model extends CRM_Model
 
     public function update($data,$id)
     {
+        $warehouse_id=NULL;
         $affected=0;
          $import=array(
             'rel_type'=>$data['rel_type'],
@@ -151,7 +152,7 @@ class Sale_oders_model extends CRM_Model
                 $tax=$sub_total*$product->tax_rate/100;
                 $amount=$sub_total+$tax;
                 $total+=$amount;
-
+                $warehouse_id=$data['warehouse_name'];
                 $item_data=array(
                     'sale_id'=>$id,
                     'product_id'=>$item['id'],
@@ -194,11 +195,12 @@ class Sale_oders_model extends CRM_Model
             }
 
             $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$id));
-
             foreach ($itemsR as $key => $item) {
                 $affected_idR[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
+                $tax=$sub_total*$product->tax_rate/100;
+                $amount=$sub_total+$tax;
                 $itm=$this->getSaleItemReturn($id,$item['id']);
                 $item_dataa=array(
                     'reject_id'=>$id,
@@ -208,7 +210,11 @@ class Sale_oders_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'warehouse_id'=>$item['warehouse']
+                    'tax_id'=>$product->tax,
+                    'tax_rate'=>$product->tax_rate,
+                    'tax'=>$tax,
+                    'amount'=>$amount,
+                    'warehouse_id'=>$warehouse_id
                     );
                 if($itm)
                 {
@@ -245,6 +251,186 @@ class Sale_oders_model extends CRM_Model
         return false;
     }
 
+    public function getReturn($order_id)
+    {
+        $this->db->where('status <>',2);
+        $result=$this->db->get_where('tblimports',array('rel_type'=>'return','rel_id'=>$order_id))->row();
+        if($result)
+        {
+            $result->items=$this->db->get_where('tblimport_items',array('import_id'=>$result->id))->result();
+            return $result;
+        }
+        return false;
+    }
+    //Tao phieu tra hang
+    public function createReturnItems($order_id)
+    {
+
+        if (is_numeric($order_id)) {
+            $info=$this->db->get_where('tblsale_orders',array('id'=>$order_id))->row(); 
+
+            $this->db->where('reject_id', $order_id);
+            $items=$this->db->get('tblsale_order_items')->result();
+
+            $returns=$this->getReturn($order_id);
+            //Chua duyet Phieu Tra Hang(Sua tren don tra ve)
+            if($returns)
+            {
+                if($items)
+                {
+                    //Data Return
+                    $returnData=array(
+                        'customer_id'=>$info->customer_id,
+                        'rel_type'=>'return',
+                        'rel_id'=>$order_id,
+                        'prefix'=>get_option('prefix_return'),
+                        'name'=>_l('als_return'),
+                        'date'=>to_sql_date(date('Y-m-d H:i:s'),true)
+                        );
+                    $this->db->update('tblimports', $returnData,array('id'=>$returns->id));
+                    if($this->db->affected_rows()) $insert_id = $returns->id;
+                    if($insert_id)
+                    {
+                        logActivity('Eidt Import Updated [ID:' . $insert_id . ', ' . $data['description'] . ']');
+                        $total=0;
+                        $affected_id=array(); 
+                        foreach ($items as $key => $item) {
+                            //Data Return Item(Quantity)
+                            $affected_id[]=$item->product_id;
+
+                            $isupdate=false;
+                            foreach ($returns->items as $key => $val) {
+                                $quantity_net=$item->quantity;
+                                if($val->product_id==$item->product_id)
+                                {
+                                    $quantitydiff=$this->getQuantityBeforeDiff($order_id,$item->product_id,$item->quantity);
+
+                                    $quantity_net=$val->quantity+$quantitydiff;
+                                    $isupdate=$val->id;
+                                    break;
+                                }
+                            }
+                            $product=$this->getProductById($item->product_id);
+                            $sub=$item->unit_cost*$quantity_net;
+                            $tax=$sub*$item->tax_rate/100;
+                            $sub_total=$sub+$tax;
+                            $total+=$sub_total;
+                            $item_data=array(
+                                'import_id'=>$insert_id,
+                                'product_id'=>$item->product_id,
+                                'specifications'=>$product->description,
+                                'unit_id'=>$item->unit_id,
+                                'quantity'=>$quantity_net,
+                                'quantity_net'=>NULL,
+                                'exchange_rate'=>NULL,
+                                'unit_cost'=>$item->unit_cost,
+                                'sub_total'=>$sub_total,
+                                'tax_id'=>$item->tax_id,
+                                'tax_rate'=>$item->tax_rate,
+                                'tax'=>$tax,
+                                'warehouse_id'=>$item->warehouse_id,
+                                'warehouse_id_to'=>NULL
+                                );
+
+                            if($isupdate)
+                            {
+                                $this->db->update('tblimport_items', $item_data,array('id'=>$isupdate));
+                                 if($this->db->affected_rows()>0)
+                                 {
+                                    logActivity('Edit Import Item Updated [ID:' . $insert_id . ', Item ID' . $item->product_id . ']');
+                                 }
+                            }
+                            else
+                            {
+                                $this->db->insert('tblimport_items', $item_data);
+                                 if($this->db->affected_rows()>0)
+                                 {
+                                    logActivity('Insert Import Item Added [ID:' . $insert_id . ', Item ID' . $item->product_id . ']');
+                                 }
+                            }
+
+                        }
+                        //Xoa DL
+
+                        $this->db->where('import_id',$insert_id);
+                        $this->db->where_not_in('product_id',$affected_id);
+                        $this->db->delete('tblimport_items');
+                    }
+                }
+            }
+            //Da duyet Phieu Tra Hang(Them moi)
+            else
+            {
+                if($items)
+                {
+                    //Data Return
+                    $returnData=array(
+                        'customer_id'=>$info->customer_id,
+                        'rel_type'=>'return',
+                        'rel_id'=>$order_id,
+                        'prefix'=>get_option('prefix_return'),
+                        'name'=>_l('als_return'),
+                        'code'=>sprintf('%06d',getMaxID('id','tblimports')+1),
+                        'reason'=>NULL,
+                        'date'=>to_sql_date(date('Y-m-d H:i:s'),true),
+                        'account_date'=>NULL,
+                        'create_by'=>get_staff_user_id()
+                        );
+                    $this->db->insert('tblimports', $returnData);
+                    $insert_id = $this->db->insert_id();
+                    if($insert_id)
+                    {
+                        logActivity('New Import Added [ID:' . $insert_id . ', ' . $data['description'] . ']');
+                        $total=0;
+                        foreach ($items as $key => $item) {
+                            //Data Return Item
+                            $product=$this->getProductById($item->product_id);
+                            $sub=$item->unit_cost*$item->quantity;
+                            $tax=$sub*$item->tax_rate/100;
+                            $sub_total=$sub+$tax;
+                            $total+=$sub_total;
+                            $item_data=array(
+                                'import_id'=>$insert_id,
+                                'product_id'=>$item->product_id,
+                                'specifications'=>$product->description,
+                                'unit_id'=>$item->unit_id,
+                                'quantity'=>$item->quantity,
+                                'quantity_net'=>NULL,
+                                'exchange_rate'=>NULL,
+                                'unit_cost'=>$item->unit_cost,
+                                'sub_total'=>$sub_total,
+                                'tax_id'=>$item->tax_id,
+                                'tax_rate'=>$item->tax_rate,
+                                'tax'=>$tax,
+                                'warehouse_id'=>$item->warehouse_id,
+                                'warehouse_id_to'=>NULL
+                                );
+
+                             $this->db->insert('tblimport_items', $item_data);
+
+                             if($this->db->affected_rows()>0)
+                             {
+                                logActivity('Insert Import Item Added [ID:' . $insert_id . ', Item ID' . $item->product_id . ']');
+                             }
+                        }
+                    }
+                    
+                    $this->db->update('tblimports',array('total'=>$total),array('id'=>$insert_id));
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public function getQuantityBeforeDiff($rel_id,$product_id,$quantity)
+    {
+        $this->db->select_sum('quantity');
+        $this->db->join('tblimports','tblimports.id=tblimport_items.import_id','left');
+        $result=$this->db->get_where('tblimport_items',array('product_id'=>$product_id,'rel_id'=>$rel_id))->row();
+        if($result) return $quantity-$result->quantity;
+        return $quantity;
+    }
+
     public function setDafaultConfirm($id)
     {
         $data=array(
@@ -271,6 +457,7 @@ class Sale_oders_model extends CRM_Model
         }
         return false;
     }
+
     public function getSaleItemReturn($sale_id,$product_id)
     {
         if (is_numeric($sale_id) && is_numeric($product_id)) {

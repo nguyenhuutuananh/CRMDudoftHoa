@@ -1,9 +1,33 @@
 <?php init_head(); ?>
 <style type="text/css">
+        fieldset 
+    {
+        border: 1px solid #ddd !important;
+        margin: 0;
+        xmin-width: 0;
+        padding: 10px;       
+        position: relative;
+        border-radius:4px;
+        background-color:#f5f5f5;
+        padding-left:10px!important;
+    }   
+    
+        legend
+        {
+            font-size:14px;
+            font-weight:bold;
+            margin-bottom: 0px; 
+            width: 35%; 
+            border: 1px solid #ddd;
+            border-radius: 4px; 
+            padding: 5px 5px 5px 10px; 
+            background-color: #ffffff;
+        }
 </style>
 <div id="wrapper">
  <div class="content">
    <div class="row">
+
   <div class="col-md-12">
    <div class="panel_s">
      <div class="panel-body">
@@ -14,7 +38,10 @@
       <div class="clearfix"></div>
         <?php 
         } ?>
-  <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_export_order') : _l('add_export_order')); ?></h4>
+        <!-- Product information -->
+        
+
+  <h4 class="bold no-margin"><?php echo (isset($item) ? (($item->status==2)?_l('Xem phiếu trả hàng'):_l('Sửa phiếu trả hàng')) : _l('Tạo phiếu trả hàng')); ?></h4>
   <hr class="no-mbot no-border" />
   <div class="row">
     <div class="additional"></div>
@@ -37,6 +64,12 @@
                     $type='success';
                     $status='Đã duyệt';
                 }
+                // if($item->invoice_status==1)
+                // {
+                //     $type='success';
+                //     $status='Đã lập hóa đơn';
+                //     $style='style="font-size: 8px"';
+                // }
             }
             else
             {
@@ -49,7 +82,7 @@
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
-                    <?php echo _l('export_detail'); ?>
+                    <?php echo _l('Chi tiết phiếu trả hàng'); ?>
                 </a>
             </li>
         </ul>
@@ -64,26 +97,26 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($item) ) { ?>
-                        <a href="<?php echo admin_url('exports/pdf/' . $item->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('exports/pdf/' . $item->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="<?php echo admin_url('imports/detail_pdf/' . $item->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('imports/detail_pdf/' . $item->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
             </div>
             
-            <?php echo form_open_multipart($this->uri->uri_string(), array('class' => 'sales-form', 'autocomplete' => 'off')); ?>
+            <?php echo form_open_multipart($this->uri->uri_string(), array('class' => 'client-form', 'autocomplete' => 'off')); ?>
                 <div class="row">
                   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">            
                     <?php
                     $attrs_not_select = array('data-none-selected-text' => _l('system_default_string'));
                     ?>
                     <div class="form-group">
-                         <label for="number"><?php echo _l('export_code'); ?></label>
+                         <label for="number"><?php echo _l('code_noo'); ?></label>
                          <div class="input-group">
                           <span class="input-group-addon">
-                          <?php $prefix =($item) ? $item->prefix : get_option('prefix_export'); ?>
+                          <?php $prefix =($item) ? $item->prefix : get_option('prefix_return'); ?>
                             <?=$prefix?>
-                            <?php echo form_hidden('rel_type', (($item->rel_type)? $item->rel_type :'export_warehouse_transfer')); ?>
+                            <?php echo form_hidden('rel_type', 'return'); ?>
                             <?=form_hidden('prefix',$prefix)?>    
                             </span>
                             <?php 
@@ -93,50 +126,34 @@
                                 }
                                 else
                                 {
-                                    $number=sprintf('%06d',getMaxID('id','tblexports')+1);
+                                    $number=sprintf('%06d',getMaxID('id','tblimports')+1);
                                 }
                             ?>
-                            <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
+                            <input type="text" name="code" id="number" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
                           </div>
                     </div>
 
-                    <?php
-                    $value= ( isset($item) ? $item->rel_code : ''); 
-                    $attrs = array('readonly'=>true);
-                    if(!empty('rel_id') || !empty('rel_code'))
-                    {
-                        $frmattrs['style']="display: none;";
-                    }
-                    ?>
-                    <?php echo render_input( 'rel_code', _l("sale_code"),$value,'text',$attrs,$frmattrs); ?>
+                    <?=form_hidden('rel_id',$item->rel_id)?>
+                    <?php $row=getRow('tblsale_orders',array('id'=>$item->rel_id));?>
+                    <?php $value = (isset($item) ? $row->prefix.$row->code : '');?>
+                    <?php echo render_input('rel_code','orders_code',$value,'text',array('readonly'=>true)); ?>
+                    
 
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','view_date',$value); ?>
+
+                    <?php $value = (isset($item) ? _d($item->account_date) : _d(date('Y-m-d')));?>
+                    <?php echo render_date_input('account_date','account_date',$value); ?>
                     
-                    <?php
-                    $default_name = (isset($item) ? $item->name : _l('export_name'));
-                    echo form_hidden('name', _l('export_name'), $default_name);
-                    ?>
+                    <?php $selected = (isset($item) ? $item->customer_id : ''); ?>
+                    <?php echo render_select('customer_id',$customers,array('userid','company'),'client',$selected); ?>
 
                     <?php
-                    $selected=(isset($item) ? $item->customer_id : '');
-                    if($item->rel_id)
-                    {
-                        $arr=array('disabled'=>true);
-                        echo form_hidden('customer_id',$selected);
-                    }
-                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,$arr);
+                    $default_name = (isset($item) ? $item->name : "Phiếu trả hàng");
+                    echo render_input('name', _l('import_name'), $default_name);
                     ?>
 
-                    <?php
-                    $selected=(isset($item) ? $item->receiver_id : '');
-                    echo render_select('receiver_id',$receivers,array('staffid','fullname'),'staffs',$selected); 
-                    ?>
-
-                    <!-- <?php
-                    $selected=(isset($item) ? $warehouse_id : '');
-                    echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
-                    ?> -->
+                    
 
                     <?php 
                     $reason = (isset($item) ? $item->reason : "");
@@ -150,28 +167,24 @@
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
-                    <?php if(!empty($item->rel_id) || !empty($item->rel_code)){ $display='style="display: none;"';  }?>
-                        <div class="row"  >
-                        <div class="col-md-4">
-                                <?php 
-                                    if($item->rel_id)
-                                        {
-                                            $arr=array('disabled'=>true);
-                                            echo form_hidden('warehouse_type',$warehouse_type_id);
-                                            echo form_hidden('warehouse_name',$warehouse_id);
-                                        }
-
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
+                        <div class="row">
+                            <div class="col-md-4">
+                                <?php if($item->rel_id) $display='style="display: none;"';
+                                 ?>
+                                <?php
+                                $selected=(isset($item) ? getWHTIDByWHID($warehouse_id) : '');
+                                echo render_select('warehouse_type_id',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
                                 ?>
                             </div>
                             <div class="col-md-4">
-                                <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
+                                <?php
+                                $selected=(isset($item) ? $warehouse_id : '');
+                                echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
                                 ?>
                             </div>
-                            <div class="col-md-4" <?=$display?>>
+                            <div class="col-md-4" <?=$display?> >
                                 <div class="form-group mbot25">
-                                    <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
+                                <label for="custom_item_select"><?=_l('item_name')?></label>
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
 
@@ -192,16 +205,20 @@
                                 
                             </div>
                         </div>
-                        <div class="table-responsive s_table">
-                            <table class="table items item-export no-mtop">
+                        
+
+                        <div class="table-responsive s_table mtop10" style="overflow-x: auto;overflow-y: hidden;min-height: 500px">
+                            <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                        <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th width="15%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
-                                        <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
+                                        <th width="10%" class="text-left"><?php echo _l('item_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('amount'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
 
@@ -211,10 +228,25 @@
                                 </thead>
                                 
                                 <tbody>
-                                    <tr class="main" <?=$display?> >
+                                    <tr class="main" <?=$display?>>
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                         <td>
                                             <?php echo _l('item_name'); ?>
+                                        </td>
+                                        <!-- TKno -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_no : '');
+                                            echo render_select('tk_no',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TKCo -->
+
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_co : '');
+                                            echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
                                         </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
@@ -255,29 +287,40 @@
                                             <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name; ?></td>
-                                        <td><?php echo $value->unit_name; ?></td>
-                                        <?php
-                                        $err='';
-                                            if($value->quantity>$value->warehouse_type->product_quantity)
-                                            {
-                                                $err='error';
-                                                $style='border: 1px solid red !important';
-                                            }
-                                        ?>
+                                        <!-- TK NO -->
                                         <td>
-                                        <input style="width: 100px;" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '');
+                                            echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
                                         </td>
-                                            
-                                        <td><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo number_format($value->tax) ?>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_co : '');
+                                            echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <td><?php echo $value->unit_name; ?></td>
+                                        
+                                        <td><input style="width: 100px" class="mainQuantity" type="number" min="1"  name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
+                                        
+                                        </td>
+                                        <?php 
+                                            $sub=$value->unit_cost*$value->quantity;
+                                         ?>
+                                        <td><?php echo number_format($value->unit_cost); ?>
+                                        <input type="hidden" name="items[<?=$i?>][unit_cost]" value="<?=$value->unit_cost?>">
+                                        </td>
+                                        <td><?php echo number_format($sub); ?></td>
+                                        <td><?php echo number_format($value->tax); ?>
                                             <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
                                         </td>
-                                        <td><?php echo number_format($value->amount) ?></td>
+                                        <td><?php echo number_format($value->sub_total); ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->amount;
+                                            $totalPrice += $value->sub_total;
                                             $i++;
                                         }
                                     }
@@ -306,7 +349,7 @@
                             </table>
                         </div>
                     </div>
-                    <!-- End Customize from invoice -->
+                <!-- End Customize from invoice -->
                 </div>
                 
                 <?php if(isset($item) && $item->status != 2 || !isset($item)) { ?>
@@ -330,12 +373,40 @@
 </div>
 <?php init_tail(); ?>
 <script>
-
-    _validate_form($('.sales-form'),{code:'required',date:'required',customer_id:'required',receiver_id:'required'});
+    _validate_form($('.client-form'),{number:'required',warehouse_id:'required',date:'required',customer_id:'required'});
     
+
     var itemList = <?php echo json_encode($items);?>;
 
-    $('#warehouse_name').change(function(e){
+    $('#warehouse_type_id').change(function(e){
+        var warehouse_type = $(e.currentTarget).val();
+        if(warehouse_type != '') {
+            getWarehouses('#warehouse_id',warehouse_type); 
+
+        }
+    });
+
+    function getWarehouses(selector_warehouse,warehouse_type){
+        var warehouse_id=$(selector_warehouse);
+        warehouse_id.find('option:gt(0)').remove();
+        warehouse_id.selectpicker('refresh');
+        if(warehouse_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type ,
+                dataType : 'json',
+            })
+            .done(function(data){  
+                $.each(data, function(key,value){
+                    warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
+                });
+
+                warehouse_id.selectpicker('refresh');
+            });
+        }
+    }
+    
+
+    $('#warehouse_id').change(function(e){
         $('table tr.sortable.item').remove();
         total=0;
         var warehouse_id=$(this).val();
@@ -363,32 +434,6 @@
         }
     }
 
-
-    $('#warehouse_type').change(function(e){
-        var warehouse_type = $(e.currentTarget).val();
-        if(warehouse_type != '') {
-            getWarehouses(warehouse_type); 
-        }
-    });
-    function getWarehouses(warehouse_type){
-        var warehouse_id=$('#warehouse_name');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
-        if(warehouse_id.length) {
-            $.ajax({
-                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type ,
-                dataType : 'json',
-            })
-            .done(function(data){  
-                console.log(data)
-                $.each(data, function(key,value){
-                    warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
-                });
-
-                warehouse_id.selectpicker('refresh');
-            });
-        }
-    }
 
     //format currency
     function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
@@ -419,17 +464,9 @@
     var isNew = false;
     var createTrItem = () => {
         if(!isNew) return;
-        if(!$('div #warehouse_name option:selected').length || $('div #warehouse_name option:selected').val() == '') {
-            alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
-            return;
-        }
-        if( $('table.item-export tbody tr:gt(0)').find('input[value=' + $('tr.main').find('td:nth-child(1) > input').val() + ']').length ) {
-            $('table.item-export tbody tr:gt(0)').find('input[value=' + $('tr.main').find('td:nth-child(1) > input').val() + ']').parent().find('td:nth-child(2) > input').focus();
-            alert_float('danger', "Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!");
-            return;
-        }
-        if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #select_warehouse option:selected').data('store')) {
-            alert_float('danger', 'Kho ' + $('tr.main #select_warehouse option:selected').text() + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
+        if( $('table.item-purchase tbody tr:gt(0)').find('input[value=' + $('tr.main').find('td:nth-child(1) > input').val() + ']').length ) {
+            $('table.item-purchase tbody tr:gt(0)').find('input[value=' + $('tr.main').find('td:nth-child(1) > input').val() + ']').parent().find('td:nth-child(2) > input').focus();
+            alert('Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!');
             return;
         }
         var newTr = $('<tr class="sortable item"></tr>');
@@ -437,34 +474,59 @@
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
+        var td6 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
+        var td9 = $('<td></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
-        td3.text($('tr.main').find('td:nth-child(3)').text());
-        td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
+
+        var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
+        selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+        selectTd3.removeAttr('id');
+        var tk_no='items['+uniqueArray+'][tk_no]';
+        selectTd3.attr('name',tk_no);
+        td3.append(selectTd3);
+
+
+        var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
+        selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+        selectTd4.removeAttr('id');
+        var tk_co='items['+uniqueArray+'][tk_co]';
+        selectTd4.attr('name',tk_co);
+        td4.append(selectTd4);
+
+        td5.text($('tr.main').find('td:nth-child(5)').text());
+        td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
+        var inputprice = $('<input type="hidden" name="items['+uniqueArray+'][unit_cost]" value="'+$('tr.main').find('td:nth-child(7)').text().replace(/\,/g, '')+'" />');
         
-        td5.text( $('tr.main').find('td:nth-child(5)').text());
-        td6.text( $('tr.main').find('td:nth-child(6)').text());
-        var inputTax=$('tr.main').find('td:nth-child(7) > input');
-        td7.text( $('tr.main').find('td:nth-child(7)').text());
-        td7.append(inputTax);
-        td8.text($('tr.main').find('td:nth-child(8)').text());
+        td7.text( $('tr.main').find('td:nth-child(7)').text() );
+        td7.append(inputprice);
+        td8.text( $('tr.main').find('td:nth-child(8)').text() );
+        var inputTax=$('tr.main').find('td:nth-child(9) > input');
+        td9.text( $('tr.main').find('td:nth-child(9)').text());
+        td9.append(inputTax);
+        td10.text($('tr.main').find('td:nth-child(10)').text());
+
         newTr.append(td1);
         newTr.append(td2);
+
         newTr.append(td3);
         newTr.append(td4);
+
         newTr.append(td5);
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
+        newTr.append(td10);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
-        $('table.item-export tbody').append(newTr);
+        $('table.item-purchase tbody').append(newTr);
         total++;
         totalPrice += $('tr.main').find('td:nth-child(4) > input').val() * $('tr.main').find('td:nth-child(5)').text().replace(/\+/g, ' ');
         uniqueArray++;
@@ -478,11 +540,15 @@
         $('#custom_item_select').selectpicker('refresh');
         var trBar = $('tr.main');
         
+        
         trBar.find('td:first > input').val("");
-        trBar.find('td:nth-child(2) > input').val('');
-        trBar.find('td:nth-child(3) > input').val(1);
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) > textarea').text('');
+        trBar.find('td:nth-child(2)').text("Tên hàng hóa");
+        trBar.find('td:nth-child(3) > select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(4) > select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(5)').text('Đơn vị tính');
+        trBar.find('td:nth-child(6) > input').val('1');
+        trBar.find('td:nth-child(7)').text('Giá nhập');
+        trBar.find('td:nth-child(8)').text('0');
 
 
     };
@@ -494,62 +560,74 @@
         refreshTotal();
     };
     var refreshTotal = () => {
+        $('.selectpicker').selectpicker('refresh');
          $('.total').text(formatNumber(total));
-        var items = $('table.item-export tbody tr:gt(0)');
+        var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            totalPrice += parseFloat($(value).find('td:nth-child(8)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(9)').text().replace(/\,/g, ''));
             // * 
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
-        var itemFound = findItem(id);
+        var warehouse_id=$('#warehouse_id').val();
+        getMaxProductQuantity(warehouse_id,id, function(data) {
 
-        $('#select_kindof_warehouse').val('');
-        $('#select_kindof_warehouse').selectpicker('refresh');
-        var warehouse_id=$('#select_warehouse');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
-
-        if(typeof(itemFound) != 'undefined') {
+            var maxquantity=data.product_quantity;
+            var itemFound = findItem(id);
+            if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.main');
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
-            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
-            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-            trBar.find('td:nth-child(4) > input').val(1);
-            
-            trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
-            trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1) );
+
+
+            trBar.find('td:nth-child(5)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(5) > input').val(itemFound.unit);
+            trBar.find('td:nth-child(6) > input').val(1);
+
+            trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
+            trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price * 1) );
             var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
-            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
-            trBar.find('td:nth-child(7)').append(inputTax);
-            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(9)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(9)').append(inputTax);
+            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }
-        else {
-            isNew = false;
-            $('#btnAdd').hide();
-        }
+            else {
+                isNew = false;
+                $('#btnAdd').hide();
+            }
+        });
     });
-    $('select[id^="select_warehouse"]').on('change', (e)=>{
-        if($(e.currentTarget).val() != '') {
-            $(e.currentTarget).parents('tr').find('input.mainQuantity').attr('data-store', $(e.currentTarget).find('option:selected').data('store'));
-        }
-    });
-    $(document).on('keyup', '.mainQuantity', (e)=>{
+    function getMaxProductQuantity(warehouse_id,product_id, callback){
+        $.ajax({
+          url : admin_url + 'warehouses/getProductQuantity/' +warehouse_id+'/'+ product_id,
+          dataType : 'json',
+        })
+        .done(function(data){
+            if(data) 
+            {
+                callback(data);
+            }
+            return 0;
+        });
+    }
+    $(document).on('keyup', '.mainQuantity',(e)=>{
+        
         var currentQuantityInput = $(e.currentTarget);
+
         let elementToCompare;
         if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
-            elementToCompare = currentQuantityInput.parents('tr').find('input[aria-label!="Search"]:last');
+            elementToCompare = currentQuantityInput.parents('tr').find('input:last');
         else
             elementToCompare = currentQuantityInput;
-        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))) {
+        
+        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
             currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
             currentQuantityInput.attr('data-toggle', 'tooltip');
             currentQuantityInput.attr('data-trigger', 'manual');
@@ -568,84 +646,74 @@
             currentQuantityInput.removeClass('error');
             currentQuantityInput.focus();
         }
-        
+
         var Gia = currentQuantityInput.parent().find(' + td');
         var GiaTri = Gia.find(' + td');
         var Thue = GiaTri.find(' + td');
         var Tong = Thue.find(' + td');
-        var inputTax=Thue.find('input');        
+        var inputTax=Thue.find('input');    
+        console.log(currentQuantityInput.val());    
+        console.log(Gia.text().replace(/\,/g, ''));   
+        console.log(Gia.text().replace(/\,/g, ''));   
+        console.log(Gia.text().replace(/\,/g, ''));   
         GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
         Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
         Thue.append(inputTax);
         Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
         refreshTotal();
     });
-    $('#select_kindof_warehouse').change(function(e){
-        
-
-        var warehouse_type = $(e.currentTarget).val();
-        var product = $(e.currentTarget).parents('tr').find('td:first input');
-        if(warehouse_type != '' && product.val() != '') {
-            loadWarehouses(warehouse_type,product.val()); 
-        }
+    $('#warehouse_type').change(function(e){
+      var warehouse_type = $(e.currentTarget).val();
+      // $('table tr.sortable.item').remove();
+      loadWarehouses(warehouse_type,'');
     });
-    function loadWarehouses(warehouse_type, filter_by_product,default_value=''){
-        alert(warehouse_type);
-        var warehouse_id=$('#select_warehouse');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
-        if(warehouse_id.length) {
-            $.ajax({
-                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type + '/' + filter_by_product,
-                dataType : 'json',
-            })
-            .done(function(data){          
-                $.each(data, function(key,value){
-                    var stringSelected = "";
-                    if(value.warehouseid == default_value) {
-                        stringSelected = ' selected="selected"';
-                    }
-                    warehouse_id.append('<option data-store="'+value.items[0].product_quantity+'" value="' + value.warehouseid + '"'+stringSelected+'>' + value.warehouse + '(có '+value.items[0].product_quantity+')</option>');
-                });
-                warehouse_id.selectpicker('refresh');
-            });
-        }
+    function loadWarehouses(warehouse_type,default_value=''){
+        var warehouse_id=$('#warehouse_id');
+        warehouse_id.find('option').remove()
+        warehouse_id.selectpicker("refresh");
+        if(warehouse_id != 0 && warehouse_id != '') {
+        $.ajax({
+          url : admin_url + 'warehouses/getWarehouses/' + warehouse_type,
+          dataType : 'json',
+        })
+        .done(function(data){          
+          warehouse_id.find('option').remove();
+          warehouse_id.append('<option value=""></option>');
+          $.each(data, function(key,value){
+            var stringSelected = "";
+            if(value.warehouseid == default_value) {
+              stringSelected = ' selected="selected"';
+            }
+            warehouse_id.append('<option value="' + value.warehouseid + '"'+stringSelected+'>' + value.warehouse + '</option>');
+          });
+          warehouse_id.selectpicker('refresh');
+        });
+      }
     }
 
-    function loadWarehouseByID(warehouse_type, filter_by_product,id){
-        var warehouse_id=$('#select_warehouse'+id);
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
-        if(warehouse_id.length) {
-            $.ajax({
-                url : admin_url + 'warehouses/getWarehouses/' + warehouse_type + '/' + filter_by_product,
-                dataType : 'json',
-            }).done(function(data){          
-                $.each(data, function(key,value){
-                    var stringSelected = "";
-                    warehouse_id.append('<option data-store="'+value.items[0].product_quantity+'" value="' + value.warehouseid + '"'+stringSelected+'>' + value.warehouse + '(có '+value.items[0].product_quantity+')</option>');
-                });
-                warehouse_id.selectpicker('refresh');
-            });
-        }
-    }
-
-    $('.customer-form-submiter').on('click', (e)=>{
+    $('.customer-form-submiter').on('click', function(e){
+        var warehouse_id=$('#warehouse_id').val();
+        var tk=$('select[name^="items"]');
         if($('input.error').length) {
             e.preventDefault();
-            alert_float('warning','Giá trị không hợp lệ!');    
+            alert_float('danger', "Giá trị không hợp lệ!"); 
         }
-        // alert($('select[id^="select_warehouse"]').selectpicker('val'));
-        // $.each($('select[id^="select_warehouse"]'), function(key,value){
-        //     // alert($(value).selectpicker('val'))
-        //     if($(value).selectpicker('val')=='')
-        //     {
-        //         e.preventDefault();
-        //         alert_float('warning','Vui lòng chọn kho sản phẩm');  
-        //     }
-        // });
+        if(!warehouse_id)
+        {
+            alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
+            e.preventDefault(); 
+        }
+        $.each(tk, function(key,value){
+        if($(value).val()=='')
+        {
+            alert_float('danger', "Vui lòng chọn tài khoản hạch toán!");
+            e.preventDefault();
+            
+            return;
+        }
+        });
     });
-    
+        
 </script>
 </body>
 </html>
