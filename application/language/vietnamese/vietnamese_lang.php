@@ -3934,14 +3934,14 @@ $lang['unsuccessfull_restore'] = "Không thể khôi phục phiếu";
 $lang['restore'] = "Khôi phục";
 $lang['importfromcontract'] = "Nhập hàng từ hợp đồng";
 $lang['item_warehouse'] = "Kho hàng";
-<<<<<<< HEAD
+
 $lang['importwhfromcontract'] = "Phiếu nhập hàng";
 $lang['importfromtranfer'] = "Phiếu chuyển kho";
 $lang['add_importfromtranfer'] = "Thêm phiếu phiếu chuyển kho";
 $lang['importfromreturn'] = "Hàng trả về";
 $lang['item_tax'] = "Thuế";
 $lang['als_return'] = "Phiếu trả hàng";
-=======
+
 $lang['receipts'] = "Phiếu thu";
 $lang['lblclient'] = "Khách hàng";
 $lang['_receiver'] = "Người nộp";
@@ -3979,7 +3979,6 @@ $lang['delete_false']="Xóa không thành công";
 $lang['client_report']="Phản hồi từ KH";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng thành công";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng không thành công";
->>>>>>> fba3c7d483cfda4c825252389c63ba9e6665fa4a
 
 
 
