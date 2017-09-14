@@ -376,9 +376,6 @@
             alert_float('danger', data.responseText);
         });
     }
-    $(document).ready(()=>{
-        
-    });
 </script>
 </body>
 </html>

@@ -548,6 +548,14 @@ $(function() {
         });
         return false;
     });
+    $('body').on('submit', '.lead-modal #client_report', function() {
+        var form = $(this);
+        var data = $(form).serialize();
+        $.post(form.attr('action'), data).done(function(lead_id) {
+            init_lead_modal_data(lead_id);
+        });
+        return false;
+    });
 
     // Add additional server params $_POST
     var LeadsServerParams = {
@@ -3661,6 +3669,18 @@ function delete_lead_note(wrapper, id) {
         $.get(admin_url + 'leads/delete_note/' + id, function(response) {
             if (response.success == true) {
                 $(wrapper).parents('.lead-note').remove();
+            }
+        }, 'json');
+    }
+}
+function delete_client_report(wrapper, id) {
+    var r = confirm(confirm_action_prompt);
+    if (r == false) {
+        return false;
+    } else {
+        $.get(admin_url + 'clients/delete_client_report/' + id, function(response) {
+            if (response.success == true) {
+                $(wrapper).parents('.client_report').remove();
             }
         }, 'json');
     }

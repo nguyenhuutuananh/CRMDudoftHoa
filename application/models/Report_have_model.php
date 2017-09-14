@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Receipts_model extends CRM_Model
+class Report_have_model extends CRM_Model
 {
     function __construct()
     {
@@ -29,24 +29,22 @@ class Receipts_model extends CRM_Model
     }
     public function insert($data)
     {
-        $this->db->insert('tblreceipts',$data);
+        $this->db->insert('tblreport_have',$data);
         $id=$this->db->insert_id();
         if($id){
             return $this->db->insert_id();
         }
         return false;
     }
-    public function insert_receipts_contract($id,$data)
+    public function insert_report_have_contract($id,$data)
     {
         foreach($data as $_data)
         {
 
             unset($_data['id']);
-            $_data['total']=str_replace(',','',$_data['total']);
-            $_data['discount']=str_replace(',','',$_data['discount']);
             $_data['subtotal']=str_replace(',','',$_data['subtotal']);
-            $_data['id_receipts']=$id;
-            $this->db->insert('tblreceipts_contract',$_data);
+            $_data['id_report_have']=$id;
+            $this->db->insert('tblreport_have_contract',$_data);
         }
         $id=$this->db->insert_id();
         if($id){
@@ -58,32 +56,32 @@ class Receipts_model extends CRM_Model
     public function update_status($id,$data)
     {
         $this->db->where('id',$id);
-        $this->db->update('tblreceipts',$data);
+        $this->db->update('tblreport_have',$data);
         if($this->db->affected_rows() > 0){
             return true;
         }
         return false;
     }
-    public function get_index_receipts($id="")
+    public function get_index_report_have($id="")
     {
         $this->db->where('id',$id);
-        return $this->db->get('tblreceipts')->row();
+        return $this->db->get('tblreport_have')->row();
     }
-    public function index_receipts_contract($id_receipts="")
+    public function index_report_have_contract($id_report_have="")
     {
-        $this->db->where('id_receipts',$id_receipts);
-        return $this->db->get('tblreceipts_contract')->result_array();
+        $this->db->where('id_report_have',$id_report_have);
+        return $this->db->get('tblreport_have_contract')->result_array();
     }
     public function update($id="",$data=array())
     {
         $this->db->where('id',$id);
-        $this->db->update('tblreceipts',$data);
+        $this->db->update('tblreport_have',$data);
         if($this->db->affected_rows() > 0){
             return true;
         }
         return false;
     }
-    public function update_receipts_cotract($id_receipts,$data=array())
+    public function update_report_have_cotract($id_report_have,$data=array())
     {
         $ass=0;
         $_array_id=array();
@@ -91,9 +89,9 @@ class Receipts_model extends CRM_Model
         {
             $_array_id[]=$rom['id'];
         }
-        $this->db->where('id_receipts',$id_receipts);
+        $this->db->where('id_report_have',$id_report_have);
         $this->db->where_not_in('id',$_array_id);
-        $this->db->delete('tblreceipts_contract');
+        $this->db->delete('tblreport_have_contract');
         if($this->db->affected_rows() > 0){
             $ass++;
         }
@@ -103,11 +101,9 @@ class Receipts_model extends CRM_Model
         {
             $id=$rom['id'];
             unset($rom['id']);
-            $rom['total']=str_replace(',','',$rom['total']);
-            $rom['discount']=str_replace(',','',$rom['discount']);
             $rom['subtotal']=str_replace(',','',$rom['subtotal']);
             $this->db->where('id',$id);
-            $this->db->update('tblreceipts_contract',$rom);
+            $this->db->update('tblreport_have_contract',$rom);
             if($this->db->affected_rows() > 0){
                 $ass++;
             }
@@ -119,29 +115,23 @@ class Receipts_model extends CRM_Model
     }
     public function get_data_pdf($id)
     {
-        $this->db->select('tblreceipts.*,sum(tblreceipts_contract.total) as sum_total');
-        $this->db->where('tblreceipts.id',$id);
-        $this->db->join('tblreceipts_contract','tblreceipts_contract.id_receipts=tblreceipts.id','left');
-        return $this->db->get('tblreceipts')->row();
+        $this->db->select('tblreport_have.*,sum(tblreport_have_contract.total) as sum_total');
+        $this->db->where('tblreport_have.id',$id);
+        $this->db->join('tblreport_have_contract','tblreport_have_contract.id_report_have=tblreport_have.id','left');
+        return $this->db->get('tblreport_have')->row();
     }
-    public function get_invoices_receipts($id_client="")
+    public function get_invoices_report_have($id_client="")
     {
-        $getreceipts=$this->db->get('tblreceipts_contract')->result_array();
-        $array_data=array();
-        foreach($getreceipts as $rom)
-        {
-            $array_data[]=$rom['invoices'];
-        }
         $this->db->select('tblinvoices.*');
         $this->db->where('tblinvoices.clientid',$id_client);
-        $this->db->where_not_in('id',$array_data);
         $this->db->where('tblinvoices.status=2 or tblinvoices.status=3');
+        $this->db->join('tblreport_have_contract','tblreport_have_contract.invoices!=tblinvoices.id');
         return $this->db->get('tblinvoices')->result_array();
     }
     public function get_vouchers()
     {
         $this->db->select_max('id');
-        $id_max = $this->db->get('tblreceipts')->row();
+        $id_max = $this->db->get('tblreport_have')->row();
         $last_id = strlen(($id_max->id) + 1);
         $max_code = 5;
         $n = $max_code - $last_id;
@@ -151,6 +141,14 @@ class Receipts_model extends CRM_Model
                 $_code .= 0;
             }
         }
-        return $last_code = get_option('prefix_vouchers_receipts') . $_code . ($id_max->id + 1);
+        return $last_code = get_option('prefix_vouchers_report_have') . $_code . ($id_max->id + 1);
+    }
+    public function get_client_contract($id_contract="")
+    {
+        $this->db->select('tblclients.*,tblcontracts.contract_value');
+        $this->db->where('tblcontracts.id',$id_contract);
+        $this->db->join('tblclients','tblclients.userid=tblcontracts.client');
+        return $this->db->get('tblcontracts')->row();
+
     }
 }

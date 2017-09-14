@@ -1295,4 +1295,16 @@ class Clients_model extends CRM_Model
         }
         return false;
     }
+    public function get_table_where($table,$where="",$order_by="")
+    {
+        if($where!="")
+        {
+            $this->db->where($where);
+        }
+        if($order_by!="")
+        {
+            $this->db->order_by($order_by);
+        }
+        return $this->db->get($table)->result_array();
+    }
 }

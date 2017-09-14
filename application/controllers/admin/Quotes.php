@@ -19,7 +19,13 @@ class Quotes extends Admin_controller
         }
         $data['title'] = _l('quote_list');
         $this->load->view('admin/quotes/manage', $data);
-    } 
+    }
+    public function init_client_quotes($client="")
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('quotes',array('customer_id'=>$client));
+        }
+    }
 
     public function contract_output($id) 
     {

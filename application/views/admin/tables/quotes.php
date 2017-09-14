@@ -16,6 +16,17 @@ $aColumns     = array(
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
     'date'
 );
+if($customer_id)
+{
+    $aColumns     = array(
+        'code',
+        'total',
+        '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
+        'status',
+        'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
+        'date'
+    );
+}
 $sIndexColumn = "id";
 $sTable       = 'tblquotes';
 $where        = array(
@@ -24,6 +35,10 @@ $where        = array(
 if(!empty($sale_id))
 {
     $where[]='AND rel_id="'.$sale_id.'"';
+}
+if($customer_id)
+{
+    array_push($where, 'AND customer_id='.$customer_id);
 }
 if($this->_instance->input->post()) {
     $filter_status = $this->_instance->input->post('filterStatus');

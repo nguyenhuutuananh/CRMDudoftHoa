@@ -28,6 +28,14 @@ class Contracts extends Admin_controller
         $data['chart_js_assets']   = true;
         $this->load->view('admin/contracts/manage', $data);
     }
+    public function init_contract_client($client="")
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('contracts', array(
+                'clientid' => $client,'client'=>true
+            ));
+        }
+    }
     /* Edit contract or add new contract */
     public function contract($id = '')
     {

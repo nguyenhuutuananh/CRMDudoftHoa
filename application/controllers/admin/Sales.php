@@ -28,6 +28,12 @@ class Sales extends Admin_controller
             $this->perfex_base->get_table_data('sales',array('order_id'=>$order_id));
         }
     }
+    public function list_sales_client($client=NULL)
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('sales',array('client'=>$client));
+        }
+    }
 
 
     public function sale_detail($id='') 
