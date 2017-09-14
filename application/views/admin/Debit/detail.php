@@ -290,7 +290,7 @@
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][total]" class="form-control" value="<?=$value['total']?>">
+                                                <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][total]" class="mainQuantity form-control" value="<?=_format_number($value['total'])?>">
                                             </div>
                                         </td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
@@ -417,7 +417,7 @@
         var td5 = $('<td></td>');
         var td6 = $('<td></td>');
         var td7 = $('<td></td>');
-        var td8 = $('<td><div class="form-group"><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
+        var td8 = $('<td><div class="form-group"><input  class="mainQuantity form-control" type="text" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) input').val());
         td2.find('input').val($('tr.main').find('td:nth-child(2) input').val());
@@ -544,7 +544,7 @@
         var itemFound = findItem(id,2);
         console.log(itemFound.currency);
         trBar.find('td:nth-child(7) select').val(itemFound.currency).selectpicker('refresh');
-        trBar.find('td:nth-child(8) input').val(itemFound.sum_contract);
+        trBar.find('td:nth-child(8) input').val(formatNumber(itemFound.sum_contract));
     });
 
     $('#contract').change((e)=>{
@@ -554,7 +554,7 @@
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id,1);
         trBar.find('td:nth-child(7) select').val(itemFound.currency).selectpicker('refresh');
-        trBar.find('td:nth-child(8) input').val(itemFound.sum_contract);
+        trBar.find('td:nth-child(8) input').val(formatNumber(itemFound.sum_contract));
     });
     $('#select_warehouse').on('change', (e)=>{
         if($(e.currentTarget).val() != '') {
@@ -562,52 +562,45 @@
         }
     });
 	var calculateTotal = (currentInput) => {
-		currentInput = $(currentInput);		
-		let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
-		let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
-		let tdTong = gia.parent().find(' + td');
-		tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
-        let tdtax = gia.parent().find(' + td + td');
-        let tdmoneytax = gia.parent().find(' + td + td +td');
-        let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
-        let vartax=$(tdtax).html().replace(/\,|%/g, '');
-        tdTong.text(formatNumber( tong ) );
-        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
-        refreshTotal();
+//		currentInput = $(currentInput);
+//		let soLuong = currentInput.parents('tr').find('.mainQuantity');
+//        soLuong.text(formatNumber(soLuong.val().replace(/\,|%/g, '')));
+//        refreshTotal();
 	};
-	$(document).on('keyup', '.mainPriceBuy', (e)=>{
-		var currentPriceBuyInput = $(e.currentTarget);
-		calculateTotal(e.currentTarget);
-	});
     $(document).on('keyup', '.mainQuantity', (e)=>{
-        var currentQuantityInput = $(e.currentTarget);
-        let elementToCompare;
-        if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
-            elementToCompare = currentQuantityInput.parents('tr').find('input[data-store]');
-        else
-            elementToCompare = currentQuantityInput;
-		
-        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
-            currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
-            currentQuantityInput.attr('data-toggle', 'tooltip');
-            currentQuantityInput.attr('data-trigger', 'manual');
-            currentQuantityInput.attr('title', 'Số lượng vượt mức cho phép!');
-            // $('[data-toggle="tooltip"]').tooltip();
-            currentQuantityInput.off('focus', '**').off('hover', '**');
-            currentQuantityInput.tooltip('fixTitle').focus(()=>$(this).tooltip('show')).hover(()=>$(this).tooltip('show'));
-            // error flag
-            currentQuantityInput.addClass('error');
-            currentQuantityInput.focus();
-        }
-        else {
-            currentQuantityInput.attr('title', 'OK!').tooltip('fixTitle').tooltip('show');
-            currentQuantityInput.attr("style", "width: 100px;");
-            // remove flag
-            currentQuantityInput.removeClass('error');
-            currentQuantityInput.focus();
-        }
-        calculateTotal(e.currentTarget);
+        var currentPriceBuyInput = $(e.currentTarget);
+        var new_current=formatNumber(currentPriceBuyInput.val().replace(/\,|%/g, ''));
+        currentPriceBuyInput.val(new_current);
     });
+//    $(document).on('keyup', '.mainQuantity', (e)=>{
+//        var currentQuantityInput = $(e.currentTarget);
+//        let elementToCompare;
+//        if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
+//            elementToCompare = currentQuantityInput.parents('tr').find('input[data-store]');
+//        else
+//            elementToCompare = currentQuantityInput;
+//
+//        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
+//            currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
+//            currentQuantityInput.attr('data-toggle', 'tooltip');
+//            currentQuantityInput.attr('data-trigger', 'manual');
+//            currentQuantityInput.attr('title', 'Số lượng vượt mức cho phép!');
+//            // $('[data-toggle="tooltip"]').tooltip();
+//            currentQuantityInput.off('focus', '**').off('hover', '**');
+//            currentQuantityInput.tooltip('fixTitle').focus(()=>$(this).tooltip('show')).hover(()=>$(this).tooltip('show'));
+//            // error flag
+//            currentQuantityInput.addClass('error');
+//            currentQuantityInput.focus();
+//        }
+//        else {
+//            currentQuantityInput.attr('title', 'OK!').tooltip('fixTitle').tooltip('show');
+//            currentQuantityInput.attr("style", "width: 100px;");
+//            // remove flag
+//            currentQuantityInput.removeClass('error');
+//            currentQuantityInput.focus();
+//        }
+//        calculateTotal(e.currentTarget);
+//    });
     $('#select_kindof_warehouse').change(function(e){
         var warehouse_type = $(e.currentTarget).val();
         var product = $(e.currentTarget).parents('tr').find('td:first input');

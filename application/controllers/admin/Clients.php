@@ -1120,4 +1120,149 @@ class Clients extends Admin_controller
         exit();
     }
 
+    public function init_client_care_of($client="")
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('care_of',array('client'=>$client));
+        }
+    }
+    public function care_of($id="")
+    {
+        if($this->input->post()){
+            $data=$this->input->post();
+            $data['create_by']=get_staff_user_id();
+            if($id!="")
+            {
+                $this->db->where('id',$id);
+                $this->db->update('tblcare_of',$data);
+                if($this->db->affected_rows() > 0){
+                    echo json_encode(array(
+                        'success' => true,
+                        'message' => _l('updated_successfuly')
+                    ));
+                }
+            }
+            else
+            {
+                $this->db->insert('tblcare_of',$data);
+                $_id=$this->db->insert_id();
+                if($_id)
+                {
+                     echo json_encode(array(
+                        'success' => true,
+                        'message' => _l('added_successfuly')
+                    ));
+                }
+                else
+                {
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => _l('problem_adding')
+                    ));
+                }
+            }
+        }
+    }
+    public function delete_care_of($id)
+    {
+        $this->db->where('id',$id);
+        $this->db->delete('tblcare_of');
+        if($this->db->affected_rows() > 0){
+            echo json_encode(array(
+                'success' => true,
+                'message' => _l('delete_true')
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'success' => false,
+                'message' => _l('delete_false')
+            ));
+        }
+    }
+    public function delete_client_report($id)
+    {
+        $this->db->where('id',$id);
+        $this->db->delete('tblreport_client');
+        if($this->db->affected_rows() > 0){
+            echo json_encode(array(
+                'success' => true,
+                'message' => _l('delete_true')
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'success' => false,
+                'message' => _l('delete_false')
+            ));
+        }
+    }
+    public function add_report_client($client,$id="")
+    {
+        if($this->input->post())
+        {
+            $data=$this->input->post();
+            if($id)
+            {
+                unset($data['client']);
+                $this->db->where('id',$id);
+                $this->db->update('tblreport_client',$data);
+                if($this->db->affected_rows() > 0){
+                    echo json_encode(array(
+                        'success' => true,
+                        'message' => _l('updated_successfuly')
+                    ));
+                }
+            }
+            else
+            {
+                $data['date']=date('Y-m-d');
+                $data['id_client']=$client;
+                unset($data['client']);
+                $data['addedfrom']=get_staff_user_id();
+                $this->db->insert('tblreport_client',$data);
+                $_id=$this->db->insert_id();
+                if($_id)
+                {
+                    echo json_encode(array(
+                        'success' => true,
+                        'message' => _l('added_successfuly')
+                    ));
+                }
+                else
+                {
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => _l('problem_adding')
+                    ));
+                }
+            }
+        }
+    }
+    public function delete_report_client($client,$id="")
+    {
+        $this->db->where('id',$id);
+        $this->db->delete('tblreport_client');
+        if($this->db->affected_rows() > 0){
+            echo json_encode(array(
+                'success' => true,
+                'message' => _l('delete_comment_client')
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                'success' => true,
+                'message' => _l('not_delete_comment_client')
+            ));
+        }
+    }
+    public function model_comment($id="")
+    {
+        $data['_client']=$id;
+        $this->load->view('admin/clients/modals/report',$data);
+    }
+
 }

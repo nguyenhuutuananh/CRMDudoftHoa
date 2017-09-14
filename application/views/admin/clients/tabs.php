@@ -32,22 +32,22 @@ $customer_tabs = array(
     'visible'=>(has_permission('proposals','','view') || has_permission('proposals','','view_own')),
     'order'=>4
     ),
-  array(
-    'name'=>'estimates',
-    'url'=>admin_url('clients/client/'.$client->userid.'?group=estimates'),
-    'icon'=>'fa fa-file-text-o',
-    'lang'=>_l('estimates'),
-    'visible'=>(has_permission('estimates','','view') || has_permission('estimates','','view_own')),
-    'order'=>5
-    ),
-  array(
-    'name'=>'expenses',
-    'url'=>admin_url('clients/client/'.$client->userid.'?group=expenses'),
-    'icon'=>'fa fa-heartbeat',
-    'lang'=>_l('expenses'),
-    'visible'=>(has_permission('expenses','','view') || has_permission('expenses','','view_own')),
-    'order'=>6
-    ),
+//  array(
+//    'name'=>'estimates',
+//    'url'=>admin_url('clients/client/'.$client->userid.'?group=estimates'),
+//    'icon'=>'fa fa-file-text-o',
+//    'lang'=>_l('estimates'),
+//    'visible'=>(has_permission('estimates','','view') || has_permission('estimates','','view_own')),
+//    'order'=>5
+//    ),
+//  array(
+//    'name'=>'expenses',
+//    'url'=>admin_url('clients/client/'.$client->userid.'?group=expenses'),
+//    'icon'=>'fa fa-heartbeat',
+//    'lang'=>_l('expenses'),
+//    'visible'=>(has_permission('expenses','','view') || has_permission('expenses','','view_own')),
+//    'order'=>6
+//    ),
   array(
     'name'=>'contracts',
     'url'=>admin_url('clients/client/'.$client->userid.'?group=contracts'),
@@ -64,14 +64,14 @@ $customer_tabs = array(
     'visible'=>true,
     'order'=>8
     ),
-  array(
-    'name'=>'tickets',
-    'url'=>admin_url('clients/client/'.$client->userid.'?group=tickets'),
-    'icon'=>'fa fa-ticket',
-    'lang'=>_l('tickets'),
-    'visible'=>((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()),
-    'order'=>9
-    ),
+//  array(
+//    'name'=>'tickets',
+//    'url'=>admin_url('clients/client/'.$client->userid.'?group=tickets'),
+//    'icon'=>'fa fa-ticket',
+//    'lang'=>_l('tickets'),
+//    'visible'=>((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()),
+//    'order'=>9
+//    ),
   array(
     'name'=>'tasks',
     'url'=>admin_url('clients/client/'.$client->userid.'?group=tasks'),
@@ -96,14 +96,14 @@ $customer_tabs = array(
     'visible'=>true,
     'order'=>12
     ),
-  array(
-    'name'=>'map',
-    'url'=>admin_url('clients/client/'.$client->userid.'?group=map'),
-    'icon'=>'fa fa-map-marker',
-    'lang'=>_l('customer_map'),
-    'visible'=>true,
-    'order'=>13
-    ),
+//  array(
+//    'name'=>'map',
+//    'url'=>admin_url('clients/client/'.$client->userid.'?group=map'),
+//    'icon'=>'fa fa-map-marker',
+//    'lang'=>_l('customer_map'),
+//    'visible'=>true,
+//    'order'=>13
+//    ),
   array(
     'name'=>'notes',
     'url'=>admin_url('clients/client/'.$client->userid.'?group=notes'),

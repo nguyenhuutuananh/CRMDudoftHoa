@@ -62,6 +62,7 @@ class Votes_model extends CRM_Model
 
             unset($_data['id']);
             $_data['id_votes']=$id;
+            $_data['total']=str_replace(',','',$_data['total']);
             $this->db->insert('tblvotes_contract',$_data);
         }
         $id=$this->db->insert_id();
@@ -119,6 +120,7 @@ class Votes_model extends CRM_Model
         {
             $id=$rom['id'];
             unset($rom['id']);
+            $rom['total']=str_replace(',','',$rom['total']);
             $this->db->where('id',$id);
             $this->db->update('tblvotes_contract',$rom);
             if($this->db->affected_rows() > 0){
@@ -142,7 +144,7 @@ class Votes_model extends CRM_Model
         $this->db->select_max('id');
         $id_max = $this->db->get('tbldebit')->row();
         $last_id = strlen(($id_max->id) + 1);
-        $max_code = 5;
+        $max_code = 6;
         $n = $max_code - $last_id;
         $_code = "";
         if ($n > 0) {
@@ -150,6 +152,6 @@ class Votes_model extends CRM_Model
                 $_code .= 0;
             }
         }
-        return $last_code = 'PC-' . $_code . ($id_max->id + 1);
+        return $last_code = get_option('prefix_vouchers_votes') . $_code . ($id_max->id + 1);
     }
 }

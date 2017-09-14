@@ -101,8 +101,7 @@
                                     <?php
                                     }
                                     ?>
-                                    <?php 
-                                        // var_dump($purchase);
+                                    <?php
                                         if($purchase_suggested)
                                         {
 

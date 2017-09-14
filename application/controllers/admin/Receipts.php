@@ -29,7 +29,7 @@ class Receipts extends Admin_controller
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
-                $id=$this->receipts_model->insert($data);
+                $id = $this->receipts_model->insert($data);
                 if($id) {
                     $_id = $this->receipts_model->insert_receipts_contract($id, $_data);
                     if($_id)
@@ -73,14 +73,11 @@ class Receipts extends Admin_controller
             {
                 $data['heading']=_l('receipts_add_heading');
                 $data['title']=_l('receipts_add_heading');
-                $data['supplier']=$this->receipts_model->get_table_where('tblsuppliers');
-                $data['purchase_contracts']=$this->receipts_model->get_table_where('tblpurchase_contracts');
+                $data['client']=$this->receipts_model->get_table_where('tblclients');
                 $data['currencies']=$this->receipts_model->get_table_where('tblcurrencies');
-                $data['contract']=$this->receipts_model->get_contract();
                 $data['tk_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
                 $data['tk_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
-                $data['receipts_contract']=$this->receipts_model->get_receipts_contract();
-                $data['receipts_contract_purchase']=$this->receipts_model->get_receipts_purchase();
+                $data['tk_ck']=$this->receipts_model->get_table_where('tblaccounts');
                 $data['code_vouchers']=$this->receipts_model->get_vouchers();
 
             }
@@ -88,19 +85,16 @@ class Receipts extends Admin_controller
             {
                 $data['heading']=_l('receipts_update_heading');
                 $data['title']=_l('receipts_update_heading');
-                $data['supplier']=$this->receipts_model->get_table_where('tblsuppliers');
-                $data['purchase_contracts']=$this->receipts_model->get_table_where('tblpurchase_contracts');
+                $data['client']=$this->receipts_model->get_table_where('tblclients');
                 $data['currencies']=$this->receipts_model->get_table_where('tblcurrencies');
                 $data['contract']=$this->receipts_model->get_contract();
                 $data['tk_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
                 $data['tk_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
-                $data['receipts_contract']=$this->receipts_model->get_receipts_contract();
-                $data['receipts_contract_purchase']=$this->receipts_model->get_receipts_purchase();
-
-                $data['supplier']=$this->receipts_model->get_table_where('tblsuppliers');
-                $data['vote']=$this->receipts_model->get_index_receipts($id);
-                if($data['vote'])
+                $data['tk_ck']=$this->receipts_model->get_table_where('tblaccounts');
+                $data['receipt']=$this->receipts_model->get_index_receipts($id);
+                if($data['receipt'])
                 {
+                    $data['invoices']=$this->receipts_model->get_invoices_receipts($data['receipt']->id_client);
                     $data['receipts']= $this->receipts_model->index_receipts_contract($id);
                 }
                 else
@@ -112,6 +106,20 @@ class Receipts extends Admin_controller
             $this->load->view('admin/receipts/detail',$data);
         }
 
+    }
+    public function get_invoices()
+    {
+        $id_client=$this->input->post('id_client');
+        $client=$this->receipts_model->get_invoices_receipts($id_client);
+        echo json_encode($client);
+    }
+    public function get_invoices_id()
+    {
+        $id=$this->input->post('invoices');
+        if($id){
+            $result=$this->receipts_model->get_table_id('tblinvoices','id='.$id);
+            echo json_encode($result);
+        }
     }
     public function pdf($id="")
     {

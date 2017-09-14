@@ -18,11 +18,27 @@ $aColumns     = array(
     'date'
 
 );
+if($client)
+{
+    $aColumns     = array(
+        'code',
+        'rel_code',
+        'total',
+        'status',
+        'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
+        'date'
+
+    );
+}
 $sIndexColumn = "id";
 $sTable       = 'tblsales';
 $where        = array(
     
 );
+if($client)
+{
+    array_push($where, ' AND customer_id='.$client);
+}
 if(!empty($order_id))
 {
     $where[]='AND rel_id="'.$order_id.'"';

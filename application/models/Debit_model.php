@@ -61,6 +61,7 @@ class Debit_model extends CRM_Model
         {
 
             unset($_data['id']);
+            $_data['total']=str_replace(',','',$_data['total']);
             $_data['id_debit']=$id;
             $this->db->insert('tbldebit_contract',$_data);
         }
@@ -119,6 +120,7 @@ class Debit_model extends CRM_Model
         {
             $id=$rom['id'];
             unset($rom['id']);
+            $rom['total']=str_replace(',','',$rom['total']);
             $this->db->where('id',$id);
             $this->db->update('tbldebit_contract',$rom);
             if($this->db->affected_rows() > 0){
@@ -152,6 +154,6 @@ class Debit_model extends CRM_Model
                 $_code.=0;
             }
         }
-       return $last_code='UNC-'.$_code.($id_max->id+1);
+       return $last_code=get_option('prefix_vouchers_debit').$_code.($id_max->id+1);
     }
 }

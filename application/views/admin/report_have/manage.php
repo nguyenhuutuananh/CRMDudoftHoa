@@ -6,7 +6,7 @@
         <?php if(has_permission('items','','create')){ ?>
         <div class="panel_s">
           <div class="panel-body _buttons">
-            <a href="<?php echo admin_url('receipts/receipts') ?>" class="btn btn-info pull-left"><?php echo _l('receipts_add_heading'); ?></a>
+            <a href="<?php echo admin_url('report_have/report_have') ?>" class="btn btn-info pull-left"><?php echo _l('report_haves_add_heading'); ?></a>
           </div>
 
         </div>
@@ -23,12 +23,8 @@
             
             <p></p>
             <?php render_datatable(array(
-              _l('code_vouchers'),
-              _l('receiver'),
-              _l('supplier'),
-              _l('code_vouchers_receipts'),
+              _l('code_vouchers_report_haves'),
               _l('_receiver'),
-              _l('client'),
               _l('date_create'),
               _l('status_receipts'),
               _l('reason'),
@@ -36,7 +32,7 @@
               _l('staff_create'),
               _l('actions'),
               ),
-              'receipts'); ?>
+              'report_haves'); ?>
             </div>
           </div>
         </div>
@@ -109,13 +105,13 @@
         dataString={id:id,status:status};
         jQuery.ajax({
             type: "post",
-            url:"<?=admin_url()?>receipts/update_status",
+            url:"<?=admin_url()?>report_have/update_status",
             data: dataString,
             cache: false,
             success: function (response) {
                 response = JSON.parse(response);
                 if (response.success == true) {
-                    $('.table-receipts').DataTable().ajax.reload();
+                    $('.table-report_haves').DataTable().ajax.reload();
                     alert_float('success', response.message);
                 }
             }
@@ -135,7 +131,6 @@
         $('#filterStatus').change();
     });
     $('#btnDatatableFilterNotApproval').click(() => {
-        $('#filterStatus').val(1);
         $('#filterStatus').val(0);
         $('#filterStatus').change();
     });
@@ -156,10 +151,10 @@
         'filterStatus' : '[id="filterStatus"]',
     };
     //initDataTable('.table-purchase-suggested', '<?=admin_url('purchase_suggested')?>', [1], [1], filterList,[0,'DESC']);
-    initDataTable('.table-receipts', window.location.href, [0], [0], filterList, [0,'DESC']);
+    initDataTable('.table-report_haves', window.location.href, [0], [0], filterList, [0,'DESC']);
     $.each(filterList, (filterIndex, filterItem) => {
       $('input' + filterItem).on('change', () => {
-          $('.table-receipts').DataTable().ajax.reload();
+          $('.table-report_haves').DataTable().ajax.reload();
       });
     });
   });

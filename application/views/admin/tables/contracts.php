@@ -1,6 +1,27 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-$aColumns = array('tblcontracts.id','CONCAT(prefix,code) as code', 'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company', 'contract_type', 'contract_value' , 'datestart','dateend');
+if($client)
+{
+    $aColumns = array(
+//        'tblcontracts.id',
+        'CONCAT(prefix,code) as code',
+        'contract_type',
+        'contract_value',
+        'datestart',
+        'dateend'
+    );
+}
+else
+{
+    $aColumns = array('tblcontracts.id',
+        'CONCAT(prefix,code) as code',
+        'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company',
+        'contract_type',
+        'contract_value' ,
+        'datestart',
+        'dateend'
+    );
+}
 $sIndexColumn = "id";
 $sTable = 'tblcontracts';
 $additionalSelect = array('tblcontracts.id','tblcontracttypes.name','trash','client','export_status');
@@ -96,6 +117,7 @@ foreach ( $rResult as $aRow )
     $row = array();
     for ( $i=0 ; $i<count($aColumns) ; $i++ )
     {
+        $_data = $aRow[ $aColumns[$i] ];
         if(strpos($aColumns[$i],'as') !== false && !isset($aRow[ $aColumns[$i] ])){
             $_data = $aRow[ strafter($aColumns[$i],'as ')];
         } else {
@@ -110,9 +132,10 @@ foreach ( $rResult as $aRow )
         {
             $_data = format_money($aRow['contract_value'],get_option('default_currency'));
         }
-        if($i == 2){
+        if($aColumns[$i] == 'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company'){
             $_data = '<a href="'.admin_url('clients/client/'.$aRow['client']).'">'. $aRow['company'] . '</a>';
-        } else if($aColumns[$i] == 'dateend' || $aColumns[$i] == 'datestart'){
+        }
+        else if($aColumns[$i] == 'dateend' || $aColumns[$i] == 'datestart'){
             $_data = _d($_data);
         } else if($aColumns[$i] == 'subject'){
             $_data = '<a href="'.admin_url('contracts/contract/'.$aRow['id']).'">'.$_data.'</a>';

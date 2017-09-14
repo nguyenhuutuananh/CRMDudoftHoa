@@ -38,6 +38,31 @@
                <?php echo _l('lead_profile'); ?>
             </a>
         </li>
+         <li role="presentation">
+            <a href="#tab_lead_sales" onclick="create_sales_lead(<?=$client->userid?>)" aria-controls="tab_lead_sales" role="tab" data-toggle="tab">
+               <?php echo _l('sales_buy'); ?>
+            </a>
+        </li>
+         <li role="presentation">
+            <a href="#tab_lead_contract" onclick="create_contract_lead(<?=$client->userid?>)" aria-controls="tab_lead_contract" role="tab" data-toggle="tab">
+               <?php echo _l('lead_contract'); ?>
+            </a>
+         </li>
+         <li role="presentation">
+            <a href="#tab_lead_quote" onclick="create_quote_lead(<?=$client->userid?>)" aria-controls="tab_lead_quote" role="tab" data-toggle="tab">
+               <?php echo _l('_quote'); ?>
+            </a>
+         </li>
+         <li role="presentation">
+            <a href="#tab_lead_care_of" onclick="create_care_of_lead(<?=$client->userid?>)" aria-controls="tab_lead_care_of" role="tab" data-toggle="tab">
+               <?php echo _l('care_of'); ?>
+            </a>
+         </li>
+         <li role="presentation">
+            <a href="#client_report" aria-controls="client_report" role="tab" data-toggle="tab">
+               <?php echo _l('client_report'); ?>
+            </a>
+         </li>
         <!-- <li role="presentation" class="" >
             <a href="#billing_and_shipping" aria-controls="billing_and_shipping" role="tab" data-toggle="tab">
                <?php echo _l('billing_shipping'); ?>
@@ -51,6 +76,20 @@
       <div role="tabpanel" class="tab-pane active" id="tab_lead_profile">
          <?php $this->load->view('admin/clients/modals/profile'); ?>
       </div>
+      <div role="tabpanel" class="tab-pane" id="tab_lead_sales">
+         <?php $this->load->view('admin/clients/modals/sales'); ?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tab_lead_contract">
+         <?php $this->load->view('admin/clients/modals/lead_contract'); ?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tab_lead_quote">
+         <?php $this->load->view('admin/clients/modals/lead_quote'); ?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tab_lead_care_of">
+         <?php $_client['client']=$client->userid?>
+         <?php $this->load->view('admin/clients/modals/lead_care_of',$_client['client']); ?>
+      </div>
+      <?php $this->load->view('admin/clients/modals/report'); ?>
       <?php if(isset($lead)){ ?>
          <?php if(count($mail_activity) > 0){ ?>
             <div role="tabpanel" class="tab-pane" id="tab_email_activity">

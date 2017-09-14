@@ -13,14 +13,14 @@
     <div class="additional"></div>
     <div class="col-md-12">
         <?php
-         if(isset($vote))
+         if(isset($receipt))
             {
-                if($vote->status==0)
+                if($receipt->status==0)
                 {
                     $type='warning';
                     $status='Chưa duyệt';
                 }
-                elseif($vote->status==1)
+                elseif($receipt->status==1)
                 {
                     $type='info';
                     $status='Đã xác nhận';
@@ -38,6 +38,7 @@
             }
 
         ?>
+        <?php $disabled='disabled';?>
         <div class="ribbon <?=$type?>"><span><?=$status?></span></div>
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
@@ -56,9 +57,9 @@
                 
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
-                        <?php if( isset($vote) ) { ?>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <?php if( isset($receipt) ) { ?>
+                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $receipt->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $receipt->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -67,23 +68,24 @@
             <?php echo form_open_multipart($this->uri->uri_string(), array('class' => 'client-form', 'autocomplete' => 'off')); ?>
                 <div class="row">
                   <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                      <?php $selected_supplier = (isset($vote) ? $vote->id_supplier : "");?>
-                      <?php echo  render_select('id_supplier',$supplier,array('userid','company','supplier_code'),_('lblsupplier'),$selected_supplier); ?>
+                      <?php $selected_client = (isset($receipt) ? $receipt->id_client : "");?>
+                      <?php $client_disabled = (isset($receipt) ? array('disabled'=>$disabled) : array());?>
+                      <?php echo render_select('id_client',$client,array('userid','company'),_('lblclient'),$selected_client,$client_disabled); ?>
 
                       <?php
-                          $receiver = (isset($vote) ? $vote->receiver : "");
-                          echo  render_input('receiver', _l('receiver'), $receiver);
+                          $receiver = (isset($receipt) ? $receipt->receiver : "");
+                          echo  render_input('receiver', _l('_receiver'), $receiver);
                       ?>
                       <?php
-                          $address = (isset($vote) ? $vote->address : "");
+                          $address = (isset($receipt) ? $receipt->address : "");
                           echo  render_input('address', _l('address'), $address);
                       ?>
                       <?php
-                          $reason = (isset($vote) ? $vote->reason : "");
-                          echo  render_input('reason', _l('receiptsreason'), $reason);
+                          $reason = (isset($receipt) ? $receipt->reason : "");
+                          echo  render_input('reason', _l('reason'), $reason);
                       ?>
                     <?php
-                        $default_date = ( isset($vote) ? _d($vote->date_create) : _d(date('Y-m-d')));
+                        $default_date = ( isset($receipt) ? _d($receipt->date_create) : _d(date('Y-m-d')));
                         echo render_date_input( 'date_create', 'project_datecreated' , $default_date , 'date');
                     ?>
                     
@@ -91,16 +93,16 @@
                 
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <?php
-                    $default_date = ( isset($vote) ? _d($vote->date_of_accounting) : _d(date('Y-m-d')));
+                    $default_date = ( isset($receipt) ? _d($receipt->date_of_accounting) : _d(date('Y-m-d')));
                     echo render_date_input( 'date_of_accounting', 'date_of_accounting' , $default_date , 'date_of_accounting');
                     ?>
                     <?php
-                    $default_date = ( isset($vote) ? _d($vote->day_vouchers) : _d(date('Y-m-d')));
+                    $default_date = ( isset($receipt) ? _d($receipt->day_vouchers) : _d(date('Y-m-d')));
                     echo render_date_input( 'day_vouchers', 'day_vouchers' , $default_date , 'day_vouchers');
                     ?>
                     <?php
-                    $code_vouchers = (isset($vote) ? $vote->code_vouchers : $code_vouchers);
-                    echo  render_input('code_vouchers', _l('code_vouchers'),$code_vouchers,'text',$code_vouchers);
+                    $code_vouchers = (isset($receipt) ? $receipt->code_vouchers : $code_vouchers);
+                    echo  render_input('code_vouchers', _l('code_vouchers_receipts'),$code_vouchers,'text',array('readonly'=>'readonly'));
                     ?>
                 </div>
                 
@@ -109,9 +111,9 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
-                        <?php $disabled='disabled';?>
+
                         <?php $readonly='';$display="";?>
-                    <?php if(($vote->status!=0)&&isset($vote)){ $display='style="display: none;"'; $readonly='readonly';  }?>
+                    <?php if(($receipts->status!=0)&&isset($receipts)){ $display='style="display: none;"'; $readonly='readonly';  }?>
                         <div class="table-responsive s_table">
                             <table class="table items item-export no-mtop">
                                 <thead>
@@ -119,12 +121,12 @@
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th width="" class="text-left"><?php echo _l('Diển giải'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('invoices'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('contract_ban'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('currencies'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('money'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('discount'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('total_money'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_ck'); ?></th>
                                         <th></th>
                                         
                                     </tr>
@@ -142,7 +144,6 @@
                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
                                                    <?php }?>
                                                <?php }?>
-
                                            </select>
                                        </td>
                                        <td>
@@ -156,44 +157,55 @@
 
                                            </select>
                                        </td>
-                                       <td>
-                                            <select class="selectpicker" id="purchase_contracts" data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
-                                                <?php if($purchase_contracts){?>
-                                                    <option></option>
-                                                    <?php foreach($purchase_contracts as $rom){?>
-                                                            <option value="<?=$rom['id']?>"><?=$rom['code']?></option>
-                                                    <?php }?>
-                                                <?php }?>
 
-                                            </select>
-                                       </td>
                                        <td>
-                                           <select class="selectpicker" id="contract" data-width="100%" data-none-selected-text="<?php echo _l('contract_ban'); ?>">
-                                               <?php if($contract){?>
-                                                   <option></option>
-                                                   <?php foreach($contract as $rom){?>
-                                                       <option value="<?=$rom['id']?>"><?=$rom['fullcode']?></option>
+                                           <select class="selectpicker" id="invoices" data-width="100%" data-none-selected-text="<?php echo _l('invoices'); ?>">
+                                               <option></option>
+                                               <?php if($invoices){?>
+                                                   <?php foreach($invoices as $rom){?>
+                                                       <?php
+                                                       $last_id = strlen(($rom['number']));
+                                                       $max_code = 6;
+                                                       $n = $max_code - $last_id;
+                                                       $_code = "";
+                                                       if ($n > 0) {
+                                                           for ($i = 0; $i < $n; $i++) {
+                                                               $_code .= 0;
+                                                           }
+                                                       }
+                                                       $last_code =$rom['prefix'].$_code . ($rom['number']);
+                                                       ?>
+                                                       <option value="<?=$rom['id']?>"><?=$last_code?></option>
                                                    <?php }?>
                                                <?php }?>
-
-                                           </select>
-                                       </td>
-                                        <td>
-                                           <select class="selectpicker" id="currencies" data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
-                                               <?php if($currencies){?>
-                                                   <option></option>
-                                                   <?php foreach($currencies as $rom){?>
-                                                       <option value="<?=$rom['id']?>"><?=$rom['name']?></option>
-                                                   <?php }?>
-                                               <?php }?>
-
                                            </select>
                                        </td>
                                        <td>
                                            <div class="form-group">
-                                               <input type="text" id="total" class="form-control" value="">
+                                               <input type="text" readonly id="total" class="form-control" value="">
                                            </div>
                                        </td>
+                                        <td>
+                                           <div class="form-group">
+                                               <input type="text" id="discount" readonly class="form-control" value="">
+                                           </div>
+                                       </td>
+                                        <td>
+                                           <div class="form-group">
+                                               <input type="text" id="subtotal" class="form-control" value="">
+                                           </div>
+                                       </td>
+                                        <td>
+                                            <select class="selectpicker" id="tk_ck" data-width="100%" data-none-selected-text="<?php echo _l('tk_ck')?>">
+                                                <?php if($tk_ck){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_ck as $rom){?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+
+                                            </select>
+                                        </td>
                                        <td>
                                            <button style="" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                        </td>
@@ -201,7 +213,9 @@
                                     <?php
                                     $i=0;
                                     $totalPrice=0;
-                                    
+                                    $subtotal=0;
+                                    $subdiscount=0;
+
                                     if(isset($receipts) && count($receipts) > 0) {
                                         
                                         foreach($receipts as $value) {
@@ -214,6 +228,7 @@
                                             <div class="form-group">
                                                 <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][note]" id="note" class="form-control" value="<?php echo $value['note']; ?>">
                                             </div>
+                                        </td>
                                         <td>
                                             <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                 <?php if($tk_no){?>
@@ -242,48 +257,58 @@
                                         </td>
                                             
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][purchase_contracts]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
-                                                <?php if($purchase_contracts){?>
-                                                    <option></option>
-                                                    <?php foreach($purchase_contracts as $rom){?>
-                                                        <?php $selected="";?>
-                                                        <?php if($rom['id']==$value['purchase_contracts']){$selected='selected';}?>
-                                                        <option value="<?=$rom['id']?>" <?=$selected?>><?=$rom['code']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][contract]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('contract_ban'); ?>">
-                                                <?php if($contract){?>
-                                                    <option></option>
-                                                    <?php foreach($contract as $rom){?>
-                                                        <?php $selected="";?>
-                                                        <?php if($rom['id']==$value['contract']){$selected='selected';}?>
-                                                        <option value="<?=$rom['id']?>" <?=$selected?>><?=$rom['fullcode']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][currencies]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('currencies'); ?>">
-                                                <?php if($currencies){?>
-                                                    <option></option>
-                                                    <?php foreach($currencies as $rom){?>
-                                                        <?php $selected="";?>
-                                                        <?php if($rom['id']==$value['currencies']){$selected='selected';}?>
-                                                        <option value="<?=$rom['id']?>" <?=$selected?>><?=$rom['name']?></option>
-                                                    <?php }?>
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][invoices]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                                <?php
+                                                $get_invoices=$this->receipts_model->get_table_id('tblinvoices','id='.$value['invoices']);
+                                                if($get_invoices){?>
+                                                    <?php
+                                                    $last_id = strlen(($get_invoices->number));
+                                                    $max_code = 6;
+                                                    $n = $max_code - $last_id;
+                                                    $_code = "";
+                                                    if ($n > 0) {
+                                                        for ($j = 0; $j < $n; $j++) {
+                                                            $_code .= 0;
+                                                        }
+                                                    }
+                                                     $last_code =$get_invoices->prefix.$_code . ($get_invoices->number);
+                                                    ?>
+                                                    <option value="<?=$get_invoices->id?>" <?=$selected?>><?=$last_code?></option>
                                                 <?php }?>
 
                                             </select>
                                         </td>
                                         <td>
                                             <div class="form-group">
-                                                <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][total]" class="form-control" value="<?=$value['total']?>">
+                                                <input  readonly type="text" name="item[<?php echo $i ?>][total]" class="form-control _total" value="<?=number_format($value['total'])?>">
+                                                <?php $totalPrice +=$value['total']?>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input readonly type="text" name="item[<?php echo $i ?>][discount]" class="form-control _discount" value="<?=number_format($value['discount'])?>">
+
+                                                <?php $subdiscount +=$value['discount'] ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][subtotal]" class="form-control _subtotal" value="<?=number_format($value['subtotal'])?>">
+                                                <?php $subtotal +=$value['subtotal'] ?>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_ck]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_ck')?>">
+                                                <?php if($tk_ck){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_ck as $rom){?>
+                                                        <?php $selected="";?>
+                                                        <?php if($rom['idAccount']==$value['tk_ck']){$selected='selected';}?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>" <?=$selected?>><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+
+                                            </select>
                                         </td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
@@ -299,10 +324,31 @@
                             <table class="table text-right">
                                 <tbody>
                                     <tr>
-                                        <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
+                                        <td><span class="bold"><?php echo _l('total_invoices'); ?> :</span>
+                                        </td>
+                                        <td class="_count">
+                                            <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('total_money'); ?> :</span>
                                         </td>
                                         <td class="total">
-                                            <?php echo $i ?>
+                                            <?php echo number_format($totalPrice); ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('subtotal'); ?> :</span>
+                                        </td>
+                                        <td class="subtotal">
+                                            <?php echo number_format($subtotal); ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('subdiscount'); ?> :</span>
+                                        </td>
+                                        <td class="subdiscount">
+                                            <?php echo number_format($subdiscount); ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -313,7 +359,7 @@
                 </div>
                 <!-- End edited -->
                 
-                <?php if(isset($vote) && $vote->status == 0 || !isset($vote)) { ?>
+                <?php if(isset($receipts) && $receipts->status == 0 || !isset($receipts)) { ?>
                   <button class="btn btn-info mtop20 only-save customer-form-submiter" style="margin-left: 15px">
                     <?php echo _l('submit'); ?>
                 </button>
@@ -352,7 +398,10 @@
         }
         return x1 + x2;
     }
-
+    $('._subtotal').on('change', function() {
+        //this = $(this);
+        this.value = formatNumber(this.value);
+    });
     var findItem = (id,type) => {
         var itemResult;
         if(type==1)
@@ -396,6 +445,10 @@
             alert_float('danger', "Vui lòng chọn tài khoản có!");
             return;
         }
+        if(!$('tr.main #tk_ck option:selected').length || $('tr.main #tk_ck option:selected').val() == '') {
+            alert_float('danger', "Vui lòng chọn tài khoản chiết khấu!");
+            return;
+        }
         if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #select_warehouse option:selected').data('store')) {
             alert_float('danger', 'Kho ' + $('tr.main #select_warehouse option:selected').text() + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
             return;
@@ -407,9 +460,10 @@
         var td3 = $('<td></td>');
         var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
-        var td7 = $('<td></td>');
-        var td8 = $('<td><div class="form-group"><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
+        var td6 = $('<td><div class="form-group"><input style="width: 100px" class="_total form-control" readonly type="number" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
+        var td7 = $('<td><div class="form-group"><input style="width: 100px" class="_discount form-control" readonly type="number" name="items[' + uniqueArray + '][discount]" value="" /></div></td>');
+        var td8 = $('<td><div class="form-group"><input style="width: 100px" class="_subtotal form-control" type="number" name="items[' + uniqueArray + '][subtotal]" value="" /></div></td>');
+        var td9 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) input').val());
         td2.find('input').val($('tr.main').find('td:nth-child(2) input').val());
@@ -428,27 +482,21 @@
         td4.append(tk_co);
 
 //		td5.find('input').val($('tr.main').find('td:nth-child(5) option:selected').val());
-        let purchase_contracts = $('tr.main').find('td:nth-child(5)').find('select').clone();
-        purchase_contracts.attr('name', 'items[' + uniqueArray + '][purchase_contracts]');
-        purchase_contracts.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
-        td5.append(purchase_contracts);
+        let invoices = $('tr.main').find('td:nth-child(5)').find('select').clone();
+        invoices.attr('name', 'items[' + uniqueArray + '][invoices]');
+        invoices.attr('dis', 'items[' + uniqueArray + '][invoices]');
+        invoices.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
+        td5.append(invoices);
 
+        td6.find('input').val($('tr.main').find('td:nth-child(6) input').val());
 
-//        td6.append($('tr.main').find('td:nth-child(6) select option:selected').text());
-//        td6.find('input').val($('tr.main').find('td:nth-child(6) option:selected').val());
-        let contract = $('tr.main').find('td:nth-child(6)').find('select').clone();
-        contract.attr('name', 'items[' + uniqueArray + '][contract]');
-        contract.removeAttr('id').val($('tr.main').find('td:nth-child(6)').find('select').selectpicker('val'));
-        td6.append(contract);
-
-//        td7.append($('tr.main').find('td:nth-child(7) select option:selected').text());
-//        td7.find('input').val($('tr.main').find('td:nth-child(7) option:selected').val());
-        let currencies = $('tr.main').find('td:nth-child(7)').find('select').clone();
-        currencies.attr('name', 'items[' + uniqueArray + '][currencies]');
-        currencies.removeAttr('id').val($('tr.main').find('td:nth-child(7)').find('select').selectpicker('val'));
-        td7.append(currencies);
-
+        td7.find('input').val($('tr.main').find('td:nth-child(7) input').val());
         td8.find('input').val($('tr.main').find('td:nth-child(8) input').val());
+
+        let tk_ck = $('tr.main').find('td:nth-child(9)').find('select').clone();
+        tk_ck.attr('name', 'items[' + uniqueArray + '][tk_ck]');
+        tk_ck.removeAttr('id').val($('tr.main').find('td:nth-child(9)').find('select').selectpicker('val'));
+        td9.append(tk_ck);
 
 		newTr.append(td1);
         newTr.append(td2);
@@ -458,6 +506,7 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -473,10 +522,9 @@
         trBar.find('td:first > input').val("");
         trBar.find('td:nth-child(1) input').val('');
         trBar.find('td:nth-child(2) input').val('');
-        trBar.find('td:nth-child(5) select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(6) select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(7) input').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(4) select').val('').selectpicker('refresh');
         trBar.find('td:nth-child(8) input').val('');
+        trBar.find('td:nth-child(9) input').val('').selectpicker('refresh');
 
 
     };
@@ -487,12 +535,31 @@
         total--;
         refreshTotal();
     };
-    var refreshTotal = () => {
-        $('.total').text(formatNumber(total));
-        var items = $('table.item-export tbody tr:gt(0)');
-        
-		$('.selectpicker').selectpicker('refresh');
-	};
+
+    var refreshTotal =()=>{
+        var tr_total = $('._total');
+        var tr_discount = $('._discount');
+        var tr_subtotal = $('._subtotal');
+        var _count = 0;
+        var _total=0;
+        var _discount=0;
+        var _subtotal=0;
+        $.each($(tr_subtotal), function(st,s){
+            _subtotal+= parseInt(s.value.replace(/\,|%/g, ''));
+            _count++;
+        })
+        $.each($(tr_discount), function(sd,d){
+            _discount+= parseInt(d.value.replace(/\,|%/g, ''));
+        })
+        $.each($(tr_total), function(rt,t){
+            _total+= parseInt(t.value.replace(/\,|%/g, ''));
+        })
+        $('.subtotal').html(formatNumber(_subtotal));
+        $('.subdiscount').html(formatNumber(_discount));
+        $('.total').html(formatNumber(_total));
+        $('._count').html(formatNumber(_count));
+        $('.selectpicker').selectpicker('refresh');
+    }
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
@@ -553,6 +620,55 @@
             $(e.currentTarget).parents('tr').find('input.mainQuantity').attr('data-store', $(e.currentTarget).find('option:selected').data('store'));
         }
     });
+    $( "#id_client" ).change(function() {
+        $('#invoices').html('').selectpicker('refresh');
+        var lengthcode=6;
+        var id_client=$('#id_client').val();
+        jQuery.ajax({
+            type: "post",
+            url:"<?=admin_url()?>receipts/get_invoices",
+            data: {id_client:id_client},
+            cache: false,
+            success: function (data) {
+                data = JSON.parse(data);
+                console.log(data);
+                $('#invoices').append('<option></option>');
+                $.each(data, function (key, value) {
+                    var lengthnumber=lengthcode-value.number.length;
+                    var allnumber="";
+                    if(lengthnumber>0)
+                    {
+                        for(var i=0;i<lengthnumber;i++)
+                        {
+                            allnumber=allnumber+'0';
+                        }
+                    }
+                    $('#invoices').append('<option value="'+value.id+'">'+value.prefix+allnumber+value.number+'</option>');
+                })
+                $('#invoices').selectpicker('refresh');
+            }
+        });
+        return false;
+    });
+    $( "#invoices" ).change(function() {
+        var lengthcode=6;
+        var invoices=$('#invoices').val();
+        jQuery.ajax({
+            type: "post",
+            url:"<?=admin_url()?>receipts/get_invoices_id",
+            data: {invoices:invoices},
+            cache: false,
+            success: function (result){
+            result = JSON.parse(result);
+                console.log(result);
+                $('#total').val(result.total);
+                $('#discount').val(result.subtotal-result.total);
+                $('#subtotal').val(result.subtotal);
+            }
+        });
+        return false;
+    });
+
 	var calculateTotal = (currentInput) => {
 		currentInput = $(currentInput);		
 		let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
@@ -567,9 +683,8 @@
         tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
         refreshTotal();
 	};
-	$(document).on('keyup', '.mainPriceBuy', (e)=>{
-		var currentPriceBuyInput = $(e.currentTarget);
-		calculateTotal(e.currentTarget);
+	$(document).on('keyup', '._total,._discount,._subtotal', (e)=>{
+        refreshTotal();
 	});
     $(document).on('keyup', '.mainQuantity', (e)=>{
         var currentQuantityInput = $(e.currentTarget);
@@ -607,6 +722,11 @@
             loadWarehouses(warehouse_type,product.val()); 
         }
     });
+    $('._total,._discount,._subtotal').keyup(function(e){
+
+        refreshTotal();
+    })
+
     function loadWarehouses(warehouse_type, filter_by_product,default_value=''){
         var warehouse_id=$('#select_warehouse');
         warehouse_id.find('option:gt(0)').remove();
