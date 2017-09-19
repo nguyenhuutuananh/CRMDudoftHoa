@@ -28,6 +28,7 @@
               _l('supplier'),
               _l('date_create'),
               _l('status_votes'),
+                _l('total'),
               _l('reason'),
               _l('staff_browse'),
               _l('staff_create'),

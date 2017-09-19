@@ -55,6 +55,8 @@
 						<hr />
 						<?php render_yes_no_option('rtl_support_client','settings_rtl_support_client'); ?>
 						<hr />
+						<?php render_yes_no_option('prefix_add_continuous','settings_add_continuous'); ?>
+						<hr />
 						<?php echo render_input('settings[allowed_files]','settings_allowed_upload_file_types',get_option('allowed_files')); ?>
 					</div>
 				</div>

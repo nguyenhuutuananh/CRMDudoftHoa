@@ -35,7 +35,7 @@ function client_have_transactions($id)
  */
 function getMaxID($id,$table)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -45,7 +45,7 @@ function getMaxID($id,$table)
 
 function getRow($table,$where=array())
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -55,7 +55,7 @@ function getRow($table,$where=array())
 
 function getProvince($id)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -65,7 +65,7 @@ function getProvince($id)
 
 function getDistrict($id)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -75,7 +75,7 @@ function getDistrict($id)
 
 function getWard($id)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -114,7 +114,7 @@ function getWHTIDByWHID($warehouse_id)
 
 function getClient($id,$address_type=NULL)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -134,9 +134,9 @@ function is_primary_contact($contact_id = '')
     }
 
     if (total_rows('tblcontacts', array(
-        'id' => $contact_id,
-        'is_primary' => 1
-    )) > 0) {
+            'id' => $contact_id,
+            'is_primary' => 1
+        )) > 0) {
         return true;
     }
 
@@ -329,7 +329,7 @@ function get_primary_contact_user_id($userid)
  */
 function get_option($name)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -347,7 +347,7 @@ function check_option($name) {
 
 function getWareHouse($id)
 {
-   
+
     $CI =& get_instance();
     if (!class_exists('perfex_base')) {
         $CI->load->library('perfex_base');
@@ -357,7 +357,7 @@ function getWareHouse($id)
 
 // function getProvince($id)
 // {
-   
+
 //     $CI =& get_instance();
 //     if (!class_exists('perfex_base')) {
 //         $CI->load->library('perfex_base');
@@ -366,7 +366,7 @@ function getWareHouse($id)
 // }
 // function getDistrict($id)
 // {
-   
+
 //     $CI =& get_instance();
 //     if (!class_exists('perfex_base')) {
 //         $CI->load->library('perfex_base');
@@ -375,7 +375,7 @@ function getWareHouse($id)
 // }
 // function getAward($id)
 // {
-   
+
 //     $CI =& get_instance();
 //     if (!class_exists('perfex_base')) {
 //         $CI->load->library('perfex_base');
@@ -950,7 +950,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = array(), $w
             $sWhere = '';
         }
     }
-    
+
     /*
      * SQL queries
      * Get data to display
@@ -982,6 +982,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = array(), $w
     $sLimit
     ";
 
+
     $rResult = $CI->db->query($sQuery)->result_array();
 
     /* Data set length after filtering */
@@ -1008,7 +1009,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = array(), $w
         "iTotalDisplayRecords" => $iFilteredTotal,
         "aaData" => array()
     );
-    
+
     return array(
         'rResult' => $rResult,
         'output' => $output
@@ -1513,10 +1514,10 @@ function handle_tags_save($tags,$rel_id,$rel_type){
         }
 
         foreach($tags as $tag){
-           $tag = trim($tag);
-           if($tag != ''){
+            $tag = trim($tag);
+            if($tag != ''){
                 array_push($tags_array,$tag);
-           }
+            }
         }
 
         // Check if there is removed tags
@@ -1553,12 +1554,12 @@ function handle_tags_save($tags,$rel_id,$rel_type){
 
             if(total_rows('tbltags_in',array('tag_id'=>$tag_id,'rel_id'=>$rel_id,'rel_type'=>$rel_type)) == 0){
                 $CI->db->insert('tbltags_in',
-                array(
-                    'tag_id'=>$tag_id,
-                    'rel_id'=>$rel_id,
-                    'rel_type'=>$rel_type,
-                    'tag_order'=>$order
-                ));
+                    array(
+                        'tag_id'=>$tag_id,
+                        'rel_id'=>$rel_id,
+                        'rel_type'=>$rel_type,
+                        'tag_order'=>$order
+                    ));
 
                 if($CI->db->affected_rows() > 0){
                     $affectedRows++;
@@ -1656,7 +1657,7 @@ function get_tasks_where_string()
 }
 /**
  * Show all units exists in database
- * 
+ *
  * @return array
  */
 function get_units() {
@@ -1673,4 +1674,23 @@ function get_item_groups() {
     $CI =& get_instance();
     $groups = $CI->db->get('tblitems_groups')->result_array();
     return $groups;
+}
+
+function get_table_where($table, $where = array(),$order_by="")
+{
+    $CI =& get_instance();
+    if($where!=array())
+    {
+        $CI->db->where($where);
+    }
+    if($order_by!="")
+    {
+        $CI->db->order_by($order_by);
+    }
+    $result=$CI->db->get($table)->result_array();
+    if ($result) {
+        return $result;
+    } else {
+        return array();
+    }
 }

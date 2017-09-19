@@ -15,11 +15,11 @@
           <div class="panel-body">
             <div class="clearfix"></div>
             <input type="hidden" id="filterStatus" value="" />
-            <div data-toggle="btns" class="btn-group">
-                <button type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
-                <button type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>
-                <button type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>
-            </div>
+<!--            <div data-toggle="btns" class="btn-group">-->
+<!--                <button type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>-->
+<!--                <button type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>-->
+<!--                <button type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>-->
+<!--            </div>-->
             
             <p></p>
             <?php render_datatable(array(
@@ -27,8 +27,8 @@
               _l('_receiver'),
               _l('client'),
               _l('date_create'),
-              _l('status_receipts'),
               _l('reason'),
+              _l('total'),
               _l('staff_browse'),
               _l('staff_create'),
               _l('actions'),

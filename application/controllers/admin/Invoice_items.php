@@ -92,7 +92,14 @@ class Invoice_items extends Admin_controller
                     handle_item_avatar_image_upload($id);
                     set_alert('success', _l('added_successfuly', _l('als_products')));
                     //redirect(admin_url('invoice_items/item/' . $id . '?new_contact=true'));
-                    redirect(admin_url('invoice_items'));
+                    if(get_option('prefix_add_continuous')==0)
+                    {
+                        redirect(admin_url('invoice_items'));
+                    }
+                    else
+                    {
+                        redirect(admin_url('invoice_items/item'));
+                    }
                 }
             } else {
                 if (!has_permission('invoice_items', '', 'edit')) {

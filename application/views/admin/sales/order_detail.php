@@ -12,7 +12,7 @@
       <div class="clearfix"></div>
         <?php 
         } ?>
-  <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_sale_order') : _l('add_sale_order')); ?></h4>
+  <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_sale_order_po') : _l('add_sale_order_po')); ?></h4>
   <hr class="no-mbot no-border" />
   <div class="row">
     <div class="additional"></div>
@@ -105,6 +105,9 @@
 
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','create_date',$value); ?>
+
+                      <?php $value = (isset($item) ? _d($item->date_ht) : _d(date('Y-m-d')));?>
+                    <?php echo render_date_input('date_ht','date_of_accounting',$value); ?>
                     
                     <?php
                     $default_name = (isset($item) ? $item->name : _l('sale_name'));
@@ -153,11 +156,6 @@
                                         <option value="<?php echo $product['id']; ?>" data-subtext="">(<?php echo $product['code']; ?>) <?php echo $product['name']; ?></option>
                                         <?php 
                                         } ?>
-
-                                    <!-- <?php if (has_permission('items', '', 'create')) { ?>
-                                    <option data-divider="true"></option>
-                                    <option value="newitem" data-content="<span class='text-info'><?php echo _l('new_invoice_item'); ?></span>"></option>
-                                    <?php } ?> -->
                                     </select>
                                 </div>
                             </div>
@@ -175,8 +173,10 @@
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th width="25%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
-                                        
+
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('amount'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
@@ -195,6 +195,27 @@
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
                                             <?php echo _l('item_unit'); ?>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                                <?php if($tk_no){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_no as $rom){?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                                <?php if($tk_co){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_co as $rom){?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+
+                                            </select>
                                         </td>
 
                                         <td>
@@ -224,6 +245,7 @@
                                     $totalPrice=0;
                                     if(isset($item) && count($item->items) > 0) {
                                         foreach($item->items as $value) {
+
                                         ?>
                                     <tr class="sortable item">
                                         <td>
@@ -231,6 +253,31 @@
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
                                         <td><?php echo $value->unit_name; ?></td>
+                                        <td>
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                                <?php if($tk_no){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_no as $rom){?>
+                                                        <?php $selected="";?>
+                                                        <?php if($rom['idAccount']==$value->tk_no){$selected='selected';}?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>" <?=$selected?>><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                                <?php if($tk_co){?>
+                                                    <option></option>
+                                                    <?php foreach($tk_co as $rom){?>
+                                                        <?php $selected="";?>
+                                                        <?php if($rom['idAccount']==$value->tk_co){$selected='selected';}?>
+                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>" <?=$selected?>><?=$rom['accountCode']?></option>
+                                                    <?php }?>
+                                                <?php }?>
+
+                                            </select>
+                                        </td>
                                         <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" <?=($khoa? 'readonly': '')?> ></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
@@ -548,23 +595,36 @@
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
+        var td6 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
+        var td9 = $('<td></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
         td3.text($('tr.main').find('td:nth-child(3)').text());
-        td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
+
+        let tk_no = $('tr.main').find('td:nth-child(4)').find('select').clone();
+        tk_no.attr('name', 'items[' + uniqueArray + '][tk_no]');
+        tk_no.removeAttr('id').val($('tr.main').find('td:nth-child(4)').find('select').selectpicker('val'));
+        td4.append(tk_no);
+
+        let tk_co = $('tr.main').find('td:nth-child(5)').find('select').clone();
+        tk_co.attr('name', 'items[' + uniqueArray + '][tk_co]');
+        tk_co.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
+        td5.append(tk_co);
+
+        td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
         
-        td5.text( $('tr.main').find('td:nth-child(5)').text() );
-        td6.text( $('tr.main').find('td:nth-child(6)').text() );
-        var inputTax=$('tr.main').find('td:nth-child(7) > input');
-        td7.text( $('tr.main').find('td:nth-child(7)').text());
-        td7.append(inputTax);
-        td8.text($('tr.main').find('td:nth-child(8)').text());
+        td7.text( $('tr.main').find('td:nth-child(7)').text() );
+        td8.text( $('tr.main').find('td:nth-child(8)').text() );
+        var inputTax=$('tr.main').find('td:nth-child(9) > input');
+        td9.text( $('tr.main').find('td:nth-child(9)').text());
+        td9.append(inputTax);
+        td10.text($('tr.main').find('td:nth-child(10)').text());
 
         newTr.append(td1);
         newTr.append(td2);
@@ -574,14 +634,16 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
+        newTr.append(td10);
 
-        newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
+        newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>');
         $('table.item-purchase tbody').append(newTr);
         total++;
-        totalPrice += $('tr.main').find('td:nth-child(4) > input').val() * $('tr.main').find('td:nth-child(5)').text().replace(/\+/g, ' ');
+        totalPrice =parseInt(totalPrice)+ parseInt($('tr.main').find('td:nth-child(6) > input').val()) *  parseInt($('tr.main').find('td:nth-child(7)').text().replace(/\,|,/g, ''));
         uniqueArray++;
         refreshTotal();
-        // refreshAll();
+        $('.selectpicker').selectpicker('refresh');
     };
     var refreshAll = () => {
         
@@ -594,12 +656,16 @@
         
         trBar.find('td:first > input').val("");
         trBar.find('td:nth-child(2) ').text('<?=_l('item_name')?>');
-        trBar.find('td:nth-child(3) ').text('');
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) ').text('<?=_l("item_price")?>');
-        trBar.find('td:nth-child(6) ').text('<?=_l("0")?>');
-        trBar.find('td:nth-child(7) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(8) > select').find('option:gt(0)').remove().selectpicker('refresh');
+        trBar.find('td:nth-child(3) ').text('<?=_l('item_unit')?>');
+
+        trBar.find('td:nth-child(4) > select').val('').selectpicker('refresh');
+
+        trBar.find('td:nth-child(5) > select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(6) > input').val('');
+        trBar.find('td:nth-child(7) ').text('<?=_l("item_price")?>');
+        trBar.find('td:nth-child(8) ').text('<?=_l("0")?>');
+        trBar.find('td:nth-child(9) > select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(10) > select').find('option:gt(0)').remove().selectpicker('refresh');
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
@@ -614,7 +680,7 @@
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            totalPrice += parseFloat($(value).find('td:nth-child(8)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(9)').text().replace(/\,/g, ''));
             // * 
         });
         $('.totalPrice').text(formatNumber(totalPrice));
@@ -637,14 +703,18 @@
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
             trBar.find('td:nth-child(3)').text(itemFound.unit_name);
             trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-            trBar.find('td:nth-child(4) > input').val(1);
-            trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
-            trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1) );
+
+            trBar.find('td:nth-child(4) > select').val('');
+            trBar.find('td:nth-child(5) > select').val('');
+
+            trBar.find('td:nth-child(6) > input').val(1);
+            trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
+            trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price * 1) );
             var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
-            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
-            trBar.find('td:nth-child(7)').append(inputTax);
-            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(9)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(9)').append(inputTax);
+            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }

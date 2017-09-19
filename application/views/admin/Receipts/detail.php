@@ -39,7 +39,7 @@
 
         ?>
         <?php $disabled='disabled';?>
-        <div class="ribbon <?=$type?>"><span><?=$status?></span></div>
+<!--        <div class="ribbon --><?//=$type?><!--"><span>--><?//=$status?><!--</span></div>-->
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
@@ -122,7 +122,7 @@
                                         <th width="" class="text-left"><?php echo _l('Diển giải'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('invoices'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('sales'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('money'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('discount'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('total_money'); ?></th>
@@ -159,21 +159,12 @@
                                        </td>
 
                                        <td>
-                                           <select class="selectpicker" id="invoices" data-width="100%" data-none-selected-text="<?php echo _l('invoices'); ?>">
+                                           <select class="selectpicker" id="sales" data-width="100%" data-none-selected-text="<?php echo _l('sales'); ?>">
                                                <option></option>
-                                               <?php if($invoices){?>
-                                                   <?php foreach($invoices as $rom){?>
+                                               <?php if($sales){?>
+                                                   <?php foreach($sales as $rom){?>
                                                        <?php
-                                                       $last_id = strlen(($rom['number']));
-                                                       $max_code = 6;
-                                                       $n = $max_code - $last_id;
-                                                       $_code = "";
-                                                       if ($n > 0) {
-                                                           for ($i = 0; $i < $n; $i++) {
-                                                               $_code .= 0;
-                                                           }
-                                                       }
-                                                       $last_code =$rom['prefix'].$_code . ($rom['number']);
+                                                       $last_code =$rom['prefix'].$rom['code'];
                                                        ?>
                                                        <option value="<?=$rom['id']?>"><?=$last_code?></option>
                                                    <?php }?>
@@ -257,23 +248,14 @@
                                         </td>
                                             
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][invoices]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][sales]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php
-                                                $get_invoices=$this->receipts_model->get_table_id('tblinvoices','id='.$value['invoices']);
-                                                if($get_invoices){?>
+                                                $get_sales=$this->receipts_model->get_table_id('tblsales','id='.$value['sales']);
+                                                if($get_sales){?>
                                                     <?php
-                                                    $last_id = strlen(($get_invoices->number));
-                                                    $max_code = 6;
-                                                    $n = $max_code - $last_id;
-                                                    $_code = "";
-                                                    if ($n > 0) {
-                                                        for ($j = 0; $j < $n; $j++) {
-                                                            $_code .= 0;
-                                                        }
-                                                    }
-                                                     $last_code =$get_invoices->prefix.$_code . ($get_invoices->number);
+                                                     $last_code =$get_sales->prefix.$get_sales->code;
                                                     ?>
-                                                    <option value="<?=$get_invoices->id?>" <?=$selected?>><?=$last_code?></option>
+                                                    <option value="<?=$get_sales->id?>" <?=$selected?>><?=$last_code?></option>
                                                 <?php }?>
 
                                             </select>
@@ -324,7 +306,7 @@
                             <table class="table text-right">
                                 <tbody>
                                     <tr>
-                                        <td><span class="bold"><?php echo _l('total_invoices'); ?> :</span>
+                                        <td><span class="bold"><?php echo _l('total_sales'); ?> :</span>
                                         </td>
                                         <td class="_count">
                                             <?php echo $i ?>
@@ -460,9 +442,9 @@
         var td3 = $('<td></td>');
         var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td><div class="form-group"><input style="width: 100px" class="_total form-control" readonly type="number" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
-        var td7 = $('<td><div class="form-group"><input style="width: 100px" class="_discount form-control" readonly type="number" name="items[' + uniqueArray + '][discount]" value="" /></div></td>');
-        var td8 = $('<td><div class="form-group"><input style="width: 100px" class="_subtotal form-control" type="number" name="items[' + uniqueArray + '][subtotal]" value="" /></div></td>');
+        var td6 = $('<td><div class="form-group"><input  class="_total form-control" readonly type="text" name="items[' + uniqueArray + '][total]" value="" /></div></td>');
+        var td7 = $('<td><div class="form-group"><input  class="_discount form-control" readonly type="text" name="items[' + uniqueArray + '][discount]" value="" /></div></td>');
+        var td8 = $('<td><div class="form-group"><input class="_subtotal form-control" type="text" name="items[' + uniqueArray + '][subtotal]" value="" /></div></td>');
         var td9 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) input').val());
@@ -482,16 +464,16 @@
         td4.append(tk_co);
 
 //		td5.find('input').val($('tr.main').find('td:nth-child(5) option:selected').val());
-        let invoices = $('tr.main').find('td:nth-child(5)').find('select').clone();
-        invoices.attr('name', 'items[' + uniqueArray + '][invoices]');
-        invoices.attr('dis', 'items[' + uniqueArray + '][invoices]');
-        invoices.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
-        td5.append(invoices);
+        let sales = $('tr.main').find('td:nth-child(5)').find('select').clone();
+        sales.attr('name', 'items[' + uniqueArray + '][sales]');
+        sales.attr('dis', 'items[' + uniqueArray + '][sales]');
+        sales.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
+        td5.append(sales);
 
-        td6.find('input').val($('tr.main').find('td:nth-child(6) input').val());
+        td6.find('input').val($('tr.main').find('td:nth-child(6) input').val())
 
-        td7.find('input').val($('tr.main').find('td:nth-child(7) input').val());
-        td8.find('input').val($('tr.main').find('td:nth-child(8) input').val());
+        td7.find('input').val($('tr.main').find('td:nth-child(7) input').val())
+        td8.find('input').val($('tr.main').find('td:nth-child(8) input').val())
 
         let tk_ck = $('tr.main').find('td:nth-child(9)').find('select').clone();
         tk_ck.attr('name', 'items[' + uniqueArray + '][tk_ck]');
@@ -508,6 +490,7 @@
         newTr.append(td8);
         newTr.append(td9);
 
+        console.log(td6);
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
         total++;
@@ -621,49 +604,39 @@
         }
     });
     $( "#id_client" ).change(function() {
-        $('#invoices').html('').selectpicker('refresh');
+        $('#sales').html('').selectpicker('refresh');
         var lengthcode=6;
         var id_client=$('#id_client').val();
         jQuery.ajax({
             type: "post",
-            url:"<?=admin_url()?>receipts/get_invoices",
+            url:"<?=admin_url()?>receipts/get_sales",
             data: {id_client:id_client},
             cache: false,
             success: function (data) {
                 data = JSON.parse(data);
                 console.log(data);
-                $('#invoices').append('<option></option>');
+                $('#sales').append('<option></option>');
                 $.each(data, function (key, value) {
-                    var lengthnumber=lengthcode-value.number.length;
-                    var allnumber="";
-                    if(lengthnumber>0)
-                    {
-                        for(var i=0;i<lengthnumber;i++)
-                        {
-                            allnumber=allnumber+'0';
-                        }
-                    }
-                    $('#invoices').append('<option value="'+value.id+'">'+value.prefix+allnumber+value.number+'</option>');
+                    $('#sales').append('<option value="'+value.id+'">'+value.prefix+value.code+'</option>');
                 })
-                $('#invoices').selectpicker('refresh');
+                $('#sales').selectpicker('refresh');
             }
         });
         return false;
     });
-    $( "#invoices" ).change(function() {
-        var lengthcode=6;
-        var invoices=$('#invoices').val();
+    $( "#sales" ).change(function() {
+        var sales=$('#sales').val();
         jQuery.ajax({
             type: "post",
-            url:"<?=admin_url()?>receipts/get_invoices_id",
-            data: {invoices:invoices},
+            dataType: "json",
+            url:"<?=admin_url()?>receipts/get_sales_id",
+            data: {sales:sales},
             cache: false,
             success: function (result){
-            result = JSON.parse(result);
                 console.log(result);
-                $('#total').val(result.total);
-                $('#discount').val(result.subtotal-result.total);
-                $('#subtotal').val(result.subtotal);
+                $('#total').val(formatNumber(result.money));
+                $('#discount').val(formatNumber(result.money_tax));
+                $('#subtotal').val(formatNumber(result.total));
             }
         });
         return false;

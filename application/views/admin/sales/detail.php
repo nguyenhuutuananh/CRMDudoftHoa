@@ -12,7 +12,7 @@
       <div class="clearfix"></div>
         <?php 
         } ?>
-  <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_sale_order_') : _l('add_sale_order_')); ?></h4>
+  <h4 class="bold no-margin"><?php echo (isset($item) ? _l('edit_sale_order_so') : _l('add_sale_order_so')); ?></h4>
 
   <hr class="no-mbot no-border" />
   <div class="row">

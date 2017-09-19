@@ -9,12 +9,12 @@ $plan_status=array(
 $aColumns     = array(
     '1',
     'tblquotes.code',
-    'company',
-    'total',
-    '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
-    'status',
+    'tblquotes.company',
+    'tblquotes.total',
+    '(SELECT fullname FROM tblstaff WHERE tblquotes.create_by=tblstaff.staffid)',
+    'tblquotes.status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
-    'date'
+    'tblquotes.date'
 );
 if($customer_id)
 {
@@ -56,9 +56,10 @@ if($this->_instance->input->post()) {
 }
 
 $join         = array(
-    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by',
-    'LEFT JOIN tblclients  ON tblclients.userid=tblquotes.customer_id'
+    'LEFT JOIN tblclients ON tblclients.userid = tblquotes.customer_id',
+    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by'
 );
+
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'prefix',
@@ -66,10 +67,8 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where
     'tblstaff.fullname',
     'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
 ));
-
 $output       = $result['output'];
 $rResult      = $result['rResult'];
-//var_dump($rResult);die();
 
 
 $j=0;
@@ -114,7 +113,7 @@ foreach ($rResult as $aRow) {
                     $_data .= '<a href="javacript:void(0)">';
                 }
             }
-                $_data.='<i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['status']]) . '"></i>
+            $_data.='<i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['status']]) . '"></i>
                     </a>
                 </span>';
         }
@@ -125,15 +124,15 @@ foreach ($rResult as $aRow) {
             $_data            = '';
             $result = '';
             $as = 0;
-            for ($x=0; $x < count($confirms); $x++) { 
+            for ($x=0; $x < count($confirms); $x++) {
                 if($confirms[$x]!='')
                 {
                     $_data .= '<a href="' . admin_url('profile/' . $confirm_ids[$x]) . '">' . staff_profile_image($confirm_ids[$x], array(
-                        'staff-profile-image-small mright5'
-                    ), 'small', array(
-                        'data-toggle' => 'tooltip',
-                        'data-title' => $confirms[$x]
-                    )) . '</a>';
+                            'staff-profile-image-small mright5'
+                        ), 'small', array(
+                            'data-toggle' => 'tooltip',
+                            'data-title' => $confirms[$x]
+                        )) . '</a>';
                 }
             }
         }
@@ -145,22 +144,22 @@ foreach ($rResult as $aRow) {
             'title'=>_l('dt_button_print'),
             'data-placement'=>'top'));
         if($aRow['status']==2 && $aRow['export_status']!=1)
-        {           
+        {
             //Tao Hop Dong
             $_data .= icon_btn('quotes/contract_output/'. $aRow['id'] , 'exchange','btn-default',array(
-            'data-toggle'=>'tooltip',
-            'title'=>_l('create_contract'),
-            'data-placement'=>'top'
-            ));           
-            
+                'data-toggle'=>'tooltip',
+                'title'=>_l('create_contract'),
+                'data-placement'=>'top'
+            ));
+
         }
-          
+
         $_data .= icon_btn('quotes/quote_detail/'. $aRow['id'] , 'edit','btn-default',array('data-toggle'=>'tooltip',
-        'title'=>_l('edit'),
-        'data-placement'=>'top'));     
+            'title'=>_l('edit'),
+            'data-placement'=>'top'));
         $row[] =$_data.icon_btn('quotes/delete/'. $aRow['id'] , 'remove', 'btn-danger delete-remind',array('data-toggle'=>'tooltip',
-        'title'=>_l('delete'),
-        'data-placement'=>'top'));
+                'title'=>_l('delete'),
+                'data-placement'=>'top'));
     } else {
         $row[] = '';
     }

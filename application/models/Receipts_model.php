@@ -124,19 +124,21 @@ class Receipts_model extends CRM_Model
         $this->db->join('tblreceipts_contract','tblreceipts_contract.id_receipts=tblreceipts.id','left');
         return $this->db->get('tblreceipts')->row();
     }
-    public function get_invoices_receipts($id_client="")
+    public function get_sales_receipts($id_client="")
     {
         $getreceipts=$this->db->get('tblreceipts_contract')->result_array();
         $array_data=array();
         foreach($getreceipts as $rom)
         {
-            $array_data[]=$rom['invoices'];
+            $array_data[]=$rom['sales'];
         }
-        $this->db->select('tblinvoices.*');
-        $this->db->where('tblinvoices.clientid',$id_client);
-        $this->db->where_not_in('id',$array_data);
-        $this->db->where('tblinvoices.status=2 or tblinvoices.status=3');
-        return $this->db->get('tblinvoices')->result_array();
+        $this->db->select('tblsales.*');
+        $this->db->where('tblsales.customer_id',$id_client);
+        if($array_data!=array())
+        {
+            $this->db->where_not_in('id',$array_data);
+        }
+        return $this->db->get('tblsales')->result_array();
     }
     public function get_vouchers()
     {

@@ -9,6 +9,7 @@ class Sale_orders extends Admin_controller
         $this->load->model('invoice_items_model');
         $this->load->model('clients_model');
         $this->load->model('warehouse_model');
+        $this->load->model('receipts_model');
     }
     
 
@@ -70,7 +71,7 @@ class Sale_orders extends Admin_controller
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('sales'));
+            $title = _l('add_new', _l('sales_po'));
       
         } 
         else 
@@ -106,11 +107,13 @@ class Sale_orders extends Admin_controller
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
 
-        $data['customers']= $this->clients_model->get('',$where_clients);
+        $data['tk_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
+        $data['tk_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
+
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
         $data['warehouses']= $this->warehouse_model->getWarehouses();
-
+        $data['customers']= $this->clients_model->get('',$where_clients);
         $data['title'] = $title;
         $this->load->view('admin/sales/order_detail', $data);
     }
@@ -153,7 +156,9 @@ class Sale_orders extends Admin_controller
         $data['receivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         
         $data['customers'] = $this->clients_model->get('', $where_clients);
-        $data['items']= $this->invoice_items_model->get_full(); 
+        $data['items']= $this->invoice_items_model->get_full();
+        $data['tk_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
+        $data['tk_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
 
         $data['title'] = _l('Tạo phiếu bán hàng(SO)');        
         $this->load->view('admin/sales/order_export_detail', $data);
