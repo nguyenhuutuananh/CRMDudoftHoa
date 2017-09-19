@@ -4,7 +4,7 @@ if($client)
 {
     $aColumns = array(
 //        'tblcontracts.id',
-        'CONCAT(prefix,code) as code',
+        'CONCAT(prefix,tblcontracts.code) as code',
         'contract_type',
         'contract_value',
         'datestart',
@@ -14,7 +14,7 @@ if($client)
 else
 {
     $aColumns = array('tblcontracts.id',
-        'CONCAT(prefix,code) as code',
+        'CONCAT(prefix,tblcontracts.code) as code',
         'CASE company WHEN "" THEN (SELECT CONCAT(firstname, " ", lastname) FROM tblcontacts WHERE userid = tblclients.userid and is_primary = 1) ELSE company END as company',
         'contract_type',
         'contract_value' ,

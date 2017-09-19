@@ -15,7 +15,7 @@ class Quotes extends Admin_controller
     public function index() 
     {
         if ($this->input->is_ajax_request()) {
-            $this->perfex_base->get_table_data('quotes');
+            $this->perfex_base->get_table_data('quotes');die();
         }
         $data['title'] = _l('quote_list');
         $this->load->view('admin/quotes/manage', $data);
@@ -136,7 +136,7 @@ class Quotes extends Admin_controller
         $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
         $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
 
-        $data['warehouses']=$this->warehouse_model->getWarehousesArrayByType($data['warehouse_type_id']);
+        $data['warehouses']=$this->warehouse_model->getWarehouses();
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
 
         $where_clients = 'tblclients.active=1';

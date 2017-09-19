@@ -7,22 +7,20 @@ $custom_fields = get_custom_fields('customers', array(
 
 $aColumns = array(
     '1',
-    'code',
     'company',
     'tblclients.phonenumber',
-    'tblclients.address',
-    'tblclients.email',
-    'birthday',
-    'client_type',
-    'tblleadssources.name',
     'tblcontacts.id',
+    'tblclients.email',
+    
+    'tblclients.address',
     '(SELECT GROUP_CONCAT((select tblstaff.staff_code from tblstaff where tblstaff.staffid = tblcustomeradmins.staff_id) SEPARATOR ", ") FROM tblcustomeradmins where tblcustomeradmins.customer_id = tblclients.userid)',
+
+    'tblclients.active',
     '(SELECT GROUP_CONCAT(name) FROM tblcustomersgroups LEFT JOIN tblcustomergroups_in ON tblcustomergroups_in.groupid = tblcustomersgroups.id WHERE customer_id = tblclients.userid)'
 );
 
 $join = array();
 array_push($join, 'LEFT JOIN tblcontacts ON tblcontacts.userid=tblclients.userid AND tblcontacts.is_primary=1');
-array_push($join, 'LEFT JOIN tblleadssources ON tblleadssources.id=tblclients.source_approach');
 $i = 0;
 foreach ($custom_fields as $field) {
     $select_as = 'cvalue_' . $i;
@@ -138,7 +136,6 @@ if (count($custom_fields) > 4) {
 
 $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
     'tblclients.userid',
-    'tblleadssources.name',
     'firstname',
     'lastname'
 ));
@@ -157,7 +154,7 @@ foreach ($rResult as $aRow) {
 
         if ($aColumns[$i] == '1') {
             $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['userid'] . '"><label></label></div>';
-        } else if ($i == 11) {
+        } else if ($i == 8) {
             if ($_data != '') {
                 $groups = explode(',', $_data);
                 $_data  = '';
@@ -165,49 +162,34 @@ foreach ($rResult as $aRow) {
                     $_data .= '<span class="label label-default mleft5 inline-block">' . $group . '</span>';
                 }
             }
-        }
-        else if ($aColumns[$i] == 'company') {
+        } else if ($aColumns[$i] == 'company') {
             if ($aRow['company'] == '') {
                 $aRow['company'] = _l('no_company_view_profile');
             }
             $_data = '<a onclick="init_client_modal_data('.$aRow['userid'].');return false;" href="' . admin_url('clients/client/' . $aRow['userid']) . '">' . $aRow['company'] . '</a>';
 
-        }
-        else if ($aColumns[$i] == 'client_type') {
-            if ($aRow['client_type'] == '1') {
-                $aRow['client_type'] = _l('personal');
-            }
-            else
-            {
-                $aRow['client_type'] = _l('organization');
-            }
-            $_data ='<span class="label label-default mleft5 inline-block">'.$aRow['client_type'].'</span>';
-
-        }
-        else if ($aColumns[$i] == 'code') {
-            if ($aRow['code'] == '') {
-                $aRow['code'] = _l('no_company_view_profile');
-            }
-            $_data = '<a onclick="init_client_modal_data('.$aRow['userid'].');return false;" href="' . admin_url('clients/client/' . $aRow['userid']) . '">' . $aRow['code'] . '</a>';
-
-        }
-        else if ($aColumns[$i] == 'tblleadssources.name') {
-            $_data = $aRow['tblleadssources.name'];
-
-        }
-        else if ($aColumns[$i] == 'tblcontacts.id') {
-            $_data = $aRow['firstname'].' '.$aRow['lastname'];
-
-        }
-        else if ($aColumns[$i] == 'tblclients.phonenumber') {
+        } else if ($aColumns[$i] == 'tblclients.phonenumber') {
             $_data = '<a href="tel:' . $_data . '">' . $_data . '</a>';
         } else if ($aColumns[$i] == $aColumns[4]) {
             $_data = '<a href="mailto:' . $_data . '">' . $_data . '</a>';
-        } else if ($i == 4) {
+        } else if ($i == 3) {
             // primary contact add link
             $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid'] . '?contactid=' . get_primary_contact_user_id($aRow['userid'])) . '" target="_blank">' . $aRow['firstname'] . ' ' . $aRow['lastname'] . '</a>';
-        }
-       else if($i == 6) {
+        } else if ($aColumns[$i] == 'tblclients.active') {
+            $checked = '';
+            if ($aRow['tblclients.active'] == 1) {
+                $checked = 'checked';
+            }
+
+            $_data = '';
+            $_data .= '<div class="onoffswitch" data-toggle="tooltip" data-title="' . _l('customer_active_inactive_help') . '">
+            <input type="checkbox" data-switch-url="' . admin_url().'clients/change_client_status" name="onoffswitch" class="onoffswitch-checkbox" id="' . $aRow['userid'] . '" data-id="' . $aRow['userid'] . '" ' . $checked . '>
+            <label class="onoffswitch-label" for="' . $aRow['userid'] . '"></label>
+        </div>';
+            // For exporting
+            $_data .= '<span class="hide">' . ($checked == 'checked' ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
+            // $_data .= '</div>';
+        } else if($i == 6) {
             //$_data = "x1";
         } else {
             if (strpos($aColumns[$i], 'date_picker_') !== false) {

@@ -10,7 +10,7 @@ class Quotes_model extends CRM_Model
 
     public function getQuoteByID($id = '')
     {
-        $this->db->select('tblquotes.*,tblstaff.fullname as creater,(SELECT fullname  FROM tblstaff WHERE user_head_id=tblstaff.staffid) as head,(SELECT fullname  FROM tblstaff WHERE user_admin_id=tblstaff.staffid) as admin,tblclients.company as customer_name');
+        $this->db->select('tblquotes.*,tblstaff.fullname as creater,(SELECT fullname  FROM tblstaff WHERE user_head_id=tblstaff.staffid) as head,(SELECT fullname  FROM tblstaff WHERE user_admin_id=tblstaff.staffid) as admin,tblclients.company as customer_name,tblroles.name as department');
         $this->db->from('tblquotes');
         $this->db->join('tblstaff','tblstaff.staffid=tblquotes.create_by','left');//,tblsales.date as order_date
         $this->db->join('tblclients','tblclients.userid=tblquotes.customer_id','left');
@@ -32,12 +32,13 @@ class Quotes_model extends CRM_Model
 
     public function getQuoteItems($id)
     {
-        $this->db->select('tblquote_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id, tblitems.prefix,tblitems.code, tblitems.warranty, tblitems.specification,tblcountries.short_name as made_in,tblitems.avatar as image,tbltaxes.name as tax_name');
+        $this->db->select('tblquote_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id, tblitems.prefix,tblitems.code, tblitems.warranty, tblitems.specification,tblcountries.short_name as made_in,tblitems.avatar as image,tbltaxes.name as tax_name,tblcategories.category,tblitems.short_name,tblitems.product_features,tblitems.size');
         $this->db->from('tblquote_items');
         $this->db->join('tblitems','tblitems.id=tblquote_items.product_id','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');
         $this->db->join('tblcountries','tblcountries.country_id=tblitems.country_id','left');
         $this->db->join('tbltaxes','tbltaxes.id=tblitems.tax','left');
+        $this->db->join('tblcategories','tblcategories.id=tblitems.category_id','left');
         $this->db->where('quote_id', $id);
         $items = $this->db->get()->result();
         return $items;

@@ -124,6 +124,8 @@
                         echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse, array('disabled'=>'disabled'));
                     ?>
                 </div>
+
+                
                 
                 
                 
@@ -162,11 +164,12 @@
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
+                                        
                                         <th class="text-left">Tỷ giá</th>
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -184,6 +187,21 @@
                                         <td>
                                             <?php echo _l('item_name'); ?>
                                         </td>
+                                        <!-- TKno -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_no : '');
+                                            echo render_select('tk_no',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TKCo -->
+
+                                        <td>
+                                            <?php
+                                            $selected=(isset($item) ? $item->tk_co : '');
+                                            echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
                                             <?php echo _l('item_unit'); ?>
@@ -192,16 +210,7 @@
                                         <td>
                                             <input style="width: 100px" class="mainQuantity" type="number" min="1" value="1"  class="form-control" placeholder="<?php echo _l('item_quantity'); ?>">
                                         </td>
-                                        <td>
-                                        <?php 
-                                            echo render_select('select_kindof_warehouse', $warehouse_types, array('id', 'name'));
-                                        ?>
-                                        </td>
-                                        <td>
-                                        <?php 
-                                            echo render_select('select_warehouse', array(), array('id', 'name'));
-                                        ?>
-                                        </td>
+                                        
                                         <td>
                                         <?php
                                             echo render_input('items['.$i.'][exchange_rate]', '', 1);
@@ -236,13 +245,31 @@
                                     if(isset($item) && count($item->products) > 0) {
                                         foreach($item->products as $value) {
                                             $value = (array)$value;
+
                                         ?>
                                     <tr class="sortable item">
                                         <td>
                                             <input type="hidden" name="items[<?php echo $i; ?>][product_id]" value="<?php echo $value['product_id']; ?>">
                                         </td>
                                         <td class="dragger"><?php echo $value['name']; ?></td>
-                                        <td><?php echo $value['unit_name']; ?></td>
+                                        <!-- TK NO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value['tk_no'] : '');
+                                            echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value['tk_co'] : '');
+                                            echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <td><?php echo $value['unit_name']; ?>
+                                            <input type="hidden" name="items[<?=$i?>][warehouse]" data-store="<?=$value['warehouse_type']->maximum_quantity-$value['warehouse_type']->total_quantity ?>" value="<?=$value['warehouse_id']?>" >
+
+                                        </td>
                                         <?php
                                         $err='';
                                         $style='';
@@ -256,8 +283,7 @@
                                         <input <?=($lock ? "disabled=\"disabled\"":"")?> style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                         </td>
                                             
-                                        <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
-                                        <td><input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?=$value['warehouse_type']->maximum_quantity?>)</td>
+                                        
                                         <td>
                                         <?php
                                             $array_disabled = array();
@@ -383,7 +409,7 @@
     $('#select_currency').removeAttr('name');
     var createTrItem = () => {
         if(!isNew) return;
-        if(!$('tr.main #select_warehouse option:selected').length || $('tr.main #select_warehouse option:selected').val() == '') {
+        if(!$('#id_warehouse option:selected').length || $('#id_warehouse option:selected').val() == '') {
             alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
             return;
         }
@@ -408,29 +434,40 @@
         
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][product_id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
-        var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+
+        var td3=$('<td></td>');
+        var td4=$('<td></td>');
+
         var td5 = $('<td></td>');
-        var td6 = $('<td></td>');
-        var td7 = $('<td><input class="mainExchange_Rate" type="number" name="items[' + uniqueArray + '][exchange_rate]" value="" /></td>');
+        var td6 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td7 = $('<td><input class="form-control mainExchange_Rate" type="number" name="items[' + uniqueArray + '][exchange_rate]" value="" /></td>');
         var td8 = $('<td></td>');
-		var td9 = $('<td></td>');
+        var td9 = $('<td></td>');
         var td10 = $('<td></td>');
-        var td11 = $('<td></td>');
-        var td12 = $('<td></td>')
+		var td11 = $('<td></td>');
+        var td12 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
-        td3.text($('tr.main').find('td:nth-child(3)').text());
-		td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
+
+        var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
+        selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+        selectTd3.removeAttr('id');
+        var tk_no='items['+uniqueArray+'][tk_no]';
+        selectTd3.attr('name',tk_no);
+        td3.append(selectTd3);
+
+        var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
+        selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+        selectTd4.removeAttr('id');
+        var tk_co='items['+uniqueArray+'][tk_co]';
+        selectTd4.attr('name',tk_co);
+        td4.append(selectTd4);
+
+        td5.text($('tr.main').find('td:nth-child(5)').text());
+        td5.append('<input type="hidden" data-store="'+$('#id_warehouse option:selected').attr('data-store')+'" name="item[' + uniqueArray + '][warehouse]" value="'+$('#id_warehouse option:selected').val()+'" />');
+		td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
         
-		//td5.text( $('tr.main').find('td:nth-child(5)').text());
-        
-		td5.text( $('tr.main').find('td:nth-child(5) select option:selected').text());
-        td6.append('<input type="hidden" data-store="'+$('tr.main').find('td:nth-child(6) select option:selected').data('store')+'" name="items[' + uniqueArray + '][warehouse]" value="'+$('tr.main').find('td:nth-child(6) select option:selected').val()+'" />');
-        td6.append($('tr.main').find('td:nth-child(6) select option:selected').text());
-        
-        console.log($('tr.main').find('td:nth-child(7) input'));
         td7.find('input').val($('tr.main').find('td:nth-child(7) input').val());
 
         let objCurrency = $('tr.main').find('td:nth-child(8)').find('select').clone(); 
@@ -448,13 +485,15 @@
 
 		newTr.append(td1);
         newTr.append(td2);
+
         newTr.append(td3);
         newTr.append(td4);
+
         newTr.append(td5);
-        newTr.append(td6);
-        newTr.append(td7);
+        newTr.append(td6);        
+		newTr.append(td7);
         newTr.append(td8);
-		newTr.append(td9);
+        newTr.append(td9);
         newTr.append(td10);
         newTr.append(td11);
         newTr.append(td12);
@@ -512,16 +551,20 @@
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
-            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
-            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-            trBar.find('td:nth-child(4) > input').val(1);
-            trBar.find('td:nth-child(5)');
-            trBar.find('td:nth-child(6)');
+
+            trBar.find('td:nth-child(3)');
+            trBar.find('td:nth-child(4)');
+
+            trBar.find('td:nth-child(5)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(5) > input').val(itemFound.unit);
+            trBar.find('td:nth-child(6) > input').val(1);
             trBar.find('td:nth-child(7)');
             trBar.find('td:nth-child(8)');
+            trBar.find('td:nth-child(9)');
             trBar.find('td:nth-child(10)');
             trBar.find('td:nth-child(11)').text(itemFound.tax_rate+'%');
             trBar.find('td:nth-child(12)');
+            
             isNew = true;
             $('#btnAdd').show();
         }
@@ -533,6 +576,27 @@
     $('#select_warehouse').on('change', (e)=>{
         if($(e.currentTarget).val() != '') {
             $(e.currentTarget).parents('tr').find('input.mainQuantity').attr('data-store', $(e.currentTarget).find('option:selected').data('store'));
+        }
+    });
+    $('#id_warehouse,#custom_item_select').on('change', function(e){
+        var warehouse_id=$('#id_warehouse').val();
+        var product_id=$('#custom_item_select').val();
+        var maxquanitty=0;
+        //Change option warehouse
+        if($.isNumeric(warehouse_id) && $.isNumeric(product_id)) {
+            $.ajax({
+                url : admin_url + 'warehouses/getQuantityPIW/' + warehouse_id + '/' + product_id,
+                dataType : 'json',
+            })
+            .done(function(data){
+                if(data!=null && data!=false)
+                {
+                    maxquanitty=data.maximum_quantity-data.total_quantity;
+                    $('#id_warehouse option:selected').attr('data-store',maxquanitty);  
+                }
+                //Change data-store mainQuantity Input
+                $('table tbody tr.main').find('input.mainQuantity').attr('data-store',maxquanitty);
+            });
         }
     });
 	var calculateTotal = (currentInput) => {

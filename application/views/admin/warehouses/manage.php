@@ -7,21 +7,16 @@
                     <div class="panel-body _buttons">
                         <a href="<?php echo admin_url() . "invoice_items/summary" ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Danh sách sản phầm trong kho'); ?></a>
                         <a href="#" onclick="new_warehouse(); return false;" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Thêm kho mới'); ?></a>
-                        <a href="<?php echo admin_url() . "kind_of_warehouse" ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Loại kho'); ?></a>
+                        
                     </div>
                 </div>
                 <div class="panel_s">
                     <div class="panel-body">
                         
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <?php 
-                                echo render_select('filter_kindof_warehouse', $kind_of_warehouse, array('id', 'name'), 'Loại kho');
-                            ?>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <?php echo render_select('product_category', $categories, array('id', 'category'), 'Danh mục cha'); ?>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <?php echo render_select('products', array(), array('id', 'category'), 'Sản phẩm'); ?>
                         </div>
 
@@ -37,7 +32,6 @@
                             _l('Tên kho'),
                             _l('Địa chỉ'),
                             _l('Điện thoại'),
-                            _l('Loại kho'),
                             _l('options')
                         ),'warehouses'); ?>
                     </div>
@@ -73,9 +67,7 @@
                         <?php echo render_input('phone','Điện thoại'); ?>
                     </div>
                     <div class="col-md-12">
-                    <?php 
-                        echo render_select('kindof_warehouse', $kind_of_warehouse, array('id', 'name'), 'Loại kho');
-                    ?>
+                    
 
                     <div class="form-group">
                         <label for="warehouse_can_export"  class="control-label"><?php echo _l('Kho hàng có thể bán'); ?></label><br>
@@ -162,7 +154,6 @@
                     $('#warehouse').val(json.warehouse);
                     $('#address').val(json.address);
                     $('#phone').val(json.phone);
-                    $('#kindof_warehouse').selectpicker('val', json.kindof_warehouse);
                     if(json.warehouse_can_export==1) {
                         $('input[id="yes"]').prop('checked', 'checked');
                     }
@@ -172,7 +163,6 @@
         });
     }
     var filterList = {
-        "kind_of_warehouse" : "[name='filter_kindof_warehouse']",
         "product_category"  : "[name='product_category']",
         "products"          : "[name='products']",
     };

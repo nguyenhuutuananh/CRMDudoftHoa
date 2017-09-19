@@ -38,8 +38,10 @@ class Purchase_contracts extends Admin_controller
                 }
                 $data['item'] = $contract;
                 foreach($data['item']->products as $key=>$value) {
-                    $data['item']->products[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
+                    $warehouse_id=$value->warehouse_id;
+                    $data['item']->products[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
                 }
+                $data['warehouse_id']=$warehouse_id;
                 $contract_merge_fields  = get_available_merge_fields();
                 $_contract_merge_fields = array();
                 foreach ($contract_merge_fields as $key => $val) {
@@ -63,7 +65,7 @@ class Purchase_contracts extends Admin_controller
                 }
                 $data['contract_merge_fields'] = $_contract_merge_fields;
                 $data['order'] = $order;
-                
+                $data['warehouses']= $this->warehouse_model->getWarehouses();
                 $content = $this->load->view('admin/purchase_contracts/view', $data, true);
                 exit($content);
             }

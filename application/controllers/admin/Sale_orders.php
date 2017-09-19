@@ -109,7 +109,7 @@ class Sale_orders extends Admin_controller
         $data['customers']= $this->clients_model->get('',$where_clients);
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
-        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
+        $data['warehouses']= $this->warehouse_model->getWarehouses();
 
         $data['title'] = $title;
         $this->load->view('admin/sales/order_detail', $data);
@@ -155,7 +155,7 @@ class Sale_orders extends Admin_controller
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full(); 
 
-        $data['title'] = _l('Tạo phiếu xuất kho');        
+        $data['title'] = _l('Tạo phiếu bán hàng(SO)');        
         $this->load->view('admin/sales/order_export_detail', $data);
     }
 

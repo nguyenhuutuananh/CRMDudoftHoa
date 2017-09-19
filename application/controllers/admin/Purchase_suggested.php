@@ -58,10 +58,11 @@ class Purchase_suggested extends Admin_controller
             $data['purchase_suggested'] = $this->purchase_suggested_model->get($id);
             
             foreach($data['purchase_suggested']->items as $key=>$value) {
-                $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
+                $warehouse_id=$value->warehouse_id;
+                $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
             }
         }
-        
+        $data['warehouse_id']=$warehouse_id;
         $this->load->view('admin/purchase_suggested/detail', $data);
     }
     public function detail_pdf($id='') {

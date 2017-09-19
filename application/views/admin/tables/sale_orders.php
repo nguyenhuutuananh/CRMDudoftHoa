@@ -8,7 +8,7 @@ $plan_status=array(
 
 $aColumns     = array(
     '1',
-    'code',
+    'tblsale_orders.code',
     'rel_code',
     'company',
     'total',
@@ -66,8 +66,8 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == '1') {
             $_data=$j;
         }
-        if ($aColumns[$i] == 'code') {
-            $_data=$aRow['prefix'].$aRow['code'];
+        if ($aColumns[$i] == 'tblsale_orders.code') {
+            $_data=$aRow['prefix'].$aRow['tblsale_orders.code'];
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);

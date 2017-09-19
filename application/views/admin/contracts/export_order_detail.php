@@ -114,13 +114,7 @@
                             <!-- <div class="panel-body mtop10"> -->
                             
                         <div class="row">
-                            <div class="col-md-4">
-                                <?php 
-
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,array('disabled'=>true));
-                                    echo form_hidden('warehouse_type',$warehouse_type_id);
-                                ?>
-                            </div>
+                            
                             <div class="col-md-4">
                                 <?php 
                                     echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,array('disabled'=>true));

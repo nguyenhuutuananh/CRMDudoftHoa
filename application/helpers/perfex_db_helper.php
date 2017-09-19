@@ -982,7 +982,6 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = array(), $w
     $sLimit
     ";
 
-
     $rResult = $CI->db->query($sQuery)->result_array();
 
     /* Data set length after filtering */
@@ -1674,23 +1673,4 @@ function get_item_groups() {
     $CI =& get_instance();
     $groups = $CI->db->get('tblitems_groups')->result_array();
     return $groups;
-}
-
-function get_table_where($table, $where = array(),$order_by="")
-{
-    $CI =& get_instance();
-    if($where!=array())
-    {
-        $CI->db->where($where);
-    }
-    if($order_by!="")
-    {
-        $CI->db->order_by($order_by);
-    }
-    $result=$CI->db->get($table)->result_array();
-    if ($result) {
-        return $result;
-    } else {
-        return array();
-    }
 }

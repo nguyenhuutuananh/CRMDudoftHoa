@@ -118,7 +118,7 @@
                                   <?php } ?>
                             </div>
                     <?php
-                    $default_name = (isset($purchase_suggested) ? $purchase_suggested->name : "");
+                    $default_name = (isset($purchase_suggested) ? $purchase_suggested->name : _l('purchase_suggest_name'));
                     echo render_input('name', _l('purchase_suggested_name'), $default_name);
                     ?>
                     <?php
@@ -141,9 +141,16 @@
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                     <?php if(!empty($purchase_suggested->rel_id) || !empty($purchase_suggested->rel_code)){ $display='style="display: none;"';  }?>
-                        <div class="row" <?=$display?> >
+                        <div class="row" >
                             <div class="col-md-4">
+                                <?php
+                                $selected=(isset($warehouse_id)? $warehouse_id:'');
+                                 echo render_select('warehouse_id', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$selected);
+                                ?>
+                            </div>
+                            <div class="col-md-4" <?=$display?>>
                                 <div class="form-group mbot25">
+                                    <label for="custom_item_select"><?=_l('item_name')?></label>
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
 
@@ -173,8 +180,6 @@
                                         <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
@@ -199,16 +204,7 @@
                                         <td>
                                             <input style="width: 100px" class="mainQuantity" type="number" min="1" value="1"  class="form-control" placeholder="<?php echo _l('item_quantity'); ?>">
                                         </td>
-                                        <td>
-                                            <?php 
-                                                echo render_select('select_kindof_warehouse', $warehouse_types, array('id', 'name'));
-                                            ?>
-                                        </td>
-                                        <td>
-                                        <?php 
-                                            echo render_select('select_warehouse', array(), array('id', 'name'));
-                                        ?>
-                                        </td>
+                                        
                                         <td>
                                             <?php
                                             echo render_select('select_currency', $currencies, array('id', 'name'), '', '', array(), array(), '', '', false);
@@ -244,7 +240,9 @@
                                             <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value['product_id']; ?>">
                                         </td>
                                         <td class="dragger"><?php echo $value['name']; ?></td>
-                                        <td><?php echo $value['unit_name']; ?></td>
+                                        <td><?php echo $value['unit_name']; ?>
+                                            <input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity-$value['warehouse_type']->total_quantity ?>" name="item[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>">
+                                        </td>
                                         <?php
                                         $err='';
                                         $style='';
@@ -258,8 +256,7 @@
                                         <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                         </td>
                                             
-                                        <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
-                                        <td><input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?=$value['warehouse_type']->maximum_quantity?>)</td>
+                                        
                                         <td>
                                             <?php echo render_select('items['.$i.'][currency]', $currencies, array('id', 'name'), '', $value['currency_id']); ?>
                                         </td>
@@ -359,15 +356,15 @@
     $('#select_currency').removeAttr('name');
     var createTrItem = () => {
         if(!isNew) return;
-        if(!$('tr.main #select_warehouse option:selected').length || $('tr.main #select_warehouse option:selected').val() == '') {
+        if(!$('#warehouse_id option:selected').length || $('#warehouse_id option:selected').val() == '') {
             alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
             return;
         }
-		if(!$('tr.main #select_currency option:selected').length || $('tr.main #select_currency option:selected').val() == '') {
+        if(!$('tr.main #select_currency option:selected').length || $('tr.main #select_currency option:selected').val() == '') {
             alert_float('danger', "Vui lòng chọn tiền tệ cho sản phẩm!");
             return;
         }
-		if($.trim($('tr.main .mainPriceBuy').val()) == '') {
+        if($.trim($('tr.main .mainPriceBuy').val()) == '') {
             alert_float('danger', "Vui lòng chọn giá nhập cho sản phẩm!");
             return;
         }
@@ -376,47 +373,45 @@
             alert_float('danger', "Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!");
             return;
         }
-        if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #select_warehouse option:selected').data('store')) {
-            alert_float('danger', 'Kho ' + $('tr.main #select_warehouse option:selected').text() + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
+        var maxQ=$('#warehouse_id option:selected').attr('data-store');
+        var strMaxQ='(' + 'Nhập tối đa ' + maxQ + ')';
+        if($('tr.main').find('td:nth-child(4) > input').val() > $('#warehouse_id option:selected').attr('data-store')) {
+            alert_float('danger', 'Kho ' + $('#warehouse_id option:selected').text() + strMaxQ + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
             return;
         }
+
         var newTr = $('<tr class="sortable item"></tr>');
         
-        var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
+        var td1 = $('<td><input type="hidden" name="item[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="item[' + uniqueArray + '][quantity]" value="" /></td>');
         var td5 = $('<td></td>');
         var td6 = $('<td></td>');
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
-		var td9 = $('<td></td>');
-        var td10 = $('<td></td>');
-        var td11 = $('<td></td>');
+        var td9 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
         td3.text($('tr.main').find('td:nth-child(3)').text());
-		td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
+        td3.append('<input type="hidden" data-store="'+$('#warehouse_id option:selected').attr('data-store')+'" name="item[' + uniqueArray + '][warehouse]" value="'+$('#warehouse_id option:selected').val()+'" />');
+        td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
         
-		//td5.text( $('tr.main').find('td:nth-child(5)').text());
-        
-		td5.text( $('tr.main').find('td:nth-child(5) select option:selected').text());
-        td6.append('<input type="hidden" data-store="'+$('tr.main').find('td:nth-child(6) select option:selected').data('store')+'" name="items[' + uniqueArray + '][warehouse]" value="'+$('tr.main').find('td:nth-child(6) select option:selected').val()+'" />');
-        td6.append($('tr.main').find('td:nth-child(6) select option:selected').text());
-        let objCurrency = $('tr.main').find('td:nth-child(7)').find('select').clone(); 
-		objCurrency.attr('name', 'items[' + uniqueArray + '][currency]');
-		objCurrency.removeAttr('id').val($('tr.main').find('td:nth-child(7)').find('select').selectpicker('val'));
+        let objCurrency = $('tr.main').find('td:nth-child(5)').find('select').clone(); 
+        objCurrency.attr('name', 'item[' + uniqueArray + '][currency]');
+        objCurrency.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
 
-		td7.append(objCurrency);
-		let objPriceBuy = $('tr.main').find('td:nth-child(8)').find('input').clone(); 
-		objPriceBuy.attr('name', 'items[' + uniqueArray + '][price_buy]');
-		objPriceBuy.removeAttr('id');
-		td8.append(objPriceBuy);
+        td5.append(objCurrency);
+        let objPriceBuy = $('tr.main').find('td:nth-child(6)').find('input').clone(); 
+        objPriceBuy.attr('name', 'item[' + uniqueArray + '][price_buy]');
+        objPriceBuy.removeAttr('id');
+        td6.append(objPriceBuy);
+        td7.append($('tr.main').find('td:nth-child(7)').text());
+        td8.append($('tr.main').find('td:nth-child(8)').text());
         td9.append($('tr.main').find('td:nth-child(9)').text());
-        td10.append($('tr.main').find('td:nth-child(10)').text());
 
-		newTr.append(td1);
+        newTr.append(td1);
         newTr.append(td2);
         newTr.append(td3);
         newTr.append(td4);
@@ -424,10 +419,7 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
-		newTr.append(td9);
-        newTr.append(td10);
-        newTr.append(td11);
-
+        newTr.append(td9);
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
         total++;
@@ -464,17 +456,35 @@
         
 		$('.selectpicker').selectpicker('refresh');
 	};
+
+    $('#warehouse_id,#custom_item_select').on('change', function(e){
+        var warehouse_id=$('#warehouse_id').val();
+        var product_id=$('#custom_item_select').val();
+        var maxquanitty=0;
+        //Change option warehouse
+        if($.isNumeric(warehouse_id) && $.isNumeric(product_id)) {
+            $.ajax({
+                url : admin_url + 'warehouses/getQuantityPIW/' + warehouse_id + '/' + product_id,
+                dataType : 'json',
+            })
+            .done(function(data){
+                if(data!=null && data!=false)
+                {
+                    maxquanitty=data.maximum_quantity-data.total_quantity;
+                    console.log(data.maximum_quantity+' '+data.total_quantity+' '+product_id)
+                    $('#warehouse_id option:selected').attr('data-store',maxquanitty);  
+                }
+                //Change data-store mainQuantity Input
+                $('table tbody tr.main').find('input.mainQuantity').attr('data-store',maxquanitty);
+            });
+        }
+    });
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
 
-        $('#select_kindof_warehouse').val('');
-        $('#select_kindof_warehouse').selectpicker('refresh');
 		$('#select_currency').find('option:first').attr('selected', 'selected');
         $('#select_currency').selectpicker('refresh');
-        var warehouse_id=$('#select_warehouse');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
 
         if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.main');
@@ -488,9 +498,7 @@
             trBar.find('td:nth-child(5)');
             trBar.find('td:nth-child(6)');
             trBar.find('td:nth-child(7)');
-            trBar.find('td:nth-child(8)');
-            trBar.find('td:nth-child(10)').text(itemFound.tax_rate + " %");
-            trBar.find('td:nth-child(11)');
+            trBar.find('td:nth-child(8)').text(itemFound.tax_rate + " %");
             isNew = true;
             $('#btnAdd').show();
         }

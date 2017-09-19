@@ -124,6 +124,7 @@ class Warehouse_model extends CRM_Model
         if (is_numeric($warehouse_type) && is_numeric($filter_product) && $filter_product > 0) 
         {
             // Khi cần các kho không chứa thì sẽ không lọc
+            
             if(!$includeDoesntContain){
                 $this->db->join('tblwarehouses_products', 'tblwarehouses_products.warehouse_id=tblwarehouses.warehouseid');
                 $this->db->where('tblwarehouses_products.product_id', $filter_product);
@@ -146,6 +147,26 @@ class Warehouse_model extends CRM_Model
             $warehouses = $this->db->get()->result();
         }
         return $warehouses;
+    }
+
+    public function getQuantityProductInWarehouses($warehouse_id, $product_id)
+    {
+        if(is_numeric($warehouse_id) && is_numeric($product_id))
+        {
+            $this->db->select('*');
+            $this->db->from('tblwarehouses_products');
+            $this->db->join('tblitems', 'tblitems.id = tblwarehouses_products.product_id', 'left');
+            $this->db->where('tblwarehouses_products.product_id', $product_id);
+            $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
+            $result=$this->db->get()->row();
+            if($result)
+            {
+                $this->db->select_sum('product_quantity');
+                $result->total_quantity=$this->db->get_where('tblwarehouses_products',array('product_id'=>$product_id))->row()->product_quantity;
+            }
+            return $result;
+        }
+        return false;
     }
 
     public function getProductQuantity($warehouse_id = '', $product_id='')

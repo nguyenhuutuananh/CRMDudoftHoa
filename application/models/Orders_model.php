@@ -28,7 +28,7 @@ class Orders_model extends CRM_Model
     }
     public function get_detail($order_id) {
         if(is_numeric($order_id)) {
-            $this->db->select('tblorders_detail.*, tblunits.*, tblitems.*, tblorders_detail.product_price_buy as price_buy');
+            $this->db->select('tblorders_detail.*, tblunits.unitid, tblunits.unit as unit_name, tblitems.*, tblorders_detail.product_price_buy as price_buy');
             $this->db->where('order_id', $order_id);
             $this->db->join('tblitems',     'tblitems.id = tblorders_detail.product_id', 'left');
             $this->db->join('tblunits',     'tblunits.unitid = tblitems.unit', 'left');
@@ -43,6 +43,8 @@ class Orders_model extends CRM_Model
             if($order) {
                 $items = $data['items'];
                 unset($data['items']);
+                unset($data['tk_no']);
+                unset($data['tk_co']);
                 $this->db->where('id', $id);
                 $this->db->update('tblorders', $data);
                 if(count($items) > 0) {
@@ -55,7 +57,10 @@ class Orders_model extends CRM_Model
                                 'currency_id' => $value['currency'],
                                 'warehouse_id' => $value['warehouse'],
                                 'exchange_rate' => $value['exchange_rate'],
+                                'tk_no' => $value['tk_no'],
+                                'tk_co' => $value['tk_co'],
                             );
+                            
                             $this->db->where('id', $item_exists->id);
                             $this->db->update('tblorders_detail', $data);
                         }
@@ -67,6 +72,8 @@ class Orders_model extends CRM_Model
                                 'product_price_buy' => $value['price_buy'],
                                 'currency_id' => $value['currency'],
                                 'warehouse_id' => $value['warehouse'],
+                                'tk_no' => $value['tk_no'],
+                                'tk_co' => $value['tk_co'],
                             );
                             $this->db->insert('tblorders_detail', $data);
                         }
@@ -91,9 +98,9 @@ class Orders_model extends CRM_Model
                 'converted' => '1',
             );
             $this->db->update('tblorders', $data_order);
-            
             $this->db->insert('tblpurchase_contracts', $data);
             if ($this->db->affected_rows() > 0) {
+                var_dump('bgfb');die();
                 $new_id = $this->db->insert_id();
                 return $new_id;
             }

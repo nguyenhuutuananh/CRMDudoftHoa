@@ -39,7 +39,7 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($item) ) { ?>
-                        <a href="<?php echo admin_url('purchase_contracts/detail_pdf/' . $item->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('purchase_contracts/pdf/' . $item->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
                         <a href="<?php echo admin_url('purchase_contracts/detail_pdf/' . $item->id . '?pdf=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
@@ -87,6 +87,11 @@
                         $terms_of_sale = (isset($item) ? $item->terms_of_sale : "");
                         echo render_textarea('terms_of_sale', 'Điều khoản thanh toán', $terms_of_sale, array(), array(), '', 'tinymce');
                     ?>
+
+                    <?php 
+                        $default_warehouse = $warehouse_id;
+                        echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse, array());
+                    ?>
                 </div>
 
                 
@@ -125,9 +130,6 @@
                                         <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
-                                        
-                                        <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
                                         <th class="text-left">Tỷ giá</th>
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -164,13 +166,12 @@
                                                 $err='error';
                                                 $style='border: 1px solid red !important';
                                             }
+                                            $maxQ=$value['warehouse_type']->maximum_quantity-$value['warehouse_type']->total_quantity;
                                         ?>
                                         <td>
-                                        <input <?=($lock ? "disabled=\"disabled\"":"")?> style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
+                                        <input <?=($lock ? "disabled=\"disabled\"":"")?> data-store="<?=$maxQ?>" style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                         </td>
-                                            
-                                        <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
-                                        <td><input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?=$value['warehouse_type']->maximum_quantity?>)</td>
+                                        
                                         <td>
                                         <?php
                                             $array_disabled = array();

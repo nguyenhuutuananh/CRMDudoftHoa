@@ -13,15 +13,14 @@
                 <div class="clearfix"></div>
                 <div class="panel_s">
                     <div class="panel-body">
-                    <input type="hidden" id="filterStatus" value="" />
+                    <!-- <input type="hidden" id="filterStatus" value="" />
                     <div data-toggle="btn" class="btn-group mbot15">
                         <button style=" font-size: 11px;" type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
                         <button style=" font-size: 11px;" type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>
                         <button style=" font-size: 11px;" type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>
                         <button style=" font-size: 11px;" type="button" id="btnDatatableFilterNotCreateContract" data-toggle="tab" class="btn btn-info">Chưa tạo hợp đồng</button>
-                        <!-- <button style=" font-size: 11px;" type="button" id="btnDatatableFilterCreatingOrder" data-toggle="tab" class="btn btn-info">Đang tạo hợp đồng</button> -->
                         <button style=" font-size: 11px;" type="button" id="btnDatatableFilterCreateContract" data-toggle="tab" class="btn btn-info">Đã tạo hợp đồng</button>
-                    </div>
+                    </div> -->
                     <?php render_datatable(array(
                             _l('#'),
                             _l('Mã phiếu báo giá'),
@@ -72,7 +71,6 @@
         };
 
         initDataTable('.table-quotes', window.location.href, [1], [1], filterList);
-        console.log(filterList)
         $.each(filterList, (filterIndex, filterItem) => {
             $('input' + filterItem).on('change', () => {
                 $('.table-quotes').DataTable().ajax.reload();

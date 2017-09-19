@@ -8,7 +8,7 @@ $plan_status=array(
 
 $aColumns     = array(
     '1',
-    'code',
+    'tblexports.code',
     'rel_code',
     'company',
     'total',
@@ -82,8 +82,8 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'rel_code') {
             $_data='<a href="'.admin_url('sales/sale_detail/'.$aRow['rel_id']).'">'.$aRow['rel_code'].'</a>';
         }
-        if ($aColumns[$i] == 'code') {
-            $_data='<a href="'.admin_url('exports/export_detail/'.$aRow['id']).'">'.$aRow['prefix'].$aRow['code'].'</a>';
+        if ($aColumns[$i] == 'tblexports.code') {
+            $_data='<a href="'.admin_url('exports/export_detail/'.$aRow['id']).'">'.$aRow['prefix'].$aRow['tblexports.code'].'</a>';
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);

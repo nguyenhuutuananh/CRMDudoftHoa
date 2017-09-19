@@ -149,12 +149,7 @@
                         <div class="panel-heading"><?=_l('list_products')?></div>
                         <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <?php 
-
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_id);
-                                ?>
-                            </div>
+                            
                             <div class="col-md-4">
                                 <?php 
                                     echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);

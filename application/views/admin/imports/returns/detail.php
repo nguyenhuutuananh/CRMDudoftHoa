@@ -132,11 +132,12 @@
                             <input type="text" name="code" id="number" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
                           </div>
                     </div>
-
+                    <?php if(isset($item) && isset($item->rel_id)){ ?>
                     <?=form_hidden('rel_id',$item->rel_id)?>
                     <?php $row=getRow('tblsale_orders',array('id'=>$item->rel_id));?>
                     <?php $value = (isset($item) ? $row->prefix.$row->code : '');?>
                     <?php echo render_input('rel_code','orders_code',$value,'text',array('readonly'=>true)); ?>
+                    <?php } ?>
                     
 
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>

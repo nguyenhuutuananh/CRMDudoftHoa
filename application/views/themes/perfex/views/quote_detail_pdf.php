@@ -76,12 +76,7 @@ $plan_name=_l('als_quotation');
 
 $pdf->SetFont($font_name, 'B', 20);
 $pdf->Cell(0, 0, mb_strtoupper($plan_name, 'UTF-8') , 0, 1, 'C', 0, '', 0);
-// $pdf->ln(10);
-//Set purchase no
-// var_dump($pdf->get_fonts_list());die();
-// $pdf->SetFont($font_name, 'B', $font_size);
-// $pdf->MultiCell(0, 0, '<b>Kế hoạch: #' . $invoice_number . '</b>' , 0, 'L', 0, 0, '', '', true, 0, true, false, 0);
-// $pdf->ln(4);
+
 //Set code
 $pdf->SetFont($font_name, 'I', $font_size);
 $pdf->Cell(0, 0, _l('code_no').($invoice_number) , 0, 1, 'C', 0, '', 0);
@@ -96,129 +91,43 @@ $pdf->ln(4);
 
 // Get Y position for the separation
 // $y            = $pdf->getY();
-// $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
 
-// $invoice_info .= get_option('invoice_company_address') . '<br/>';
-// if (get_option('invoice_company_city') != '') {
-//     $invoice_info .= get_option('invoice_company_city') . ', ';
-// }
-// $invoice_info .= get_option('invoice_company_country_code') . ' ';
-// $invoice_info .= get_option('invoice_company_postal_code') . ' ';
-
-// if (get_option('invoice_company_phonenumber') != '') {
-//     $invoice_info .= '<br />' . get_option('invoice_company_phonenumber');
-// }
-// if(get_option('company_vat') != ''){
-//     $invoice_info .= '<br />'.get_option('company_vat');
-// }
-// check for company custom fields
-// $custom_company_fields = get_company_custom_fields();
-// if (count($custom_company_fields) > 0) {
-//     $invoice_info .= '<br />';
-// }
-// foreach ($custom_company_fields as $field) {
-//     $invoice_info .= $field['label'] . ': ' . $field['value'] . '<br />';
-// }
-
-// $pdf->writeHTMLCell(($swap == '1' ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
 
 //Set detail
 $pdf->SetFont($font_name, '', $font_size);
-$pdf->writeHTMLCell(0, '', '', '', _l('dear').'<b>'.$invoice->customer_name.'</b>', 0, 1, false, true, 'L', true);
+// var_dump($customer->client_type);die();
+if($customer->client_type==1)
+{
+    $pdf->writeHTMLCell(0, '', '', '', _l('dear').'<b>'.'<i>'.$customer->title.'</i>: '.$invoice->customer_name.'</b>', 0, 1, false, true, 'L', true);
+}
+else 
+{
+    $pdf->writeHTMLCell(0, '', '', '', _l('dear').'<b>'.'<i>'.$customer->contact_title.'</i>: '.$customer->primary_contact.'<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$invoice->customer_name.'</b>', 0, 1, false, true, 'L', true);
+}
+$pdf->writeHTMLCell(0, '', '', '', _l('address').': '.getClient($invoice->customer_id,1), 0, 1, false, true, 'L', true);
+
 $pdf->ln(2);
 
 $pdf->SetFont($font_name, '', $font_size);
 $pdf->writeHTMLCell(0, '', '', '', '<div style="padding-left: 100px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'._l('first_1st').'</div>', 0, 1, false, true, 'L', true);
 $pdf->ln(2);
 
-// Bill to
-// $client_details = '<b>' . _l('invoice_bill_to') . '</b><br />';
-// if($invoice->client->show_primary_contact == 1){
-//     $pc_id = get_primary_contact_user_id($invoice->clientid);
-//     if($pc_id){
-//         $client_details .= get_contact_full_name($pc_id) .'<br />';
-//     }
-// }
-// $client_details .= $invoice->client->company . '<br />';
-// $client_details .= $invoice->billing_street . '<br />';
-// if (!empty($invoice->billing_city)) {
-//     $client_details .= $invoice->billing_city;
-// }
-// if (!empty($invoice->billing_state)) {
-//     $client_details .= ', ' . $invoice->billing_state;
-// }
-// $billing_country = get_country_short_name($invoice->billing_country);
-// if (!empty($billing_country)) {
-//     $client_details .= '<br />' . $billing_country;
-// }
-// if (!empty($invoice->billing_zip)) {
-//     $client_details .= ', ' . $invoice->billing_zip;
-// }
-// if (!empty($invoice->client->vat)) {
-//     $client_details .= '<br />' . _l('invoice_vat') . ': ' . $invoice->client->vat;
-// }
-// check for invoice custom fields which is checked show on pdf
-// $pdf_custom_fields = get_custom_fields('customers', array(
-//     'show_on_pdf' => 1
-// ));
-// if (count($pdf_custom_fields) > 0) {
-//     $client_details .= '<br />';
-//     foreach ($pdf_custom_fields as $field) {
-//         $value = get_custom_field_value($invoice->clientid, $field['id'], 'customers');
-//         if ($value == '') {
-//             continue;
-//         }
-//         $client_details .= $field['name'] . ': ' . $value . '<br />';
-//     }
-// }
-// $pdf->writeHTMLCell(($dimensions['wk'] / 2) - $dimensions['rm'], '', '', ($swap == '1' ? $y : ''), $client_details, 0, 1, false, true, ($swap == '1' ? 'J' : 'R'), true);
-// $pdf->Ln(5);
-// ship to to
-// if ($invoice->include_shipping == 1 && $invoice->show_shipping_on_invoice == 1) {
-//     $pdf->Ln(5);
-//     $shipping_details = '<b>' . _l('ship_to') . '</b><br />';
-//     $shipping_details .= $invoice->shipping_street . '<br />' . $invoice->shipping_city . ', ' . $invoice->shipping_state . '<br />' . get_country_short_name($invoice->shipping_country) . ', ' . $invoice->shipping_zip;
-//     $pdf->writeHTMLCell(($dimensions['wk'] - ($dimensions['rm'] + $dimensions['lm'])), '', '', '', $shipping_details, 0, 1, false, true, ($swap == '1' ? 'L' : 'R'), true);
-//     $pdf->Ln(5);
-// }
-// Dates
-// $pdf->Cell(0, 0, _l('invoice_data_date') . ' ' . _d($invoice->date), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-// if (!empty($invoice->duedate)) {
-//     $pdf->Cell(0, 0, _l('invoice_data_duedate') . ' ' . _d($invoice->duedate), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-// }
-// if ($invoice->sale_agent != 0) {
-//     if (get_option('show_sale_agent_on_invoices') == 1) {
-//         $pdf->Cell(0, 0, _l('sale_agent_string') . ': ' . get_staff_full_name($invoice->sale_agent), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-//     }
-// }
-// check for invoice custom fields which is checked show on pdf
-// $pdf_custom_fields = get_custom_fields('invoice', array(
-//     'show_on_pdf' => 1
-// ));
-// foreach ($pdf_custom_fields as $field) {
-//     $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
-//     if ($value == '') {
-//         continue;
-//     }
-//     $pdf->writeHTMLCell(0, '', '', '', $field['name'] . ': ' . $value, 0, 1, false, true, ($swap == '1' ? 'J' : 'R'), true);
-// }
+
 // The Table
 $pdf->Ln(5);
 $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
         <th scope="col"  width="5%" align="center" valign="middle">STT</th>
-        <th scope="col"  width="15%" align="center" valign="middle">' . _l('Sản phẩm') . '</th>
-        <th scope="col"  width="8%" align="center" valign="middle">' . _l('Mã số') . '</th>
-        <th scope="col"  width="10%" align="center" valign="middle">' . _l('Chức năng/Đặc tính/Quy cách') . '</th>
+        <th scope="col"  width="15%" align="center" valign="middle">' . _l('Danh mục') . '</th>
+        <th scope="col"  width="12%" align="center" valign="middle">' . _l('Sản phẩm') . '</th>
+        <th scope="col"  width="14%" align="center" valign="middle">' . _l('Chức năng/Đặc tính/Quy cách') . '</th>
         <th scope="col"  width="8%" align="center" valign="middle">' . _l('Hình ảnh') . '</th>
-        <th scope="col"  width="10%" align="center" valign="middle">' . _l('Xuất xứ') . '</th>
-        <th scope="col" width="8%" align="center" valign="middle">' . _l('Bảo hành').' ('.get_option('default_warranty_time').')' . '</th>
+        <th scope="col"  width="10%" align="center" valign="middle">' . _l('Kích thước') . '</th>
         <th scope="col" width="5%" align="center" valign="middle">' . _l('Số lượng').'</th>
         <th scope="col" width="5%" align="center" valign="middle">' . _l('Đơn vị tính'). '</th>
-        <th scope="col" width="8%" align="center" valign="middle">' . _l('Đơn giá').' ('.get_option('default_currency').')' . '</th>
-        <th scope="col" width="8%" align="center" valign="middle">' . _l('Thuế').' ('.get_option('default_currency').')' . '</th>
-        <th scope="col" width="10%" align="center" valign="middle">' . _l('Giá trị').' ('.get_option('default_currency').')' . '</th>';
+        <th scope="col" width="12%" align="center" valign="middle">' . _l('Đơn giá').' ('.get_option('default_currency').')' . '</th>
+        <th scope="col" width="14%" align="center" valign="middle">' . _l('Giá trị').' ('.get_option('default_currency').')' . '</th>';
 $tblhtml .= '</tr>';
 // Items
 
@@ -230,7 +139,7 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $grand_total+=$invoice->items[$i]->amount;
     $quantity_total+=$invoice->items[$i]->quantity;
     
-
+// var_dump($invoice->items[$i]);die();
     $img='';
     if($invoice->items[$i]->image)
     {
@@ -238,44 +147,30 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     }
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
-    $tblhtml.='<td align="center">'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
-    $tblhtml.='<td align="right" nowrap>'.$invoice->items[$i]->specification.'</td>';
+    $tblhtml.='<td>'.$invoice->items[$i]->category.'</td>';
+    $tblhtml.='<td align="center">'.$invoice->items[$i]->short_name.'</td>';
+    $tblhtml.='<td align="right" nowrap>'.$invoice->items[$i]->product_features.'</td>';
     $tblhtml.='<td align="right" >'.'<img width="80px" src="' .$img.'" style="padding: 5px">'.'</td>';
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->made_in.'</td>';
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->warranty.'</td>';
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->quantity.'</td>';
+    $tblhtml.='<td align="right">'.$invoice->items[$i]->size.'</td>';
+    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.$invoice->items[$i]->unit_name.'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
-    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->tax).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
+    $tblhtml.='<tr>';
+    $tblhtml.='<td colspan="6" align="center"><b>'.mb_strtoupper(_l('total'),'UTF-8').'</b></td>';
+    $tblhtml.='<td align="right"><b>'._format_number($quantity_total).'</b></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"><b>'.format_money($grand_total,get_option('default_currency')).'</b></td>';
+    $tblhtml.='</tr>';
 
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="10" align="right">'._l('Số sản phẩm').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'._format_number(count($invoice->items)).'</td>';
-    $tblhtml.='</tr>';
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="10" align="right">'._l('Tổng số lượng').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'._format_number($quantity_total).'</td>';
-    $tblhtml.='</tr>';
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="10" align="right">'._l('Tổng tiền').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total,get_option('default_currency')).'</td>';
-    $tblhtml.='</tr>';
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
 $pdf->writeHTML($tblhtml, true, false, false, false, '');
 
-// $pdf->writeHTML(_l('blank_date'), true, false, false, false, 'R');
 
-// $strmoney='<div class="col-md-12"><ul>';
-// $strmoney.='<li>'._l('str_money').'</li>';
-// $strmoney.='<li>'._l('certificate_root').'</li>';;
-// $strmoney.='</ul></div>';
-// $pdf->writeHTMLCell(0, '', '', '', $strmoney, 0, 1, false, true, 'L', true);
-// var_dump('<b>'.mb_strtoupper(_l('sumary_note').': </b>', 'UTF-8'));die();
 
 if (get_option('total_to_words_enabled') == 1) {
     // Set the font again to normal like the rest of the pdf
@@ -292,163 +187,36 @@ $pdf->SetFont($font_name, '', $font_size);
 $pdf->writeHTMLCell(0, '', '', '', '<b>'.mb_strtoupper(_l('sumary_note').': </b>', 'UTF-8').(($invoice->reason)? $invoice->reason : _l('sumary_detail_html')), 0, 1, false, true, 'L', true);
 $pdf->ln(5);
 
-// $pdf->SetFont($font_name, '', $font_size);
-// $pdf->writeHTMLCell(0, '', '', '', '<b>'.mb_strtoupper(_l('(*)').': </b>', 'UTF-8').clear_textarea_breaks(_l('sumary_detail')), 0, 1, false, true, 'L', true);
-// $pdf->ln(5);
+$department=$invoice->department;
+if($invoice->create_by==1)
+{
+    $department=_l('directer_department');
+    $strshortD='NV';
+    foreach (explode(' ',mb_ucfirst($department,"UTF-8")) as $key => $value) {
+        $strshortD.=mb_substr($value,0,1,'utf-8');
+    }
+}
 
-
-// $pdf->SetFont($font_name, '', $font_size);
-// $pdf->writeHTMLCell(0, '', '', '', '<b>'.mb_strtoupper(_l('(*)').': </b>', 'UTF-8').(_l('sumary_detail_html')), 0, 1, false, true, 'L', true);
-// $pdf->ln(5);
 
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td>" . mb_ucfirst('', "UTF-8") . "</td>
             <td><b>" . mb_strtoupper(get_option('invoice_company_name'), "UTF-8") . "</b></td>
         </tr>
+        <tr  style=\"margin-bottom:200px\">
+            <td>" . mb_ucfirst('', "UTF-8") . "</td>
+            <td><i>" . mb_ucfirst($department, "UTF-8") . "</i></td>
+        </tr>
+        <tr>
+            <td style=\"height: 100px\" colspan=\"3\"></td>
+        </tr>
         <tr>
             <td>" . mb_ucfirst('', "UTF-8") . "</td>
-            <td><i>" . mb_ucfirst(_l('sale_department'), "UTF-8") . "</i></td>
+            <td>". $strshortD.': '.mb_ucfirst($invoice->creater, "UTF-8") ."</td>
         </tr>
         
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
 
-// $pdf->Ln(8);
-// $tbltotal = '';
-// $tbltotal .= '<table cellpadding="6">';
-// $tbltotal .= '
-// <tr>
-//     <td align="right" width="80%">' . _l('Sản phẩm') . '</td>
-//     <td align="right" width="20%">' . count($invoice->items) . '</td>
-// </tr>';
-//     $tbltotal .= '
-//     <tr>
-//         <td align="right" width="80%">' . _l('Tổng tiền') . '</td>
-//         <td align="right" width="20%">' . format_money($grand_total) . '</td>
-//     </tr>';
-// foreach ($taxes as $tax) {
-//     $total = array_sum($tax['total']);
-//     if ($invoice->discount_percent != 0 && $invoice->discount_type == 'before_tax') {
-//         $total_tax_calculated = ($total * $invoice->discount_percent) / 100;
-//         $total                = ($total - $total_tax_calculated);
-//     }
-//     // The tax is in format TAXNAME|20
-//     $_tax_name = explode('|', $tax['tax_name']);
-//     $tbltotal .= '<tr>
-//     <td align="right" width="80%">' . $_tax_name[0] . '(' . _format_number($tax['taxrate']) . '%)' . '</td>
-//     <td align="right" width="20%">' . format_money($total, $invoice->symbol) . '</td>
-// </tr>';
-// }
-// if ($invoice->adjustment != '0.00') {
-//     $tbltotal .= '<tr>
-//     <td align="right" width="80%">' . _l('invoice_adjustment') . '</td>
-//     <td align="right" width="20%">' . format_money($invoice->adjustment, $invoice->symbol) . '</td>
-// </tr>';
-// }
-// $tbltotal .= '
-// <tr style="background-color:#f0f0f0;">
-//     <td align="right" width="80%">' . _l('invoice_total') . '</td>
-//     <td align="right" width="20%">' . format_money($invoice->total, $invoice->symbol) . '</td>
-// </tr>';
 
-// if ($invoice->status == 3) {
-//     $tbltotal .= '
-//     <tr>
-//         <td align="right" width="80%">' . _l('invoice_total_paid') . '</td>
-//         <td align="right" width="20%">' . format_money(sum_from_table('tblinvoicepaymentrecords', array(
-//         'field' => 'amount',
-//         'where' => array(
-//             'invoiceid' => $invoice->id
-//         )
-//     )), $invoice->symbol) . '</td>
-//     </tr>
-//     <tr style="background-color:#f0f0f0;">
-//        <td align="right" width="80%">' . _l('invoice_amount_due') . '</td>
-//        <td align="right" width="20%">' . format_money(get_invoice_total_left_to_pay($invoice->id, $invoice->total), $invoice->symbol) . '</td>
-//    </tr>';
-// }
-// $tbltotal .= '</table>';
-// $pdf->writeHTML($tbltotal, true, false, false, false, '');
-
-// if (get_option('total_to_words_enabled') == 1) {
-//     // Set the font bold
-//     $pdf->SetFont($font_name, 'B', $font_size);
-//     $pdf->Cell(0, 0, _l('num_word') . ': ' . $CI->numberword->convert($invoice->total, $invoice->currency_name), 0, 1, 'C', 0, '', 0);
-//     // Set the font again to normal like the rest of the pdf
-//     $pdf->SetFont($font_name, '', $font_size);
-//     $pdf->Ln(4);
-// }
-
-// if (count($invoice->payments) > 0 && get_option('show_transactions_on_invoice_pdf') == 1) {
-//     $pdf->Ln(4);
-//     $border = 'border-bottom-color:#000000;border-bottom-width:1px;border-bottom-style:solid; 1px solid black;';
-//     $pdf->SetFont($font_name, 'B', $font_size);
-//     $pdf->Cell(0, 0, _l('invoice_received_payments'), 0, 1, 'L', 0, '', 0);
-//     $pdf->SetFont($font_name, '', $font_size);
-//     $pdf->Ln(4);
-//     $tblhtml = '<table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="0">
-//         <tr height="20"  style="color:#000;border:1px solid #000;">
-//         <th width="25%;" style="' . $border . '">' . _l('invoice_payments_table_number_heading') . '</th>
-//         <th width="25%;" style="' . $border . '">' . _l('invoice_payments_table_mode_heading') . '</th>
-//         <th width="25%;" style="' . $border . '">' . _l('invoice_payments_table_date_heading') . '</th>
-//         <th width="25%;" style="' . $border . '">' . _l('invoice_payments_table_amount_heading') . '</th>
-//     </tr>';
-//     $tblhtml .= '<tbody>';
-//     foreach ($invoice->payments as $payment) {
-//         $payment_name = $payment['name'];
-//         if (!empty($payment['paymentmethod'])) {
-//             $payment_name .= ' - ' . $payment['paymentmethod'];
-//         }
-//         $tblhtml .= '
-//             <tr>
-//             <td>' . $payment['paymentid'] . '</td>
-//             <td>' . $payment_name . '</td>
-//             <td>' . _d($payment['date']) . '</td>
-//             <td>' . format_money($payment['amount'], $invoice->symbol) . '</td>
-//             </tr>
-//         ';
-//     }
-//     $tblhtml .= '</tbody>';
-//     $tblhtml .= '</table>';
-//     $pdf->writeHTML($tblhtml, true, false, false, false, '');
-// }
-
-// if (found_invoice_mode($payment_modes, $invoice->id, true, true)) {
-//     $pdf->Ln(4);
-//     $pdf->SetFont($font_name, 'B', 10);
-//     $pdf->Cell(0, 0, _l('invoice_html_offline_payment'), 0, 1, 'L', 0, '', 0);
-//     $pdf->SetFont($font_name, '', 10);
-//     foreach ($payment_modes as $mode) {
-//         if (is_numeric($mode['id'])) {
-//             if (!is_payment_mode_allowed_for_invoice($mode['id'], $invoice->id)) {
-//                 continue;
-//             }
-//         }
-//         if (isset($mode['show_on_pdf']) && $mode['show_on_pdf'] == 1) {
-//             $pdf->Ln(2);
-//             $pdf->Cell(0, 0, $mode['name'], 0, 1, 'L', 0, '', 0);
-//             $pdf->MultiCell($dimensions['wk'] - ($dimensions['lm'] + $dimensions['rm']), 0, clear_textarea_breaks($mode['description']), 0, 'L');
-//         }
-//     }
-// }
-
-// if (!empty($invoice->clientnote)) {
-//     $pdf->Ln(4);
-//     $pdf->SetFont($font_name, 'B', 10);
-//     $pdf->Cell(0, 0, _l('invoice_note'), 0, 1, 'L', 0, '', 0);
-//     $pdf->SetFont($font_name, '', 10);
-//     $pdf->Ln(2);
-//     $pdf->MultiCell(0, 0, clear_textarea_breaks($invoice->clientnote), 0, 'L');
-// }
-
-// if (!empty($invoice->terms)) 
-// {
-//     $pdf->Ln(4);
-//     $pdf->SetFont($font_name, 'B', 10);
-//     $pdf->Cell(0, 0, _l('terms_and_conditions'), 0, 1, 'L', 0, '', 0);
-//     $pdf->SetFont($font_name, '', 10);
-//     $pdf->Ln(2);
-//     $pdf->MultiCell(0, 0, clear_textarea_breaks($invoice->terms), 0, 'L');
-// }
 

@@ -642,7 +642,7 @@
 
     $('.customer-form-submiter').on('click', function(e){
         var warehouse_id=$('#warehouse_id').val();
-        var tk=$('select[name^="items"]');
+        
         if($('input.error').length) {
             e.preventDefault();
             alert_float('danger', "Giá trị không hợp lệ!"); 
@@ -652,6 +652,7 @@
             alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
             e.preventDefault(); 
         }
+        var tk=$('select[name^="items"]');
         $.each(tk, function(key,value){
         if($(value).val()=='')
         {

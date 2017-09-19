@@ -37,9 +37,10 @@ class Purchase_suggested_model extends CRM_Model
         if(is_array($data['items']) && count($data['items']) > 0) {
             $items = $data['items'];
             unset($data['items']);
-
+            unset($data['warehouse_id']);
             $this->db->insert('tblpurchase_suggested', $data);
             $insert_id = $this->db->insert_id();
+            
             if($insert_id) {
                 $this->db->update('tblpurchase_plan',array('converted'=>1),array('id'=>
                     $data['purchase_plan_id']));
@@ -205,7 +206,9 @@ class Purchase_suggested_model extends CRM_Model
                 // $this->db->update('tblpurchase_suggested', $data_suggested);
 
                 $items = $data['items'];
+                $warehouse_id=$data['id_warehouse'];
                 unset($data['items']);
+                unset($data['warehouse_id']);
                 
                 $this->db->insert('tblorders', $data);
                 
@@ -219,13 +222,14 @@ class Purchase_suggested_model extends CRM_Model
                             'product_id' => $value['product_id'],
                             'product_quantity' => $value['quantity'],
                             'currency_id' => $value['currency'],
-                            'warehouse_id' => $value['warehouse'],
+                            'warehouse_id' => $warehouse_id,
                             'product_price_buy' => $value['price_buy'],
                             'purchase_suggested_detail_id' => $value['id'],
                             'exchange_rate' => $value['exchange_rate'],
                             'taxrate' => $tax->taxrate,
+                            'tk_no' => $value['tk_no'],
+                            'tk_co' => $value['tk_co'],
                         );     
-                        
                         $this->db->insert('tblorders_detail', $data_order);
 
                         // print_r($value);

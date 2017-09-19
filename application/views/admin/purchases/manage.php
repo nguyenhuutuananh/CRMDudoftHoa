@@ -20,11 +20,11 @@
 
                         <input type="hidden" id="filterStatus" value="" />
                         <div data-toggle="btns" class="btn-group">
-                            <button type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
-                            <button type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>
-                            <button type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>
-                            <button type="button" id="btnDatableFilterDidntConvert" data-toggle="tab" class="btn btn-info">Chưa chuyển đề xuất</button>
-                            <button type="button" id="btnDatableFilterConverted" data-toggle="tab" class="btn btn-info">Đã chuyển đề xuất</button>
+                            <button style=" font-size: 11px;" type="button" id="btnDatatableFilterAll" data-toggle="tab" class="btn btn-info active">Tất cả</button>
+                            <button style=" font-size: 11px;" type="button" id="btnDatatableFilterNotApproval" data-toggle="tab" class="btn btn-info">Chưa duyệt</button>
+                            <button style=" font-size: 11px;" type="button" id="btnDatatableFilterApproval" data-toggle="tab" class="btn btn-info">Đã duyệt</button>
+                            <button style=" font-size: 11px;" type="button" id="btnDatableFilterDidntConvert" data-toggle="tab" class="btn btn-info">Chưa chuyển đề xuất</button>
+                            <button style=" font-size: 11px;" type="button" id="btnDatableFilterConverted" data-toggle="tab" class="btn btn-info">Đã chuyển đề xuất</button>
                         </div>
                         
                         <p></p>

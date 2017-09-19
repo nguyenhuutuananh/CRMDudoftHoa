@@ -103,9 +103,9 @@ $detail .= _l('purchase_suggested_reason').': ' . $purchase_suggested->reason . 
 // $detail .= _l('purchase_suggested_status').': <b>' . ($purchase_suggested->status == 1 ? "Đã duyệt" : "Chưa duyệt") . '</b> <br /> <br /> <br />';
 
 $pdf->writeHTMLCell($dimensions['wk'] - $dimensions['lm'] - 20, '', '', $y, $detail, 0, 0, false, true, ($swap == '1' ? 'R' : 'L'), true);
-
 // The Table
-$pdf->Ln(80);
+$pdf->ln(40);
+
 $item_width = 38;
 // If show item taxes is disabled in PDF we should increase the item width table heading
 if (get_option('show_tax_per_item') == 0) {
@@ -140,15 +140,15 @@ foreach($purchase_suggested->items as $value) {
     $tblhtml .= '
         <tr>
             <td>'.$i.'</td>
-            <td>'.$value->product_name.'<br /><span style="color:#777;">'.$value->product_code.'</span></td>
-            <td>'.$value->product_unit.'</td>
+            <td>'.$value->name.'<br /><span style="color:#777;">'.$value->code.'</span></td>
+            <td>'.$value->unit_name.'</td>
             <td style="text-align:center">'.number_format($value->product_quantity).'</td>
-            <td style="text-align:right">'.number_format($value->product_price_buy).'</td>
-            <td style="text-align:right">'.number_format($value->product_quantity*$value->product_price_buy).'</td>
-            <td>'.$value->product_specifications.'</td>
+            <td style="text-align:right">'.number_format($value->price_buy).'</td>
+            <td style="text-align:right">'.number_format($value->product_quantity*$value->price_buy).'</td>
+            <td>'.$value->description.'</td>
         </tr>
     ';
-    $totalPrice += ($value->product_quantity*$value->product_price_buy);
+    $totalPrice += ($value->product_quantity*$value->price_buy);
 }
 $tblhtml .= '
         <tr>
@@ -162,7 +162,11 @@ $tblhtml .= '
 ';
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
-$pdf->writeHTMLCell($dimensions['wk'] - $dimensions['lm'] - 20, '', '', $y+100, $tblhtml, false, true, 'L', true);
+
+// Get Y position for the separation
+$y            = $pdf->getY();
+
+$pdf->writeHTMLCell($dimensions['wk'] - $dimensions['lm'] - 20, '', '', $y, $tblhtml, false, true, 'L', true);
 
 
 // $detail = _l('user_head').': <b>' . $purchase_suggested->user_head_name . '</b> <br /> <br />';

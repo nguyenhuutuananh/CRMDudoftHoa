@@ -174,6 +174,12 @@ class Warehouses extends Admin_controller
         }
     }
 
+    public function getQuantityPIW($warehouse_id=NULL,$product_id=NULL) {
+        if(is_numeric($warehouse_id) && is_numeric($product_id) && $this->input->is_ajax_request()) {
+            echo json_encode($this->warehouse_model->getQuantityProductInWarehouses($warehouse_id, $product_id));
+        }
+    }
+
     public function getProductQuantity($warehouse_id,$product_id) {
         if(is_numeric($product_id) && is_numeric($warehouse_id) && $this->input->is_ajax_request()) {
             echo json_encode($this->warehouse_model->getProductQuantity($warehouse_id,$product_id));

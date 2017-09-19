@@ -9,12 +9,12 @@ $plan_status=array(
 $aColumns     = array(
     '1',
     'tblquotes.code',
-    'tblquotes.company',
-    'tblquotes.total',
-    '(SELECT fullname FROM tblstaff WHERE tblquotes.create_by=tblstaff.staffid)',
-    'tblquotes.status',
+    'company',
+    'total',
+    '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
+    'status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
-    'tblquotes.date'
+    'date'
 );
 if($customer_id)
 {
@@ -56,10 +56,9 @@ if($this->_instance->input->post()) {
 }
 
 $join         = array(
-    'LEFT JOIN tblclients ON tblclients.userid = tblquotes.customer_id',
-    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by'
+    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by',
+    'LEFT JOIN tblclients  ON tblclients.userid=tblquotes.customer_id'
 );
-
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'prefix',
@@ -67,8 +66,10 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where
     'tblstaff.fullname',
     'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
 ));
+
 $output       = $result['output'];
 $rResult      = $result['rResult'];
+//var_dump($rResult);die();
 
 
 $j=0;

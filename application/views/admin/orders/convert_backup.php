@@ -145,11 +145,11 @@
                                         <tr>
                                             <th><input type="hidden" id="itemID" value="" /></th>
                                             <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                             
+                                            <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
+                                            <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
                                             <th class="text-left">Tỷ giá</th>
                                             <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -177,23 +177,7 @@
                                                 <input type="hidden" name="items[<?php echo $i; ?>][product_id]" id="items[<?php echo $i; ?>][product_id]" value="<?php echo $value['product_id']; ?>">
                                             </td>
                                             <td class="dragger"><?php echo $value['name']; ?></td>
-                                            <!-- TK NO -->
-                                            <td>
-                                                <?php
-                                                $selected=(isset($value) ? $value['tk_no'] : '');
-                                                echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
-                                                ?>
-                                            </td>
-                                            <!-- TK CO -->
-                                            <td>
-                                                <?php
-                                                $selected=(isset($value) ? $value['tk_co'] : '');
-                                                echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
-                                                ?>
-                                            </td>
-                                            <td><?php echo $value['unit_name']; ?>
-                                                <input type="hidden" id="items[<?=$i?>][warehouse]" data-store="<?=$value['warehouse_type']->maximum_quantity-$value['warehouse_type']->total_quantity ?>"  value="<?=$value['warehouse_id']?>">
-                                            </td>
+                                            <td><?php echo $value['unit_name']; ?></td>
                                             <?php
                                             $err='';
                                             $style='';
@@ -206,7 +190,9 @@
                                             <td>
                                             <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" id="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                             </td>
-                                            
+                                                
+                                            <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
+                                            <td><input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity ?>" name="items[<?=$i?>][warehouse]" id="items[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?=$value['warehouse_type']->maximum_quantity?>)</td>
                                             <td>
                                             <?php
                                                 echo render_input('items['.$i.'][exchange_rate]', '', 1);
@@ -274,11 +260,11 @@
                                         <tr>
                                             <th><input type="hidden" id="itemID" value="" /></th>
                                             <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></> <?php echo _l('item_name'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                             
+                                            <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
+                                            <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
                                             <th class="text-left">Tỷ giá</th>
                                             <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -318,7 +304,8 @@
                                             <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                             </td>
                                                 
-                                            
+                                            <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
+                                            <td><input type="hidden" data-store="<?=$value['warehouse_type']->maximum_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value['warehouse_id']?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?=$value['warehouse_type']->maximum_quantity?>)</td>
                                             <td>
                                             <?php
                                                 echo render_input('items['.$i.'][exchange_rate]', '');
@@ -566,52 +553,6 @@
         changeStatics();
         return false;
     };
-    $(document).on('keyup', '.mainPriceBuy', (e)=>{
-        var currentPriceBuyInput = $(e.currentTarget);
-        calculateTotal(e.currentTarget);
-    });
-    $(document).on('keyup', '.mainQuantity', (e)=>{
-        var currentQuantityInput = $(e.currentTarget);
-        let elementToCompare;
-        if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
-            elementToCompare = currentQuantityInput.parents('tr').find('input[data-store]');
-        else
-            elementToCompare = currentQuantityInput;
-        
-        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
-            currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
-            currentQuantityInput.attr('data-toggle', 'tooltip');
-            currentQuantityInput.attr('data-trigger', 'manual');
-            currentQuantityInput.attr('title', 'Số lượng vượt mức cho phép!');
-            // $('[data-toggle="tooltip"]').tooltip();
-            currentQuantityInput.off('focus', '**').off('hover', '**');
-            currentQuantityInput.tooltip('fixTitle').focus(()=>$(this).tooltip('show')).hover(()=>$(this).tooltip('show'));
-            // error flag
-            currentQuantityInput.addClass('error');
-            currentQuantityInput.focus();
-        }
-        else {
-            currentQuantityInput.attr('title', 'OK!').tooltip('fixTitle').tooltip('show');
-            currentQuantityInput.attr("style", "width: 100px;");
-            // remove flag
-            currentQuantityInput.removeClass('error');
-            currentQuantityInput.focus();
-        }
-        calculateTotal(e.currentTarget);
-    });
-    var calculateTotal = (currentInput) => {
-        currentInput = $(currentInput);     
-        let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
-        let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
-        let tdTong = gia.parent().find(' + td');
-        tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
-        let tdtax = gia.parent().find(' + td + td');
-        let tdmoneytax = gia.parent().find(' + td + td +td');
-        let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
-        let vartax=$(tdtax).html().replace(/\,|%/g, '');
-        tdTong.text(formatNumber( tong ) );
-        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
-    };
     var changeStatics = () => {
         let totalPurchaseSuggestedItem = $('.table_purchase_suggested tbody tr:visible').length;
         $('.table_purchase_suggested').next().find('.total').text(formatNumber(totalPurchaseSuggestedItem));
@@ -619,29 +560,6 @@
         let totalPurchaseOrderdItem = $('.table_purchase_orders tbody tr').length;
         $('.table_purchase_orders').next().find('.total').text(formatNumber(totalPurchaseOrderdItem));
     };
-    $('.customer-form-submiter').on('click', function(e){
-        var warehouse_id=$('#id_warehouse').val();
-        
-        if($('input.error').length) {
-            e.preventDefault();
-            alert_float('danger', "Giá trị không hợp lệ!"); 
-        }
-        if(!warehouse_id)
-        {
-            alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
-            e.preventDefault(); 
-        }
-        var tk=$('select[name^="items"]');
-        $.each(tk, function(key,value){
-        if($(value).val()=='')
-        {
-            alert_float('danger', "Vui lòng chọn tài khoản hạch toán!");
-            e.preventDefault();
-            
-            return;
-        }
-        });
-    });
 </script>
 </body>
 </html>

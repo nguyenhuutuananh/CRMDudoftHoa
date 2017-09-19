@@ -176,6 +176,19 @@ function is_head($staffid = '')
     return false;
 }
 
+function removeNullValues($data=array())
+{
+    if($data)
+    {
+        foreach ($data as $key => $value) {
+            if($value==NULL)
+                unset($data[$key]);
+        }
+        return $data;
+    }
+    return false;
+}
+
 function is_admin_two($staffid = '')
 {
     $_staffid = get_staff_user_id();

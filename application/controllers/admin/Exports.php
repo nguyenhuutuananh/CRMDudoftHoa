@@ -88,7 +88,6 @@ class Exports extends Admin_controller
         }
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
-        // var_dump($data['warehouses']);die();
         $data['receivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         
         $data['customers'] = $this->clients_model->get('', $where_clients);
@@ -114,7 +113,7 @@ class Exports extends Admin_controller
             $i++;
         }
         if (!$data['item']) {
-            blank_page('Export Not Found');
+            blank_page('Sale Not Found');
         }  
 
         $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
@@ -127,7 +126,7 @@ class Exports extends Admin_controller
         }
 
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
-        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
+        $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['receivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         
         $data['customers'] = $this->clients_model->get('', $where_clients);

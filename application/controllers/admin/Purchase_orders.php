@@ -11,6 +11,7 @@ class Purchase_orders extends Admin_controller
         $this->load->model('currencies_model');
         $this->load->model('warehouse_model');
         $this->load->model('contract_templates_model');
+        $this->load->model('accounts_model');
     }
     public function index() {
 
@@ -32,7 +33,7 @@ class Purchase_orders extends Admin_controller
         $data['warehouses'] = $this->orders_model->get_warehouses();
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         foreach($data['purchase_suggested']->items as $key=>$value) {
-            $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
+            $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
         }
         $data['product_list'] = $purchase_suggested->items;
         $data['suppliers'] = $this->orders_model->get_suppliers();
@@ -45,6 +46,8 @@ class Purchase_orders extends Admin_controller
             $this->purchase_suggested_model->convert_to_order($id, $data);
             redirect(admin_url() . 'purchase_orders');
         }
+        $data['accounts_no'] = $this->accounts_model->get_tk_no();
+        $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $this->load->view('admin/orders/convert', $data);
     }
     public function convert_to_contract($id='') {
@@ -76,10 +79,12 @@ class Purchase_orders extends Admin_controller
             }
         }
         $data['contract_merge_fields'] = $_contract_merge_fields;
+        
         $data['order'] = $order;
         $data['default_template'] = $this->contract_templates_model->get_contract_template_by_id(2)->content;
         foreach($data['order']->products as $key=>$value) {
-            $data['order']->products[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
+            $warehouse_id=$value->warehouse_id;
+            $data['order']->products[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
         }
         $data['currencies'] = $this->currencies_model->get();
         $data['product_list'] = $order->items;
@@ -90,12 +95,15 @@ class Purchase_orders extends Admin_controller
             $data['code'] = get_option('prefix_contract') . $data['code'];
             $data['id_user_create'] = get_staff_user_id();
             $data['id_supplier'] = $order->id_supplier;
+            
             unset($data['items']);
             $data['template'] = $this->contract_templates_model->get_contract_template_by_id(2)->content;
 
             $result = $this->orders_model->convert_to_contact($id, $data);
             redirect(admin_url() . 'purchase_contracts');
         }
+        $data['warehouse_id']=$warehouse_id;
+        $data['warehouses'] = $this->orders_model->get_warehouses();
         $this->load->view('admin/orders/convert_to_contract', $data);
     }
     public function view($id='') {
@@ -126,8 +134,10 @@ class Purchase_orders extends Admin_controller
                 }
                 $data['item'] = $order;
                 foreach($data['item']->products as $key=>$value) {
-                    $data['item']->products[$key]->warehouse_type = (object)$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id, true);
+                    $data['item']->products[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
                 }
+                $data['accounts_no'] = $this->accounts_model->get_tk_no();
+                $data['accounts_co'] = $this->accounts_model->get_tk_co();
                 $content = $this->load->view('admin/orders/view', $data, true);
                 exit($content);
             }

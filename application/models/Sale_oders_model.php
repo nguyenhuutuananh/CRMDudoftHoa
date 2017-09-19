@@ -358,7 +358,7 @@ class Sale_oders_model extends CRM_Model
                     }
                 }
             }
-            //Da duyet Phieu Tra Hang(Them moi)
+            //Da duyet Phieu Tra Hang/Them moi
             else
             {
                 if($items)
@@ -385,7 +385,8 @@ class Sale_oders_model extends CRM_Model
                         foreach ($items as $key => $item) {
                             //Data Return Item
                             $product=$this->getProductById($item->product_id);
-                            $sub=$item->unit_cost*$item->quantity;
+                            $quantity_net=$this->getQuantityBeforeDiff($order_id,$item->product_id,$item->quantity);
+                            $sub=$item->unit_cost*$quantity_net;
                             $tax=$sub*$item->tax_rate/100;
                             $sub_total=$sub+$tax;
                             $total+=$sub_total;
@@ -394,7 +395,7 @@ class Sale_oders_model extends CRM_Model
                                 'product_id'=>$item->product_id,
                                 'specifications'=>$product->description,
                                 'unit_id'=>$item->unit_id,
-                                'quantity'=>$item->quantity,
+                                'quantity'=>$quantity_net,
                                 'quantity_net'=>NULL,
                                 'exchange_rate'=>NULL,
                                 'unit_cost'=>$item->unit_cost,

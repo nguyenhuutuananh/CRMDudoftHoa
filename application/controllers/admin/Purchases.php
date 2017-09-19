@@ -92,13 +92,18 @@ class Purchases extends Admin_controller
             $data['purchase'] = $this->purchases_model->getPurchaseByID($id);
             
             foreach ($data['purchase']->items as $key => $value) {
-                $data['purchase']->items[$key]['warehouse_type']=$this->warehouse_model->getWarehouseProduct($value['warehouse_id'],$value['product_id'], true);
+                $warehouse_id=$value['warehouse_id'];
+                $data['purchase']->items[$key]['warehouse_type']=$this->warehouse_model->getQuantityProductInWarehouses($value['warehouse_id'],$value['product_id']);
+                
+
             }
-            
+
             if (!$data['purchase']) {
                 blank_page('Purchase Not Found');
             }
         }
+
+        $data['warehouse_id']=$warehouse_id;
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['bodyclass'] = 'customer-profile';
@@ -130,12 +135,13 @@ class Purchases extends Admin_controller
         $data['currencies'] = $this->currencies_model->get();
         $data['item'] = $this->purchases_model->getPurchaseByID($id);
         foreach ($data['item']->items as $key => $value) {
-            $data['item']->items[$key]['warehouse_type']= (object)$this->warehouse_model->getWarehouseProduct($value['warehouse_id'],$value['product_id'], true);
+            $warehouse_id=$value['warehouse_id'];
+            $data['item']->items[$key]['warehouse_type']= (object)$this->warehouse_model->getQuantityProductInWarehouses($value['warehouse_id'],$value['product_id']);
         }
         // print_r($data['item']);
         // exit();
         // var_dump($data['item']);die();
-
+        $data['warehouse_id']=$warehouse_id;
         $this->load->view('admin/purchases/convert_to_suggested', $data);
     }
 

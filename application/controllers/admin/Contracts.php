@@ -8,6 +8,7 @@ class Contracts extends Admin_controller
         $this->load->model('contracts_model');
         $this->load->model('contract_templates_model');
         $this->load->model('warehouse_model');
+        $this->load->model('invoice_items_model');
     }
     /* List all contracts */
     public function index($clientid = false)
@@ -180,13 +181,11 @@ class Contracts extends Admin_controller
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
 
+        
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full();
-        var_dump($this->clients_model->get('', $where_clients));die();
-
-        var_dump($data['customers']);die();
         
         $data['convert']= $data['item']->export_status ? false : true ;
         

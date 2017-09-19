@@ -2,13 +2,85 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b0d3ec6-4fa1-499d-92ec-f86274547e0c" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/uploads/invoices/40/SO-00087.pdf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DB Change/11_9.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DB Change/7_9.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/imports/contracts/contracts.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/imports/contracts/detail.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/admin/sales/detail_old.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/uploads/invoices/40/index.html" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa (1).sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa 2017.08.01.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.07.22.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.07.27.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.03.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.09.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.17.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.22.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.23.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.25.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.08.31.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.09.01.sql" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dudoffhoa-2017.7.10.sql" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/app-config.php" afterPath="$PROJECT_DIR$/application/config/app-config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Contracts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Deliveries.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Deliveries.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Exports.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Exports.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Imports.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Imports.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Invoices.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Invoices.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Quotes.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Quotes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Receipts.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Receipts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Sale_orders.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Sale_orders.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Sales.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Sales.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/admin/Warehouses.php" afterPath="$PROJECT_DIR$/application/controllers/admin/Warehouses.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_db_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_db_helper.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_html_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_html_helper.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/perfex_sales_helper.php" afterPath="$PROJECT_DIR$/application/helpers/perfex_sales_helper.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" afterPath="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/Perfex_base.php" afterPath="$PROJECT_DIR$/application/libraries/Perfex_base.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Accounts_model.php" afterPath="$PROJECT_DIR$/application/models/Accounts_model.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Clients_model.php" afterPath="$PROJECT_DIR$/application/models/Clients_model.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/clients/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/clients/manage.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/clients.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/clients.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Contracts_model.php" afterPath="$PROJECT_DIR$/application/models/Contracts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Exports_model.php" afterPath="$PROJECT_DIR$/application/models/Exports_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Imports_model.php" afterPath="$PROJECT_DIR$/application/models/Imports_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Invoice_items_model.php" afterPath="$PROJECT_DIR$/application/models/Invoice_items_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Invoices_model.php" afterPath="$PROJECT_DIR$/application/models/Invoices_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Purchase_contacts_model.php" afterPath="$PROJECT_DIR$/application/models/Purchase_contacts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Receipts_model.php" afterPath="$PROJECT_DIR$/application/models/Receipts_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Sales_model.php" afterPath="$PROJECT_DIR$/application/models/Sales_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Warehouse_model.php" afterPath="$PROJECT_DIR$/application/models/Warehouse_model.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/Receipts/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/Receipts/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/contracts/export_order_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/contracts/export_order_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/contracts/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/contracts/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/deliveries/delivery_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/deliveries/delivery_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/deliveries/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/deliveries/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/delivery_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/delivery_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/export.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/export.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/exports/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/exports/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/adjustments/adjustment.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/adjustments/adjustment.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/adjustments/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/adjustments/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/imports/internals/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/imports/internals/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice_preview_template.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice_preview_template.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/invoices/invoice_template.php" afterPath="$PROJECT_DIR$/application/views/admin/invoices/invoice_template.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/contract.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/contract.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/quotes/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/quotes/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/detail.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/manage.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/manage.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/sales/order_detail.php" afterPath="$PROJECT_DIR$/application/views/admin/sales/order_detail.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/contracts.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/contracts.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/deliveries.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/deliveries.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/exports.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/exports.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/quotes.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/quotes.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/sale_orders.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/sale_orders.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/tables/sales.php" afterPath="$PROJECT_DIR$/application/views/admin/tables/sales.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/themes/perfex/views/delivery_detail_pdf.php" afterPath="$PROJECT_DIR$/application/views/themes/perfex/views/delivery_detail_pdf.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/main.js" afterPath="$PROJECT_DIR$/assets/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/js/main.min.js" afterPath="$PROJECT_DIR$/assets/js/main.min.js" />
     </list>
     <ignored path="01917F.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,89 +102,49 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="campaign.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/admin/tables/campaign.php">
+      <file leaf-file-name="Receipts_model.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/models/Receipts_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+            <state vertical-scroll-proportion="-18.307692">
+              <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
               <folding>
-                <marker date="1505784858394" expanded="true" signature="3431:3508" placeholder="..." />
-                <marker date="1505784858394" expanded="true" signature="3757:3815" placeholder="..." />
+                <marker date="1505122404541" expanded="true" signature="108:4773" placeholder="{...}" />
+                <marker date="1505122404541" expanded="true" signature="137:180" placeholder="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Quotes.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/admin/Quotes.php">
+      <file leaf-file-name="Receipts.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="136" column="48" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="48" />
+            <state vertical-scroll-proportion="-13.730769">
+              <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vietnamese_lang.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.45904762">
+              <caret line="2834" column="47" selection-start-line="2834" selection-start-column="47" selection-end-line="2834" selection-end-column="47" />
+              <folding>
+                <marker date="1505122634631" expanded="true" signature="227844:227918" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="detail.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/admin/campaign/detail.php">
+        <entry file="file://$PROJECT_DIR$/application/views/admin/Receipts/detail.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.2181818">
-              <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
+            <state vertical-scroll-proportion="-17.653847">
+              <caret line="147" column="43" selection-start-line="147" selection-start-column="43" selection-end-line="147" selection-end-column="43" />
               <folding>
-                <marker date="1505789055908" expanded="true" signature="14536:14548" placeholder="..." />
+                <marker date="1505121730875" expanded="true" signature="23349:23361" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="detail.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/admin/quotes/detail.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.65384614">
-              <caret line="290" column="0" selection-start-line="290" selection-start-column="0" selection-end-line="574" selection-end-column="9" />
-              <folding>
-                <marker date="1505376034112" expanded="true" signature="17821:17833" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="items_detail.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/views/admin/campaign/items_detail.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17397662">
-              <caret line="43" column="61" selection-start-line="43" selection-start-column="61" selection-end-line="43" selection-end-column="61" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Campaign.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/admin/Campaign.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.8461537">
-              <caret line="92" column="73" selection-start-line="92" selection-start-column="73" selection-end-line="92" selection-end-column="73" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Campaign_model.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/Campaign_model.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-22.192308">
-              <caret line="194" column="5" selection-start-line="194" selection-start-column="5" selection-end-line="194" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Invoice_items_model.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/Invoice_items_model.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.230769">
-              <caret line="417" column="40" selection-start-line="417" selection-start-column="40" selection-end-line="417" selection-end-column="40" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -125,57 +157,28 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/application/controllers/admin/Receipts.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/Receipts/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/report_have.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Report_have.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/report_have/manage.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/report_have/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/Votes/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/Debit/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/tabs.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/sales/manage.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/sale_orders.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Sale_orders.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Sales.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/sales.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/sales.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Contracts.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/lead_contract.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/contracts.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/lead_quote.php" />
-        <option value="$PROJECT_DIR$/application/models/Receipts_model.php" />
-        <option value="$PROJECT_DIR$/application/models/Report_have_model.php" />
-        <option value="$PROJECT_DIR$/application/models/Debit_model.php" />
+        <option value="$PROJECT_DIR$/application/models/Warehouse_model.php" />
         <option value="$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/purchase_contracts/view.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/orders/view.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/orders/convert_to_contract.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/purchases/purchase.php" />
+        <option value="$PROJECT_DIR$/application/views/themes/perfex/views/votespdf.php" />
+        <option value="$PROJECT_DIR$/application/helpers/perfex_sales_helper.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/Votes/manage.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/tables/votes.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/tables/debit.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/Debit/manage.php" />
+        <option value="$PROJECT_DIR$/application/models/Debit_model.php" />
+        <option value="$PROJECT_DIR$/application/controllers/admin/Debit.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/Debit/detail.php" />
+        <option value="$PROJECT_DIR$/application/controllers/admin/Votes.php" />
         <option value="$PROJECT_DIR$/application/models/Votes_model.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/sales/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/lead_care_of.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/care_of.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/leads/lead.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/lead_contract - Copy.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/client.php" />
-        <option value="$PROJECT_DIR$/assets/js/main.js" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Clients.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/modals/report.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/clients.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/clients/manage.php" />
-        <option value="$PROJECT_DIR$/application/models/Clients_model.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/campaign/manage.php" />
-        <option value="$PROJECT_DIR$/application/models/Opportunity_model.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Quotes.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/quotes.php" />
-        <option value="$PROJECT_DIR$/application/helpers/perfex_db_helper.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/opportunity/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/opportunity.php" />
+        <option value="$PROJECT_DIR$/application/models/Receipts_model.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/Votes/detail.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/Receipts/detail.php" />
+        <option value="$PROJECT_DIR$/application/controllers/admin/Receipts.php" />
         <option value="$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Opportunity.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/tables/campaign.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/opportunity/manage.php" />
-        <option value="$PROJECT_DIR$/application/controllers/admin/Campaign.php" />
-        <option value="$PROJECT_DIR$/application/models/Campaign_model.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/campaign/detail.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/campaign/items_detail.php" />
       </list>
     </option>
   </component>
@@ -248,20 +251,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="01917F" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="01917F" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="application" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -328,7 +317,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tables" />
+              <option name="myItemId" value="Votes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -354,7 +343,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="quotes" />
+              <option name="myItemId" value="Receipts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -380,7 +369,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="campaign" />
+              <option name="myItemId" value="Debit" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -482,6 +471,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="01917F" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -507,11 +514,6 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -535,13 +537,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="0" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985657" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24511082" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -553,7 +556,6 @@
       <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985657" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24511082" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39895698" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -568,10 +570,10 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24511082" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24511082" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -591,380 +593,485 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="1" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Contracts.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5960729">
-          <caret line="34" column="45" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/groups/attachments.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4516129">
-          <caret line="147" column="74" selection-start-line="147" selection-start-column="74" selection-end-line="147" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/contracts.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28611502">
-          <caret line="93" column="4" selection-start-line="93" selection-start-column="4" selection-end-line="93" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Debit_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.26923">
-          <caret line="151" column="32" selection-start-line="151" selection-start-column="32" selection-end-line="151" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Receipts_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.80364656">
-          <caret line="151" column="13" selection-start-line="151" selection-start-column="13" selection-end-line="151" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Report_have_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5708275">
-          <caret line="142" column="9" selection-start-line="142" selection-start-column="9" selection-end-line="142" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5245442">
-          <caret line="103" column="42" selection-start-line="103" selection-start-column="42" selection-end-line="103" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_suggested.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14165498">
-          <caret line="130" column="54" selection-start-line="130" selection-start-column="54" selection-end-line="130" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/sales/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33380085">
-          <caret line="101" column="55" selection-start-line="101" selection-start-column="55" selection-end-line="101" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/call_logs_relations.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.5295238">
-          <caret line="109" column="20" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tasks/view_call_logs_template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5504762">
-          <caret line="74" column="51" selection-start-line="74" selection-start-column="51" selection-end-line="74" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/modals/lead_contract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11921459">
-          <caret line="5" column="41" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/main.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47605634">
-          <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/leads/lead.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37865496">
-          <caret line="197" column="37" selection-start-line="197" selection-start-column="37" selection-end-line="197" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/modals/lead_care_of.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7752381">
-          <caret line="73" column="3" selection-start-line="48" selection-start-column="1" selection-end-line="73" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/main.js">
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_orders.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="3509" column="29" selection-start-line="3509" selection-start-column="9" selection-end-line="3509" selection-end-column="29" />
+          <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Leads.php">
+    <entry file="file://$PROJECT_DIR$/application/views/admin/orders/convert_to_contract.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="650" column="37" selection-start-line="650" selection-start-column="37" selection-end-line="650" selection-end-column="37" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/modals/client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.576923">
-          <caret line="97" column="37" selection-start-line="97" selection-start-column="37" selection-end-line="97" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/modals/report.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.1538463">
-          <caret line="102" column="14" selection-start-line="102" selection-start-column="13" selection-end-line="102" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.2368422">
-          <caret line="90" column="35" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Votes_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8092567">
-          <caret line="155" column="5" selection-start-line="141" selection-start-column="2" selection-end-line="155" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/groups/profile.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30995792">
-          <caret line="52" column="52" selection-start-line="52" selection-start-column="52" selection-end-line="52" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/invoice_items.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47545582">
-          <caret line="118" column="22" selection-start-line="118" selection-start-column="22" selection-end-line="118" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Clients.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.093969144">
-          <caret line="1148" column="24" selection-start-line="1148" selection-start-column="24" selection-end-line="1148" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Clients_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.023842918">
-          <caret line="578" column="45" selection-start-line="578" selection-start-column="7" selection-end-line="578" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/clients/manage.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.023842918">
-          <caret line="211" column="86" selection-start-line="211" selection-start-column="85" selection-end-line="211" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
+    <entry file="file://$PROJECT_DIR$/application/models/Warehouse_model.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="57" column="38" selection-start-line="57" selection-start-column="38" selection-end-line="57" selection-end-column="38" />
+          <caret line="84" column="96" selection-start-line="84" selection-start-column="94" selection-end-line="84" selection-end-column="96" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/campaign/manage.php">
+    <entry file="file://$PROJECT_DIR$/application/views/admin/orders/view.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2622721">
-          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="539" column="68" selection-start-line="539" selection-start-column="56" selection-end-line="539" selection-end-column="68" />
+          <folding>
+            <marker date="1504865115485" expanded="true" signature="11550:11664" placeholder="..." />
+            <marker date="1504865115485" expanded="true" signature="11929:12107" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Categories.php">
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="60" column="25" selection-start-line="60" selection-start-column="25" selection-end-line="60" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_contracts/view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="146" column="51" selection-start-line="145" selection-start-column="35" selection-end-line="146" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/app-config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="26" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchases/convert_to_suggested_bk.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="210" column="42" selection-start-line="210" selection-start-column="42" selection-end-line="210" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Products.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/clients.php">
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchases.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45760235">
-          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="96" />
+        <state vertical-scroll-proportion="-4.4545455">
+          <caret line="120" column="51" selection-start-line="120" selection-start-column="43" selection-end-line="120" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/care_of.php">
+    <entry file="file://$PROJECT_DIR$/application/config/app-config.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2622721">
-          <caret line="32" column="22" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="26" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/receipts.php">
+    <entry file="file://$PROJECT_DIR$/application/views/admin/orders/convert_to_contract.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50070125">
-          <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.9396914">
+          <caret line="184" column="24" selection-start-line="184" selection-start-column="24" selection-end-line="184" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/invoices.php">
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_orders.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38148668">
-          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="71" />
+        <state vertical-scroll-proportion="0.023842918">
+          <caret line="87" column="34" selection-start-line="87" selection-start-column="34" selection-end-line="87" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/quotes.php">
+    <entry file="file://$PROJECT_DIR$/application/models/Warehouse_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.19428572">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.023842918">
+          <caret line="84" column="96" selection-start-line="84" selection-start-column="94" selection-end-line="84" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_contracts/view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.023842918">
+          <caret line="146" column="51" selection-start-line="145" selection-start-column="35" selection-end-line="146" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchases/convert_to_suggested_bk.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.023842918">
+          <caret line="210" column="42" selection-start-line="210" selection-start-column="42" selection-end-line="210" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_suggested/detail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.023842918">
+          <caret line="518" column="61" selection-start-line="513" selection-start-column="7" selection-end-line="518" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Rule_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25877193">
+          <caret line="30" column="26" selection-start-line="30" selection-start-column="26" selection-end-line="30" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Sales_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="66" column="24" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Clients.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35818714">
+          <caret line="602" column="82" selection-start-line="601" selection-start-column="15" selection-end-line="602" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Accounts_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35818714">
+          <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/orders/view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.025245441">
+          <caret line="539" column="68" selection-start-line="539" selection-start-column="56" selection-end-line="539" selection-end-column="68" />
+          <folding>
+            <marker date="1504865115485" expanded="true" signature="11550:11664" placeholder="..." />
+            <marker date="1504865115485" expanded="true" signature="11929:12107" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/categories.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40532959">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="38" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_cost.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14305751">
+          <caret line="34" column="36" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Purchase_contacts_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.018182">
+          <caret line="32" column="51" selection-start-line="32" selection-start-column="41" selection-end-line="32" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_contracts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.2692308">
+          <caret line="87" column="5" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/themes/perfex/views/contractpdf.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42917252">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/helpers/perfex_sales_helper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1871345">
+          <caret line="2129" column="25" selection-start-line="2129" selection-start-column="25" selection-end-line="2129" selection-end-column="25" />
+          <folding>
+            <marker date="1505122404166" expanded="false" signature="67865:67960" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="67961:68622" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="67979:68020" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68038:68087" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68105:68161" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68179:68240" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68258:68333" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68351:68405" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68423:68604" placeholder="..." />
+            <marker date="1505122404166" expanded="false" signature="68680:68775" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68776:68973" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68819:68833" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68858:68889" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="68911:68959" placeholder="..." />
+            <marker date="1505122404166" expanded="false" signature="68994:69089" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69090:69290" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69133:69147" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69172:69203" placeholder="..." />
+            <marker date="1505122404166" expanded="true" signature="69225:69276" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/helpers/perfex_themes_helper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.3338008">
+          <caret line="57" column="15" selection-start-line="57" selection-start-column="15" selection-end-line="57" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchases/manage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.307693">
+          <caret line="118" column="47" selection-start-line="118" selection-start-column="35" selection-end-line="118" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/purchase_contracts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.5636363">
+          <caret line="49" column="38" selection-start-line="49" selection-start-column="38" selection-end-line="49" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/purchase_suggested.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.85834503">
+          <caret line="117" column="13" selection-start-line="88" selection-start-column="7" selection-end-line="117" selection-end-column="13" />
+          <folding>
+            <marker date="1504845307897" expanded="true" signature="5446:5618" placeholder="..." />
+            <marker date="1504845307897" expanded="true" signature="6197:6369" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchase_suggested/manage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18666667">
+          <caret line="103" column="21" selection-start-line="103" selection-start-column="21" selection-end-line="103" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Purchase_suggested.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34879032">
+          <caret line="102" column="9" selection-start-line="102" selection-start-column="9" selection-end-line="102" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/contracts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.5">
+          <caret line="37" column="45" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/helpers/perfex_general_helper.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5752381">
+          <caret line="170" column="58" selection-start-line="170" selection-start-column="45" selection-end-line="170" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/purchases/purchase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.733871">
+          <caret line="521" column="51" selection-start-line="521" selection-start-column="51" selection-end-line="521" selection-end-column="51" />
+          <folding>
+            <marker date="1504936453040" expanded="true" signature="14737:14749" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/Votes/manage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.7180927">
+          <caret line="114" column="35" selection-start-line="114" selection-start-column="35" selection-end-line="114" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/Debit/detail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.076923">
+          <caret line="110" column="121" selection-start-line="110" selection-start-column="121" selection-end-line="110" selection-end-column="121" />
+          <folding>
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <marker date="1505117863968" expanded="true" signature="23641:23653" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Votes_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5466667">
+          <caret line="147" column="21" selection-start-line="147" selection-start-column="21" selection-end-line="147" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/votes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0514286">
+          <caret line="46" column="66" selection-start-line="46" selection-start-column="66" selection-end-line="46" selection-end-column="66" />
+          <folding>
+            <marker date="1505114307622" expanded="true" signature="2790:2948" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/debit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38857144">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+          <folding>
+            <marker date="1505114632651" expanded="true" signature="2790:2948" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/Debit/manage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32380953">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Debit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8366935">
+          <caret line="86" column="16" selection-start-line="86" selection-start-column="16" selection-end-line="86" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Votes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.81142855">
+          <caret line="86" column="57" selection-start-line="86" selection-start-column="46" selection-end-line="86" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Debit_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.70857143">
+          <caret line="154" column="55" selection-start-line="139" selection-start-column="3" selection-end-line="154" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/Votes/detail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.034274194">
+          <caret line="109" column="90" selection-start-line="109" selection-start-column="90" selection-end-line="109" selection-end-column="90" />
+          <folding>
+            <marker date="1505121730869" expanded="true" signature="5773:6110" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="5849:6110" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="5889:6110" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="5930:6110" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="7062:7575" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="7277:7294" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="7433:7575" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="8236:8378" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="9039:9194" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="9845:9989" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="10616:10762" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="11386:11657" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="11454:11612" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="11701:11941" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="12447:12635" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="12509:12635" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="12737:12981" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="12806:12981" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="13090:13259" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="14148:14317" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="15251:15447" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="16321:16507" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="17357:17545" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="18395:18622" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="18464:18622" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="19331:19551" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="19392:19551" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="19432:19551" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="19473:19551" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="19692:19799" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="20288:20305" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="20306:20341" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="20624:21000" placeholder="..." />
+            <marker date="1505121730869" expanded="true" signature="20983:21000" placeholder="{...}" />
+            <marker date="1505121730869" expanded="true" signature="23595:23607" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/Receipts/detail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.653847">
+          <caret line="147" column="43" selection-start-line="147" selection-start-column="43" selection-end-line="147" selection-end-column="43" />
+          <folding>
+            <marker date="1505121730875" expanded="true" signature="23349:23361" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/Receipts_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.307692">
+          <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
+          <folding>
+            <marker date="1505122404541" expanded="true" signature="108:4773" placeholder="{...}" />
+            <marker date="1505122404541" expanded="true" signature="137:180" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Receipts.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.730769">
+          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/language/vietnamese/vietnamese_lang.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.26923">
-          <caret line="4022" column="15" selection-start-line="4022" selection-start-column="7" selection-end-line="4022" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/helpers/perfex_db_helper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.26923">
-          <caret line="1687" column="37" selection-start-line="1687" selection-start-column="37" selection-end-line="1687" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/opportunity.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.65384614">
-          <caret line="76" column="119" selection-start-line="76" selection-start-column="119" selection-end-line="76" selection-end-column="119" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/opportunity/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.654546">
-          <caret line="201" column="25" selection-start-line="201" selection-start-column="25" selection-end-line="201" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Opportunity.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.26923">
-          <caret line="117" column="27" selection-start-line="117" selection-start-column="27" selection-end-line="117" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/opportunity/manage.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7615708">
-          <caret line="140" column="15" selection-start-line="140" selection-start-column="15" selection-end-line="140" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Opportunity_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30995792">
-          <caret line="138" column="47" selection-start-line="138" selection-start-column="12" selection-end-line="138" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Quotes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="136" column="48" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Quotes_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50438595">
-          <caret line="22" column="40" selection-start-line="22" selection-start-column="40" selection-end-line="22" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Invoices_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.6545453">
-          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/tables/campaign.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="66" column="35" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.45904762">
+          <caret line="2834" column="47" selection-start-line="2834" selection-start-column="47" selection-end-line="2834" selection-end-column="47" />
           <folding>
-            <marker date="1505784858394" expanded="true" signature="3431:3508" placeholder="..." />
-            <marker date="1505784858394" expanded="true" signature="3757:3815" placeholder="..." />
+            <marker date="1505122634631" expanded="true" signature="227844:227918" placeholder="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/admin/Campaign.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8461537">
-          <caret line="92" column="73" selection-start-line="92" selection-start-column="73" selection-end-line="92" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/quotes/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.65384614">
-          <caret line="290" column="0" selection-start-line="290" selection-start-column="0" selection-end-line="574" selection-end-column="9" />
-          <folding>
-            <marker date="1505376034112" expanded="true" signature="17821:17833" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Campaign_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.192308">
-          <caret line="194" column="5" selection-start-line="194" selection-start-column="5" selection-end-line="194" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/Invoice_items_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.230769">
-          <caret line="417" column="40" selection-start-line="417" selection-start-column="40" selection-end-line="417" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/campaign/detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.2181818">
-          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-          <folding>
-            <marker date="1505789055908" expanded="true" signature="14536:14548" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/campaign/items_detail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17397662">
-          <caret line="43" column="61" selection-start-line="43" selection-start-column="61" selection-end-line="43" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>

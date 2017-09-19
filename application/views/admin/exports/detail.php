@@ -152,18 +152,16 @@
                     <div class="panel-body mtop10">
                     <?php if(!empty($item->rel_id) || !empty($item->rel_code)){ $display='style="display: none;"';  }?>
                         <div class="row"  >
-                        <div class="col-md-4">
-                                <?php 
-                                    if($item->rel_id)
-                                        {
-                                            $arr=array('disabled'=>true);
-                                            echo form_hidden('warehouse_type',$warehouse_type_id);
-                                            echo form_hidden('warehouse_name',$warehouse_id);
-                                        }
-
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
-                                ?>
-                            </div>
+                        <div class="col-md-4" style="display: none;">
+                            <?php 
+                                if($item->rel_id)
+                                    {
+                                        $arr=array('disabled'=>true);
+                                        echo form_hidden('warehouse_type',$warehouse_type_id);
+                                        echo form_hidden('warehouse_name',$warehouse_id);
+                                    }
+                            ?>
+                        </div>
                             <div class="col-md-4">
                                 <?php 
                                     echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);

@@ -209,6 +209,7 @@ class Purchases_model extends CRM_Model
      */
     public function add($data, $expense = false)
     {
+        $warehouse_id=$data['warehouse_id'];
         $purchase = array(
             'code'=>get_option('prefix_purchase_plan').$data['number'],
             'name'=>$data['name'],
@@ -227,25 +228,28 @@ class Purchases_model extends CRM_Model
 
         if($id)
         {
-            
-            for ($i=0; $i < count($items); $i++) { 
+            foreach ($items as $key => $item) {
+                
                 $item=array(
                     'purchase_plan_id'=>$id,
-                    'product_id'=>$items[$i]['id'],
-                    'quantity_required'=>$items[$i]['quantity'],
-                    'warehouse_id'=>$items[$i]['warehouse'],
-                    'currency_id'=>$items[$i]['currency'],
-                    'price_buy'=>$items[$i]['price_buy'],
+                    'product_id'=>$item['id'],
+                    'quantity_required'=>$item['quantity'],
+                    'warehouse_id'=>$warehouse_id,
+                    'currency_id'=>$item['currency'],
+                    'price_buy'=>$item['price_buy'],
                 );
                 if($this->db->insert('tblpurchase_plan_details',$item))
                 {
-                    logActivity('Purchase plan detail insert [ID Purchase: ' . $id . ', ID Product: ' . $items[$i]['id'] . ']');
+
+                    logActivity('Purchase plan detail insert [ID Purchase: ' . $id . ', ID Product: ' . $item['id'] . ']');
                     $count++;
                 }
                 else {
                     exit("error");
                 }
+
             }
+            
         }
 
         if($id)
@@ -446,6 +450,7 @@ class Purchases_model extends CRM_Model
      */
     public function update($data, $id)
     {
+        $warehouse_id=$data['warehouse_id'];
         $purchase = array(
             'name'=>$data['name'],
             'reason'=>$data['reason'],
@@ -477,7 +482,7 @@ class Purchases_model extends CRM_Model
                 {
                     $item = array(
                     'quantity_required'=>$items[$i]['quantity'],
-                    'warehouse_id' => $items[$i]['warehouse'],
+                    'warehouse_id' => $warehouse_id,
                     'currency_id'=>$items[$i]['currency'],
                     'price_buy'=>$items[$i]['price_buy'],
                     );

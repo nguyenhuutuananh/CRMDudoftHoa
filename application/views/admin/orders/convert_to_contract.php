@@ -124,6 +124,11 @@
                     echo render_textarea('terms_of_sale', 'Điều khoản thanh toán', $terms_of_sale, array(), array(), '', 'tinymce');
                     ?>
 
+                    <?php 
+                        $default_warehouse = $warehouse_id;
+                        echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse);
+                    ?>
+
                 </div>
                 
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -166,8 +171,6 @@
                                     <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                     
-                                    <th width="" class="text-left"><?php echo _l('warehouse_type'); ?></th>
-                                    <th width="" class="text-left"><?php echo _l('warehouse_name'); ?></th>
                                     <th class="text-left">Tỷ giá</th>
                                     <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
@@ -199,18 +202,17 @@
                                     <?php
                                     $err = '';
                                     $style = '';
-                                    if ($value['quantity_required'] > $value['warehouse_type']->maximum_quantity)
+                                    $maxQ=$value['warehouse_type']->maximum_quantity-$value['warehouse_type']->total_quantity;
+                                    if ($value['product_quantity'] > $value['warehouse_type']->maximum_quantity)
                                         {
                                         $err = 'error';
                                         $style = 'border: 1px solid red !important';
                                     }
                                     ?>
                                     <td>
-                                    <input <?= ($lock ? "disabled=\"disabled\"" : "") ?> style="width: 100px; <?= $style ?>" class="mainQuantity <?= $err ?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
+                                    <input <?= ($lock ? "disabled=\"disabled\"" : "") ?> data-store="<?=$maxQ?>" style="width: 100px; <?= $style ?>" class="mainQuantity <?= $err ?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value['product_quantity']; ?>">
                                     </td>
-                                        
-                                    <td><?php echo $value['warehouse_type']->kindof_warehouse_name ?></td>
-                                    <td><input type="hidden" data-store="<?= $value['warehouse_type']->maximum_quantity ?>" name="items[<?= $i ?>][warehouse]" value="<?= $value['warehouse_id'] ?>"><?php echo $value['warehouse_type']->warehouse ?>(tối đa <?= $value['warehouse_type']->maximum_quantity ?>)</td>
+                                    
                                     <td>
                                     <?php
                                         $array_disabled = array();
@@ -306,6 +308,7 @@
 <script>
     
     $(document).ready(function(){$('select option:not(:selected)').attr('disabled',true);});
+    $(document).ready(function(){$('id_warehouse option:not(:selected)').removeAttr('disabled');});
     $(document).ready(function(){$('button[data-toggle="dropdown"]').attr('disabled',true);});
     $(function() {
         _validate_form($('.client-form'), {

@@ -7,8 +7,7 @@ $aColumns     = array(
     'code',
     'warehouse',
     'address',
-    'phone',
-    '(select name from tbl_kindof_warehouse a where tblwarehouses.kindof_warehouse = a.id) as kind_of_warehouse',
+    'phone'
 );
 $sIndexColumn = "warehouseid";
 $sTable       = 'tblwarehouses';

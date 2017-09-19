@@ -109,7 +109,7 @@ class Sales extends Admin_controller
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
-        $data['warehouses']= (isset($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type_id']):$this->warehouse_model->getWarehouses());
+        $data['warehouses']= $this->warehouse_model->getWarehouses();
         
         $data['title'] = $title;
         $this->load->view('admin/sales/detail', $data);
