@@ -8,18 +8,18 @@ $plan_status=array(
 
 $aColumns     = array(
     '1',
-    'code',
-    'company',
-    'total',
-    '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
-    'status',
+    'tblquotes.code',
+    'tblquotes.company',
+    'tblquotes.total',
+    '(SELECT fullname FROM tblstaff WHERE tblquotes.create_by=tblstaff.staffid)',
+    'tblquotes.status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
-    'date'
+    'tblquotes.date'
 );
 if($customer_id)
 {
     $aColumns     = array(
-        'code',
+        'tblquotes.code',
         'total',
         '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
         'status',
@@ -56,9 +56,10 @@ if($this->_instance->input->post()) {
 }
 
 $join         = array(
-    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by',
-    'LEFT JOIN tblclients  ON tblclients.userid=tblquotes.customer_id'
+    'LEFT JOIN tblclients ON tblclients.userid = tblquotes.customer_id',
+    'LEFT JOIN tblstaff  ON tblstaff.staffid=tblquotes.create_by'
 );
+
 $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where, array(
     'id',
     'prefix',
@@ -68,7 +69,6 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where
 ));
 $output       = $result['output'];
 $rResult      = $result['rResult'];
-//var_dump($rResult);die();
 
 
 $j=0;
@@ -83,8 +83,8 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'rel_code') {
             $_data='<a href="'.admin_url('sales/sale_detail/'.$aRow['rel_id']).'">'.$aRow['rel_code'].'</a>';
         }
-        if ($aColumns[$i] == 'code') {
-            $_data=$aRow['prefix'].$aRow['code'];
+        if ($aColumns[$i] == 'tblquotes.code') {
+            $_data=$aRow['prefix'].$aRow['tblquotes.code'];
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);

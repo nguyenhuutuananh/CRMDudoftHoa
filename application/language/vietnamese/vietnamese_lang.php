@@ -659,7 +659,8 @@ $lang['wd_sunday']    = 'Chủ Nhật';
 $lang['als_dashboard'] = 'Bảng Điều Khiển';
 $lang['als_clients']   = 'Khách Hàng';
 $lang['als_leads']     = 'Cuộc gọi';
-
+$lang['als_Marketing']     = 'Marketing';
+$lang['als_campaign']     = 'Chiến dịch';
 $lang['als_contracts'] = 'Hợp Đồng';
 
 $lang['als_all_tickets'] = 'Tất Cả Vé Hỗ Trợ';
@@ -3684,6 +3685,7 @@ $lang['als_sale_orders'] = "Đơn hàng bán";
 $lang['als_quotations'] = "Báo giá";
 $lang['als_deliveries'] = "Giao hàng";
 $lang['als_sale_contracts'] = "Hợp đồng bán";
+$lang['als_opportunity'] = "Cơ hội";
 
 $lang['warehouse_type'] = "Loại kho";
 $lang['warehouse_name'] = "Kho hàng";
@@ -3978,7 +3980,50 @@ $lang['delete_true']="Xóa thành công";
 $lang['delete_false']="Xóa không thành công";
 $lang['client_report']="Phản hồi từ KH";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng thành công";
-$lang['delete_comment_client']="Xóa phản hồi khách hàng không thành công";
+$lang['not_delete_comment_client']="Xóa phản hồi khách hàng không thành công";
+$lang['personal']="Cá nhân";
+$lang['organization']="Tổ chức";
+$lang['clients_code']="Mã KH";
+$lang['source_approach']="Nguồn KH";
+$lang['birthday']="Sinh nhật";
+$lang['_campaign_name']="Tên chiến dịch";
+$lang['start_data']="Ngày bắt đầu";
+$lang['staff']="Nhân viên";
+$lang['_end_date']="Ngày kết thúc";
+$lang['step_name_campaign']="Các bước chiến dịch";
+$lang['add_campain_true']="Thêm chiến dịch thành công";
+$lang['add_campain_flase']="Thêm chiến dịch không thành công";
+$lang['update_campain_true']="Cập chiến dịch thành công";
+$lang['name_campaign']="Tên chiến dịch";
+$lang['manage_campaign']="Quản lý chiến dịch";
+$lang['staff_participation']="Nhân viên tham gia";
+$lang['cost_campaign']="Chi phí chiến dịch";
+$lang['_start_date']="Ngày bắt đầu";
+$lang['__end_date']="Ngày kết thúc";
+$lang['_tb_delete_campaign']="Xóa chiến dịch sẽ xóa các thông tin liên quan đến chiến dịch";
+$lang['delete_true']="Xóa dữ liệu thành công";
+$lang['contact']="Liên hệ chính";
+$lang['performance']="Xác xuất";
+$lang['_expected']="Danh thu dự kiến";
+
+$lang['staff_in']="Nhân viên phụ trách";
+$lang['status_opportunity']="Trạng thái cơ hội";
+$lang['source']="Nguồn";
+$lang['source_details']="Chi tiết nguồn";
+$lang['content']="Nội dung";
+$lang['_phone']="Số điện thoại";
+$lang['staff_manage']="Nhân viên quản lý";
+$lang['campaign']="Chiến dịch";
+$lang['create_campaign']="Tạo chiến dịch";
+$lang['add_opportunity_true']="Thêm cơ hội khách hàng thành công";
+$lang['add_opportunity_false']="Thêm cơ hội khách hàng không thành công";
+$lang['update_opportunity_true']="Cập nhật cơ hội khách hàng thành công";
+$lang['expected']="Danh thu dự kiến";
+$lang['step']="Các bước";
+$lang['war_step']="Chuyển trạng thái thành công";
+$lang['title_items']="Sản phẩm";
+
+
 
 
 

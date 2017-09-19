@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Clients_model extends CRM_Model
 {
-    private $contact_data = array('firstname', 'lastname', 'email', 'phonenumber', 'title', 'password', 'send_set_password_email', 'donotsendwelcomeemail', 'permissions', 'direction');
+    private $contact_data = array('firstname', 'lastname', 'phonenumber', 'password', 'send_set_password_email', 'donotsendwelcomeemail', 'permissions', 'direction');
     function __construct()
     {
         parent::__construct();
@@ -441,6 +441,7 @@ class Clients_model extends CRM_Model
         }
         $data['datecreated'] = date('Y-m-d H:i:s');
         $data                = do_action('before_client_added', $data);
+        $data['code']=$this->get_code();
         $this->db->insert('tblclients', $data);
         $userid = $this->db->insert_id();
         if ($userid) {
@@ -486,6 +487,21 @@ class Clients_model extends CRM_Model
             logActivity('New Client Created [' . $_new_client_log . ']', $_is_staff);
         }
         return $userid;
+    }
+    public function get_code()
+    {
+        $this->db->select_max('userid');
+        $id_max = $this->db->get('tblclients')->row();
+        $last_id = strlen(($id_max->id) + 1);
+        $max_code = 6;
+        $n = $max_code - $last_id;
+        $_code = "";
+        if ($n > 0) {
+            for ($i = 0; $i < $n; $i++) {
+                $_code .= 0;
+            }
+        }
+        return $last_code = get_option('prefix_clients') . $_code . ($id_max->userid + 1);
     }
     // Sources
     /**
