@@ -288,8 +288,6 @@ class Purchase_orders extends Admin_controller
         header('Content-type: application/json');
         $array_currencies = array();
         if(count($currencies) > 0) {
-            
-            
             $url = "http://www.mycurrency.net/service/rates";
             $content = file_get_contents($url);
             $result = new stdClass();

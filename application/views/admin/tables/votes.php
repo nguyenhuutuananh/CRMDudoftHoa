@@ -106,8 +106,19 @@ foreach ($rResult as $aRow) {
         $row[] = $_data;
     }
     $options = '';
-    $options .= icon_btn('votes/pdf/'. $aRow['tblvotes.id'] .'?pdf=true' , 'file-pdf-o', 'btn-default', array('target'=>'_blank'));
-    $options .= icon_btn('votes/pdf/'. $aRow['tblvotes.id'] .'?print=true' , 'print', 'btn-default', array('target'=>'_blank'));
+    $options.='<div class="dropdown" style="position: absolute;">
+                    <a class="dropdown-toggle btn btn-default btn-icon" data-toggle="dropdown"><i class="fa fa-print"></i></a>
+                    <ul class="dropdown-menu">
+                      <li class="dropdown-header">LIÊN</li>
+                      <li><a href="'.admin_url().'votes/pdf/' . $aRow['id'].'?pdf=true" target="_blank">Liên 1</a></li>
+                      <li><a href="#">Liên 2</a></li>
+                      <li><a href="#">Liên 3</a></li>
+                    </ul>
+                 </div>
+                ';
+    $mleft30='mleft30';
+//    $options .= icon_btn('votes/pdf/'. $aRow['tblvotes.id'] .'?pdf=true' , 'print', 'btn-default', array('target'=>'_blank'));
+    $options .= icon_btn('votes/pdf/'. $aRow['tblvotes.id'] .'?print=true' , 'file-pdf-o', 'btn-default '.$mleft30, array('target'=>'_blank'));
     $options .= icon_btn('votes/pdf/'. $aRow['tblvotes.id'] , 'download', 'btn-default', array('target'=>'_blank'));
     $row[] = $options;
 

@@ -4039,6 +4039,20 @@ $lang['step']="Các bước";
 $lang['war_step']="Chuyển trạng thái thành công";
 $lang['title_items']="Sản phẩm";
 $lang['total_sales']="Tổng sản phẩm phiếu thu";
+$lang['_day']="Ngày";
+$lang['_month']="Tháng";
+$lang['_year']="Năm";
+$lang['_money_']="Viết bằng chữ";
+$lang['_attach']="Kèm theo";
+$lang['_documents']="chứng từ gốc";
+
+$lang['director']="Giám đốc";
+$lang['chief_accountant']="Kế toán trưởng";
+$lang['treasurer']="Thủ quỹ";
+$lang['the_person_making_the_votes']="Người lập phiếu";
+$lang['money_receiver']="Người nhận tiền";
+$lang['prefix_logo_date_pdf_true_false']="Hiện logo và ngày tháng";
+$lang['prefix_header_pdf']="Header pdf để rổng để không áp dụng";
 
 
 

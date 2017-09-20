@@ -132,7 +132,7 @@
                                         <th width="" class="text-left"><?php echo _l('contract_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('contract_ban'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('currencies'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('total_money'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('total_money'); ?>(VND)</th>
                                         <th></th>
                                         
                                     </tr>
@@ -187,7 +187,7 @@
                                            </select>
                                        </td>
                                         <td>
-                                           <select class="selectpicker" id="currencies" data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                           <select class="selectpicker" id="currencies" disabled data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                <?php if($currencies){?>
                                                    <option></option>
                                                    <?php foreach($currencies as $rom){?>
@@ -276,7 +276,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][currencies]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                            <select class="selectpicker" name="item[<?php echo $i ?>][currencies]" data-width="100%" disabled data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                 <?php if($currencies){?>
                                                     <option></option>
                                                     <?php foreach($currencies as $rom){?>
@@ -451,6 +451,7 @@
         let currencies = $('tr.main').find('td:nth-child(7)').find('select').clone();
         currencies.attr('name', 'items[' + uniqueArray + '][currencies]');
         currencies.removeAttr('id').val($('tr.main').find('td:nth-child(7)').find('select').selectpicker('val'));
+
         td7.append(currencies);
 
         td8.find('input').val($('tr.main').find('td:nth-child(8) input').val());
@@ -481,9 +482,8 @@
         trBar.find('td:nth-child(2) input').val('');
         trBar.find('td:nth-child(5) select').val('').selectpicker('refresh');
         trBar.find('td:nth-child(6) select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(7) input').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(7) select').val('').selectpicker('refresh');
         trBar.find('td:nth-child(8) input').val('');
-
 
     };
     var deleteTrItem = (trItem) => {
@@ -502,7 +502,7 @@
         $('.total').text(formatNumber(total));
         var items = $('table.item-export tbody tr:gt(0)');
         
-		$('.selectpicker').selectpicker('refresh');
+		$('.selectpicker').selectpicker('refresh').removeAttr('disabled');;
 	};
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
