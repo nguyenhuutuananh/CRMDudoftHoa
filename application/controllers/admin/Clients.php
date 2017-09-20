@@ -83,10 +83,21 @@ class Clients extends Admin_controller
                 }
                 if ($id) {
                     set_alert('success', _l('added_successfuly', _l('client')));
-                    if ($save_and_add_contact == false) {
-                        redirect(admin_url('clients/client/' . $id));
-                    } else {
-                        redirect(admin_url('clients/client/' . $id . '?new_contact=true'));
+                    if(get_option('prefix_add_continuous ')==0)
+                    {
+                        if ($save_and_add_contact == false) {
+                            redirect(admin_url('clients/client/' . $id));
+                        } else {
+                            redirect(admin_url('clients/client/' . $id . '?new_contact=true'));
+                        }
+                    }
+                    else
+                    {
+                        if ($save_and_add_contact == false) {
+                            redirect(admin_url('clients/client'));
+                        } else {
+                            redirect(admin_url('clients/client?new_contact=true'));
+                        }
                     }
                 }
             } else {

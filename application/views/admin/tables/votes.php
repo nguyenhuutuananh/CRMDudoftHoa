@@ -11,6 +11,7 @@ $aColumns     = array(
     'tblvotes.id_supplier',
     'tblvotes.date_create',
     'tblvotes.status',
+    '6',
     'tblvotes.reason',
     'tblvotes.staff_browse',
     'tblvotes.id_staff'
@@ -48,6 +49,22 @@ foreach ($rResult as $aRow) {
         }
         if($aColumns[$i] == "tblvotes.id_supplier"){
             $_data = '<a href="'.admin_url('suppliers/supplier').$aRow['tblvotes.id_supplier'].'">'.$aRow['name_supplier'].'</a>';
+        }
+        if($aColumns[$i] == "6"){
+            $_total= get_table_where('tblvotes_contract','id_votes='.$aRow['id']);
+            if($_total!=array())
+            {
+                $total=0;
+                foreach($_total as $r)
+                {
+                    $total+=$r['total'];
+                }
+                $_data=_format_number($total);
+            }
+            else
+            {
+                $_data="";
+            }
         }
         if($aColumns[$i] == 'tblvotes.status') {
             if ($aRow['tblvotes.status'] == 0) {

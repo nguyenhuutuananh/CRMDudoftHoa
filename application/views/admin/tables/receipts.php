@@ -10,8 +10,8 @@ $aColumns     = array(
     'tblreceipts.receiver',
     'tblreceipts.id_client',
     'tblreceipts.date_create',
-    'tblreceipts.status',
     'tblreceipts.reason',
+    '6',
     'tblreceipts.staff_browse',
     'tblreceipts.id_staff'
 );
@@ -48,6 +48,22 @@ foreach ($rResult as $aRow) {
         }
         if($aColumns[$i] == "tblreceipts.id_client"){
             $_data = '<a href="'.admin_url('clients/client/').$aRow['tblreceipts.id_client'].'">'.$aRow['company'].'</a>';
+        }
+        if($aColumns[$i] == "6"){
+           $_total= get_table_where('tblreceipts_contract','id_receipts='.$aRow['id']);
+            if($_total!=array())
+            {
+                $total=0;
+                foreach($_total as $r)
+                {
+                    $total+=$r['subtotal'];
+                }
+                $_data=_format_number($total);
+            }
+            else
+            {
+                $_data="";
+            }
         }
         if($aColumns[$i] == 'tblreceipts.status') {
             if ($aRow['tblreceipts.status'] == 0) {

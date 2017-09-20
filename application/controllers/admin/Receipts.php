@@ -94,7 +94,7 @@ class Receipts extends Admin_controller
                 $data['receipt']=$this->receipts_model->get_index_receipts($id);
                 if($data['receipt'])
                 {
-                    $data['invoices']=$this->receipts_model->get_invoices_receipts($data['receipt']->id_client);
+                    $data['sales']=$this->receipts_model->get_sales_receipts($data['receipt']->id_client);
                     $data['receipts']= $this->receipts_model->index_receipts_contract($id);
                 }
                 else
@@ -107,17 +107,28 @@ class Receipts extends Admin_controller
         }
 
     }
-    public function get_invoices()
+    public function get_sales()
     {
         $id_client=$this->input->post('id_client');
-        $client=$this->receipts_model->get_invoices_receipts($id_client);
+        $client=$this->receipts_model->get_sales_receipts($id_client);
         echo json_encode($client);
     }
-    public function get_invoices_id()
+    public function get_sales_id()
     {
-        $id=$this->input->post('invoices');
+        $id=$this->input->post('sales');
         if($id){
-            $result=$this->receipts_model->get_table_id('tblinvoices','id='.$id);
+            $result=$this->receipts_model->get_table_id('tblsales','id='.$id);
+            $this->db->where('sale_id',$id);
+            $project_sales=$this->db->get('tblsale_items')->result_array();
+            $money=0;
+            $money_tax=0;
+            foreach($project_sales as $rom)
+            {
+                $money_tax+=$rom['tax'];
+                $money+=$rom['sub_total'];
+            }
+            $result->money_tax=$money_tax.'';
+            $result->money=$money.'';
             echo json_encode($result);
         }
     }

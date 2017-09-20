@@ -659,7 +659,8 @@ $lang['wd_sunday']    = 'Chủ Nhật';
 $lang['als_dashboard'] = 'Bảng Điều Khiển';
 $lang['als_clients']   = 'Khách Hàng';
 $lang['als_leads']     = 'Cuộc gọi';
-
+$lang['als_Marketing']     = 'Marketing';
+$lang['als_campaign']     = 'Chiến dịch';
 $lang['als_contracts'] = 'Hợp Đồng';
 
 $lang['als_all_tickets'] = 'Tất Cả Vé Hỗ Trợ';
@@ -1300,6 +1301,7 @@ $lang['invoice_discount'] = 'Giảm giá';
 # Settings
 $lang['settings_rtl_support_admin']                                   = 'Khu vực Quản trị RTL (Từ phải sang trái)';
 $lang['settings_rtl_support_client']                                  = 'Khu vực khách hàng RTL (phải sang trái)';
+$lang['settings_add_continuous']                                  	  = 'Thêm dữ liệu liên tục';
 $lang['acs_language_editor']                                          = 'Trình biên soạn Ngôn ngữ';
 $lang['settings_estimate_auto_convert_to_invoice_on_client_accept']   = 'Tự động chuyển đổi dự toán sang hóa đơn sau khi khách hàng chấp nhận';
 $lang['settings_exclude_estimate_from_client_area_with_draft_status'] = 'Loại trừ ước tính có trạng thái dự thảo từ khu vực khách hàng';
@@ -2729,7 +2731,7 @@ $lang['home_project_activity_not_found'] = 'Không tìm thấy hoạt động Đ
 $lang['view_tracking'] = 'Theo dõi lượt xem';
 $lang['view_date'] = 'Ngày chứng từ';
 $lang['account_date'] = 'Ngày hạch toán';
-$lang['create_date'] = 'Ngày tạo đơn hàng';
+$lang['create_date'] = 'Ngày chứng từ';
 $lang['view_ip'] = 'Địa chỉ IP';
 $lang['article_total_views'] = 'Tổng số lần xem';
 $lang['leads_source'] = 'Nguồn';
@@ -3685,6 +3687,7 @@ $lang['als_quotations'] = "Báo giá";
 $lang['als_deliveries'] = "Giao hàng";
 $lang['als_sale_contracts'] = "Hợp đồng bán";
 
+$lang['als_opportunity'] = "Cơ hội";
 $lang['warehouse_type'] = "Loại kho";
 $lang['warehouse_name'] = "Kho hàng";
 $lang['item_name'] = "Sản phẩm";
@@ -3717,10 +3720,12 @@ $lang['cost_code'] = "Mã phiếu chi phí";
 $lang['purchase_cost_information'] = 'Thông tin phiếu chi phí mua hàng';
 $lang['sale_orders'] = "Đơn đặt hàng";
 $lang['add_sale_order_'] = "Thêm đơn hàng bán";
+$lang['add_sale_order_so'] = "Thêm đơn hàng bán(SO)";
 $lang['sales'] = "Đơn hàng bán";
+$lang['sales_po'] = "Đơn hàng bán(PO)";
 $lang['sale'] = "Đơn đặt hàng";
 $lang['sale_detail'] = "Chi tiết đơn hàng";
-$lang['sale_code'] = "Mã đơn hàng";
+$lang['sale_code'] = "Mã chứng từ";
 $lang['code_noo'] = "Số chứng từ";
 $lang['sale_name'] = "Phiếu Đặt Hàng";
 $lang['edit_sale_order'] = "Sửa đơn hàng";
@@ -3791,6 +3796,7 @@ $lang['sale_list'] = "Danh sách đơn hàng";
 $lang['create_export'] = "Tạo phiếu xuất kho";
 $lang['warehouseman'] = "Thủ kho";
 $lang['add_sale_order'] = "Thêm đơn đặt hàng";
+$lang['add_sale_order_po'] = "Thêm đơn đặt hàng (PO)";
 $lang['export_list'] = "Danh sách phiếu xuất kho";
 $lang['blank_date'] = "Ngày %s tháng ..... năm .....";
 $lang['quotes'] = "Báo giá";
@@ -3871,6 +3877,8 @@ $lang['chief_accountant'] = "Kế toán trưởng";
 $lang['director'] = "Giám đốc";
 $lang['divider'] = '<hr style="margin-top: 20px;margin-bottom: 20px;border: 0;border-top: 1px solid #eee;" />';
 $lang['edit_sale_order_'] = "Sửa đơn hàng";
+$lang['edit_sale_order_po'] = "Sửa đơn hàng(PO)";
+$lang['edit_sale_order_so'] = "Sửa đơn hàng(SO)";
 
 $lang['view_delivery'] = "Xem phiếu giao hàng";
 $lang['converted_contract'] = "Hóa đơn đã tạo đơn đặt hàng";
@@ -3987,6 +3995,50 @@ $lang['directer_department']="Ban giám đốc";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng không thành công";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng không thành công";
 $lang['delete_comment_client']="Xóa phản hồi khách hàng không thành công";
+
+$lang['not_delete_comment_client']="Xóa phản hồi khách hàng không thành công";
+$lang['personal']="Cá nhân";
+$lang['organization']="Tổ chức";
+$lang['clients_code']="Mã KH";
+$lang['source_approach']="Nguồn KH";
+$lang['birthday']="Sinh nhật";
+$lang['_campaign_name']="Tên chiến dịch";
+$lang['start_data']="Ngày bắt đầu";
+$lang['staff']="Nhân viên";
+$lang['_end_date']="Ngày kết thúc";
+$lang['step_name_campaign']="Các bước chiến dịch";
+$lang['add_campain_true']="Thêm chiến dịch thành công";
+$lang['add_campain_flase']="Thêm chiến dịch không thành công";
+$lang['update_campain_true']="Cập chiến dịch thành công";
+$lang['name_campaign']="Tên chiến dịch";
+$lang['manage_campaign']="Quản lý chiến dịch";
+$lang['staff_participation']="Nhân viên tham gia";
+$lang['cost_campaign']="Chi phí chiến dịch";
+$lang['_start_date']="Ngày bắt đầu";
+$lang['__end_date']="Ngày kết thúc";
+$lang['_tb_delete_campaign']="Xóa chiến dịch sẽ xóa các thông tin liên quan đến chiến dịch";
+$lang['delete_true']="Xóa dữ liệu thành công";
+$lang['contact']="Liên hệ chính";
+$lang['performance']="Xác xuất";
+$lang['_expected']="Danh thu dự kiến";
+
+$lang['staff_in']="Nhân viên phụ trách";
+$lang['status_opportunity']="Trạng thái cơ hội";
+$lang['source']="Nguồn";
+$lang['source_details']="Chi tiết nguồn";
+$lang['content']="Nội dung";
+$lang['_phone']="Số điện thoại";
+$lang['staff_manage']="Nhân viên quản lý";
+$lang['campaign']="Chiến dịch";
+$lang['create_campaign']="Tạo chiến dịch";
+$lang['add_opportunity_true']="Thêm cơ hội khách hàng thành công";
+$lang['add_opportunity_false']="Thêm cơ hội khách hàng không thành công";
+$lang['update_opportunity_true']="Cập nhật cơ hội khách hàng thành công";
+$lang['expected']="Danh thu dự kiến";
+$lang['step']="Các bước";
+$lang['war_step']="Chuyển trạng thái thành công";
+$lang['title_items']="Sản phẩm";
+$lang['total_sales']="Tổng sản phẩm phiếu thu";
 
 
 
