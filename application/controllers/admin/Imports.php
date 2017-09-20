@@ -172,10 +172,7 @@ class Imports extends Admin_controller
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
-        if($data['warehouse_id'])
-            $data['warehouses']= $this->warehouse_model->getWarehousesByType2(getWHTIDByWHID($data['warehouse_id']));
-        if($data['warehouse_id_to'])
-            $data['warehouses_to']= $this->warehouse_model->getWarehousesByType2(getWHTIDByWHID($data['warehouse_id_to']));
+        
         $data['title'] = $title;
         $this->load->view('admin/imports/transfers/detail', $data);
     }

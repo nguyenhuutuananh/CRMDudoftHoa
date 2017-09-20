@@ -166,10 +166,7 @@
                             <div class="col-md-4">
                                 <fieldset>
                                     <legend style="white-space: nowrap">Kho chuyển:</legend>
-                                        <?php
-                                        $selected=(isset($item) ? getWHTIDByWHID($warehouse_id) : '');
-                                        echo render_select('warehouse_type_id_from',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                                        ?>
+                                     
                                         <?php
                                         $selected=(isset($item) ? $warehouse_id : '');
                                         echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
@@ -179,13 +176,11 @@
                             <div class="col-md-4">
                                 <fieldset>
                                     <legend>Kho nhận:</legend>
+                                        
                                         <?php
-                                        $selected=(isset($item) ? getWHTIDByWHID($warehouse_id_to) : '');
-                                        echo render_select('warehouse_type_id_to',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                                        ?>
-                                        <?php
+                                        
                                         $selected=(isset($item) ? $warehouse_id_to : '');
-                                        echo render_select('warehouse_id_to',$warehouses_to,array('warehouseid','warehouse'),'warehouse_name',$selected); 
+                                        echo render_select('warehouse_id_to',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
                                         ?>
                                 </fieldset>
                             </div>
