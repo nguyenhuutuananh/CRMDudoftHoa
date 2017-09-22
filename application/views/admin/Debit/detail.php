@@ -65,8 +65,8 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($vote) ) { ?>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="<?php echo admin_url('debit/pdf/' . $vote->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('debit/pdf/' . $vote->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                                         <th width="" class="text-left"><?php echo _l('contract_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('contract_ban'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('currencies'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('total_money'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('total_money'); ?>(VNĐ)</th>
                                         <th></th>
                                         
                                     </tr>
@@ -143,7 +143,7 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                        <td style="padding-top: 8px;"><div class="form-group"><input type="text" id="note" class="form-control" value=""></div></td>
                                        <td>
-                                           <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                <?php if($tk_no){?>
                                                    <option></option>
                                                    <?php foreach($tk_no as $rom){?>
@@ -154,7 +154,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                <?php if($tk_co){?>
                                                    <option></option>
                                                    <?php foreach($tk_co as $rom){?>
@@ -165,7 +165,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                            <select class="selectpicker" id="purchase_contracts" data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" data-live-search="true" id="purchase_contracts" data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php if($purchase_contracts){?>
                                                     <option></option>
                                                     <?php foreach($purchase_contracts as $rom){?>
@@ -176,7 +176,7 @@
                                             </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="contract" data-width="100%" data-none-selected-text="<?php echo _l('contract_ban'); ?>">
+                                           <select class="selectpicker" data-live-search="true" id="contract" data-width="100%" data-none-selected-text="<?php echo _l('contract_ban'); ?>">
                                                <?php if($contract){?>
                                                    <option></option>
                                                    <?php foreach($contract as $rom){?>
@@ -187,7 +187,7 @@
                                            </select>
                                        </td>
                                         <td>
-                                           <select class="selectpicker" id="currencies" data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                           <select class="selectpicker" data-live-search="true" id="currencies" data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                <?php if($currencies){?>
                                                    <option></option>
                                                    <?php foreach($currencies as $rom){?>
@@ -223,7 +223,7 @@
                                                 <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][note]" id="note" class="form-control" value="<?php echo $value['note']; ?>">
                                             </div>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                 <?php if($tk_no){?>
                                                     <option></option>
                                                     <?php foreach($tk_no as $rom){?>
@@ -236,7 +236,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                 <?php if($tk_co){?>
                                                     <option></option>
                                                     <?php foreach($tk_co as $rom){?>
@@ -250,7 +250,7 @@
                                         </td>
                                             
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][purchase_contracts]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][purchase_contracts]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php if($purchase_contracts){?>
                                                     <option></option>
                                                     <?php foreach($purchase_contracts as $rom){?>
@@ -263,7 +263,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][contract]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('contract_ban'); ?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][contract]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('contract_ban'); ?>">
                                                 <?php if($contract){?>
                                                     <option></option>
                                                     <?php foreach($contract as $rom){?>
@@ -276,7 +276,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][currencies]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][currencies]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                 <?php if($currencies){?>
                                                     <option></option>
                                                     <?php foreach($currencies as $rom){?>
@@ -438,6 +438,7 @@
 //		td5.find('input').val($('tr.main').find('td:nth-child(5) option:selected').val());
         let purchase_contracts = $('tr.main').find('td:nth-child(5)').find('select').clone();
         purchase_contracts.attr('name', 'items[' + uniqueArray + '][purchase_contracts]');
+        purchase_contracts.attr('disabled','disabled ');
         purchase_contracts.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
         td5.append(purchase_contracts);
 
@@ -446,6 +447,7 @@
 //        td6.find('input').val($('tr.main').find('td:nth-child(6) option:selected').val());
         let contract = $('tr.main').find('td:nth-child(6)').find('select').clone();
         contract.attr('name', 'items[' + uniqueArray + '][contract]');
+        contract.attr('disabled','disabled ');
         contract.removeAttr('id').val($('tr.main').find('td:nth-child(6)').find('select').selectpicker('val'));
         td6.append(contract);
 
@@ -453,6 +455,7 @@
 //        td7.find('input').val($('tr.main').find('td:nth-child(7) option:selected').val());
         let currencies = $('tr.main').find('td:nth-child(7)').find('select').clone();
         currencies.attr('name', 'items[' + uniqueArray + '][currencies]');
+        currencies.attr('disabled','disabled ');
         currencies.removeAttr('id').val($('tr.main').find('td:nth-child(7)').find('select').selectpicker('val'));
         td7.append(currencies);
 
@@ -499,7 +502,7 @@
         $('.total').text(formatNumber(total));
         var items = $('table.item-export tbody tr:gt(0)');
         
-		$('.selectpicker').selectpicker('refresh');
+		$('.selectpicker').selectpicker('refresh').removeAttr('disabled');
 	};
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
@@ -572,35 +575,6 @@
         var new_current=formatNumber(currentPriceBuyInput.val().replace(/\,|%/g, ''));
         currentPriceBuyInput.val(new_current);
     });
-//    $(document).on('keyup', '.mainQuantity', (e)=>{
-//        var currentQuantityInput = $(e.currentTarget);
-//        let elementToCompare;
-//        if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
-//            elementToCompare = currentQuantityInput.parents('tr').find('input[data-store]');
-//        else
-//            elementToCompare = currentQuantityInput;
-//
-//        if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
-//            currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
-//            currentQuantityInput.attr('data-toggle', 'tooltip');
-//            currentQuantityInput.attr('data-trigger', 'manual');
-//            currentQuantityInput.attr('title', 'Số lượng vượt mức cho phép!');
-//            // $('[data-toggle="tooltip"]').tooltip();
-//            currentQuantityInput.off('focus', '**').off('hover', '**');
-//            currentQuantityInput.tooltip('fixTitle').focus(()=>$(this).tooltip('show')).hover(()=>$(this).tooltip('show'));
-//            // error flag
-//            currentQuantityInput.addClass('error');
-//            currentQuantityInput.focus();
-//        }
-//        else {
-//            currentQuantityInput.attr('title', 'OK!').tooltip('fixTitle').tooltip('show');
-//            currentQuantityInput.attr("style", "width: 100px;");
-//            // remove flag
-//            currentQuantityInput.removeClass('error');
-//            currentQuantityInput.focus();
-//        }
-//        calculateTotal(e.currentTarget);
-//    });
     $('#select_kindof_warehouse').change(function(e){
         var warehouse_type = $(e.currentTarget).val();
         var product = $(e.currentTarget).parents('tr').find('td:first input');

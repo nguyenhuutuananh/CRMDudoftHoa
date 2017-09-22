@@ -1694,3 +1694,16 @@ function get_table_where($table, $where = array(),$order_by="")
         return array();
     }
 }
+function get_code_tk($id)
+{
+    $CI =& get_instance();
+    if(is_numeric($id))
+    {
+        $CI->db->where('idAccount',$id);
+        $result=$CI->db->get('tblaccounts')->row();
+        if ($result) {
+            return $result->accountCode;
+        }
+        return "";
+    }
+}

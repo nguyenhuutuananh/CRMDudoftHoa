@@ -1399,7 +1399,148 @@ function votes_pdf($votes, $tag = '')
     }
     return $pdf;
 }
+function debit_pdf($debit, $tag = '')
+{
 
+    $CI =& get_instance();
+    $CI->load->library('pdf');
+    $font_name      = get_option('pdf_font');
+    $font_size      = get_option('pdf_font_size');
+
+    if ($font_size == '') {
+        $font_size = 10;
+    }
+    $i = 0;
+
+    $formatArray = get_pdf_format('pdf_format_invoice');
+    $pdf         = new Pdf($formatArray['orientation'], 'mm', $formatArray['format'], true, 'UTF-8', false,false,'invoice');
+
+    $pdf->SetTitle($debit->code_vouchers);
+    $CI->pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
+
+    $CI->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    $pdf->SetAuthor(get_option('company'));
+    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->setImageScale(1.53);
+    $pdf->setJPEGQuality(100);
+    $pdf->AddPage($formatArray['orientation'], $formatArray['format']);
+
+    if ($CI->input->get('print') == 'true') {
+        // force print dialog
+        $js = 'print(true);';
+        $pdf->IncludeJS($js);
+    }
+
+    $status = $debit->status;
+    $swap   = get_option('swap_pdf_info');
+    $CI->load->library('numberword', array(
+//        'clientid' => $invoice->customer_id
+    ));
+
+//    $CI->load->model('clients_model');
+//    $customer=$CI->clients_model->get($invoice->customer_id);
+    // echo "<pre>";
+    // var_dump($customer);die();
+
+    $invoice = do_action('invoice_html_pdf_data', $debit);
+    if (file_exists(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_debit_detail_pdf.php')) {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_debit_detail_pdf.php');
+    } else {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_debit_detail_pdf.php');
+    }
+    return $pdf;
+}
+function receipts_pdf($receipts, $tag = '')
+{
+
+    $CI =& get_instance();
+    $CI->load->library('pdf');
+    $font_name      = get_option('pdf_font');
+    $font_size      = get_option('pdf_font_size');
+
+    if ($font_size == '') {
+        $font_size = 10;
+    }
+    $i = 0;
+
+    $formatArray = get_pdf_format('pdf_format_invoice');
+    $pdf         = new Pdf($formatArray['orientation'], 'mm', $formatArray['format'], true, 'UTF-8', false,false,'invoice');
+
+    $pdf->SetTitle($receipts->code_vouchers);
+    $CI->pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
+
+    $CI->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    $pdf->SetAuthor(get_option('company'));
+    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->setImageScale(1.53);
+    $pdf->setJPEGQuality(100);
+    $pdf->AddPage($formatArray['orientation'], $formatArray['format']);
+
+    if ($CI->input->get('print') == 'true') {
+        // force print dialog
+        $js = 'print(true);';
+        $pdf->IncludeJS($js);
+    }
+
+    $status = $receipts->status;
+    $swap   = get_option('swap_pdf_info');
+    $CI->load->library('numberword', array(
+//        'clientid' => $invoice->customer_id
+    ));
+    $invoice = do_action('invoice_html_pdf_data', $receipts);
+    if (file_exists(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_receipts_detail_pdf.php')) {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_receipts_detail_pdf.php');
+    } else {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_receipts_detail_pdf.php');
+    }
+    return $pdf;
+}
+function report_have_pdf($report_have, $tag = '')
+{
+
+    $CI =& get_instance();
+    $CI->load->library('pdf');
+    $font_name      = get_option('pdf_font');
+    $font_size      = get_option('pdf_font_size');
+
+    if ($font_size == '') {
+        $font_size = 10;
+    }
+    $i = 0;
+
+    $formatArray = get_pdf_format('pdf_format_invoice');
+    $pdf         = new Pdf($formatArray['orientation'], 'mm', $formatArray['format'], true, 'UTF-8', false,false,'invoice');
+
+    $pdf->SetTitle($report_have->code_vouchers);
+    $CI->pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
+
+    $CI->pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+    $pdf->SetAuthor(get_option('company'));
+    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->setImageScale(1.53);
+    $pdf->setJPEGQuality(100);
+    $pdf->AddPage($formatArray['orientation'], $formatArray['format']);
+
+    if ($CI->input->get('print') == 'true') {
+        $js = 'print(true);';
+        $pdf->IncludeJS($js);
+    }
+
+    $status = $report_have->status;
+    $swap   = get_option('swap_pdf_info');
+    $CI->load->library('numberword', array(
+    ));
+    $invoice = do_action('invoice_html_pdf_data', $report_have);
+    if (file_exists(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_report_have_detail_pdf.php')) {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_report_have_detail_pdf.php');
+    } else {
+        include(APPPATH . 'views/themes/' . active_clients_theme() . '/views/my_report_have_detail_pdf.php');
+    }
+    return $pdf;
+}
 function export_detail_pdf($invoice, $tag = '')
 {
 

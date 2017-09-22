@@ -65,8 +65,8 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($vote) ) { ?>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $vote->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="<?php echo admin_url('votes/pdf/' . $vote->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('votes/pdf/' . $vote->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                        <td style="padding-top: 8px;"><div class="form-group"><input type="text" id="note" class="form-control" value=""></div></td>
                                        <td>
-                                           <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                <?php if($tk_no){?>
                                                    <option></option>
                                                    <?php foreach($tk_no as $rom){?>
@@ -154,7 +154,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                <?php if($tk_co){?>
                                                    <option></option>
                                                    <?php foreach($tk_co as $rom){?>
@@ -165,7 +165,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                            <select class="selectpicker" id="purchase_contracts" data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" data-live-search="true" id="purchase_contracts" data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php if($purchase_contracts){?>
                                                     <option></option>
                                                     <?php foreach($purchase_contracts as $rom){?>
@@ -176,7 +176,7 @@
                                             </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="contract" data-width="100%" data-none-selected-text="<?php echo _l('contract_ban'); ?>">
+                                           <select class="selectpicker" data-live-search="true" id="contract" data-width="100%" data-none-selected-text="<?php echo _l('contract_ban'); ?>">
                                                <?php if($contract){?>
                                                    <option></option>
                                                    <?php foreach($contract as $rom){?>
@@ -187,7 +187,7 @@
                                            </select>
                                        </td>
                                         <td>
-                                           <select class="selectpicker" id="currencies" disabled data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                           <select class="selectpicker" data-live-search="true" id="currencies" disabled data-width="100%" data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                <?php if($currencies){?>
                                                    <option></option>
                                                    <?php foreach($currencies as $rom){?>
@@ -223,7 +223,7 @@
                                                 <input <?=$readonly?> type="text" name="item[<?php echo $i ?>][note]" id="note" class="form-control" value="<?php echo $value['note']; ?>">
                                             </div>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                 <?php if($tk_no){?>
                                                     <option></option>
                                                     <?php foreach($tk_no as $rom){?>
@@ -236,7 +236,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                 <?php if($tk_co){?>
                                                     <option></option>
                                                     <?php foreach($tk_co as $rom){?>
@@ -250,7 +250,7 @@
                                         </td>
                                             
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][purchase_contracts]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][purchase_contracts]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php if($purchase_contracts){?>
                                                     <option></option>
                                                     <?php foreach($purchase_contracts as $rom){?>
@@ -263,7 +263,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][contract]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('contract_ban'); ?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][contract]" data-width="100%" <?=$disabled?> data-none-selected-text="<?php echo _l('contract_ban'); ?>">
                                                 <?php if($contract){?>
                                                     <option></option>
                                                     <?php foreach($contract as $rom){?>
@@ -276,7 +276,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][currencies]" data-width="100%" disabled data-none-selected-text="<?php echo _l('currencies'); ?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][currencies]" data-width="100%" disabled data-none-selected-text="<?php echo _l('currencies'); ?>">
                                                 <?php if($currencies){?>
                                                     <option></option>
                                                     <?php foreach($currencies as $rom){?>
@@ -502,7 +502,7 @@
         $('.total').text(formatNumber(total));
         var items = $('table.item-export tbody tr:gt(0)');
         
-		$('.selectpicker').selectpicker('refresh').removeAttr('disabled');;
+		$('.selectpicker').selectpicker('refresh').removeAttr('disabled');
 	};
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();

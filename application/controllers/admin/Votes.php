@@ -120,8 +120,10 @@ class Votes extends Admin_controller
     public function pdf($id="")
     {
         $votes = $this->votes_model->get_data_pdf($id);
+        if ($this->input->get('combo')) {
+            $votes->combo=$this->input->get('combo');
+        }
         $pdf      = votes_pdf($votes);
-
         $type     = 'D';
         if ($this->input->get('print')) {
             $type = 'I';

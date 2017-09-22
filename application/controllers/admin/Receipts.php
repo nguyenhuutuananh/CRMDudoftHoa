@@ -29,6 +29,7 @@ class Receipts extends Admin_controller
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
+                $data['id_staff']=get_staff_user_id();
                 $id = $this->receipts_model->insert($data);
                 if($id) {
                     $_id = $this->receipts_model->insert_receipts_contract($id, $_data);
@@ -135,6 +136,9 @@ class Receipts extends Admin_controller
     public function pdf($id="")
     {
         $receipts = $this->receipts_model->get_data_pdf($id);
+        if ($this->input->get('combo')) {
+            $receipts->combo=$this->input->get('combo');
+        }
         $pdf      = receipts_pdf($receipts);
 
         $type     = 'D';

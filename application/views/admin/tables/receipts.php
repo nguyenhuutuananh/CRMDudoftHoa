@@ -109,16 +109,16 @@ foreach ($rResult as $aRow) {
                     <a class="dropdown-toggle btn btn-default btn-icon" data-toggle="dropdown"><i class="fa fa-print"></i></a>
                     <ul class="dropdown-menu">
                       <li class="dropdown-header">LIÊN</li>
-                      <li><a href="'.admin_url().'debit/pdf/' . $aRow['tblreceipts.id'].'?print=true" target="_blank">Liên 1</a></li>
-                      <li><a href="#">Liên 2</a></li>
+                      <li><a href="'.admin_url().'receipts/pdf/' . $aRow['id'].'?print=true" target="_blank">Liên 1</a></li>
+                      <li><a href="'.admin_url().'receipts/pdf/' . $aRow['id'].'?print=true&combo=2">Liên 2</a></li>
                       <li><a href="#">Liên 3</a></li>
                     </ul>
                  </div>
                 ';
     $mleft30='mleft30';
 //    $options .= icon_btn('receipts/pdf/'. $aRow['tblreceipts.id'] .'?print=true' , 'print', 'btn-default ', array('target'=>'_blank'));
-    $options .= icon_btn('receipts/pdf/'. $aRow['tblreceipts.id'] .'?pdf=true' , 'file-pdf-o', 'btn-default '.$mleft30, array('target'=>'_blank'));
-    $options .= icon_btn('receipts/pdf/'. $aRow['tblreceipts.id'] , 'download', 'btn-default', array('target'=>'_blank'));
+    $options .= icon_btn('receipts/pdf/'. $aRow['id'] .'?pdf=true' , 'file-pdf-o', 'btn-default '.$mleft30, array('target'=>'_blank'));
+    $options .= icon_btn('receipts/pdf/'. $aRow['id'] , 'download', 'btn-default', array('target'=>'_blank'));
     $row[] = $options;
 
     $output['aaData'][] = $row;

@@ -58,8 +58,8 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($receipt) ) { ?>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $receipt->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $receipt->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="<?php echo admin_url('receipts/pdf/' . $receipt->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('receipts/pdf/' . $receipt->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                        <td style="padding-top: 8px;"><div class="form-group"><input type="text" id="note" class="form-control" value=""></div></td>
                                        <td>
-                                           <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                <?php if($tk_no){?>
                                                    <option></option>
                                                    <?php foreach($tk_no as $rom){?>
@@ -147,7 +147,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                           <select class="selectpicker" data-live-search="true" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                <?php if($tk_co){?>
                                                    <option></option>
                                                    <?php foreach($tk_co as $rom){?>
@@ -159,7 +159,7 @@
                                        </td>
 
                                        <td>
-                                           <select class="selectpicker" id="sales" data-width="100%" data-none-selected-text="<?php echo _l('sales'); ?>">
+                                           <select class="selectpicker" data-live-search="true" id="sales" data-width="100%" data-none-selected-text="<?php echo _l('sales'); ?>">
                                                <option></option>
                                                <?php if($sales){?>
                                                    <?php foreach($sales as $rom){?>
@@ -187,7 +187,7 @@
                                            </div>
                                        </td>
                                         <td>
-                                            <select class="selectpicker" id="tk_ck" data-width="100%" data-none-selected-text="<?php echo _l('tk_ck')?>">
+                                            <select class="selectpicker" data-live-search="true" id="tk_ck" data-width="100%" data-none-selected-text="<?php echo _l('tk_ck')?>">
                                                 <?php if($tk_ck){?>
                                                     <option></option>
                                                     <?php foreach($tk_ck as $rom){?>
@@ -221,7 +221,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                 <?php if($tk_no){?>
                                                     <option></option>
                                                     <?php foreach($tk_no as $rom){?>
@@ -234,7 +234,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                 <?php if($tk_co){?>
                                                     <option></option>
                                                     <?php foreach($tk_co as $rom){?>
@@ -248,7 +248,7 @@
                                         </td>
                                             
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][sales]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][sales]" <?=$disabled?> data-width="100%" data-none-selected-text="<?php echo _l('contract_buy')?>">
                                                 <?php
                                                 $get_sales=$this->receipts_model->get_table_id('tblsales','id='.$value['sales']);
                                                 if($get_sales){?>
@@ -280,7 +280,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_ck]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_ck')?>">
+                                            <select class="selectpicker" data-live-search="true" name="item[<?php echo $i ?>][tk_ck]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_ck')?>">
                                                 <?php if($tk_ck){?>
                                                     <option></option>
                                                     <?php foreach($tk_ck as $rom){?>
@@ -466,7 +466,7 @@
 //		td5.find('input').val($('tr.main').find('td:nth-child(5) option:selected').val());
         let sales = $('tr.main').find('td:nth-child(5)').find('select').clone();
         sales.attr('name', 'items[' + uniqueArray + '][sales]');
-        sales.attr('dis', 'items[' + uniqueArray + '][sales]');
+        sales.attr('disabled','disabled');
         sales.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
         td5.append(sales);
 
@@ -541,7 +541,7 @@
         $('.subdiscount').html(formatNumber(_discount));
         $('.total').html(formatNumber(_total));
         $('._count').html(formatNumber(_count));
-        $('.selectpicker').selectpicker('refresh');
+        $('.selectpicker').selectpicker('refresh').removeAttr('disabled');
     }
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
