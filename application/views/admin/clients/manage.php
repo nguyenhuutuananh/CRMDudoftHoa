@@ -221,6 +221,7 @@
                         <?php
                         $table_data = array();
                         $_table_data = array(
+                            _l('order_no'),
                             _l('clients_code'),
                             _l('clients_list_company'),
                             _l('clients_list_phone'),

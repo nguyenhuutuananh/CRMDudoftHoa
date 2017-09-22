@@ -30,31 +30,6 @@ if (is_array($pdf_text_color_array) && count($pdf_text_color_array) == 3) {
 
 $info_right_column = '';
 $info_left_column  = '';
-// if (get_option('show_status_on_pdf_ei') == 1) {
-//     $status_name = format_purchase_status($status, '', false);
-//     if ($status == 0) {
-//         $bg_status = '252, 45, 66';
-//     } else if ($status == 1) {
-//         $bg_status = '0, 191, 54';
-//     } else if ($status == 2) {
-//         $bg_status = '255, 111, 0';
-//     } else if ($status == 3) {
-//         $bg_status = '255, 111, 0';
-//     } else if ($status == 4 || $status == 6) {
-//         $bg_status = '114, 123, 144';
-//     }
-
-//     $info_right_column .= '
-//     <table style="text-align:center;border-spacing:3px 3px;padding:3px 4px 3px 4px;">
-//     <tbody>
-//         <tr>
-//             <td></td>
-//             <td></td>
-//             <td style="color:#fff;">' . '' . '</td>
-//         </tr>
-//     </tbody>
-//     </table>';
-// }
 $info_right_column=$info_right_column .= '<a href="' . admin_url('#') . '" style="color:#4e4e4e;text-decoration:none;"><b> ' . date('Y-m-d H:i:s') . '</b></a>';
 
 $invoice_info='';
@@ -78,13 +53,6 @@ if (get_option('invoice_company_faxnumber') != '') {
 if (get_option('main_domain') != '') {
     $invoice_info .= _l('Website').': '.get_option('main_domain');
 }
-
-// if ($status != 2 && $status != 5 && get_option('show_pay_link_to_invoice_pdf') == 1) {
-//     $info_right_column .= '<a style="color:#84c529;text-decoration:none;" href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '">' . _l('view_invoice_pdf_link_pay') . '</a><br />';
-// }
-// $info_right_column .= '<span style="font-weight:bold;font-size:20px;">' . _l('Kế hoạch mua') . '</span><br />';
-// $info_right_column .= '<a href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '" style="color:#4e4e4e;text-decoration:none;"><b># ' . $invoice_number . '</b></a>';
-
 // write the first column
 $info_left_column .= pdf_logo_url();
 $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
@@ -104,12 +72,6 @@ $plan_name=_l('sales');
 
 $pdf->SetFont($font_name, 'B', 20);
 $pdf->Cell(0, 0, mb_strtoupper($plan_name, 'UTF-8') , 0, 1, 'C', 0, '', 0);
-// $pdf->ln(10);
-//Set purchase no
-// var_dump($pdf->get_fonts_list());die();
-// $pdf->SetFont($font_name, 'B', $font_size);
-// $pdf->MultiCell(0, 0, '<b>Kế hoạch: #' . $invoice_number . '</b>' , 0, 'L', 0, 0, '', '', true, 0, true, false, 0);
-// $pdf->ln(4);
 //Set code
 $pdf->SetFont($font_name, 'I', $font_size);
 $pdf->Cell(0, 0, _l('code_no').($invoice_number) , 0, 1, 'C', 0, '', 0);
@@ -118,38 +80,6 @@ $pdf->Cell(0, 0, _l('code_no').($invoice_number) , 0, 1, 'C', 0, '', 0);
 $pdf->SetFont($font_name, 'I', $font_size);
 $pdf->Cell(0, 0, _l('view_date').': '._d($invoice->date) , 0, 1, 'C', 0, '', 0);
 $pdf->ln(4);
-
-
-
-
-// Get Y position for the separation
-// $y            = $pdf->getY();
-// $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-
-// $invoice_info .= get_option('invoice_company_address') . '<br/>';
-// if (get_option('invoice_company_city') != '') {
-//     $invoice_info .= get_option('invoice_company_city') . ', ';
-// }
-// $invoice_info .= get_option('invoice_company_country_code') . ' ';
-// $invoice_info .= get_option('invoice_company_postal_code') . ' ';
-
-// if (get_option('invoice_company_phonenumber') != '') {
-//     $invoice_info .= '<br />' . get_option('invoice_company_phonenumber');
-// }
-// if(get_option('company_vat') != ''){
-//     $invoice_info .= '<br />'.get_option('company_vat');
-// }
-// check for company custom fields
-// $custom_company_fields = get_company_custom_fields();
-// if (count($custom_company_fields) > 0) {
-//     $invoice_info .= '<br />';
-// }
-// foreach ($custom_company_fields as $field) {
-//     $invoice_info .= $field['label'] . ': ' . $field['value'] . '<br />';
-// }
-
-// $pdf->writeHTMLCell(($swap == '1' ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-
 //Set detail
 $pdf->SetFont($font_name, '', $font_size);
 $pdf->Cell(0, 0, _l('customer_name').': '.$customer->company , 0, 1, 'L', 0, '', 0);
@@ -185,76 +115,6 @@ $pdf->Cell(0, 0, _l('shipping_address').': '.implode(', ', $shipping_address) , 
 $pdf->ln(2);
 
 // Bill to
-// $client_details = '<b>' . _l('invoice_bill_to') . '</b><br />';
-// if($invoice->client->show_primary_contact == 1){
-//     $pc_id = get_primary_contact_user_id($invoice->clientid);
-//     if($pc_id){
-//         $client_details .= get_contact_full_name($pc_id) .'<br />';
-//     }
-// }
-// $client_details .= $invoice->client->company . '<br />';
-// $client_details .= $invoice->billing_street . '<br />';
-// if (!empty($invoice->billing_city)) {
-//     $client_details .= $invoice->billing_city;
-// }
-// if (!empty($invoice->billing_state)) {
-//     $client_details .= ', ' . $invoice->billing_state;
-// }
-// $billing_country = get_country_short_name($invoice->billing_country);
-// if (!empty($billing_country)) {
-//     $client_details .= '<br />' . $billing_country;
-// }
-// if (!empty($invoice->billing_zip)) {
-//     $client_details .= ', ' . $invoice->billing_zip;
-// }
-// if (!empty($invoice->client->vat)) {
-//     $client_details .= '<br />' . _l('invoice_vat') . ': ' . $invoice->client->vat;
-// }
-// check for invoice custom fields which is checked show on pdf
-// $pdf_custom_fields = get_custom_fields('customers', array(
-//     'show_on_pdf' => 1
-// ));
-// if (count($pdf_custom_fields) > 0) {
-//     $client_details .= '<br />';
-//     foreach ($pdf_custom_fields as $field) {
-//         $value = get_custom_field_value($invoice->clientid, $field['id'], 'customers');
-//         if ($value == '') {
-//             continue;
-//         }
-//         $client_details .= $field['name'] . ': ' . $value . '<br />';
-//     }
-// }
-// $pdf->writeHTMLCell(($dimensions['wk'] / 2) - $dimensions['rm'], '', '', ($swap == '1' ? $y : ''), $client_details, 0, 1, false, true, ($swap == '1' ? 'J' : 'R'), true);
-// $pdf->Ln(5);
-// ship to to
-// if ($invoice->include_shipping == 1 && $invoice->show_shipping_on_invoice == 1) {
-//     $pdf->Ln(5);
-//     $shipping_details = '<b>' . _l('ship_to') . '</b><br />';
-//     $shipping_details .= $invoice->shipping_street . '<br />' . $invoice->shipping_city . ', ' . $invoice->shipping_state . '<br />' . get_country_short_name($invoice->shipping_country) . ', ' . $invoice->shipping_zip;
-//     $pdf->writeHTMLCell(($dimensions['wk'] - ($dimensions['rm'] + $dimensions['lm'])), '', '', '', $shipping_details, 0, 1, false, true, ($swap == '1' ? 'L' : 'R'), true);
-//     $pdf->Ln(5);
-// }
-// Dates
-// $pdf->Cell(0, 0, _l('invoice_data_date') . ' ' . _d($invoice->date), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-// if (!empty($invoice->duedate)) {
-//     $pdf->Cell(0, 0, _l('invoice_data_duedate') . ' ' . _d($invoice->duedate), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-// }
-// if ($invoice->sale_agent != 0) {
-//     if (get_option('show_sale_agent_on_invoices') == 1) {
-//         $pdf->Cell(0, 0, _l('sale_agent_string') . ': ' . get_staff_full_name($invoice->sale_agent), 0, 1, ($swap == '1' ? 'L' : 'R'), 0, '', 0);
-//     }
-// }
-// check for invoice custom fields which is checked show on pdf
-// $pdf_custom_fields = get_custom_fields('invoice', array(
-//     'show_on_pdf' => 1
-// ));
-// foreach ($pdf_custom_fields as $field) {
-//     $value = get_custom_field_value($invoice->id, $field['id'], 'invoice');
-//     if ($value == '') {
-//         continue;
-//     }
-//     $pdf->writeHTMLCell(0, '', '', '', $field['name'] . ': ' . $value, 0, 1, false, true, ($swap == '1' ? 'J' : 'R'), true);
-// }
 // The Table
 $pdf->Ln(5);
 $tblhtml = '

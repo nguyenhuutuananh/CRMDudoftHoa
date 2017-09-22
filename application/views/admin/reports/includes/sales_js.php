@@ -114,12 +114,12 @@
      var sums = invoiceReportsTable.ajax.json().sums;
      $(this).find('tfoot').addClass('bold');
      $(this).find('tfoot td').eq(0).html("<?php echo _l('invoice_total'); ?>");
-     $(this).find('tfoot td.subtotal').html(sums.subtotal);
-     $(this).find('tfoot td.total').html(sums.total);
-     $(this).find('tfoot td.total_tax').html(sums.total_tax);
-     $(this).find('tfoot td.discount_total').html(sums.discount_total);
-     $(this).find('tfoot td.adjustment').html(sums.adjustment);
-     $(this).find('tfoot td.amount_open').html(sums.amount_open);
+     $(this).find('tfoot td.TDT').html(sums.TDT);
+     $(this).find('tfoot td.DTHH').html(sums.DTHH);
+     $(this).find('tfoot td.DTK').html(sums.DTK);
+     $(this).find('tfoot td.CK').html(sums.CK);
+     $(this).find('tfoot td.GTTV').html(sums.GTTV);
+     $(this).find('tfoot td.DTT').html(sums.DTT);
    });
 
    $('.table-estimates-report').on('draw.dt', function() {

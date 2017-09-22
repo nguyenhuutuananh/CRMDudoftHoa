@@ -29,6 +29,7 @@ class Report_have extends Admin_controller
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
+                $data['id_staff']=  get_staff_user_id();
                 $id = $this->report_have_model->insert($data);
                 if($id) {
                     $_id = $this->report_have_model->insert_report_have_contract($id, $_data);
@@ -78,7 +79,7 @@ class Report_have extends Admin_controller
                 $data['tk_no']=$this->report_have_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
                 $data['tk_co']=$this->report_have_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
                 $data['tk_ck']=$this->report_have_model->get_table_where('tblaccounts');
-                $data['contract']=$this->report_have_model->get_table_where('tblcontracts');
+                $data['contract']=$this->report_have_model->get_contract();
                 $data['code_vouchers']=$this->report_have_model->get_vouchers();
             }
             else
@@ -86,19 +87,14 @@ class Report_have extends Admin_controller
                 $data['heading']=_l('report_have_update_heading');
                 $data['title']=_l('report_have_update_heading');
                 $data['client']=$this->report_have_model->get_table_where('tblclients');
+                $data['account_person']=$this->report_have_model->get_table_where('tblaccount_person');
                 $data['contract']=$this->report_have_model->get_contract();
                 $data['tk_no']=$this->report_have_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
                 $data['tk_co']=$this->report_have_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
                 $data['report_have']=$this->report_have_model->get_index_report_have($id);
                 if($data['report_have'])
                 {
-//                    $data['invoices']=$this->report_have_model->get_invoices_report_have($data['report_haves']->id_client);
-
-
-
-
                     $data['report_haves']= $this->report_have_model->index_report_have_contract($id);
-//                    var_dump($data);die();
                 }
                 else
                 {
@@ -133,6 +129,9 @@ class Report_have extends Admin_controller
     public function pdf($id="")
     {
         $report_have = $this->report_have_model->get_data_pdf($id);
+        if ($this->input->get('combo')) {
+            $report_have->combo=$this->input->get('combo');
+        }
         $pdf      = report_have_pdf($report_have);
 
         $type     = 'D';
@@ -200,6 +199,50 @@ class Report_have extends Admin_controller
             ));
         }
         die;
+    }
+    public function account_person($id)
+    {
+        if($this->input->post($id))
+        {
+            if($id=="")
+            {
+                $data= $this->input->post();
+                $data['id_staff']=get_staff_user_id();
+                $data['date_create']=date('Y-m-d');
+                if($data['account']=="")
+                {
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => _l('Vui lòng nhập số tài khoản hưởng thụ')
+                    ));die();
+                }
+                if($data['account_holder']=="")
+                {
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => _l('Vui lòng nhập chủ tài khoản')
+                    ));die();
+                }
+                $this->db->insert('tblaccount_person',$data);
+                $id=$this->db->insert_id();
+                if($id)
+                {
+                    echo json_encode(array(
+                        'success' => true,
+                        'message' => _l('add_true'),
+                        'adddata'=>true,
+                        'data'=>json_encode(array('id'=>$id,'name_bank'=>$data['name_bank'],'account'=>$data['account']))
+                    ));
+                }
+                else
+                {
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => _l('add_false')
+                    ));
+                }
+            }
+        }
     }
 
 }

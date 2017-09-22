@@ -783,7 +783,8 @@ class Reports extends Admin_controller
 
     public function diaries_report()
     {
-        if ($this->input->is_ajax_request()) {
+        if ($this->input->is_ajax_request()) 
+        {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
             $this->load->model('sales_model');
@@ -896,6 +897,7 @@ class Reports extends Admin_controller
             );
             
             foreach ($rResult as $aRow) {
+
                 $row = array();
                 for ($i = 0; $i < count($aColumns); $i++) {
                     if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
@@ -919,59 +921,46 @@ class Reports extends Admin_controller
                     }
                     if($aColumns[$i]=='1')
                     {
-                        $footer_data['TDT']=$aRow['1'];
-                        $_data = format_money($aRow['1']);
+                        $DTK=getTotalReceiptByClientID($aRow['customer_id'],$aRow['tblsales.date'],true);  
+                        $TDT=$aRow['tblsales.total']+$DTK;
+                        $footer_data['TDT']+=$TDT;
+                        $_data = format_money($TDT);
                     }
                     if($aColumns[$i]=='tblsales.total')
                     {   
-                        $footer_data['DTHH']=$aRow['tblsales.total'];
+                        $footer_data['DTHH']+=$aRow['tblsales.total'];
                         $_data = format_money($aRow['tblsales.total']);
                     }
                     if($aColumns[$i]=='2')
                     {
-                        $footer_data['DTK']=$aRow['2'];
-                        $_data = format_money($aRow['2']);
+                        $DTK=getTotalReceiptByClientID($aRow['customer_id'],$aRow['tblsales.date'],true);
+                        $footer_data['DTK']+=$DTK;
+                        $_data = format_money($DTK);
                     }
                     if($aColumns[$i]=='tblsales.discount')
                     {
-                        $footer_data['CK']=$aRow['tblsales.discount'];
+                        $footer_data['CK']+=$aRow['tblsales.discount'];
                         $_data = format_money($aRow['tblsales.discount']);
                     }
                     if($aColumns[$i]=='tblsales.return_value')
                     {
-                        $footer_data['GTTV']=$aRow['tblsales.return_value'];
+                        $footer_data['GTTV']+=$aRow['tblsales.return_value'];
                         $_data = format_money($aRow['tblsales.return_value']);
                     }
                     if($aColumns[$i]=='5')
                     {
-                        $footer_data['DTT']=$aRow['5'];
-                        $_data = format_money($aRow['5']);
+                        $DTK=getTotalReceiptByClientID($aRow['customer_id'],$aRow['tblsales.date'],true);   
+                        $DTT=($aRow['tblsales.total']+$DTK)-($aRow['tblsales.discount']+$aRow['tblsales.return_value']);
+                        $footer_data['DTT']+=$DTT;
+                        $_data = format_money($DTT);
                     }
-                    
-                    // if ($i == 1) {
-                    //     $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . $aRow['company'] . '</a>';
-                    // } else if ($aColumns[$i] == 'total' || $aColumns[$i] == 'subtotal' || $aColumns[$i] == 'total_tax' || $aColumns[$i] == 'discount_total' || $aColumns[$i] == 'adjustment') {
-                    //     if ($_data == null) {
-                    //         $_data = 0;
-                    //     }
-                    //     $footer_data[$aColumns[$i]] += $_data;
-                    //     $_data = format_money($_data, $currency_symbol);
 
-                    // } else if ($aColumns[$i] == '1') {
-                    //     $_data = $this->get_report_tax_breakdown_column('invoices', $aRow['id'], $_data, $currency_symbol);
-                    // } else if ($aColumns[$i] == $select[11]) {
-                    //     $_amount_open = $aRow['total'] - $_data;
-                    //     $footer_data['amount_open'] += $_amount_open;
-                    //     $_data = format_money($_amount_open, $currency_symbol);
-                    // } else if ($aColumns[$i] == 'id') {
-                    //     $_data = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
-                    // } else if ($aColumns[$i] == 'status') {
-                    //     $_data = format_invoice_status($aRow['status']);
-                    // } else if ($aColumns[$i] == 'date' || $aColumns[$i] == 'duedate') {
-                    //     $_data = _d($_data);
-                    // }
+
+                    
                     $row[] = $_data;
                 }
+
+                // var_dump($row);die;
                 $output['aaData'][] = $row;
                 $x++;
             }
@@ -980,7 +969,7 @@ class Reports extends Admin_controller
                 $footer_data[$key] = format_money($total, $currency_symbol);
             }
 
-            // var_dump($footer_data);die;
+            
 
             $output['sums'] = $footer_data;
             echo json_encode($output);

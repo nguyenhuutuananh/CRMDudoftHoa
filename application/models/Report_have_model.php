@@ -115,9 +115,10 @@ class Report_have_model extends CRM_Model
     }
     public function get_data_pdf($id)
     {
-        $this->db->select('tblreport_have.*,sum(tblreport_have_contract.total) as sum_total');
+        $this->db->select('tblreport_have.*,sum(tblreport_have_contract.subtotal) as sum_total,tblaccount_person.name_bank,tblaccount_person.account,branch');
         $this->db->where('tblreport_have.id',$id);
         $this->db->join('tblreport_have_contract','tblreport_have_contract.id_report_have=tblreport_have.id','left');
+        $this->db->join('tblaccount_person','tblaccount_person.id=tblreport_have.id_account_person','left');
         return $this->db->get('tblreport_have')->row();
     }
     public function get_invoices_report_have($id_client="")

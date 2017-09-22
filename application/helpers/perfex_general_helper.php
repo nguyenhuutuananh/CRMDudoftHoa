@@ -134,6 +134,68 @@ function get_current_date_format($php = false)
         return $format[0];
     }
 }
+
+/**
+ * Get Receipt/Receipt Other
+ * @param  mixed $staffid
+ * @return boolean if user is not admin
+ */
+function getTotalReceiptByClientID($customer_id = NULL,$date=NULL,$other=false)
+{
+    $_date=date('Y-m-d',strtotime($date));
+    if (is_numeric($customer_id)) 
+    {
+        $CI =& get_instance();
+        $CI->db->select_sum('subtotal');
+        $CI->db->select('tblreceipts.id,id_client,sales,purchase_contracts');
+        $CI->db->join('tblreceipts_contract','tblreceipts_contract.id_receipts=tblreceipts.id','left');
+        $CI->db->where('day_vouchers', $_date);
+        $CI->db->where('id_client', $customer_id);
+        if($other)
+        {
+            $CI->db->where('sales',0);
+            $CI->db->or_where('sales is null');
+            $CI->db->where('purchase_contracts is null');
+            $CI->db->or_where('purchase_contracts',0);
+        }
+        $result = $CI->db->get('tblreceipts')->row()->subtotal;
+    }
+    
+    if ($result) {
+        return $result;
+    }
+    return false;
+}
+
+/**
+ * Get Receipt/Receipt Other
+ * @param  mixed $staffid
+ * @return boolean if user is not admin
+ */
+function getTotalReportHaveByClientID($customer_id = NULL,$date=NULL,$other=false)
+{
+    $_date=date('Y-m-d',strtotime($date));
+    if (is_numeric($customer_id)) 
+    {
+        $CI =& get_instance();
+        $CI->db->select_sum('subtotal');
+        $CI->db->select('tblreport_have.id,id_account_person,contract');
+        $CI->db->join('tblreport_have_contract','tblreport_have_contract.id_receipts=tblreport_have.id','left');
+        $CI->db->where('day_vouchers', $_date);
+        if($other)
+        {
+            $CI->db->where('contract',0);
+            $CI->db->or_where('contract is null');
+        }
+        $result = $CI->db->get('tblreport_have')->row()->subtotal;
+    }
+    
+    if ($result) {
+        return $result;
+    }
+    return false;
+}
+
 /**
  * Check if current user is admin
  * @param  mixed $staffid

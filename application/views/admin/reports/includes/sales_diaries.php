@@ -52,13 +52,13 @@
                <td></td>
                <td></td>
                <td></td>
-               <td class="subtotal"></td>
-               <td class="total"></td>
-               <td class="total_tax"></td>
                <td></td>
-               <td class="discount_total"></td>
-               <td class="adjustment"></td>
-               <td class="amount_open"></td>
+               <td class="TDT"></td>
+               <td class="DTHH"></td>
+               <td class="DTK"></td>
+               <td class="CK"></td>
+               <td class="GTTV"></td>
+               <td class="DTT"></td>
                <td></td>
             </tr>
          </tfoot>

@@ -7,6 +7,7 @@ $custom_fields = get_custom_fields('customers', array(
 
 $aColumns = array(
     '1',
+    '2',
     'code',
     'company',
     'tblclients.phonenumber',
@@ -144,10 +145,10 @@ $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ar
 ));
 $output  = $result['output'];
 $rResult = $result['rResult'];
-
+$j=1;
 foreach ($rResult as $aRow) {
     $row = array();
-
+    
     for ($i = 0; $i < count($aColumns); $i++) {
         if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
             $_data = $aRow[strafter($aColumns[$i], 'as ')];
@@ -157,6 +158,8 @@ foreach ($rResult as $aRow) {
 
         if ($aColumns[$i] == '1') {
             $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['userid'] . '"><label></label></div>';
+        }else if($aColumns[$i]=='2') {
+            $_data=$j;
         } else if ($i == 11) {
             if ($_data != '') {
                 $groups = explode(',', $_data);
@@ -224,6 +227,8 @@ foreach ($rResult as $aRow) {
 
         $row[] = $_data;
     }
+
+    $j++;
 
     $options = '';
     $options .= icon_btn('clients/client/' . $aRow['userid'], 'pencil-square-o');

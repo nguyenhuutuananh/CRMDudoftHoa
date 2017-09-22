@@ -28,12 +28,12 @@ class Pdf extends TCPDF
 
 	public function Header() {
 		$this->SetFont('helvetica', 'B', 20);
-		// if(get_option('show_page_number_on_pdf') == 1){
-		// 	$this->SetTextColor(142,142,142);
-		// 	$y            = $this->getY();
-		// $this->writeHTMLCell('', '', '', $y, _l('divider'), 0, 0, false, true, 'J', true);
-		// 	$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
-		// }
+		 if(get_option('prefix_header_pdf') !=""){
+		 	$this->SetTextColor(142,142,142);
+		 	$y            = $this->getY();
+		 $this->writeHTMLCell('', '', '', $y, '<img src="'.get_option('prefix_header_pdf').'">', 0, 0, false, true, 'J', true);
+		 	$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		 }
 	}
 
 	public function Footer() {

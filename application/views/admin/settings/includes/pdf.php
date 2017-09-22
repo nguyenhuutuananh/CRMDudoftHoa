@@ -35,9 +35,13 @@
         <hr />
         <?php echo render_input('settings[custom_pdf_logo_image_url]','settings_custom_pdf_logo_image_url',get_option('custom_pdf_logo_image_url'),'text',array('data-toggle'=>'tooltip','title'=>'settings_custom_pdf_logo_image_url_tooltip')); ?>
         <hr />
+        <?php echo render_input('settings[prefix_header_pdf]','prefix_header_pdf',get_option('prefix_header_pdf'),'text',array('data-toggle'=>'tooltip','title'=>'settings_custom_pdf_logo_image_url_tooltip')); ?>
+        <hr />
         <?php echo render_input('settings[pdf_logo_width]','pdf_logo_width',get_option('pdf_logo_width'),'number'); ?>
         <hr />
         <?php render_yes_no_option('show_status_on_pdf_ei','show_invoice_estimate_status_on_pdf'); ?>
+        <hr />
+        <?php render_yes_no_option('prefix_logo_date_pdf_true_false','prefix_logo_date_pdf_true_false'); ?>
         <hr />
         <?php render_yes_no_option('show_pay_link_to_invoice_pdf','show_pay_link_to_invoice_pdf'); ?>
         <hr />

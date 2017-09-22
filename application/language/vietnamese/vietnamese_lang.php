@@ -3953,6 +3953,7 @@ $lang['als_return'] = "Phiếu trả hàng";
 $lang['receipts'] = "Phiếu thu";
 $lang['lblclient'] = "Khách hàng";
 $lang['_receiver'] = "Người nộp";
+$lang['_receiver_money'] = "Người nộp tiền";
 $lang['code_vouchers_receipts'] = "Số phiếu thu";
 $lang['tk_ck'] = "TK chiết khấu";
 $lang['subtotal_money'] = "Tổng tiền";
@@ -4039,6 +4040,7 @@ $lang['step']="Các bước";
 $lang['war_step']="Chuyển trạng thái thành công";
 $lang['title_items']="Sản phẩm";
 $lang['total_sales']="Tổng sản phẩm phiếu thu";
+
 $lang['sale_diary']="Sổ nhật ký bán hàng";
 $lang['invoice_date']="Ngày hóa đơn";
 $lang['invoice_no']="Số hóa đơn";
@@ -4053,6 +4055,44 @@ $lang['sale_item_select']="Đơn hàng bán";
 // $lang['returns_value']="Giá trị trả lại";
 // $lang['returns_value']="Giá trị trả lại";
 // $lang['returns_value']="Giá trị trả lại";
+
+$lang['_day']="Ngày";
+$lang['_month']="Tháng";
+$lang['_year']="Năm";
+$lang['_money_']="Viết bằng chữ";
+$lang['_attach']="Kèm theo";
+$lang['_documents']="chứng từ gốc";
+
+$lang['director']="Giám đốc";
+$lang['chief_accountant']="Kế toán trưởng";
+$lang['treasurer']="Thủ quỹ";
+$lang['the_person_making_the_votes']="Người lập phiếu";
+$lang['money_receiver']="Người nhận tiền";
+$lang['prefix_logo_date_pdf_true_false']="Hiện logo và ngày tháng";
+$lang['prefix_header_pdf']="Header pdf để rổng để không áp dụng";
+$lang['__receiver']="Họ tên người người nhận tiền";
+$lang['reason_receipts']="Lý do nộp";
+$lang['account_person']="Tài khoản hưởng thụ";
+$lang['add_account_person']="Thêm tài khoản hưởng thụ";
+$lang['code_account_person']="Số tài khoản hưởng thụ";
+$lang['name_account_person']="Chủ tài khoản";
+$lang['address_person']="Địa chỉ ngân hàng";
+$lang['account_holder']="Chủ tài khoản";
+$lang['branch']="Chi nhánh";
+$lang['electrolyte']="Diễn giải";
+$lang['name_bank']="Tên ngân hàng";
+$lang['add_true']="Thêm dữ liệu thành công";
+$lang['add_false']="Thêm dữ liệu không thành công";
+$lang['als_report_have_']="Giấy báo có";
+$lang['order_no']="STT";
+
+
+
+
+
+
+
+
 
 
 

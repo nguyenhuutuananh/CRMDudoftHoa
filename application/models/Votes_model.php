@@ -38,7 +38,7 @@ class Votes_model extends CRM_Model
         $data=array();
         foreach($contract as $rom)
         {
-            $this->db->select('sum(product_price_buy) as sum_contract,currency_id');
+            $this->db->select('sum(product_price_buy*exchange_rate) as sum_contract,currency_id');
             $this->db->where('order_id',$rom['id_order']);
             $sum_contract=$this->db->get('tblorders_detail')->row();
             $data[$rom['id']]=array('sum_contract'=>$sum_contract->sum_contract,'currency'=>$sum_contract->currency_id);

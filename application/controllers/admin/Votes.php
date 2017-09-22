@@ -30,6 +30,7 @@ class Votes extends Admin_controller
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
+                $data['id_staff']=get_staff_user_id();
                 $id=$this->votes_model->insert($data);
                 if($id) {
                     $_id = $this->votes_model->insert_votes_contract($id, $_data);
@@ -118,12 +119,11 @@ class Votes extends Admin_controller
     }
     public function pdf($id="")
     {
-//        if (!$id) {
-//            redirect(admin_url('votes'));
-//        }
         $votes = $this->votes_model->get_data_pdf($id);
+        if ($this->input->get('combo')) {
+            $votes->combo=$this->input->get('combo');
+        }
         $pdf      = votes_pdf($votes);
-
         $type     = 'D';
         if ($this->input->get('print')) {
             $type = 'I';

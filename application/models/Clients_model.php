@@ -757,7 +757,7 @@ class Clients_model extends CRM_Model
     {
         $affectedRows = 0;
 
-        if (is_reference_in_table('clientid', 'tblinvoices', $id) || is_reference_in_table('clientid', 'tblestimates', $id)) {
+        if (is_reference_in_table('clientid', 'tblinvoices', $id) || is_reference_in_table('clientid', 'tblestimates', $id) && is_reference_in_table('customer_id', 'tblquotes', $id) && is_reference_in_table('client', 'tblcontracts', $id) && is_reference_in_table('customer_id', 'tblsales', $id) && is_reference_in_table('customer_id', 'tblsale_orders', $id) && is_reference_in_table('customer_id', 'tblimports', $id) && is_reference_in_table('customer_id', 'customer_id', $id)) {
             return array(
                 'referenced' => true
             );

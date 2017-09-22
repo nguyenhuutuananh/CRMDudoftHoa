@@ -7,7 +7,34 @@
    <div class="panel_s">
      <div class="panel-body">
       <div class="clearfix"></div>
-          <h4 class="bold no-margin"><?php echo (isset($heading) ? $heading : ''); ?></h4>
+          <h4 class="bold col-md-11"><?php echo (isset($heading) ? $heading : ''); ?></h4>
+         <div class="pull-right col-md-1">
+             <a class="btn btn-info"  data-toggle="modal" data-target="#account_person" style="float: right"><?=_l('add_account_person')?></a>
+         </div>
+         <div id="account_person" class="modal fade" role="dialog">
+             <?php echo form_open_multipart(admin_url().'report_have/account_person', array('class' => 'account-person', 'autocomplete' => 'off')); ?>
+             <div class="modal-dialog">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <button type="button" class="close" data-dismiss="modal">&times;</button>
+                         <h4 class="modal-title"><?=_l('add_account_person')?></h4>
+                     </div>
+                     <div class="modal-body">
+                         <?php echo render_input('account','code_account_person')?><!--số tài khoản-->
+                         <?php echo render_input('name_bank','name_bank')?><!--ten ngan hàng-->
+                         <?php echo render_input('branch','branch')?><!--chi nhanh-->
+                         <?php echo render_input('account_holder','account_holder')?><!--chu tai khoan-->
+                         <?php echo render_input('electrolyte','electrolyte')?><!--dien giai-->
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" id="add_accout_person" class="btn btn-info"><?=_l('submit')?></button>
+                         <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                     </div>
+                 </div>
+
+             </div>
+             <?php echo form_close();?>
+         </div>
   <hr class="no-mbot no-border" />
     <div class="row">
     <div class="additional"></div>
@@ -58,8 +85,8 @@
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 _buttons">
                     <div class="pull-right">
                         <?php if( isset($report_have) ) { ?>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $report_have->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
-                        <a href="<?php echo admin_url('purchase_suggested/detail_pdf/' . $report_have->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="<?php echo admin_url('report_have/pdf/' . $report_have->id . '?print=true') ?>" target="_blank" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="In" aria-describedby="tooltip652034"><i class="fa fa-print"></i></a>
+                        <a href="<?php echo admin_url('report_have/pdf/' . $report_have->id  ) ?>" class="btn btn-default btn-with-tooltip" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="Xem PDF"><i class="fa fa-file-pdf-o"></i></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -79,6 +106,10 @@
                     <?php
                         $default_date = ( isset($report_have) ? _d($report_have->date_create) : _d(date('Y-m-d')));
                         echo render_date_input( 'date_create', 'project_datecreated' , $default_date , 'date');
+                    ?>
+                      <?php
+                        $selected = ( isset($report_have) ? $report_have->id_account_person : "");
+                        echo render_select('id_account_person',$account_person,array('id','account','name_bank'),'account_person',$selected);
                     ?>
                     
                 </div>
@@ -127,7 +158,7 @@
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                        <td style="padding-top: 8px;"><div class="form-group"><input type="text" id="note" class="form-control" value=""></div></td>
                                        <td>
-                                           <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                           <select class="selectpicker" id="tk_no" data-live-search="true" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                <?php if($tk_no){?>
                                                    <option></option>
                                                    <?php foreach($tk_no as $rom){?>
@@ -137,7 +168,7 @@
                                            </select>
                                        </td>
                                        <td>
-                                           <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                           <select class="selectpicker" id="tk_co" data-live-search="true" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                <?php if($tk_co){?>
                                                    <option></option>
                                                    <?php foreach($tk_co as $rom){?>
@@ -149,7 +180,7 @@
                                        </td>
 
                                        <td>
-                                           <select class="selectpicker" id="contracts" data-width="100%" data-none-selected-text="<?php echo _l('contracts'); ?>">
+                                           <select class="selectpicker" id="contracts" data-live-search="true" data-width="100%" data-none-selected-text="<?php echo _l('contracts'); ?>">
 
                                                <option></option>
                                                <?php if($contract){?>
@@ -379,7 +410,7 @@
         var td5 = $('<td></td>');
         var td6 = $('<td><div class="form-group"><input class="form-control" readonly type="text" value="" /></div></td>');
         var td7 = $('<td><div class="form-group"><input class="_subtotal form-control" type="number" name="items[' + uniqueArray + '][subtotal]" value="" /></div></td>');
-        var td8 = $('<td></td>');
+        // var td8 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) input').val());
         td2.find('input').val($('tr.main').find('td:nth-child(2) input').val());
@@ -400,13 +431,13 @@
 //		td5.find('input').val($('tr.main').find('td:nth-child(5) option:selected').val());
         let contract = $('tr.main').find('td:nth-child(5)').find('select').clone();
         contract.attr('name', 'items[' + uniqueArray + '][contract]');
-        contract.attr('dis', 'items[' + uniqueArray + '][contract]');
+        contract.attr('disabled', 'disabled');
         contract.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
         td5.append(contract);
         td6.find('input').val($('tr.main').find('td:nth-child(6) input').val());
 
         td7.find('input').val($('tr.main').find('td:nth-child(7) input').val());
-        td8.find('input').val($('tr.main').find('td:nth-child(8) input').val());
+        // td8.find('input').val($('tr.main').find('td:nth-child(8) input').val());
 
 		newTr.append(td1);
         newTr.append(td2);
@@ -415,7 +446,7 @@
         newTr.append(td5);
         newTr.append(td6);
         newTr.append(td7);
-        newTr.append(td8);
+        // newTr.append(td8);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -459,7 +490,7 @@
         })
         $('.subtotal').html(formatNumber(_subtotal));
         $('._count').html(formatNumber(_count));
-        $('.selectpicker').selectpicker('refresh');
+        $('.selectpicker').selectpicker('refresh').removeAttr('disabled');
     }
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
