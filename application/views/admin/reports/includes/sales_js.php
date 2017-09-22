@@ -109,6 +109,19 @@
      $(this).find('tfoot td.amount_open').html(sums.amount_open);
    });
 
+   $('.table-diaries-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<?php echo _l('invoice_total'); ?>");
+     $(this).find('tfoot td.subtotal').html(sums.subtotal);
+     $(this).find('tfoot td.total').html(sums.total);
+     $(this).find('tfoot td.total_tax').html(sums.total_tax);
+     $(this).find('tfoot td.discount_total').html(sums.discount_total);
+     $(this).find('tfoot td.adjustment').html(sums.adjustment);
+     $(this).find('tfoot td.amount_open').html(sums.amount_open);
+   });
+
    $('.table-estimates-report').on('draw.dt', function() {
      var estimatesReportsTable = $(this).DataTable();
      var sums = estimatesReportsTable.ajax.json().sums;
@@ -123,6 +136,7 @@
  });
 
  function init_report(e, type) {
+  // alert(type)
    var report_wrapper = $('#report');
    if (report_wrapper.hasClass('hide')) {
      report_wrapper.removeClass('hide');
@@ -148,6 +162,7 @@
        if (type != 'total-income' && type != 'payment-modes') {
          report_from_choose.removeClass('hide');
        }
+
        if (type == 'total-income') {
          $('.chart-income').removeClass('hide');
          $('#income-years').removeClass('hide');
@@ -167,6 +182,8 @@
          report_estimates.removeClass('hide');
        } else if(type == 'proposals-report'){
         $('#proposals-reports').removeClass('hide');
+      }else if(type == 'diaries-report'){
+        $('#diaries-report').removeClass('hide');
       }
       gen_reports();
     }
@@ -275,6 +292,20 @@
         });
      });
    }
+
+   function diaries_report() {
+     if ($.fn.DataTable.isDataTable('.table-diaries-report')) {
+       $('.table-diaries-report').DataTable().destroy();
+     }
+     // _table_api = initDataTable('.table-diaries-report', admin_url + 'reports/diaries_report', false, false, fnServerParams, [
+     //   [2, 'DESC'],
+     //   [0, 'DESC']
+     //   ]);
+
+     initDataTable('.table-diaries-report', admin_url + 'reports/diaries_report', false, false, fnServerParams, [0, 'DESC']);
+     // .column(2).visible(false, false).columns.adjust()
+   }
+
    function invoices_report() {
      if ($.fn.DataTable.isDataTable('.table-invoices-report')) {
        $('.table-invoices-report').DataTable().destroy();
@@ -322,7 +353,10 @@
        report_by_customer_groups();
      } else if (!report_invoices.hasClass('hide')) {
        invoices_report();
-     } else if (!report_payments_received.hasClass('hide')) {
+       // Sales Diaries
+     }else if(!$('#diaries-reports').hasClass('hide')){
+      diaries_report();
+    } else if (!report_payments_received.hasClass('hide')) {
        payments_received_reports();
      } else if (!report_estimates.hasClass('hide')) {
        estimates_report();

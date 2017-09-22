@@ -1,3 +1,0 @@
-ALTER TABLE `tblexports` ADD `deleted_at` TIMESTAMP NULL AFTER `total`, ADD `canceled_at` TIMESTAMP NULL AFTER `deleted_at`;
-
-INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES (NULL, 'prefix_import_contract', 'NKC-');

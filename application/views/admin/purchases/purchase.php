@@ -282,7 +282,12 @@
 <?php init_tail(); ?>
 <script>
 	$(function(){
-		validate_invoice_form();
+		// validate_invoice_form();
+		_validate_form($('purchase-form'), {
+        date: "required",
+        warehouse_id: "required",
+        number: "required"
+    });
 	    // Init accountacy currency symbol
 	    init_currency_symbol();
 	});

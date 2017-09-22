@@ -1,1 +1,0 @@
-ALTER TABLE `tblpurchase_costs_detail` ADD `tk_no` INT NULL AFTER `cost`, ADD `tk_co` INT NULL AFTER `tk_no`;

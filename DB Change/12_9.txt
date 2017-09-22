@@ -1,9 +1,0 @@
-ALTER TABLE `tblimport_items` ADD `exchange_rate` DECIMAL(11,2) NULL DEFAULT '0' AFTER `unit_cost`;
-
-ALTER TABLE `tblimports` ADD `supplier_id` INT NULL AFTER `id`;
-
-ALTER TABLE `tblimport_items` ADD `warehouse_id_to` INT NULL AFTER `warehouse_id`;
-
-INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES (NULL, 'prefix_transfer', 'CK-');
-
-ALTER TABLE `tblimports` ADD `deleted_at` TIMESTAMP NULL AFTER `invoice_status`, ADD `canceled_at` TIMESTAMP NULL AFTER `deleted_at`;

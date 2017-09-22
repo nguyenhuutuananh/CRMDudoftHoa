@@ -4039,12 +4039,20 @@ $lang['step']="Các bước";
 $lang['war_step']="Chuyển trạng thái thành công";
 $lang['title_items']="Sản phẩm";
 $lang['total_sales']="Tổng sản phẩm phiếu thu";
+$lang['sale_diary']="Sổ nhật ký bán hàng";
+$lang['invoice_date']="Ngày hóa đơn";
+$lang['invoice_no']="Số hóa đơn";
+$lang['total_revenue']="Tổng doanh thu";
+$lang['others_revenue']="Doanh thu khác";
+$lang['goods_revenue']="Doanh thu hàng hóa";
+$lang['returns_value']="Giá trị trả lại";
+$lang['net_revenue']="Doanh thu thuần";
 
-
-
-
-
-
+$lang['report_diary_status']="Trạng thái";
+$lang['sale_item_select']="Đơn hàng bán";
+// $lang['returns_value']="Giá trị trả lại";
+// $lang['returns_value']="Giá trị trả lại";
+// $lang['returns_value']="Giá trị trả lại";
 
 
 

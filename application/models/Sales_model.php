@@ -2,10 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Sales_model extends CRM_Model
 {
-    private $statuses;
+    private $statuses = array(1, 2, 3, 4, 5, 6);
     function __construct()
     {
         parent::__construct();
+    }
+
+    public function get_statuses()
+    {
+        return $this->statuses;
     }
 
     public function get($id = '', $where = array())
@@ -25,14 +30,17 @@ class Sales_model extends CRM_Model
         return $this->db->get()->result();
     }
 
-    public function getAllSalesByCustomerID($customer_id = '')
+    public function getAllSalesByCustomerID($customer_id = '',$return=false)
     {
 
-        $this->db->select('*,tblclients.company');
+        $this->db->select('tblsales.*,tblclients.company');
         $this->db->from('tblsales');
         $this->db->join('tblclients', 'tblclients.userid = tblsales.customer_id', 'left');
         $this->db->where('tblsales.customer_id', $customer_id);
-        $this->db->where('tblsales.invoice_status <>', 1);
+        if(!$return)
+        {
+            $this->db->where('tblsales.invoice_status <>', 1);
+        }
         if (is_numeric($customer_id)) 
         {
             $sales = $this->db->get()->result();

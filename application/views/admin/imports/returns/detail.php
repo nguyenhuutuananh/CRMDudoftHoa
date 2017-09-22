@@ -149,12 +149,13 @@
                     <?php $selected = (isset($item) ? $item->customer_id : ''); ?>
                     <?php echo render_select('customer_id',$customers,array('userid','company'),'client',$selected); ?>
 
+                    <?php $selected = (isset($item) ? $item->rel_id : ''); ?>
+                    <?php echo render_select('rel_id',array(),array(),'sale_item_select',$selected); ?>
+
                     <?php
                     $default_name = (isset($item) ? $item->name : "Phiếu trả hàng");
                     echo render_input('name', _l('import_name'), $default_name);
                     ?>
-
-                    
 
                     <?php 
                     $reason = (isset($item) ? $item->reason : "");
@@ -162,21 +163,31 @@
                     ?>
                 </div>
 
-                
+                <div id="tk" class="hide">
+                    <!-- TKno -->
+                   
+                        <?php
+                        $selected=(isset($item) ? $item->tk_no : '');
+                        echo render_select('tk_no_id',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                        ?>
+                    
+                    <!-- TKCo -->
+
+                   
+                        <?php
+                        $selected=(isset($item) ? $item->tk_co : '');
+                        echo render_select('tk_co_id',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                        ?>
+                    
+                </div>
                 
                 
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                         <div class="row">
-                            <div class="col-md-4">
-                                <?php if($item->rel_id) $display='style="display: none;"';
-                                 ?>
-                                <?php
-                                $selected=(isset($item) ? getWHTIDByWHID($warehouse_id) : '');
-                                echo render_select('warehouse_type_id',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                                ?>
-                            </div>
+                            <?php if($item->rel_id) $display='style="display: none;"';?>
+                            
                             <div class="col-md-4">
                                 <?php
                                 $selected=(isset($item) ? $warehouse_id : '');
@@ -714,6 +725,107 @@
         }
         });
     });
+
+    $('#customer_id').change(function(){
+        var customer_id=$(this).val();
+        $('table.item-purchase tbody tr.sortable.item').remove();
+        loadAllSalesByCustomerID(customer_id);
+
+    });
+    function loadAllSalesByCustomerID(customer_id){
+        var invoice_item=$('#rel_id');
+        invoice_item.find('option:gt(0)').remove();
+        invoice_item.selectpicker('refresh');
+        if(invoice_item.length) {
+            $.ajax({
+                url : admin_url + 'sales/getAllSalesByCustomerID/' + customer_id+'/'+true,
+                dataType : 'json',
+            })
+            .done(function(data){ 
+                $.each(data, function(key,value){
+
+                    invoice_item.append('<option value="' + value.id + '">'+ value.prefix+value.code + '</option>');
+                });
+                invoice_item.selectpicker('refresh');
+            });
+        }
+    }
+
+    $('#rel_id').change(function(){
+      var sale_id=($(this).val());
+      loadAllItemsBySaleID(sale_id);
+    });
+
+    function loadAllItemsBySaleID(sale_id){
+        $('table.item-purchase tbody tr').remove();
+        if(sale_id) {
+            $.ajax({
+                url : admin_url + 'sales/getAllItemsBySaleID/' + sale_id,
+                dataType : 'json',
+            })
+            .done(function(data){ 
+            
+                total=0;
+                $.each(data, function(key,value){
+                    var newTr = $('<tr class="item"></tr>');
+                    var td1 = $('<td class="dragger"><input type="hidden" name="items[' + uniqueArray + '][id]" value="'+value.product_id+'" /></td>');
+                    var td2 = $('<td>'+value.product_name+'</td>');
+
+                    var td3 = $('<td></td>');
+                    var selectTd3 = $('#tk_no_id').clone();
+                    selectTd3.val('');
+                    selectTd3.removeAttr('id');
+                    var tk_no='items['+uniqueArray+'][tk_no]';
+                    selectTd3.attr('name',tk_no);
+                    td3.append(selectTd3);
+
+                    var td4 = $('<td></td>');
+                    var selectTd4 = $('#tk_co_id').clone();
+                    selectTd4.val('');
+                    selectTd4.removeAttr('id');
+                    var tk_no='items['+uniqueArray+'][tk_co]';
+                    selectTd4.attr('name',tk_no);
+                    td4.append(selectTd4);
+                    var maxQ=value.quantity-value.quantity_return;
+                    var td5 = $('<td>'+value.unit_name+'</td>');
+                    var td6 = $('<td><input style="width: 100px" class="mainQuantity" min="0" max="'+maxQ+'" type="number" name="items[' + uniqueArray + '][quantity]" value="'+formatNumber(value.quantity)+'" /></td>');
+                    var td7 = $('<td>'+formatNumber(value.unit_cost)+'</td>');
+                    var sub_total=value.unit_cost*maxQ;
+                    var tax=sub_total*value.tax_rate/100;
+                    var td8 = $('<td>'+formatNumber(sub_total)+'</td>');
+                    var td9 = $('<td>'+formatNumber(tax)+'</td>');
+                    td9.append('<input type="hidden" id="tax" data-taxrate="'+value.tax_rate+'" value="'+value.tax_id+'">')
+                    var amount=sub_total+tax;
+                    
+                    if(isNaN(parseFloat(value.amount)))
+                    {
+                        amount=0;
+                    }
+                    
+                    var td10 = $('<td>'+formatNumber(amount)+'</td>');
+                    var td11 = $('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>');
+
+                    newTr.append(td1);
+                    newTr.append(td2);
+                    newTr.append(td3);
+                    newTr.append(td4);
+                    newTr.append(td5);
+                    newTr.append(td6);
+                    newTr.append(td7);
+                    newTr.append(td8);
+                    newTr.append(td9);
+                    newTr.append(td10);
+                    newTr.append(td11);
+                    $('table.item-purchase tbody').append(newTr);
+                    $('.selectpicker').selectpicker('refresh');
+                    uniqueArray++;
+                    total+=amount;
+                    
+                });
+                // Total();
+            });
+        }
+    }
         
 </script>
 </body>

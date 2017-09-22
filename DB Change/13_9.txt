@@ -1,7 +1,0 @@
-INSERT INTO `01917f`.`tbloptions` (`id`, `name`, `value`) VALUES (NULL, 'prefix_return', 'TH-');
-
-ALTER TABLE `tblimport_items` ADD `tax_id` TINYINT NULL AFTER `unit_cost`, ADD `tax_rate` DECIMAL(15,0) NULL AFTER `tax_id`, ADD `tax` DECIMAL(25,0) NULL AFTER `tax_rate`;
-
-ALTER TABLE `tblimports` ADD `customer_id` INT NULL AFTER `supplier_id`;
-
-ALTER TABLE `tblsale_items` ADD `reject_id` INT NULL AFTER `sale_id`;

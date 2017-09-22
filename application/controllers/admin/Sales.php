@@ -116,9 +116,9 @@ class Sales extends Admin_controller
     }
 
 
-    public function getAllSalesByCustomerID($customer_id) {
+    public function getAllSalesByCustomerID($customer_id,$return=false) {
         if(is_numeric($customer_id) && $this->input->is_ajax_request()) {
-            echo json_encode($this->sales_model->getAllSalesByCustomerID($customer_id));
+            echo json_encode($this->sales_model->getAllSalesByCustomerID($customer_id,$return));
         }
     }
 

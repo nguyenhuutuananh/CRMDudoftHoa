@@ -316,127 +316,14 @@
                             </table>
                         </div>
 
+
+
                     </div>
                     </div>
-                    <!-- <?php (isset($item)) ? $display='block' : $display='none' ?>
-                    <div class="panel panel-info mtop20" style="display: <?=$display?>">
-                        <div class="panel-heading"><?=_l('list_returns')?></div>
-                        <div class="panel-body">
-                            <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mbot25">
-                                    <select class="selectpicker no-margin" data-width="100%" id="custom_item_select_return" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
-                                        <option value=""></option>
-                                        <?php foreach ($item->items as $product) { ?>
-                                        <option value="<?php echo $product->product_id ?>" data-subtext="">(<?php echo $product->code ?>) <?php echo $product->product_name; ?></option>
-                                        <?php 
-                                        } ?>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-5 text-right show_quantity_as_wrapper">                        
-                            </div>
 
-                        </div>
-                        <div class="table-responsive s_table">
-                            <table class="table items item-return no-mtop">
-                                <thead>
-                                    <tr>
-                                        <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="25%" class="text-left"><?php echo _l('item_name'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
-                                        
-                                        <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody>
-                                    <tr class="mains">
-                                        <td><input type="hidden" id="itemID" value="" /></td>
-                                        <td>
-                                            <?php echo _l('item_name'); ?>
-                                        </td>
-                                        <td>
-                                            <input type="hidden" id="item_unit" value="" />
-                                            <?php echo _l('item_unit'); ?>
-                                        </td>
+                    
 
-                                        <td>
-                                            <input style="width: 100px " class="mainQuantity" type="number" min="1" value="1"  class="form-control" placeholder="<?php echo _l('item_quantity'); ?>">
-                                        </td>
-                                        
-                                        <td>
-                                            <?php echo _l('item_price'); ?>
-                                        </td>
-                                        <td>
-                                            0
-                                        </td>
-                                        <td>
-                                            <button style="display:none" id="btnRAdd" type="button" onclick="createTrItemR(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
-                                        </td>
-                                    </tr>
-                                <?php if(empty($item_returns)) {?>
-                                    <tr class="empty">
-                                        <td colspan="7"><?=_l('no_items_return')?></td>
-                                    </tr>
-                                <?php } ?>
-                                    <?php
-                                    $j=0;
-                                    $totalPriceR=0;
-                                    if(isset($item_returns) && count($item_returns) > 0) {
-                                        
-                                        foreach($item_returns as $value) {
-                                        ?>
-                                    <tr class="sortable item">
-                                        <td>
-                                            <input type="hidden" name="itemsR[<?php echo $j; ?>][id]" value="<?php echo $value->product_id; ?>">
-                                        </td>
-                                        <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
-                                        <td><?php echo $value->unit_name; ?></td>
-                                        <td><input style="width: 100px" class="mainQuantity" type="number" min="0" max="<?=$value->quantity?>" name="itemsR[<?php echo $j; ?>][quantity]" value="<?php echo $value->quantity; ?>"></td>
-                                            
-                                        <td><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>                                        
-                                        <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItemR(this); return false;"><i class="fa fa-times"></i></a></td>
-                                    </tr>
-                                        <?php
-                                            $totalPriceR += $value->sub_total;
-                                            $j++;
-                                        }
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-8 col-md-offset-4">
-                            <table class="table text-right">
-                                <tbody>
-                                    <tr>
-                                        <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
-                                        </td>
-                                        <td class="totalR">
-                                            <?php echo $j; ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
-                                        </td>
-                                        <td class="totalPriceR">
-                                            <?php echo number_format($totalPriceR); ?> VND
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
-                        </div>
-                    </div>
-                     -->
-                <!-- End Customize from invoice if(isset($item) && $item->status != 2 || !isset($item))  -->
                 </div>
                 
                 <?php { ?>
@@ -794,6 +681,57 @@
                 $('.sales-form').submit();
             }
 
+        }
+    });
+
+     var itemRs= <?php echo json_encode($item->items);?>;
+    function findItemR(id){
+        var itemResult;
+        $.each(itemRs, (index,value) => {
+            if(value.product_id == id) {
+                itemResult = value;
+                return false;
+            }
+        });
+        return itemResult;
+    };
+
+     var deleteTrItemR = (trItem) => {
+        var current = $(trItem).parent().parent();
+        totalPriceR -= current.find('td:nth-child(4) > input').val() * current.find('td:nth-child(5)').text().replace(/\,/g, '');
+        $(trItem).parent().parent().remove();
+        totalR--;
+        refreshTotalR();
+    };
+    var isNewR = false;
+    $('#custom_item_select_return').change(function(e){
+        var id = $(e.currentTarget).val();
+        var itemFound = findItemR(id);
+        // console.log(itemFound);
+        if(typeof(itemFound) != 'undefined') {
+            var trBar = $('tr.mains');
+            trBar.find('td:first > input').val(itemFound.product_id);
+            trBar.find('td:nth-child(2)').text(itemFound.product_name+' ('+itemFound.prefix+itemFound.code+')');
+            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
+            trBar.find('td:nth-child(4) > input').val(1);
+            //max min =>1 quantity
+            trBar.find('td:nth-child(4) > input').attr('max',itemFound.quantity);
+
+            trBar.find('td:nth-child(5)').text(formatNumber(itemFound.unit_cost));
+            trBar.find('td:nth-child(6)').text(formatNumber(itemFound.unit_cost * 1) );
+            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.unit_cost)/100);
+            var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax_id+'" />');
+            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(7)').append(inputTax);
+            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.unit_cost)));
+            isNewR = true;
+            $('#btnRAdd').show();
+        }
+        else 
+        {
+            isNewR = false;
+            $('#btnRAdd').hide();
         }
     });
     

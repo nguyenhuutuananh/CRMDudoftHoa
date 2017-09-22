@@ -1,5 +1,0 @@
-ALTER TABLE `tblquote_items` ADD `tax_id` DECIMAL(25,0) NULL AFTER `tax`, ADD `tax_rate` DECIMAL(15,0) NULL DEFAULT '0' AFTER `tax_id`;
-
-ALTER TABLE `tblquote_items` ADD `amount` DECIMAL(25,0) NULL DEFAULT '0' AFTER `tax_rate`;
-
-ALTER TABLE `tblquote_items` CHANGE `tax` `tax` DECIMAL(25,0) NULL DEFAULT '0';

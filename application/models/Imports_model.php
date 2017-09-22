@@ -278,6 +278,9 @@ class Imports_model extends CRM_Model
             'account_date'=>to_sql_date($data['account_date']),
             'create_by'=>get_staff_user_id()
             );
+
+    var_dump($import);die();
+
         
         $this->db->insert('tblimports', $import);
         $insert_id = $this->db->insert_id();
@@ -298,7 +301,17 @@ class Imports_model extends CRM_Model
                     $sub=$item['unit_cost']*$item['quantity'];
                     $tax=$sub*$product->tax_rate/100;
                     $sub_total=$sub+$tax;
+                    if($data['rel_id'])
+                    {
+                        $pro=$this->getSaleItem($data['rel_id'],$item['id']);
+                        if($pro)
+                        {
+                            $quantity_net=$pro->quantity+$item['quantity'];
+                            $this->db->update('tblsale_items',array('quantity_return'=>$quantity_net),array('id'=>$pro->id));
+                        }
+                    }
                 }
+
                 $total+=$sub_total;
                 $item_data=array(
                     'import_id'=>$insert_id,
@@ -326,6 +339,16 @@ class Imports_model extends CRM_Model
             }
             $this->db->update('tblimports',array('total'=>$total),array('id'=>$insert_id));
             return $insert_id;
+        }
+        return false;
+    }
+
+    public function getSaleItem($sale_id,$product_id)
+    {
+        if (is_numeric($sale_id) && is_numeric($product_id)) {
+            $this->db->where('sale_id', $sale_id);
+            $this->db->where('product_id', $product_id);
+            return $this->db->get('tblsale_items')->row();
         }
         return false;
     }

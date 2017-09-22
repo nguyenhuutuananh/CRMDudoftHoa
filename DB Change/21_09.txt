@@ -1,0 +1,3 @@
+ALTER TABLE `tblsales` ADD `return_value` DECIMAL(25,0) NULL AFTER `discount`;
+
+ALTER TABLE `tblsale_items` ADD `quantity_return` INT NULL AFTER `quantity`;

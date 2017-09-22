@@ -55,9 +55,11 @@ class Reports extends Admin_controller
             $this->load->model('currencies_model');
             $data['currencies'] = $this->currencies_model->get();
         }
+        $this->load->model('sales_model');
         $this->load->model('invoices_model');
         $this->load->model('estimates_model');
         $this->load->model('proposals_model');
+        $data['sale_statuses']      = $this->sales_model->get_statuses();
         $data['invoice_statuses']      = $this->invoices_model->get_statuses();
         $data['estimate_statuses']     = $this->estimates_model->get_statuses();
         $data['payments_years']        = $this->reports_model->get_distinct_payments_years();
@@ -65,12 +67,20 @@ class Reports extends Admin_controller
 
         $data['invoices_sale_agents']  = $this->invoices_model->get_sale_agents();
 
+
         $data['proposals_sale_agents']  = $this->proposals_model->get_sale_agents();
         $data['proposals_statuses'] = $this->proposals_model->get_statuses();
         $data['chart_js_assets']   = true;
         $data['title']                 = _l('sales_reports');
         $this->load->view('admin/reports/sales', $data);
     }
+
+    /* Buys reportts */
+    public function buys()
+    {
+        var_dump(expression);
+    }
+
     /* Customer report */
     public function customers_report()
     {
@@ -647,6 +657,7 @@ class Reports extends Admin_controller
                 '(SELECT SUM(amount) FROM tblinvoicepaymentrecords WHERE invoiceid = tblinvoices.id)',
                 'status'
             );
+
             $where  = array(
                 'AND status != 5'
             );
@@ -762,6 +773,215 @@ class Reports extends Admin_controller
             foreach ($footer_data as $key => $total) {
                 $footer_data[$key] = format_money($total, $currency_symbol);
             }
+
+
+            $output['sums'] = $footer_data;
+            echo json_encode($output);
+            die();
+        }
+    }
+
+    public function diaries_report()
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->load->model('currencies_model');
+            $this->load->model('invoices_model');
+            $this->load->model('sales_model');
+
+            $select = array(
+                'tblsales.account_date',
+                'tblsales.date',
+                'CONCAT(tblsales.prefix,tblsales.code) as sale_code',
+                'tblinvoices.date',
+                'tblinvoices.number',
+                'tblsales.reason',
+                '1',
+                'tblsales.total',
+                '2',
+                'tblsales.discount',
+                'tblsales.return_value',
+                '5',
+                'tblclients.company'
+            );
+
+            
+            $where  = array(
+                // 'AND status != 5'
+            );
+
+            // $custom_date_select = $this->get_where_report_period();
+            // if ($custom_date_select != '') {
+            //     array_push($where, $custom_date_select);
+            // }
+
+            // if ($this->input->post('sale_agent_invoices')) {
+            //     $agents  = $this->input->post('sale_agent_invoices');
+            //     $_agents = array();
+            //     if (is_array($agents)) {
+            //         foreach ($agents as $agent) {
+            //             if ($agent != '') {
+            //                 array_push($_agents, $agent);
+            //             }
+            //         }
+            //     }
+            //     if (count($_agents) > 0) {
+            //         array_push($where, 'AND sale_agent IN (' . implode(', ', $_agents) . ')');
+            //     }
+            // }
+            $by_currency = $this->input->post('report_currency');
+            if ($by_currency) {
+
+                $_temp = substr($select[11], 0, -1);
+                $_temp .= ' AND currency =' . $by_currency . ')';
+                $select[11] = $_temp;
+
+                $currency = $this->currencies_model->get($by_currency);
+                array_push($where, 'AND currency=' . $by_currency);
+            } else {
+                $currency = $this->currencies_model->get_base_currency();
+            }
+            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
+
+            // if ($this->input->post('invoice_status')) {
+            //     $statuses  = $this->input->post('invoice_status');
+            //     $_statuses = array();
+            //     if (is_array($statuses)) {
+            //         foreach ($statuses as $status) {
+            //             if ($status != '') {
+            //                 array_push($_statuses, $status);
+            //             }
+            //         }
+            //     }
+            //     if (count($_statuses) > 0) {
+            //         array_push($where, 'AND status IN (' . implode(', ', $_statuses) . ')');
+            //     }
+            // }
+
+            $aColumns     = $select;
+            $sIndexColumn = "id";
+            $sTable       = 'tblsales';
+            $join         = array(
+                'JOIN tblclients ON tblclients.userid = tblsales.customer_id',
+                'LEFT JOIN tblinvoices ON tblinvoices.rel_id = tblsales.id'
+            );
+
+            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+                'tblinvoices.prefix',
+                'tblsales.customer_id',                
+                'tblsales.id as sale_id',
+                'tblinvoices.id as invoice_id'
+            ));
+            $output  = $result['output'];
+            $rResult = $result['rResult'];
+
+            
+            $x       = 0;
+
+            // $footer_data = array(
+            //     'total' => 0,
+            //     'subtotal' => 0,
+            //     'total_tax' => 0,
+            //     'discount_total' => 0,
+            //     'adjustment' => 0,
+            //     'amount_open' => 0
+            // );
+
+            $footer_data = array(
+                'TDT' => 0,
+                'DTHH' => 0,
+                'DTK' => 0,
+                'CK' => 0,
+                'GTTV' => 0,
+                'DTT' => 0
+            );
+            
+            foreach ($rResult as $aRow) {
+                $row = array();
+                for ($i = 0; $i < count($aColumns); $i++) {
+                    if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                        $_data = $aRow[strafter($aColumns[$i], 'as ')];
+                    } else {
+                        $_data = $aRow[$aColumns[$i]];
+                    }
+
+                    if(strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]]) && strafter($aColumns[$i], 'as ')=='sale_code')
+                    {
+                        $_data = '<a href="' . admin_url('sales/sale_detail/' . $aRow['sale_id']) . '" target="_blank">' . $aRow['sale_code'] . '</a>';
+                    }
+                    if($aColumns[$i]=='tblsales.account_date' || $aColumns[$i]=='tblsales.date' || $aColumns[$i]=='tblinvoices.date')
+                    {
+                        $_data=_d($aRow['tblsales.account_date']);
+                    }
+                    if($aColumns[$i]=='tblinvoices.number')
+                    {
+                        $code=$aRow['prefix'].str_pad($aRow['tblinvoices.number'], get_option('number_padding_prefixes'), '0', STR_PAD_LEFT);
+                        $_data = '<a href="' . admin_url('invoices/#' . $aRow['invoice_id']) . '" target="_blank">' . $code . '</a>';
+                    }
+                    if($aColumns[$i]=='1')
+                    {
+                        $footer_data['TDT']=$aRow['1'];
+                        $_data = format_money($aRow['1']);
+                    }
+                    if($aColumns[$i]=='tblsales.total')
+                    {   
+                        $footer_data['DTHH']=$aRow['tblsales.total'];
+                        $_data = format_money($aRow['tblsales.total']);
+                    }
+                    if($aColumns[$i]=='2')
+                    {
+                        $footer_data['DTK']=$aRow['2'];
+                        $_data = format_money($aRow['2']);
+                    }
+                    if($aColumns[$i]=='tblsales.discount')
+                    {
+                        $footer_data['CK']=$aRow['tblsales.discount'];
+                        $_data = format_money($aRow['tblsales.discount']);
+                    }
+                    if($aColumns[$i]=='tblsales.return_value')
+                    {
+                        $footer_data['GTTV']=$aRow['tblsales.return_value'];
+                        $_data = format_money($aRow['tblsales.return_value']);
+                    }
+                    if($aColumns[$i]=='5')
+                    {
+                        $footer_data['DTT']=$aRow['5'];
+                        $_data = format_money($aRow['5']);
+                    }
+                    
+                    // if ($i == 1) {
+                    //     $_data = '<a href="' . admin_url('clients/client/' . $aRow['userid']) . '" target="_blank">' . $aRow['company'] . '</a>';
+                    // } else if ($aColumns[$i] == 'total' || $aColumns[$i] == 'subtotal' || $aColumns[$i] == 'total_tax' || $aColumns[$i] == 'discount_total' || $aColumns[$i] == 'adjustment') {
+                    //     if ($_data == null) {
+                    //         $_data = 0;
+                    //     }
+                    //     $footer_data[$aColumns[$i]] += $_data;
+                    //     $_data = format_money($_data, $currency_symbol);
+
+                    // } else if ($aColumns[$i] == '1') {
+                    //     $_data = $this->get_report_tax_breakdown_column('invoices', $aRow['id'], $_data, $currency_symbol);
+                    // } else if ($aColumns[$i] == $select[11]) {
+                    //     $_amount_open = $aRow['total'] - $_data;
+                    //     $footer_data['amount_open'] += $_amount_open;
+                    //     $_data = format_money($_amount_open, $currency_symbol);
+                    // } else if ($aColumns[$i] == 'id') {
+                    //     $_data = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+                    // } else if ($aColumns[$i] == 'status') {
+                    //     $_data = format_invoice_status($aRow['status']);
+                    // } else if ($aColumns[$i] == 'date' || $aColumns[$i] == 'duedate') {
+                    //     $_data = _d($_data);
+                    // }
+                    $row[] = $_data;
+                }
+                $output['aaData'][] = $row;
+                $x++;
+            }
+
+            foreach ($footer_data as $key => $total) {
+                $footer_data[$key] = format_money($total, $currency_symbol);
+            }
+
+            // var_dump($footer_data);die;
+
             $output['sums'] = $footer_data;
             echo json_encode($output);
             die();

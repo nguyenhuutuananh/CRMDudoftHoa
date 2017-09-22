@@ -267,7 +267,6 @@ class Invoices_model extends CRM_Model
         } else if (isset($data['adjustment']) && is_numeric($data['adjustment'])) {
             $data['adjustment'] = number_format($data['adjustment'], 2, '.', '');
         }
-
         $unsetters = array(
             'currency_symbol',
             'price',
@@ -288,7 +287,7 @@ class Invoices_model extends CRM_Model
         );
 
         $rel_id=$data['invoice_item_select'];
-
+        $data['rel_id']=$rel_id;
         if (isset($data['recurring'])) {
             if ($data['recurring'] == 'custom') {
                 $data['recurring_type']   = $data['repeat_type_custom'];

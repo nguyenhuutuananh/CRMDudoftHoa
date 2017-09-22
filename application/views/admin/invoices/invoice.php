@@ -40,7 +40,7 @@
                 url : admin_url + 'sales/getAllSalesByCustomerID/' + customer_id,
                 dataType : 'json',
             })
-            .done(function(data){         
+            .done(function(data){ 
                 $.each(data, function(key,value){
 
                     invoice_item.append('<option value="' + value.id + '">'+ value.prefix+value.code + '</option>');
@@ -112,14 +112,10 @@
     }
 
     $("body").on("change", 'input.discount_percent', function() {
-        console.log($(this).parent())
         var inputdiscount=$(this).parent().find('input[type="hidden"]');
         var amount=$(this).parent().find(' + td').text().replace(/\,/g, '');
         var discount=parseFloat(amount)*$(this).val()/100;
         inputdiscount.val(discount);
-        console.log(inputdiscount.val())
-        console.log(amount)
-        console.log(discount)
 
         Total();
     });
@@ -133,7 +129,6 @@
         $.each(rows, function() {
             total_discount+=parseFloat($(this).find('input.discount').val());
     });
-            console.log(total_discount);
             $('.discount_percent').text(formatNumber(total_discount))
     	var grand_total=0;
     	$('.subtotal').text(formatNumber(total));

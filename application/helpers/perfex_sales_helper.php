@@ -350,6 +350,54 @@ function get_sale_status_label($status)
     return $label_class;
 }
 
+function format_diary_status($status, $classes = '', $label = true)
+{
+    $id          = $status;
+    $label_class = get_other_status_label($status);
+    if ($status == 1) {
+        $status = _l('invoice_status_unpaid');
+    } else if ($status == 2) {
+        $status = _l('invoice_status_paid');
+    } else if ($status == 3) {
+        $status = _l('invoice_status_not_paid_completely');
+    } else if ($status == 4) {
+        $status = _l('invoice_status_overdue');
+    } else if ($status == 5) {
+        $status = _l('invoice_status_cancelled');
+    } else {
+        // status 6
+        $status = _l('invoice_status_draft');
+    }
+    if ($label == true) {
+        return '<span class="label label-' . $label_class . ' ' . $classes . ' s-status invoice-status-' . $id . '">' . $status . '</span>';
+    } else {
+        return $status;
+    }
+}
+
+function get_other_status_label($status)
+{
+    $label_class = '';
+    if ($status == 1) {
+        $label_class = 'danger';
+    } else if ($status == 2) {
+        $label_class = 'success';
+    } else if ($status == 3) {
+        $label_class = 'warning';
+    } else if ($status == 4) {
+        $label_class = 'warning';
+    } else if ($status == 5 || $status == 6) {
+        $label_class = 'default';
+    } else {
+        if (!is_numeric($status)) {
+            if ($status == 'not_sent') {
+                $label_class = 'default';
+            }
+        }
+    }
+    return $label_class;
+}
+
 /**
  * Format invoice status
  * @param  integer  $status
