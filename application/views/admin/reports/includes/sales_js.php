@@ -12,6 +12,7 @@
  var report_payments_received = $('#payments-received-report');
  var date_range = $('#date-range');
  var report_from_choose = $('#report-time');
+ var report_year_choose = $('#report-year');
  var fnServerParams = {
    "report_months": '[name="months-report"]',
    "report_from": '[name="report-from"]',
@@ -76,6 +77,7 @@
      gen_reports();
    });
 
+
    $('.table-payments-received-report').on('draw.dt', function() {
      var paymentReceivedReportsTable = $(this).DataTable();
      var sums = paymentReceivedReportsTable.ajax.json().sums;
@@ -113,13 +115,65 @@
      var invoiceReportsTable = $(this).DataTable();
      var sums = invoiceReportsTable.ajax.json().sums;
      $(this).find('tfoot').addClass('bold');
-     $(this).find('tfoot td').eq(0).html("<?php echo _l('invoice_total'); ?>");
+     // $(this).find('tfoot').addClass('textR');
+     $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
      $(this).find('tfoot td.TDT').html(sums.TDT);
      $(this).find('tfoot td.DTHH').html(sums.DTHH);
      $(this).find('tfoot td.DTK').html(sums.DTK);
      $(this).find('tfoot td.CK').html(sums.CK);
      $(this).find('tfoot td.GTTV').html(sums.GTTV);
      $(this).find('tfoot td.DTT').html(sums.DTT);
+   });
+
+   $('.table-order-tracking-book-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
+     $(this).find('tfoot td.SL').html(sums.SL);
+     $(this).find('tfoot td.DTB').html(sums.DTB);
+   });
+
+   $('.table-order-tracking-book-PO-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
+     $(this).find('tfoot td.SL').html(sums.SL);
+     $(this).find('tfoot td.DTB').html(sums.DTB);
+   });
+
+   $('.table-order-tracking-monthly-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tbody tr').eq(0).find('td').eq(0).addClass('title');
+     $(this).find('tbody tr').eq(1).find('td').eq(0).addClass('title');
+
+     // $(this).find('tbody tr').eq(0).find('td').eq(1).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(2).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(3).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(4).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(5).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(6).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(7).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(8).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(9).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(10).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(11).addClass('textR');
+     // $(this).find('tbody tr').eq(0).find('td').eq(12).addClass('textR');
+
+     // $(this).find('tbody tr').eq(1).find('td').eq(1).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(2).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(3).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(4).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(5).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(6).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(7).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(8).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(9).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(10).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(11).addClass('textG');
+     // $(this).find('tbody tr').eq(1).find('td').eq(12).addClass('textG');
    });
 
    $('.table-estimates-report').on('draw.dt', function() {
@@ -136,7 +190,7 @@
  });
 
  function init_report(e, type) {
-  // alert(type)
+    $('#report_tiltle').text($(e).text());
    var report_wrapper = $('#report');
    if (report_wrapper.hasClass('hide')) {
      report_wrapper.removeClass('hide');
@@ -152,7 +206,13 @@
    $('.chart-income').addClass('hide');
    $('.chart-payment-modes').addClass('hide');
    $('#proposals-reports').addClass('hide');
+   $('#diaries-report').addClass('hide');
+   $('#order-tracking-book-report').addClass('hide');
+   $('#order-tracking-book-report-PO').addClass('hide');
+   $('#order-tracking-monthly-report').addClass('hide');
    report_from_choose.addClass('hide');
+   report_year_choose.addClass('hide');
+
 
    $('select[name="months-report"]').selectpicker('val', '');
        // Clear custom date picker
@@ -161,6 +221,11 @@
        $('#currency').removeClass('hide');
        if (type != 'total-income' && type != 'payment-modes') {
          report_from_choose.removeClass('hide');
+       }
+
+       if (type =='order-tracking-monthly-report') {
+         report_year_choose.removeClass('hide');
+         report_from_choose.addClass('hide');
        }
 
        if (type == 'total-income') {
@@ -184,7 +249,14 @@
         $('#proposals-reports').removeClass('hide');
       }else if(type == 'diaries-report'){
         $('#diaries-report').removeClass('hide');
+      }else if(type == 'order-tracking-book-report'){
+        $('#order-tracking-book-report').removeClass('hide');
+      }else if(type == 'order-tracking-book-report-PO'){
+        $('#order-tracking-book-report-PO').removeClass('hide');
+      }else if(type == 'order-tracking-monthly-report'){
+        $('#order-tracking-monthly-report').removeClass('hide');
       }
+
       gen_reports();
     }
 
@@ -306,6 +378,30 @@
      // .column(2).visible(false, false).columns.adjust()
    }
 
+   function order_tracking_book_report() {
+     if ($.fn.DataTable.isDataTable('.table-order-tracking-book-report')) {
+       $('.table-order-tracking-book-report').DataTable().destroy();
+     }
+
+     initDataTable('.table-order-tracking-book-report', admin_url + 'reports/order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+   }
+
+   function order_tracking_book_report_PO() {
+     if ($.fn.DataTable.isDataTable('.table-order-tracking-book-PO-report')) {
+       $('.table-order-tracking-book-PO-report').DataTable().destroy();
+     }
+
+     initDataTable('.table-order-tracking-book-PO-report', admin_url + 'reports/order_tracking_book_report_PO', false, false, fnServerParams, [0, 'DESC']);
+   }
+
+   function order_tracking_monthly_report() {
+     if ($.fn.DataTable.isDataTable('.table-order-tracking-monthly-report')) {
+       $('.table-order-tracking-monthly-report').DataTable().destroy();
+     }
+
+     initDataTable('.table-order-tracking-monthly-report', admin_url + 'reports/order_tracking_monthly_report', false, false, fnServerParams, [0, 'DESC']);
+   }
+
    function invoices_report() {
      if ($.fn.DataTable.isDataTable('.table-invoices-report')) {
        $('.table-invoices-report').DataTable().destroy();
@@ -333,16 +429,16 @@
      initDataTable('.table-payments-received-report', admin_url + 'reports/payments_received', false, false, fnServerParams, [1, 'DESC']);
    }
 
-   function proposals_report(){
+   function proposals_report() {
     if ($.fn.DataTable.isDataTable('.table-proposals-report')) {
      $('.table-proposals-report').DataTable().destroy();
+    }
+
+     initDataTable('.table-proposals-report', admin_url + 'reports/proposals_report', false, false, fnServerParams, [0, 'DESC']);
    }
 
-   initDataTable('.table-proposals-report', admin_url + 'reports/proposals_report', false, false, fnServerParams, [0, 'DESC']);
- }
-
    // Main generate report function
-   function gen_reports() {
+   function gen_reports() { 
      if (!$('.chart-income').hasClass('hide')) {
        total_income_bar_report();
      } else if (!$('.chart-payment-modes').hasClass('hide')) {
@@ -354,14 +450,27 @@
      } else if (!report_invoices.hasClass('hide')) {
        invoices_report();
        // Sales Diaries
-     }else if(!$('#diaries-reports').hasClass('hide')){
+     }else if(!$('#order-tracking-book-report').hasClass('hide')){
+      order_tracking_book_report();
+     }
+      else if(!$('#diaries-report').hasClass('hide')){
       diaries_report();
-    } else if (!report_payments_received.hasClass('hide')) {
+     } 
+     else if (!report_payments_received.hasClass('hide')) {
        payments_received_reports();
-     } else if (!report_estimates.hasClass('hide')) {
+     } 
+     else if (!report_estimates.hasClass('hide')) {
        estimates_report();
-     } else if(!$('#proposal-reports').hasClass('hide')){
+     } 
+     else if(!$('#proposals-reports').hasClass('hide')){
       proposals_report();
     }
+    else if(!$('#order-tracking-book-report-PO').hasClass('hide')){
+      order_tracking_book_report_PO();
+     }
+     else if(!$('#order-tracking-monthly-report').hasClass('hide')){
+      order_tracking_monthly_report();
+     }
   }
+
 </script>

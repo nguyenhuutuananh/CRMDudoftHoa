@@ -1,6 +1,6 @@
     <div id="diaries-report" class="hide">
       <div class="row">
-         <div class="col-md-4">
+         <!-- <div class="col-md-4">
             <div class="form-group">
                <label for="diary_status"><?php echo _l('report_diary_status'); ?></label>
                <select name="invoice_status" class="selectpicker" multiple data-width="100%">
@@ -10,7 +10,7 @@
                   <?php } ?>
                </select>
             </div>
-         </div>
+         </div> -->
          <!-- <?php if(count($invoices_sale_agents) > 0 ) { ?>
          <div class="col-md-4">
             <div class="form-group">
@@ -29,8 +29,8 @@
       <table class="table table table-striped table-diaries-report">
          <thead>
             <tr>
-               <th><?php echo _l('account_date'); ?></th>
                <th><?php echo _l('view_date'); ?></th>
+               <th><?php echo _l('account_date'); ?></th>               
                <th><?php echo _l('code_noo'); ?></th>
                <th><?php echo _l('invoice_date'); ?></th>
                <th><?php echo _l('invoice_no'); ?></th>

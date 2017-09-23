@@ -11,6 +11,15 @@
                       <!-- Sale Diary -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'diaries-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sale_diary'); ?></a></p>
+                      <!-- So theo doi don hang ban SO -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-book-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('order_tracking_book_SO'); ?></a></p>
+                      <!-- So theo doi don dat hang PO -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-book-report-PO'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('order_tracking_book_PO'); ?></a></p>
+                      <!-- Tổng cộng đơn hàng bán trong tháng -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-monthly-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sales_order_tracking_monthly_report'); ?></a></p>
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'invoices-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('invoice_report'); ?></a></p>
                       <hr class="hr-10" />
@@ -63,6 +72,7 @@
                            <?php } ?>
                         </select>
                      </div>
+
                      <div class="form-group hide" id="report-time">
                         <label for="months-report"><?php echo _l('period_datepicker'); ?></label><br />
                         <select class="selectpicker" name="months-report" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
@@ -73,6 +83,21 @@
                            <option value="custom"><?php echo _l('period_datepicker'); ?></option>
                         </select>
                      </div>
+
+                     <div class="form-group hide" id="report-year">
+                        <label for="years_report"><?php echo _l('year_report'); ?></label><br />
+                        <select class="selectpicker" name="years_report" id="years-report" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
+                           <option value=""><?php echo _l(''); ?></option>
+                           <?php foreach ($order_years as $key => $year) { 
+                              $selected='';
+                              if($year->year==date('Y'))
+                                  $selected='selected';
+                            ?>
+                                  <option value="<?=$year->year?>" <?=$selected?> ><?=$year->year?></option>
+                           <?php } ?>
+                        </select>
+                     </div>
+
                      <div id="date-range" class="hide animated mbot15">
                         <div class="row">
                            <div class="col-md-6">
@@ -103,7 +128,7 @@
       <div class="col-md-12">
          <div class="panel_s hide" id="report">
             <div class="panel-body">
-               <h4 class="no-mtop"><?php echo _l('reports_sales_generated_report'); ?></h4>
+               <h4 class="no-mtop" id="report_tiltle" ><?php echo _l('reports_sales_generated_report'); ?></h4>
                <hr />
                <?php $this->load->view('admin/reports/includes/sales_income'); ?>
                <?php $this->load->view('admin/reports/includes/sales_payment_modes'); ?>
@@ -115,6 +140,12 @@
                <?php $this->load->view('admin/reports/includes/sales_proposals'); ?>
                <!-- Sale Diary -->
                <?php $this->load->view('admin/reports/includes/sales_diaries'); ?>
+               <!-- Sale sales_order_tracking_books SO -->
+               <?php $this->load->view('admin/reports/includes/sales_order_tracking_books'); ?>
+               <!-- Sale sales_order_tracking_books PO -->
+               <?php $this->load->view('admin/reports/includes/sales_order_tracking_books_PO'); ?>
+               <!-- Sale sales_order_tracking_monthly -->
+               <?php $this->load->view('admin/reports/includes/sales_order_tracking_monthly_report'); ?>
             </div>
          </div>
       </div>
@@ -125,3 +156,22 @@
 <?php $this->load->view('admin/reports/includes/sales_js'); ?>
 </body>
 </html>
+
+<style type="text/css">
+  .textR{
+    color: red;
+    font-weight: bold;  
+  }
+  .textB{
+    color: blue;
+    font-weight: bold;
+  }
+  .textG{
+    color: green;
+    font-weight: bold;
+  }
+  .title{
+    font-weight: bold;
+    font-style: italic;
+  }
+</style>

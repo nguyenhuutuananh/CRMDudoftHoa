@@ -26,6 +26,34 @@ class Sale_oders_model extends CRM_Model
         return false;
     }
 
+    public function getYears()
+    {
+        $this->db->distinct();
+        $this->db->select('YEAR(date) as year');
+        $this->db->order_by('YEAR(date)');
+        $this->db->from('tblsale_orders');
+        $q=$this->db->get();
+        if($q->num_rows()>0)
+            return $q->result();
+
+        return false;
+    }
+
+    public function getSaleOrderDetails($month=NULL,$year=NULL)
+    {
+        $this->db->select('COUNT(code) as quantity, SUM(total) as grand_total ,MONTH(date) as month,YEAR(date) as year');
+        $this->db->from('tblsale_orders');
+        if(is_numeric($month))
+            $this->db->where('MONTH(date)',$month);
+        if(is_numeric($year))
+            $this->db->where('YEAR(date)',$year);
+        $orders = $this->db->get()->row();
+        if($orders)
+            return $orders;
+        return false;
+
+    }
+
     public function getSaleItems($id)
     {
         $this->db->select('tblsale_order_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,');

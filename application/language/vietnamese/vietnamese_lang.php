@@ -38,7 +38,7 @@ $lang['invoice_table_amount_heading']          = 'Số tiền';
 $lang['invoice_subtotal']                      = 'Tổng tiền';
 $lang['invoice_discount_total']                      = 'Tổng chiết khấu';
 $lang['invoice_adjustment']                    = 'Điều chỉnh';
-$lang['invoice_total']                         = 'Tổng giá trị';
+$lang['invoice_total']                         = 'Tổng cộng';
 $lang['invoice_vat']                           = 'VAT';
 $lang['invoice_bill_to']                       = 'Hóa đơn để';
 $lang['invoice_data_date']                     = 'Ngày Hóa Đơn:';
@@ -4085,6 +4085,21 @@ $lang['add_true']="Thêm dữ liệu thành công";
 $lang['add_false']="Thêm dữ liệu không thành công";
 $lang['als_report_have_']="Giấy báo có";
 $lang['order_no']="STT";
+$lang['order_tracking_book_SO']="Sổ theo dõi đơn hàng bán(SO)";
+$lang['order_tracking_book_PO']="Sổ theo dõi đơn đặt hàng(PO)";
+$lang['total_number_monthly_orders_report']="Tổng đơn đặt hàng bán trong tháng";
+
+$lang['order_no']="STT";
+$lang['product_code']="Mã hàng";
+$lang['product_name']="Tên hàng";
+$lang['unit_name']="ĐVT";
+$lang['quantity']="Số lượng";
+$lang['revenue']="Doanh số";
+$lang['sale_revenue']="Doanh số bán";
+$lang['announcement_name']="Tên thông báo ";
+$lang['announcement_show_my_name']="Thông báo hiển thị tên của tôi";
+$lang['sales_order_tracking_monthly_report']="Đơn hàng bán trong tháng";
+$lang['year_report']="Năm";
 
 
 
