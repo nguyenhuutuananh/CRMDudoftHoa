@@ -128,12 +128,6 @@
                         <div class="row">
                             <div class="col-md-4">
                             <?php
-                            $selected=(isset($item) ? $warehouse_type : '');
-                            echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                            ?>
-                            </div>
-                            <div class="col-md-4">
-                            <?php
                             $selected=(isset($item) ? $warehouse_id : '');
                             echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
                             ?>
