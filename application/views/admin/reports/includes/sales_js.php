@@ -19,18 +19,20 @@
    "report_to": '[name="report-to"]',
    "report_currency": '[name="currency"]',
    "invoice_status": '[name="invoice_status"]',
+   "SO_status": '[name="SO_status"]',
    "estimate_status": '[name="estimate_status"]',
    "sale_agent_invoices": '[name="sale_agent_invoices"]',
    "sale_agent_estimates": '[name="sale_agent_estimates"]',
    "proposals_sale_agents": '[name="proposals_sale_agents"]',
    "proposal_status": '[name="proposal_status"]',
+   "years_report": '[name="years_report"]',
  }
  $(function() {
-   $('select[name="currency"],select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="payments_years"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
+   $('select[name="currency"],select[name="SO_status"],select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="payments_years"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
      gen_reports();
    });
 
-   $('select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
+   $('select[name="invoice_status"],select[name="SO_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
      var value = $(this).val();
      if (value != null) {
        if (value.indexOf('') > -1) {

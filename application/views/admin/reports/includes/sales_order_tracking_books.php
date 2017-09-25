@@ -1,5 +1,18 @@
     <div id="order-tracking-book-report" class="hide">
       <div class="row">
+         <div class="col-md-4">
+            <div class="form-group">
+               <!-- multiple -->
+               <label for="SO_status"><?php echo _l('report_invoice_status'); ?></label>
+               <select name="SO_status"  class="selectpicker"  data-width="100%">
+                  <option value="" selected><?php echo _l('invoice_status_report_all'); ?></option>
+                  <?php foreach($sale_SO_statuses as $status){ ?>
+                  <option value="<?=$status['id']?>"><?=$status['text']?></option>
+                  <?php } ?>
+               </select>
+            </div>
+         </div>
+
          <div class="clearfix"></div>
       </div>
       <table class="table table table-striped table-order-tracking-book-report">

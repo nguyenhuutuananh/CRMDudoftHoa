@@ -375,6 +375,8 @@ function format_diary_status($status, $classes = '', $label = true)
     }
 }
 
+
+
 function get_other_status_label($status)
 {
     $label_class = '';

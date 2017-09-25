@@ -142,11 +142,15 @@ $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ar
     'tblleadssources.name',
     'firstname',
     'lastname'
-));
+),$sTable.$sIndexColumn.' DESC');
 $output  = $result['output'];
 $rResult = $result['rResult'];
-$j=1;
-foreach ($rResult as $aRow) {
+$j=count($rResult);
+
+$currentPage=$this->_instance->input->post('start');
+$currentall=$output['iTotalRecords'];
+
+foreach ($rResult as $r=> $aRow) {
     $row = array();
     
     for ($i = 0; $i < count($aColumns); $i++) {
@@ -159,7 +163,7 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == '1') {
             $_data = '<div class="checkbox"><input type="checkbox" value="' . $aRow['userid'] . '"><label></label></div>';
         }else if($aColumns[$i]=='2') {
-            $_data=$j;
+            $_data = ($currentall+1)-($currentPage+$r+1);
         } else if ($i == 11) {
             if ($_data != '') {
                 $groups = explode(',', $_data);
@@ -228,7 +232,7 @@ foreach ($rResult as $aRow) {
         $row[] = $_data;
     }
 
-    $j++;
+    $j--;
 
     $options = '';
     $options .= icon_btn('clients/client/' . $aRow['userid'], 'pencil-square-o');

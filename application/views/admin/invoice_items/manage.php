@@ -47,12 +47,16 @@
           <div class="panel-body">
             <div class="clearfix"></div>
             <?php render_datatable(array(
-              "ID",
+              "STT",
               _l('item_avatar'),
               _l('item_code'),
               _l('item_name'),
               _l('item_short_name'),
               _l('item_description'),
+              _l('product_features'),
+              _l('size'),
+              _l('specification'),
+              _l('weight'),
               _l('item_price'),
               _l('item_unit'),
               _l('item_group_id'),

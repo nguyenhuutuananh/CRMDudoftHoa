@@ -265,7 +265,7 @@
     });
     var headers_clients = $('.table-clients').find('th');
     var not_sortable_clients = (headers_clients.length - 1);
-    initDataTable('.table-clients', window.location.href, [not_sortable_clients,0], [not_sortable_clients,0], CustomersServerParams,<?php echo do_action('customers_table_default_order',json_encode(array(1,'ASC'))); ?>);
+    initDataTable('.table-clients', window.location.href, [not_sortable_clients,0], [not_sortable_clients,0], CustomersServerParams,<?php echo do_action('customers_table_default_order',json_encode(array(2,'DESC'))); ?>);
 
     function customers_bulk_action(event) {
         var r = confirm(confirm_action_prompt);

@@ -8,18 +8,23 @@ $aColumns     = array(
     'tblitems.name',
     'tblitems.short_name',
     'tblitems.description',
+    'tblitems.product_features',
+    'tblitems.size',
+    'tblitems.specification',
+    'tblitems.weight',
     'tblitems.price',
     'tblunits.unit',
     'tblitems_groups.name',
     'tblitems.minimum_quantity',
     'tblitems.maximum_quantity',
     );
-// var_dump($aColumns);die;
 $sIndexColumn = "id";
 $sTable       = 'tblitems';
 $where = array(
 
 );
+$order_by = 'tblitems.id ASC';
+$order_by = '';
 $join             = array(
     'LEFT JOIN tbltaxes ON tbltaxes.id = tblitems.tax',     
     'LEFT JOIN tblitems_groups ON tblitems_groups.id = tblitems.group_id',
@@ -93,11 +98,20 @@ if($this->_instance->input->post()) {
 }
 // print_r($where);
 // exit();
-$result           = data_tables_init($aColumns, $sIndexColumn, $sTable ,$join, $where, $additionalSelect);
+$result           = data_tables_init($aColumns, $sIndexColumn, $sTable ,$join, $where, $additionalSelect,$order_by);
 $output           = $result['output'];
 $rResult          = $result['rResult'];
 
-foreach ($rResult as $aRow) {
+
+// $currentPage = (
+
+//     !is_null($this->_instance->input->post('start')) && !is_null($this->_instance->input->post('length')) ? 
+//     $this->_instance->input->post('start') / $this->_instance->input->post('length') 
+// : 0 ) + 1;
+$currentPage=$this->_instance->input->post('start');
+$currentall=$output['iTotalRecords'];
+
+foreach ($rResult as $r=> $aRow) {
     $row = array();
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
@@ -105,6 +119,9 @@ foreach ($rResult as $aRow) {
         $array_link = ['tblitems.code', 'tblitems.name'];
         if(in_array($aColumns[$i],$array_link)){
             $_data = '<a href="'.admin_url('invoice_items/item/').$aRow['id'].'">'.$_data.'</a>';
+        }
+         if($aColumns[$i]=='tblitems.id') {
+            $_data = ($currentall+1)-($currentPage+$r+1);
         }
         if($aColumns[$i] == 'tblitems.avatar' && file_exists($_data)) {
             $_data = '<img src="'.base_url($_data).'" width="50px" />';
@@ -114,7 +131,11 @@ foreach ($rResult as $aRow) {
             $_data = number_format($_data,0,',','.');
         }
         if($aColumns[$i] == 'tblitems.description') {
-            $_data = strlen($_data) > 50 ? substr($_data,0,50)."..." : $_data;
+            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
+            // $_data = strlen($_data) > 50 ? substr($_data,0,50)."..." : $_data;
+        }
+        if($aColumns[$i] == 'tblitems.product_features') {
+            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
         }
         // if($aColumns[$i] == 'tblitems.price') {
         //     $_data = number_format($aRow['tblitems.price'],0,',','.');

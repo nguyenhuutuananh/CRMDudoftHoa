@@ -86,7 +86,7 @@
 
                      <div class="form-group hide" id="report-year">
                         <label for="years_report"><?php echo _l('year_report'); ?></label><br />
-                        <select class="selectpicker" name="years_report" id="years-report" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
+                        <select class="selectpicker" name="years_report" id="years_report" data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                            <option value=""><?php echo _l(''); ?></option>
                            <?php foreach ($order_years as $key => $year) { 
                               $selected='';

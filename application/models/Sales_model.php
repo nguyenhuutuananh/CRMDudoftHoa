@@ -2,7 +2,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Sales_model extends CRM_Model
 {
-    private $statuses = array(1, 2, 3, 4, 5, 6);
+    private $statuses = array(
+                                array('id'=>0,'text'=>'Đã đặt hàng'),
+                                array('id'=>1,'text'=>'Đã đặt hàng'),
+                                array('id'=>2,'text'=>'Đã đặt hàng'),
+                                array('id'=>3,'text'=>'Đã thực hiện'),
+                                array('id'=>4,'text'=>'Chưa thực hiện')
+                                );
+    
     function __construct()
     {
         parent::__construct();

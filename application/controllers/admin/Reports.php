@@ -60,7 +60,8 @@ class Reports extends Admin_controller
         $this->load->model('invoices_model');
         $this->load->model('estimates_model');
         $this->load->model('proposals_model');
-        $data['sale_statuses']      = $this->sales_model->get_statuses();
+        $data['sale_SO_statuses']      = $this->sales_model->get_statuses();
+        // var_dump($data['sale_SO_statuses']);die;
         $data['invoice_statuses']      = $this->invoices_model->get_statuses();
         $data['estimate_statuses']     = $this->estimates_model->get_statuses();
         $data['payments_years']        = $this->reports_model->get_distinct_payments_years();
@@ -951,27 +952,13 @@ class Reports extends Admin_controller
             $rowQ=array(_l('quantity'));
             $rowT=array(_l('revenue'));
             foreach ($months as $key => $month) {
-                $month_detail=$this->sale_oders_model->getSaleOrderDetails($month,$year);
+                $month_detail=$this->sale_oders_model->getSaleSODetails($month,$year);
                 $rowQ[]=_format_number($month_detail->quantity);
                 $rowT[]=format_money($month_detail->grand_total);
             }
             $aaData[]=$rowQ;
             $aaData[]=$rowT;
 
-            // var_dump($aaData);die;
-
-            $select = array(
-                'tblsale_orders.date',
-                'tblsale_orders.date_ht',                
-                'CONCAT(tblsale_orders.prefix,tblsale_orders.code) as sale_code',
-                'tblsale_orders.reason',
-                'tblitems.code',
-                'tblitems.name',
-                'tblunits.unit',
-                'tblsale_order_items.quantity',
-                'tblsale_order_items.unit_cost',
-                'tblsale_order_items.amount'
-            );
 
             $result=new stdClass();
             $result->draw=1;
@@ -981,129 +968,7 @@ class Reports extends Admin_controller
             $result->aaData=$aaData;
 
             echo json_encode($result);die;
-
             
-            $where  = array(
-                // 'AND status != 5'
-            );
-
-            $custom_date_select = $this->get_where_report_period('tblsale_orders.date');
-            if ($custom_date_select != '') {
-                array_push($where, $custom_date_select);
-            }
-
-            $by_currency = $this->input->post('report_currency');
-            if ($by_currency) {
-
-                $_temp = substr($select[11], 0, -1);
-                $_temp .= ' AND currency =' . $by_currency . ')';
-                $select[11] = $_temp;
-
-                $currency = $this->currencies_model->get($by_currency);
-                array_push($where, 'AND currency=' . $by_currency);
-            } else {
-                $currency = $this->currencies_model->get_base_currency();
-            }
-            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
-
-            // if ($this->input->post('invoice_status')) {
-            //     $statuses  = $this->input->post('invoice_status');
-            //     $_statuses = array();
-            //     if (is_array($statuses)) {
-            //         foreach ($statuses as $status) {
-            //             if ($status != '') {
-            //                 array_push($_statuses, $status);
-            //             }
-            //         }
-            //     }
-            //     if (count($_statuses) > 0) {
-            //         array_push($where, 'AND status IN (' . implode(', ', $_statuses) . ')');
-            //     }
-            // }
-            // var_dump($select);die;
-            $aColumns     = $select;
-            $sIndexColumn = "id";
-            $sTable       = 'tblsale_orders';
-            $join         = array(
-                'LEFT JOIN tblclients ON tblclients.userid = tblsale_orders.customer_id',
-                'LEFT JOIN tblsale_order_items ON tblsale_order_items.sale_id = tblsale_orders.id',
-                'LEFT JOIN tblitems ON tblitems.id = tblsale_order_items.product_id',
-                'LEFT JOIN tblunits ON tblunits.unitid = tblsale_order_items.unit_id'
-            );
-
-            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
-                // 'tblinvoices.prefix',
-                // 'tblsale_orders.customer_id',                
-                'tblsale_orders.id as sale_id',
-                // 'tblinvoices.id as invoice_id'
-            ));
-            $output  = $result['output'];
-            $rResult = $result['rResult'];
-
-            $x       = 0;
-
-            // $footer_data = array(
-            //     'total' => 0,
-            //     'subtotal' => 0,
-            //     'total_tax' => 0,
-            //     'discount_total' => 0,
-            //     'adjustment' => 0,
-            //     'amount_open' => 0
-            // );
-
-            $footer_data = array(
-                'SL' => 0,
-                'DTB' => 0
-            );
-            
-            foreach ($rResult as $aRow) {
-
-                $row = array();
-                for ($i = 0; $i < count($aColumns); $i++) {
-                    if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
-                        $_data = $aRow[strafter($aColumns[$i], 'as ')];
-                    } else {
-                        $_data = $aRow[$aColumns[$i]];
-                    }
-
-                    if(strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]]) && strafter($aColumns[$i], 'as ')=='sale_code')
-                    {
-                        $_data = '<a href="' . admin_url('sale_orders/sale_detail/' . $aRow['sale_id']) . '" target="_blank">' . $aRow['sale_code'] . '</a>';
-                    }
-                    if($aColumns[$i]=='tblsale_orders.date_ht' || $aColumns[$i]=='tblsale_orders.date')
-                    {
-                        $_data=_d($aRow[$aColumns[$i]]);
-                    }
-                    if($aColumns[$i]=='tblsale_order_items.quantity')
-                    {
-                        $footer_data['SL']+=$aRow[$aColumns[$i]];
-                        $_data = _format_number($aRow['tblsale_order_items.quantity']);
-                    }
-                    if($aColumns[$i]=='tblsale_order_items.unit_cost' || $aColumns[$i]=='tblsale_order_items.amount')
-                    {
-                        if($aColumns[$i]=='tblsale_order_items.amount')
-                            $footer_data['DTB']+=$aRow[$aColumns[$i]];
-                        $_data = format_money($aRow[$aColumns[$i]]);
-                    }
-                    
-
-                    $row[] = $_data;
-                }
-
-                $output['aaData'][] = $row;
-                $x++;
-            }
-
-            foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = format_money($total, $currency_symbol);
-                if($key=='SL')
-                    $footer_data[$key] = _format_number($total);
-
-            }
-
-            $output['sums'] = $footer_data;
-            echo json_encode($output);
-            die();
         }
     }
 
@@ -1152,21 +1017,14 @@ class Reports extends Admin_controller
             }
             $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
 
-            // if ($this->input->post('invoice_status')) {
-            //     $statuses  = $this->input->post('invoice_status');
-            //     $_statuses = array();
-            //     if (is_array($statuses)) {
-            //         foreach ($statuses as $status) {
-            //             if ($status != '') {
-            //                 array_push($_statuses, $status);
-            //             }
-            //         }
-            //     }
-            //     if (count($_statuses) > 0) {
-            //         array_push($where, 'AND status IN (' . implode(', ', $_statuses) . ')');
-            //     }
-            // }
-            // var_dump($select);die;
+            if ($this->input->post('SO_status')) {
+                $statuses  = $this->input->post('SO_status');
+                
+                if (is_numeric($statuses)) {
+                    array_push($where, 'AND status IN ('. $statuses . ')');
+                }
+            }
+            
             $aColumns     = $select;
             $sIndexColumn = "id";
             $sTable       = 'tblsales';
@@ -1176,7 +1034,7 @@ class Reports extends Admin_controller
                 'LEFT JOIN tblitems ON tblitems.id = tblsale_items.product_id',
                 'LEFT JOIN tblunits ON tblunits.unitid = tblsale_items.unit_id'
             );
-
+            // var_dump($where);die;
             $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
                 // 'tblinvoices.prefix',
                 // 'tblsales.customer_id',                

@@ -1,5 +1,6 @@
     <div id="order-tracking-monthly-report" class="hide">
       <div class="row">
+         
          <div class="clearfix"></div>
       </div>
       <table class="table table table-striped table-order-tracking-monthly-report">

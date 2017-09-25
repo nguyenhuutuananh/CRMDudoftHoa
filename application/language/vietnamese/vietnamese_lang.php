@@ -4098,8 +4098,13 @@ $lang['revenue']="Doanh số";
 $lang['sale_revenue']="Doanh số bán";
 $lang['announcement_name']="Tên thông báo ";
 $lang['announcement_show_my_name']="Thông báo hiển thị tên của tôi";
-$lang['sales_order_tracking_monthly_report']="Đơn hàng bán trong tháng";
+$lang['sales_order_tracking_monthly_report']="Đơn hàng bán trong tháng (SO)";
 $lang['year_report']="Năm";
+$lang['product_features']="Đặc tính sản phẩm";
+$lang['size']="Kích thước";
+$lang['specification']="Quy cách";
+$lang['weight']="Trọng lượng";
+
 
 
 
