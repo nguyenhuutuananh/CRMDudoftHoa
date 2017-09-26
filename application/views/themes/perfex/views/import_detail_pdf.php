@@ -127,6 +127,7 @@ foreach ($accountCo as $key => $account) {
 // $y            = $pdf->getY();
 
 $pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+
 $pdf->writeHTMLCell(200, '', '', 20, $info_right, 0, 0, false, true, ('R'), true);
 
 $pdf->ln(25);

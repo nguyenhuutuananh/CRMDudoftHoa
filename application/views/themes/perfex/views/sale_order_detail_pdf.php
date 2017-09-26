@@ -28,8 +28,8 @@ if (is_array($pdf_text_color_array) && count($pdf_text_color_array) == 3) {
     $pdf->SetTextColor($pdf_text_color_array[0], $pdf_text_color_array[1], $pdf_text_color_array[2]);
 }
 
-$info_right_column = '';
-$info_left_column  = '';
+// $info_right_column = '';
+// $info_left_column  = '';
 // if (get_option('show_status_on_pdf_ei') == 1) {
 //     $status_name = format_purchase_status($status, '', false);
 //     if ($status == 0) {
@@ -57,27 +57,27 @@ $info_left_column  = '';
 // }
 $info_right_column=$info_right_column .= '<a href="' . admin_url('#') . '" style="color:#4e4e4e;text-decoration:none;"><b> ' . date('Y-m-d H:i:s') . '</b></a>';
 
-$invoice_info='';
-$invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-$invoice_info .= _l('address').': '.get_option('invoice_company_address') . '<br/>';
-// if (get_option('invoice_company_city') != '') {
-//     $invoice_info .= get_option('invoice_company_city') . ', ';
-// }
-if(get_option('company_vat') != ''){
-    $invoice_info .= _l('vat_no').': '.get_option('company_vat').'<br/>';
-}
-$invoice_info .= get_option('invoice_company_country_code') . ' ';
-$invoice_info .= get_option('invoice_company_postal_code') . ' ';
-$invoice_info .= _l('company_bank_account').get_option('company_contract_blank_account') . '<br />';
-if (get_option('invoice_company_phonenumber') != '') {
-    $invoice_info .= _l('Tel').': '.get_option('invoice_company_phonenumber').'  ';
-}
-if (get_option('invoice_company_faxnumber') != '') {
-    $invoice_info .= _l('Fax').': '.get_option('invoice_company_faxnumber').'  ';
-}
-if (get_option('main_domain') != '') {
-    $invoice_info .= _l('Website').': '.get_option('main_domain');
-}
+$invoice_info = '';
+    $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
+    $invoice_info .= _l('address') . ': ' . get_option('invoice_company_address') . '<br/>';
+    // if (get_option('invoice_company_city') != '') {
+    //     $invoice_info .= get_option('invoice_company_city') . ', ';
+    // }
+    if (get_option('company_vat') != '') {
+        $invoice_info .= _l('vat_no') . ': ' . get_option('company_vat') . '<br/>';
+    }
+    $invoice_info .= get_option('invoice_company_country_code') . ' ';
+    $invoice_info .= get_option('invoice_company_postal_code') . ' ';
+    $invoice_info .= _l('company_bank_account') . get_option('company_contract_blank_account') . '<br />';
+    if (get_option('invoice_company_phonenumber') != '') {
+        $invoice_info .= _l('Tel') . ': ' . get_option('invoice_company_phonenumber') . '  ';
+    }
+    if (get_option('invoice_company_faxnumber') != '') {
+        $invoice_info .= _l('Fax') . ': ' . get_option('invoice_company_faxnumber') . '  ';
+    }
+    if (get_option('main_domain') != '') {
+        $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
+    }
 
 // if ($status != 2 && $status != 5 && get_option('show_pay_link_to_invoice_pdf') == 1) {
 //     $info_right_column .= '<a style="color:#84c529;text-decoration:none;" href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '">' . _l('view_invoice_pdf_link_pay') . '</a><br />';
@@ -86,17 +86,17 @@ if (get_option('main_domain') != '') {
 // $info_right_column .= '<a href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '" style="color:#4e4e4e;text-decoration:none;"><b># ' . $invoice_number . '</b></a>';
 
 // write the first column
-$info_left_column .= pdf_logo_url();
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
-// write the second column
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
-$divide='<hr style="margin-top: 20px;margin-bottom: 20px;border: 0;border-top: 1px solid #eee;" />';
-$pdf->ln(6);
+// $info_left_column .= pdf_logo_url();
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
+// // write the second column
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
+// $divide='<hr style="margin-top: 20px;margin-bottom: 20px;border: 0;border-top: 1px solid #eee;" />';
+// $pdf->ln(6);
+// $y            = $pdf->getY();
+// $pdf->writeHTMLCell('', '', '', $y, $divide, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+// $pdf->ln(2);
 $y            = $pdf->getY();
-$pdf->writeHTMLCell('', '', '', $y, $divide, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-$pdf->ln(2);
-$y            = $pdf->getY();
-$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
 $pdf->ln(23);
 $y            = $pdf->getY();
 // Set Head

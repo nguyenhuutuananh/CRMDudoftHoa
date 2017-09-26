@@ -54,26 +54,34 @@ $info_left_column  = '';
 $info_right_column .= '<a href="' . admin_url('purchase_suggested/detail/' . $purchase_suggested->name) . '" style="color:#4e4e4e;text-decoration:none;"><b># ' . $purchase_suggested->date . '</b></a>';
 
 // write the first column
-$info_left_column .= pdf_logo_url();
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
-// write the second column
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
+// $info_left_column .= pdf_logo_url();
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
+// // write the second column
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
 
 
-$invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-$invoice_info .= get_option('invoice_company_address') . '<br/>';
-if (get_option('invoice_company_city') != '') {
-    $invoice_info .= get_option('invoice_company_city') . ', ';
-}
-$invoice_info .= get_option('invoice_company_country_code') . ' ';
-$invoice_info .= get_option('invoice_company_postal_code') . ' ';
+$invoice_info = '';
+    $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
+    $invoice_info .= _l('address') . ': ' . get_option('invoice_company_address') . '<br/>';
+    // if (get_option('invoice_company_city') != '') {
+    //     $invoice_info .= get_option('invoice_company_city') . ', ';
+    // }
+    if (get_option('company_vat') != '') {
+        $invoice_info .= _l('vat_no') . ': ' . get_option('company_vat') . '<br/>';
+    }
+    $invoice_info .= get_option('invoice_company_country_code') . ' ';
+    $invoice_info .= get_option('invoice_company_postal_code') . ' ';
+    $invoice_info .= _l('company_bank_account') . get_option('company_contract_blank_account') . '<br />';
+    if (get_option('invoice_company_phonenumber') != '') {
+        $invoice_info .= _l('Tel') . ': ' . get_option('invoice_company_phonenumber') . '  ';
+    }
+    if (get_option('invoice_company_faxnumber') != '') {
+        $invoice_info .= _l('Fax') . ': ' . get_option('invoice_company_faxnumber') . '  ';
+    }
+    if (get_option('main_domain') != '') {
+        $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
+    }
 
-if (get_option('invoice_company_phonenumber') != '') {
-    $invoice_info .= '<br />' . get_option('invoice_company_phonenumber');
-}
-if(get_option('company_vat') != ''){
-    $invoice_info .= '<br />'.get_option('company_vat');
-}
 // check for company custom fields
 $custom_company_fields = get_company_custom_fields();
 if (count($custom_company_fields) > 0) {
@@ -82,11 +90,13 @@ if (count($custom_company_fields) > 0) {
 foreach ($custom_company_fields as $field) {
     $invoice_info .= $field['label'] . ': ' . $field['value'] . '<br />';
 }
-$pdf->writeHTMLCell(($swap == '1' ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y+40, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
 
 
 
-$pdf->ln(10);
+
+$pdf->ln(25);
+$y            = $pdf->getY();
 $title = _l('purchase_suggested');
 $title = mb_strtoupper($title, "UTF-8");
 $info_center_column = '<span style="font-weight:bold;font-size:30px;">' . $title . '</span><br />';
@@ -116,7 +126,7 @@ $qty_heading = _l('invoice_table_quantity_heading');
 
 $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1">
-    <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';font-size: 20px;">
+        <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
         <th width="5%;" valign="middle" align="center">#</th>
         <th width="20%" valign="middle" align="center">
             <i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip"></i>'. _l('item_name').'</th>
@@ -179,6 +189,11 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
             <td>" . mb_ucfirst(_l('user_admin'), "UTF-8") . "</td>
         </tr>
         <tr>
+            <td>(ký, ghi rõ họ tên)</td>
+            <td>(ký, ghi rõ họ tên)</td>
+            <td>(ký, ghi rõ họ tên)</td>
+        </tr>
+        <tr>
             <td style=\"height: 100px\" colspan=\"3\"></td>
         </tr>
         <tr>
@@ -186,10 +201,6 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
             <td>" . $purchase_suggested->user_head_name . "</td>
             <td>" . $purchase_suggested->user_admin_name . "</td>
         </tr>
-        <tr>
-            <td>(ký, ghi rõ họ tên)</td>
-            <td>(ký, ghi rõ họ tên)</td>
-            <td>(ký, ghi rõ họ tên)</td>
-        </tr>
+        
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');

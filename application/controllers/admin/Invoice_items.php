@@ -692,7 +692,7 @@ class Invoice_items extends Admin_controller
             $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+4),$item['code']);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.($rom+4),$item['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+4),$item['short_name']);
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+4),strip_tags($item['description']));
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+4),htmlspecialchars_decode (strip_tags($item['description']),ENT_QUOTES));
             $objPHPExcel->getActiveSheet()->setCellValue('G'.($rom+4),strip_tags($item['product_features']));
             $objPHPExcel->getActiveSheet()->setCellValue('H'.($rom+4),$item['size']);
             $objPHPExcel->getActiveSheet()->setCellValue('I'.($rom+4),$item['specification']);

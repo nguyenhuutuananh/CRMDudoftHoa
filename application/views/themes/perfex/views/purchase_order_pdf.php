@@ -41,28 +41,36 @@ $info_right_column .= '<p><b>' . _l('orders_code') . '</b>: '. $purchase_order->
 $info_right_column .= '<p><b>' . _l('pdf_date_print') . '</b>: '. date('d-m-Y').'</p>';
 
 // write the first column
-$info_left_column .= pdf_logo_url();
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
-// write the second column
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
-$pdf->ln(10);
+// $info_left_column .= pdf_logo_url();
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
+// // write the second column
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
+// $pdf->ln(10);
 
 // Get Y position for the separation
 $y            = $pdf->getY();
-$invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-$invoice_info .= get_option('invoice_company_address') . '<br/>';
-if (get_option('invoice_company_city') != '') {
-    $invoice_info .= get_option('invoice_company_city') . ', ';
-}
-$invoice_info .= get_option('invoice_company_country_code') . ' ';
-$invoice_info .= get_option('invoice_company_postal_code') . ' ';
 
-if (get_option('invoice_company_phonenumber') != '') {
-    $invoice_info .= '<br />' . get_option('invoice_company_phonenumber');
-}
-if(get_option('company_vat') != ''){
-    $invoice_info .= '<br />'.get_option('company_vat');
-}
+$invoice_info = '';
+    $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
+    $invoice_info .= _l('address') . ': ' . get_option('invoice_company_address') . '<br/>';
+    // if (get_option('invoice_company_city') != '') {
+    //     $invoice_info .= get_option('invoice_company_city') . ', ';
+    // }
+    if (get_option('company_vat') != '') {
+        $invoice_info .= _l('vat_no') . ': ' . get_option('company_vat') . '<br/>';
+    }
+    $invoice_info .= get_option('invoice_company_country_code') . ' ';
+    $invoice_info .= get_option('invoice_company_postal_code') . ' ';
+    $invoice_info .= _l('company_bank_account') . get_option('company_contract_blank_account') . '<br />';
+    if (get_option('invoice_company_phonenumber') != '') {
+        $invoice_info .= _l('Tel') . ': ' . get_option('invoice_company_phonenumber') . '  ';
+    }
+    if (get_option('invoice_company_faxnumber') != '') {
+        $invoice_info .= _l('Fax') . ': ' . get_option('invoice_company_faxnumber') . '  ';
+    }
+    if (get_option('main_domain') != '') {
+        $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
+    }
 // check for company custom fields
 $custom_company_fields = get_company_custom_fields();
 if (count($custom_company_fields) > 0) {
@@ -71,19 +79,25 @@ if (count($custom_company_fields) > 0) {
 foreach ($custom_company_fields as $field) {
     $invoice_info .= $field['label'] . ': ' . $field['value'] . '<br />';
 }
-$pdf->writeHTMLCell(($swap == '1' ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-$pdf->ln(20);
+$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+
+$pdf->ln(25);
 
 
 $title = _l('orders_ticket');
 $title = mb_strtoupper($title, "UTF-8");
 
-
-$info_center_column = '<span style="font-weight:bold;font-size:30px;">' . $title . '</span><p style="text-align: center;">'._l('orders_date_create').': ' . date("d/m/Y", strtotime($purchase_order->date_create)) . '</p>';
+$y            = $pdf->getY();
+$info_center_column = '<span style="font-weight:bold;font-size:30px;">' . $title . '</span><br/>';
+$info_center_column.='<span style="text-align: center;">'._l('orders_code').': ' . $purchase_order->code. '</span><br/>';
+$info_center_column.='<span style="text-align: center;">'._l('orders_date_create').': ' . date("d/m/Y", strtotime($purchase_order->date_create)) . '</span>';
 $date_create .= '';
 
-$pdf->writeHTMLCell(($dimensions['wk']) - $dimensions['lm'], '', '', $y+20, $info_center_column, 0, 0, false, true, 'C', true);
-$pdf->ln(30);
+$pdf->writeHTMLCell(($dimensions['wk']) - $dimensions['lm'], '', '', $y, $info_center_column, 0, 0, false, true, 'C', true);
+
+$pdf->SetFont($font_name, '', $font_size);
+$pdf->writeHTMLCell('', '', '', '', _l('orders_code') . ' '. $purchase_order->code, 0, 1, false, true, 'C', true);
+$pdf->ln(10);
 
 $y            = $pdf->getY();
 
