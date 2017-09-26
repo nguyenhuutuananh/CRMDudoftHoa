@@ -447,6 +447,52 @@ function get_proposal_merge_fields($proposal_id)
 
     return $fields;
 }
+
+function getStrDate($date='',$delimiter='-')
+{
+    // mb_substr($date, start)
+    if(empty($date)) $date=date('Y-m-d');
+    $strdate='';
+    $date=mb_substr($date, 0,10,'UTF-8');
+    $date=explode($delimiter, $date);
+    if(!empty($date))
+    {
+        $strdate=mb_ucfirst(_l('day_',$date[2]),"UTF-8")._l('month_',$date[1])._l('year_',$date[0]);    
+    }
+    return $strdate;
+
+}
+
+function getContractByImportID($id)
+{
+    $CI =& get_instance();
+    $CI->db->select('tblpurchase_contracts.*,tblsuppliers.company as supplier_name');
+    $CI->db->where('tblimports.id', $id);
+    $CI->db->join('tblpurchase_contracts', 'tblpurchase_contracts.id=tblimports.rel_id' , 'left');
+    $CI->db->join('tblsuppliers', 'tblsuppliers.userid=tblpurchase_contracts.id_supplier' , 'left');
+    $CI->db->where('tblimports.rel_type','contract');
+    $contract = $CI->db->get('tblimports')->row();
+    if($contract)
+    {
+        return $contract; 
+    }
+    return false;
+
+}
+
+function getWarehouseByID($id)
+{
+    $CI =& get_instance();
+    $CI->db->where('tblwarehouses.warehouseid', $id);
+    $warehouse = $CI->db->get('tblwarehouses')->row();
+    if($warehouse)
+    {
+        return $warehouse; 
+    }
+    return false;
+
+}
+
 /**
  * Merge field for contacts
  * @param  mixed $contract_id contract id

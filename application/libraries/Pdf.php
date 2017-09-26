@@ -32,7 +32,7 @@ class Pdf extends TCPDF
 		 	$this->SetTextColor(142,142,142);
 		 	$y            = $this->getY();
 		 $this->writeHTMLCell('', '', '', $y, '<img src="'.get_option('prefix_header_pdf').'">', 0, 0, false, true, 'J', true);
-		 	$this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		 	// $this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		 }
 	}
 

@@ -30,72 +30,106 @@ if (is_array($pdf_text_color_array) && count($pdf_text_color_array) == 3) {
 
 $info_right_column = '';
 $info_left_column  = '';
-// if (get_option('show_status_on_pdf_ei') == 1) {
-//     $status_name = format_purchase_status($status, '', false);
-//     if ($status == 0) {
-//         $bg_status = '252, 45, 66';
-//     } else if ($status == 1) {
-//         $bg_status = '0, 191, 54';
-//     } else if ($status == 2) {
-//         $bg_status = '255, 111, 0';
-//     } else if ($status == 3) {
-//         $bg_status = '255, 111, 0';
-//     } else if ($status == 4 || $status == 6) {
-//         $bg_status = '114, 123, 144';
-//     }
 
-//     $info_right_column .= '
-//     <table style="text-align:center;border-spacing:3px 3px;padding:3px 4px 3px 4px;">
-//     <tbody>
-//         <tr>
-//             <td></td>
-//             <td></td>
-//             <td style="color:#fff;">' . '' . '</td>
-//         </tr>
-//     </tbody>
-//     </table>';
-// }
-$info_right_column=$info_right_column .= '<a href="' . admin_url('#') . '" style="color:#4e4e4e;text-decoration:none;"><b> ' . date('Y-m-d H:i:s') . '</b></a>';
+$items=$invoice->items;
 
-$invoice_info='';
-$invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-$invoice_info .= _l('address').': '.get_option('invoice_company_address') . '<br/>';
-// if (get_option('invoice_company_city') != '') {
-//     $invoice_info .= get_option('invoice_company_city') . ', ';
-// }
-if(get_option('company_vat') != ''){
-    $invoice_info .= _l('vat_no').': '.get_option('company_vat').'<br/>';
+$tk_no = "";
+$tk_co="";
+$accountNo=array();
+$accountCo=array();
+$warehouse_id=false;
+foreach ($items as $item) 
+{
+    $warehouse_id=$item->warehouse_id;
+    $accountNo[]=$item->tk_no;
+    $accountCo[]=$item->tk_co;
 }
-$invoice_info .= get_option('invoice_company_country_code') . ' ';
-$invoice_info .= get_option('invoice_company_postal_code') . ' ';
+$accountNo=array_unique($accountNo);
+$accountCo=array_unique($accountCo);
 
-if (get_option('invoice_company_phonenumber') != '') {
-    $invoice_info .= _l('Tel').': '.get_option('invoice_company_phonenumber').'  ';
-}
-if (get_option('invoice_company_faxnumber') != '') {
-    $invoice_info .= _l('Fax').': '.get_option('invoice_company_faxnumber').'  ';
-}
-if (get_option('main_domain') != '') {
-    $invoice_info .= _l('Website').': '.get_option('main_domain');
+foreach ($accountNo as $key => $account) {
+    if(empty($tk_no))
+    {  $tk_no .= '<br />' . get_code_tk($account)." ".format_money(get_value_tk_no(' tblimport_items','import_id',$invoice->id,$account));
+    }
+    else
+    {
+        $tk_no .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . get_code_tk($account)." ".format_money(get_value_tk_no(' tblimport_items','import_id',$invoice->id,$account));
+    }
 }
 
-// if ($status != 2 && $status != 5 && get_option('show_pay_link_to_invoice_pdf') == 1) {
-//     $info_right_column .= '<a style="color:#84c529;text-decoration:none;" href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '">' . _l('view_invoice_pdf_link_pay') . '</a><br />';
-// }
-// $info_right_column .= '<span style="font-weight:bold;font-size:20px;">' . _l('Kế hoạch mua') . '</span><br />';
-// $info_right_column .= '<a href="' . site_url('viewinvoice/' . $invoice->id . '/' . $invoice->hash) . '" style="color:#4e4e4e;text-decoration:none;"><b># ' . $invoice_number . '</b></a>';
+foreach ($accountCo as $key => $account) {
+    if(empty($tk_co)){
+    $tk_co .= '<br />' . get_code_tk($account)." ".format_money(get_value_tk_co(' tblimport_items','import_id',$invoice->id,$account));
+    }
+    else
+    {
+        $tk_co .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . get_code_tk($account)." ".format_money(get_value_tk_co(' tblimport_items','import_id',$invoice->id,$account));
+    }
+}
 
-// write the first column
-$info_left_column .= pdf_logo_url();
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
+    // foreach ($items as $rom) {
+    //     $tk_no .= '<br />' . get_code_tk($rom->tk_no);
+    //     $tk_co = $tk_co . '<br />' . get_code_tk($rom->tk_co);
+    //     $total += $rom->total;
+    // }
+    $tk_no = "Nợ: " . trim($tk_no, '<br />');
+    $tk_co = "Có: " . trim($tk_co, '<br />');
+
+    $mau = '<b align="center">Mẩu số 01-VT</b><br />
+        <i style="font-weight: 100;font-size: 12px;">(Ban hành theo QĐ số 436/2016/QĐ-BTC<br /> Ngày 14/09/2016 của BTC)</i>
+    ';
+    $info_right = '
+    <table style="float: right" >
+        <tr>
+            <td style="width: 60%" align="right"></td>
+            <td style="width: 40%" align="left">' . $mau . '</td>
+        </tr>
+         <tr>
+            <td style="width: 70%" align="right"></td>
+            <td style="width: 30%" align="left">' . $tk_no . '</td>
+        </tr>
+        <tr>
+            <td style="width: 70%" align="right"></td>
+            <td style="width: 30%" align="left">' . $tk_co . '</td>
+        </tr>
+    </table>';
+
+
+    
+// $info_right_column=$info_right_column .= '<a href="' . admin_url('#') . '" style="color:#4e4e4e;text-decoration:none;"><b> ' . date('Y-m-d H:i:s') . '</b></a>';
+
+    $invoice_info = '';
+    $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
+    $invoice_info .= _l('address') . ': ' . get_option('invoice_company_address') . '<br/>';
+    // if (get_option('invoice_company_city') != '') {
+    //     $invoice_info .= get_option('invoice_company_city') . ', ';
+    // }
+    if (get_option('company_vat') != '') {
+        $invoice_info .= _l('vat_no') . ': ' . get_option('company_vat') . '<br/>';
+    }
+    $invoice_info .= get_option('invoice_company_country_code') . ' ';
+    $invoice_info .= get_option('invoice_company_postal_code') . ' ';
+    $invoice_info .= _l('company_bank_account') . get_option('company_contract_blank_account') . '<br />';
+    if (get_option('invoice_company_phonenumber') != '') {
+        $invoice_info .= _l('Tel') . ': ' . get_option('invoice_company_phonenumber') . '  ';
+    }
+    if (get_option('invoice_company_faxnumber') != '') {
+        $invoice_info .= _l('Fax') . ': ' . get_option('invoice_company_faxnumber') . '  ';
+    }
+    if (get_option('main_domain') != '') {
+        $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
+    }
+
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
 // write the second column
-$pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
+// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
 // $pdf->MultiCell(0, 0, $invoice_info, 0, 'C', 0, 1, '', '', true, 0, true, false, 0);
 // $y            = $pdf->getY();
-$pdf->ln(5);
 
-$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-$pdf->ln(20);
+$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+$pdf->writeHTMLCell(200, '', '', 20, $info_right, 0, 0, false, true, ('R'), true);
+
+$pdf->ln(25);
 // Set Head
 if($invoice->rel_type=='adjustment')
 {
@@ -108,62 +142,47 @@ if($invoice->rel_type=='internal')
 
 $pdf->SetFont($font_name, 'B', 20);
 $pdf->Cell(0, 0, mb_strtoupper($plan_name, 'UTF-8') , 0, 1, 'C', 0, '', 0);
+
+$pdf->SetFont($font_name, '', $font_size);
+$pdf->writeHTMLCell('', '', '', '', '<i>'.getStrDate($invoice->date).'</i>', 0, 1, false, true, 'C', true);
+
+$pdf->SetFont($font_name, '', $font_size);
+$pdf->writeHTMLCell('', '', '', '', _l('no').$invoice_number, 0, 1, false, true, 'C', true);
 $pdf->ln(10);
-//Set purchase no
-// var_dump($pdf->get_fonts_list());die();
-// $pdf->SetFont($font_name, 'B', $font_size);
-// $pdf->MultiCell(0, 0, '<b>Kế hoạch: #' . $invoice_number . '</b>' , 0, 'L', 0, 0, '', '', true, 0, true, false, 0);
-// $pdf->ln(4);
-// //Set date
-// $pdf->Cell(0, 0, _l('Ngày: ')._d($invoice->date) , 0, 1, 'L', 0, '', 0);
+
+// //Set detail
+// $pdf->SetFont($font_name, '', $font_size);
+// $pdf->Cell(0, 0, _l('Mã phiếu: ').$invoice_number , 0, 1, 'L', 0, '', 0);
 // $pdf->ln(4);
 
-
-
-
-// Get Y position for the separation
-// $y            = $pdf->getY();
-// $invoice_info = '<b>' . get_option('invoice_company_name') . '</b><br />';
-
-// $invoice_info .= get_option('invoice_company_address') . '<br/>';
-// if (get_option('invoice_company_city') != '') {
-//     $invoice_info .= get_option('invoice_company_city') . ', ';
-// }
-// $invoice_info .= get_option('invoice_company_country_code') . ' ';
-// $invoice_info .= get_option('invoice_company_postal_code') . ' ';
-
-// if (get_option('invoice_company_phonenumber') != '') {
-//     $invoice_info .= '<br />' . get_option('invoice_company_phonenumber');
-// }
-// if(get_option('company_vat') != ''){
-//     $invoice_info .= '<br />'.get_option('company_vat');
-// }
-// check for company custom fields
-// $custom_company_fields = get_company_custom_fields();
-// if (count($custom_company_fields) > 0) {
-//     $invoice_info .= '<br />';
-// }
-// foreach ($custom_company_fields as $field) {
-//     $invoice_info .= $field['label'] . ': ' . $field['value'] . '<br />';
-// }
-
-// $pdf->writeHTMLCell(($swap == '1' ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', $y, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-
-//Set detail
 $pdf->SetFont($font_name, '', $font_size);
-$pdf->Cell(0, 0, _l('Mã phiếu: ').$invoice_number , 0, 1, 'L', 0, '', 0);
+$pdf->writeHTMLCell('', '', '', '', _l('Họ tên người giao hàng: ').'<b>'.$invoice->deliver_name.'</b>', 0, 1, false, true, 'L', true);
+$pdf->ln(2);
+
+$contract=getContractByImportID($invoice->id);
+
+$pdf->writeHTMLCell('', '', '', '', _l('Theo HĐ số ')._l('blank10').$contract->code._l('blank10').mb_strtolower(getStrDate($contract->date_create),'UTF-8')._l(' của ').$contract->supplier_name , 0, 1, false, true, 'L', true);
+$pdf->ln(2);
+
+$warehouse=getWarehouseByID($warehouse_id);
+$strWH=_l('blank10')._l('blank10')._l('blank10')._l('blank10');
+if($warehouse)
+{
+    $strWH=_l('blank10').'<b>'.$warehouse->code.' - '.$warehouse->warehouse.'</b>'._l('blank10');
+}
+
+$pdf->writeHTMLCell('', '', '', '', _l('Nhập tại kho ').$strWH._l('Địa điểm')._l('blank10').$warehouse->address, 0, 1, false, true, 'L', true);
+
 $pdf->ln(4);
 
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->Cell(0, 0, _l('Ngày lập: ')._d($invoice->date) , 0, 1, 'L', 0, '', 0);
-$pdf->ln(4);
+// $strDetails='';
+// $strDetails='<ul style="list-style-type: square;">';
+// $strDetails.='<li>'._l('Họ tên người giao hàng: ').'<b>'.$invoice->deliver_name.'</b>'.'</i>'.'</li>';
+// $strDetails.='<li>'._l('Theo HĐ số ').'</li>';
+// $strDetails.='<li>'._l('Nhập tại kho ')._l('blank10').''._l('Địa điểm').'</li>';
+// $strDetails.='</ul>';
+// $pdf->writeHTML($strDetails, true, false, false, false, 'L');
 
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->Cell(0, 0, _l('Người tạo: ').$invoice->creater , 0, 1, 'L', 0, '', 0);
-$pdf->ln(4);
-
-$pdf->Cell(0, 0, _l('Ghi chú: ').clear_textarea_breaks($invoice->reason) , 0, 1, 'L', 0, '', 0);
-$pdf->ln(4);
 
 // Bill to
 // $client_details = '<b>' . _l('invoice_bill_to') . '</b><br />';
@@ -242,61 +261,96 @@ $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
         <th scope="col"  width="5%" align="center">STT</th>
-        <th scope="col"  width="20%" align="center">' . _l('Sản phẩm') . '</th>
-        <th scope="col"  width="15%" align="center">' . _l('Mã số') . '</th>
-        <th scope="col"  width="10%" align="center">' . _l('Quy cách') . '</th>
-        <th scope="col"  width="10%" align="center">' . _l('Đơn vị tính') . '</th>
-        <th scope="col"  width="10%" align="center">' . _l('Số lượng') . '</th>';
-$tblhtml .='<th  width="15%" align="center">' . _l('Đơn giá') . '</th>
-            <th  width="15%" align="center">' . _l('Thành tiền') . '</th>';
+        <th scope="col"  width="17%" align="center">' . _l('Tên, nhãn hiệu, quy cách, phẩm chất vật tư, dụng cụ sản phẩm, hàng hóa') . '</th>
+        <th scope="col"  width="12%" align="center">' . _l('Mã số') . '</th>
+        <th scope="col"  width="8%" align="center">' . _l('Đơn vị tính') . '</th>
+        <th scope="col"  width="9%" align="center">' . _l('Số lượng (Chứng từ)') . '</th>
+        <th scope="col"  width="9%" align="center">' . _l('Số lượng (Thực nhập)') . '</th>
+        <th  width="15%" align="center">' . _l('Đơn giá') . '</th>
+        <th  width="15%" align="center">' . _l('Thành tiền') . '</th>
+        <th  width="10%" align="center">' . _l('Ghi chú') . '</th>';
 $tblhtml .= '</tr>';
+$tblhtml.='<tr bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">';
+$tblhtml.='<th align="center">A</th>';
+$tblhtml.='<th align="center">B</th>';
+$tblhtml.='<th align="center">C</th>';
+$tblhtml.='<th align="center">D</th>';
+$tblhtml.='<th align="center">1</th>';
+$tblhtml.='<th align="center">2</th>';
+$tblhtml.='<th align="center">3</th>';
+$tblhtml.='<th align="center">4</th>';
+$tblhtml.='<th align="center">5</th>';
+$tblhtml.='</tr>';
+
+
 // Items
 $tblhtml .= '<tbody>';
 $grand_total=0;
 for ($i=0; $i < count($invoice->items) ; $i++) { 
-    // var_dump($invoice->items[$i]);die();
+    $rowspan=count($invoice->items);
     $grand_total+=$invoice->items[$i]->sub_total;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->specifications.'</td>';
     $tblhtml.='<td align="right">'.$invoice->items[$i]->unit_name.'</td>';
-    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
+    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';    
+    $tblhtml.='<td align="right">'.$invoice->items[$i]->quantity_net.'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
+    $tblhtml.='<td  rowspan="'.$rowspan.'" align="left">'.$invoice->reason.'</td>';
     $tblhtml.='</tr>';
 }
 
 
     $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="6" align="right">Tổng tiền</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total).'</td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"><b>'._l('Tổng tiền').'</b></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td align="right">'.format_money($grand_total).'</td>';
     $tblhtml.='</tr>';
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
 $pdf->writeHTML($tblhtml, true, false, false, false, '');
 
-$pdf->Ln(20);
+$strmoney='<ul>';
+$strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($grand_total,get_option('default_currency')).'</i>'.'</li>';
+$strmoney.='<li>'._l('certificate_root')._l('blank10').$contract->code.'</li>';;
+$strmoney.='</ul>';
+$pdf->writeHTML($strmoney, true, false, false, false, 'L');
+$pdf->Ln(5);
+
+$pdf->SetFont($font_name, '', $font_size);
+$pdf->writeHTMLCell('', '', '', '', '<i>'.getStrDate($invoice->date).'</i>', 0, 1, false, true, 'R', true);
+
+$pdf->Ln(5);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td><b>" . mb_ucfirst(_l('creater'), "UTF-8") . "</b></td>
-            <td><b>" . mb_ucfirst(_l('user_head'), "UTF-8") . "</b></td>
-            <td><b>" . mb_ucfirst(_l('user_admin'), "UTF-8") . "</b></td>
+            <td><b>" . mb_ucfirst(_l('deliver'), "UTF-8") . "</b></td>
+            <td><b>" . mb_ucfirst(_l('warehouseman'), "UTF-8") . "</b></td>
+            <td><b>" . mb_ucfirst(_l('chief_accountant'), "UTF-8") . "</b></td>
+        </tr>
+        <tr>
+            <td>(ký, ghi rõ họ tên)</td>
+            <td>(ký, ghi rõ họ tên)</td>
+            <td>(ký, ghi rõ họ tên)</td>
+            <td>(ký, ghi rõ họ tên)</td>
         </tr>
         <tr>
             <td style=\"height: 100px\" colspan=\"3\"></td>
         </tr>
         <tr>
             <td>" . mb_ucfirst($invoice->creater,"UTF-8") . "</td>
-            <td>" . mb_ucfirst($invoice->head,"UTF-8") . "</td>
-            <td>" . mb_ucfirst($invoice->admin,"UTF-8") . "</td>
+            <td>" . mb_ucfirst($invoice->deliver_name,"UTF-8") . "</td>
+            <td>" . mb_ucfirst($invoice->warehouseman,"UTF-8") . "</td>
+            <td>" . mb_ucfirst($invoice->chief_accountant,"UTF-8") . "</td>
         </tr>
-        <tr>
-            <td>(ký, ghi rõ họ tên)</td>
-            <td>(ký, ghi rõ họ tên)</td>
-            <td>(ký, ghi rõ họ tên)</td>
-        </tr>
+
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
 

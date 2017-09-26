@@ -112,6 +112,16 @@
                     echo render_input('name', _l('import_name'), $default_name);
                     ?>
 
+                    <!-- <?php 
+                    $value = (isset($item) ? $item->deliver_id : "");
+                    echo render_select('reason', $delivers, array('staffid','fullname'), 'Người giao hàng', array(), $value);
+                    ?> -->
+
+                    <?php
+                    $default_name = (isset($item) ? $item->deliver_name : "");
+                    echo render_input('deliver_name', _l('deliver'), $default_name);
+                    ?>
+
                     
                     <?php 
                     $reason = (isset($item) ? $item->reason : "");
@@ -126,12 +136,6 @@
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                         <div class="row">
-                            <div class="col-md-4">
-                            <?php
-                            $selected=(isset($item) ? $warehouse_type : '');
-                            echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                            ?>
-                            </div>
                             <div class="col-md-4">
                             <?php
                             $selected=(isset($item) ? $warehouse_id : '');
@@ -163,12 +167,12 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
