@@ -387,8 +387,10 @@ class Imports extends Admin_controller
                 blank_page('Purchase Not Found');
             }
         }
+
         $data['accounts_no'] = $this->accounts_model->get_tk_no();
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
+        $data['delivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();

@@ -1707,3 +1707,36 @@ function get_code_tk($id)
         return "";
     }
 }
+
+function get_value_tk_no($table,$field,$id,$id_tk)
+{
+    $CI =& get_instance();
+    if(is_numeric($id))
+    {
+        $CI->db->select_sum('sub_total');
+        $CI->db->where('tk_no',$id_tk);
+        $CI->db->where($field,$id);
+        $result=$CI->db->get($table)->row();
+        if ($result) {
+            return $result->sub_total;
+        }
+        return "";
+    }
+}
+
+function get_value_tk_co($table,$field,$id,$id_tk)
+{
+    $CI =& get_instance();
+    if(is_numeric($id))
+    {
+        $CI->db->select_sum('sub_total');
+        $CI->db->where('tk_co',$id_tk);
+        $CI->db->where($field,$id);
+        $result=$CI->db->get($table)->row();
+        if ($result) {
+            return $result->sub_total;
+        }
+        return "";
+    }
+}
+

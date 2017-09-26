@@ -3872,6 +3872,8 @@ $lang['buyer'] = "Người mua hàng";
 $lang['biller'] = "Lập biểu";
 $lang['saler'] = "Người bán hàng";
 $lang['blank___'] = "..........................................................................................................................................................";
+
+$lang['blank10']='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 $lang['chief_accountant'] = "Kế toán trưởng";
 
 $lang['director'] = "Giám đốc";
@@ -4052,7 +4054,7 @@ $lang['net_revenue']="Doanh thu thuần";
 
 $lang['report_diary_status']="Trạng thái";
 $lang['sale_item_select']="Đơn hàng bán";
-// $lang['returns_value']="Giá trị trả lại";
+$lang['deliver']="Người giao hàng";
 // $lang['returns_value']="Giá trị trả lại";
 // $lang['returns_value']="Giá trị trả lại";
 
@@ -4104,6 +4106,10 @@ $lang['product_features']="Đặc tính sản phẩm";
 $lang['size']="Kích thước";
 $lang['specification']="Quy cách";
 $lang['weight']="Trọng lượng";
+
+$lang['deliver']="Người giao hàng";
+$lang['chief_accountant']="Kế toán trưởng";
+$lang['no']="Số: ";
 
 
 

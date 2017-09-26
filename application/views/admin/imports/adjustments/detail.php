@@ -166,12 +166,12 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;min-height: 500px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="20%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>

@@ -268,6 +268,7 @@ class Imports_model extends CRM_Model
         $import=array(
             'supplier_id'=>$data['supplier_id'],
             'customer_id'=>$data['customer_id'],
+            'deliver_name'=>$data['deliver_name'],
             'rel_type'=>$data['rel_type'],
             'rel_id'=>$data['rel_id'],
             'prefix'=>$data['prefix'],
@@ -279,7 +280,7 @@ class Imports_model extends CRM_Model
             'create_by'=>get_staff_user_id()
             );
 
-    var_dump($import);die();
+    
 
         
         $this->db->insert('tblimports', $import);
@@ -360,6 +361,7 @@ class Imports_model extends CRM_Model
         $import=array(
             'supplier_id'=>$data['supplier_id'],
             'customer_id'=>$data['customer_id'],
+            'deliver_name'=>$data['deliver_name'],
             'rel_id'=>$data['rel_id'],
             'prefix'=>$data['prefix'],
             'name'=>$data['name'],
@@ -368,13 +370,15 @@ class Imports_model extends CRM_Model
             'account_date'=>to_sql_date($data['account_date']),
             'reason'=>$data['reason']
             );
-        
+
         if($this->db->update('tblimports',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
         {
+
             logActivity('Edit Import Item Updated [ID:' . $id . ', Item ID' . $item['id'] . ']');
             $count=0;
             $affected=1;
         }
+
         if ($id) {
             $items=$data['items'];
             $total=0;
