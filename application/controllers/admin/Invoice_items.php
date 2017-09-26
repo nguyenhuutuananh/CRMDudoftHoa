@@ -15,6 +15,7 @@ class Invoice_items extends Admin_controller
         if (!has_permission('items', '', 'view')) {
             access_denied('Invoice Items');
         }
+
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('invoice_items');
         }
@@ -608,5 +609,109 @@ class Invoice_items extends Admin_controller
 
         $data['title']          = 'Import';
         $this->load->view('admin/invoice_items/import', $data);
+    }
+
+
+    public function exportexcel()
+    {
+        $this->db->select('tblitems.*,tblunits.unit as n_unit,tblitems_groups.name as name_groups');
+        $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left')
+            ->join('tblitems_groups','tblitems_groups.id = tblitems.group_id','left');
+        $items=$this->db->get('tblitems')->result_array();
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        // $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+
+        $colum_array=array('I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        for($row = 1; $row <= 100; $row++)
+        {
+            $styleArray = [
+                'font' => [
+                    'size' => 12
+                ]
+            ];
+            $objPHPExcel->getActiveSheet()
+                ->getStyle("A1:N2")
+                ->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+            $objPHPExcel->getActiveSheet()->SetCellValue('A2','DANH SÁCH SẢN PHẨM')->getStyle('A2')->applyFromArray($BStyle);
+            $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+            $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+            $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        }
+
+        $objPHPExcel->getActiveSheet()->setCellValue('A3','STT')->getStyle('A3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('B3','ẢNH ĐẠI DIỆN')->getStyle('B3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('C3','MÃ SỐ SẢN PHẨM')->getStyle('C3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('D3','TÊN HÀNG HÓA')->getStyle('D3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('E3','TÊN NGẮN')->getStyle('E3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('F3','MÔ TẢ CHỨC NĂNG')->getStyle('F3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('G3','ĐẶC TÍNH SẢN PHẨM')->getStyle('G3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H3','KÍCH THƯỚC')->getStyle('H3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('I3','QUY CÁCH')->getStyle('I3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('J3','TRỌNG LƯỢNG')->getStyle('J3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('K3','GIÁ BÁN')->getStyle('k3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('L3','ĐƠN VỊ TÍNH')->getStyle('L3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('M3','NHÓM')->getStyle('M3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('N3','SỐ LƯỢNG TỐI THIỂU')->getStyle('N3')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('O3','SỐ LƯỢNG TỐI ĐA')->getStyle('O3')->applyFromArray($BStyle);
+        foreach($items as $rom => $item)
+        {
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.($rom+4),($rom+1));
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($rom+4),$item['avatar']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.($rom+4),$item['code']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.($rom+4),$item['name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.($rom+4),$item['short_name']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.($rom+4),strip_tags($item['description']));
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.($rom+4),strip_tags($item['product_features']));
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.($rom+4),$item['size']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.($rom+4),$item['specification']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.($rom+4),$item['weight']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.($rom+4),$item['price']);
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.($rom+4),$item['n_unit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.($rom+4),$item['name_groups']);
+            $objPHPExcel->getActiveSheet()->setCellValue('N'.($rom+4),$item['minimum_quantity']);
+            $objPHPExcel->getActiveSheet()->setCellValue('O'.($rom+4),$item['maximum_quantity']);
+//            var_dump($item['minimum_quantity']);die();
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A4');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Danh_sach_San_Pham.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter->save('php://output');
+        exit();
+
+
     }
 }

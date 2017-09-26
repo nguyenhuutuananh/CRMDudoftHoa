@@ -1,4 +1,9 @@
 <?php init_head(); ?>
+<style>
+   .dt-buttons .buttons-collection{
+       display: none!important;
+   }
+</style>
 <div id="wrapper">
   <div class="content">
     <div class="row">
@@ -45,26 +50,30 @@
         </div>
         <div class="panel_s">
           <div class="panel-body">
+
             <div class="clearfix"></div>
-            <?php render_datatable(array(
-              "STT",
-              _l('item_avatar'),
-              _l('item_code'),
-              _l('item_name'),
-              _l('item_short_name'),
-              _l('item_description'),
-              _l('product_features'),
-              _l('size'),
-              _l('specification'),
-              _l('weight'),
-              _l('item_price'),
-              _l('item_unit'),
-              _l('item_group_id'),
-              _l('minimum_quantity'),
-              _l('maximum_quantity'),  
-              _l('actions'),              
-              ),
-              'invoice-items'); ?>
+              <a href="<?php echo admin_url('invoice_items/exportexcel'); ?>" class="btn btn-default btn-default-dt-options"><?php echo _l('Xuất Excel'); ?></a>
+              <div class="table-responsive">
+                    <?php render_datatable(array(
+                      "STT",
+                      _l('item_avatar'),
+                      _l('item_code'),
+                      _l('item_name'),
+                      _l('item_short_name'),
+                      _l('item_description'),
+                      _l('product_features'),
+                      _l('size'),
+                      _l('specification'),
+                      _l('weight'),
+                      _l('item_price'),
+                      _l('item_unit'),
+                      _l('item_group_id'),
+                      _l('minimum_quantity'),
+                      _l('maximum_quantity'),
+                      _l('actions'),
+                      ),
+                      'invoice-items'); ?>
+              </div>
             </div>
           </div>
         </div>
@@ -208,7 +217,14 @@
   </div>
 </div>
 <?php init_tail(); ?>
+<script src="https://cdn.datatables.net/fixedcolumns/3.2.3/js/dataTables.fixedColumns.min.js"></script>
 <script>
+    $(document).ready(()=>{
+        $('.table-responsive').on('mousedown', (e) => {
+//            alert('123');
+        });
+
+    });
   $(function(){
     var filterList = {
         "category_1" : "[name='category_1']",
@@ -217,7 +233,32 @@
         "category_4" : "[name='category_4']",
     };
     initDataTable('.table-invoice-items', window.location.href, [4], [4], filterList,[0,'DESC']);
+
+
+
+
+
+      $(document).ready(function() {
+          var table = $('.table-invoice-items').removeAttr('width').dataTable( {
+              scrollY:        "300px",
+              scrollX:        true,
+              scrollCollapse: true,
+              paging:         false,
+              columnDefs: [
+                  { width: 200, targets: 0 }
+              ],
+              fixedColumns: true
+          } );
+      } );
+
+
+
+
+
+
+
     $(document).ready(()=>{
+
         $('#category_1,#category_2,#category_3,#category_4').on('change', (e) => {
             var id = $(e.currentTarget).val();
             $(e.currentTarget).parents('.col-xs-3').nextAll().find('select[name^="category_"] option:gt(0)').remove();
@@ -308,6 +349,42 @@
       }
     });
   });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('table thead').find('th:nth-child(6)').css('min-width','200px');
+        $('table thead').find('th:nth-child(7)').css('min-width','200px');
+        $('table tbody').css('cursor','pointer');
+        var i = 0;
+        $('table tbody').mousedown(function(e){
+            e.preventDefault();
+            $(document).mousemove(function(b){
+                var scroll_table_left=$('.table-responsive').scrollLeft();
+                pagescoll=((b.pageX)- (e.pageX))-20;
+                console.log(pagescoll);
+                $('.table-responsive').scrollLeft((scroll_table_left)+((pagescoll)));
+            })
+        });
+        $(document).mouseup(function(e){
+            $(document).unbind('mousemove');
+        });
+    });
+//    $(document).ready(function(){
+//        var i = 0;
+//        $('th').mousedown(function(e){
+//            e.preventDefault();
+//            $(document).mousemove(function(b){
+////                console.log(e.target).prop('style');
+//                console.log(b.pageX+2);
+////                $('.table-responsive').scrollLeft((b.pageX- e.pageX)+2);
+//                $(this).find(e.target).css("min-width",(b.pageX- e.pageX)+2)
+//            })
+//        });
+//        $(document).mouseup(function(e){
+//            $(document).unbind('mousemove');
+//        });
+//    });
 </script>
 </body>
 </html>

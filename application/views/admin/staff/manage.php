@@ -12,8 +12,13 @@
 				<?php } ?>
 				<div class="panel_s">
 					<div class="panel-body">
+						<style>
+							.dt-buttons .buttons-collection{
+								display: none!important;
+							}
+						</style>
 						<div class="clearfix"></div>
-						<a href="<?php echo admin_url('staff/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel (new)'); ?></a>
+						<a href="<?php echo admin_url('staff/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel'); ?></a>
 						<?php
 						$table_data = array(
 							_l('item_avatar'),

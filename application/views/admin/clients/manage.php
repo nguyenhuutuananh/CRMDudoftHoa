@@ -1,4 +1,9 @@
 <?php init_head(); ?>
+<style>
+    .dt-buttons .buttons-collection{
+        display: none!important;
+    }
+</style>
 <div id="wrapper">
     <div class="content">
         <div class="row">
@@ -217,7 +222,7 @@
                         </div><!-- /.modal -->
 
                         <div class="clearfix"></div>
-                        <a href="<?php echo admin_url('clients/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel (new)'); ?></a>
+                        <a href="<?php echo admin_url('clients/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel'); ?></a>
                         <?php
                         $table_data = array();
                         $_table_data = array(

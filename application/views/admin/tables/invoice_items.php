@@ -131,11 +131,13 @@ foreach ($rResult as $r=> $aRow) {
             $_data = number_format($_data,0,',','.');
         }
         if($aColumns[$i] == 'tblitems.description') {
-            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
+//            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
+            $_data =strip_tags($_data);
             // $_data = strlen($_data) > 50 ? substr($_data,0,50)."..." : $_data;
         }
         if($aColumns[$i] == 'tblitems.product_features') {
-            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
+//            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
+            $_data =strip_tags($_data);
         }
         // if($aColumns[$i] == 'tblitems.price') {
         //     $_data = number_format($aRow['tblitems.price'],0,',','.');
