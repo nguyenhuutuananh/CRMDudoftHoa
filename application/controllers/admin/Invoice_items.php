@@ -68,6 +68,9 @@ class Invoice_items extends Admin_controller
                 $data['price_buy']=str_replace('.','',$data['price_buy']);
                 $data['minimum_quantity']=str_replace('.','',$data['minimum_quantity']);
                 $data['maximum_quantity']=str_replace('.','',$data['maximum_quantity']);
+                $data['long_description']=htmlspecialchars_decode($data['long_description']);
+                $data['description']=htmlspecialchars_decode($data['description']);
+                $data['product_features']=htmlspecialchars_decode($data['product_features']);
                 $save_and_add_contact = false;
                 // Category 4rd level
                 if(is_array($data['category_id'])) {
@@ -113,7 +116,10 @@ class Invoice_items extends Admin_controller
                 $data['price_buy']=str_replace('.','',$data['price_buy']);
                 $data['minimum_quantity']=str_replace('.','',$data['minimum_quantity']);
                 $data['maximum_quantity']=str_replace('.','',$data['maximum_quantity']);
-                
+                $data['long_description']=htmlspecialchars_decode($data['long_description']);
+                $data['description']=htmlspecialchars_decode($data['description']);
+                $data['product_features']=htmlspecialchars_decode($data['product_features']);
+
                 $data['itemid'] = $id;
                 $item = $this->invoice_items_model->get_full($id);
                 if(is_array($data['category_id'])) {
@@ -702,10 +708,10 @@ class Invoice_items extends Admin_controller
             $objPHPExcel->getActiveSheet()->setCellValue('M'.($rom+4),$item['name_groups']);
             $objPHPExcel->getActiveSheet()->setCellValue('N'.($rom+4),$item['minimum_quantity']);
             $objPHPExcel->getActiveSheet()->setCellValue('O'.($rom+4),$item['maximum_quantity']);
-//            var_dump($item['minimum_quantity']);die();
         }
         $objPHPExcel->getActiveSheet()->freezePane('A4');
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Encoding: UTF-8');
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="Danh_sach_San_Pham.xls"');
         header('Cache-Control: max-age=0');
