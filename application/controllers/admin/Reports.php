@@ -787,9 +787,94 @@ class Reports extends Admin_controller
         }
     }
 
-    public function general_order_tracking_book_report_PO()
+    public function general_order_tracking_book_report_PO_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('view_date'),
+            _l('code_noo'),
+            _l('customer_name'),
+            _l('sale_quantity'),
+            _l('sale_revenue'),
+            _l('net_revenue')
+        );
+        $data=$this->general_order_tracking_book_report_PO(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->general_order_tracking_book_report_PO(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỔ THEO DÕI TỔNG HỢP ĐƠN ĐẶT HÀNG (PO)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Theo_Doi_Tong_Hop_Don_Dat_Hang_Po.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function general_order_tracking_book_report_PO($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -925,14 +1010,125 @@ class Reports extends Admin_controller
             }
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }
 
-    public function general_order_tracking_book_report()
+
+    public function general_order_tracking_book_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('view_date'),
+            _l('code_noo'),
+            _l('customer_name'),
+            _l('sale_quantity'),
+            _l('sale_revenue'),
+            _l('net_revenue'),
+            _l('delivered_quantity'),
+            _l('rest_quantity'),
+            _l('paid_payment'),
+            _l('rest_payment')
+        );
+        $data=$this->general_order_tracking_book_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->general_order_tracking_book_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỔ THEO DÕI TỔNG HỢP ĐƠN HÀNG BÁN (SO)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $__data=$this->general_order_tracking_book_report(true)['sums'];
+        $sum_value=array('Tổng Cộng','','',$__data['SL'],$__data['DSB'],$__data['DTT'],$__data['DG'],$__data['CG'],$__data['DT'],$__data['CT']);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+            else
+            {
+
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Theo_Doi_Tong_Hop_Don_Hang_So.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function general_order_tracking_book_report($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1108,7 +1304,14 @@ class Reports extends Admin_controller
             }
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }
@@ -1125,9 +1328,98 @@ class Reports extends Admin_controller
         
     }
 
-    public function cash_funds_detailing_accounting_books()
+    public function cash_funds_detailing_accounting_books_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('view_date'),
+            _l('account_date'),
+            _l('code_vouchers_receipts'),
+            _l('code_vouchers_votes'),
+            _l('orders_explan'),
+            _l('reciprocal_tk'),
+            _l('incurred_tk_no'),
+            _l('incurred_tk_co'),
+            _l('rest_tk'),
+            _l('receiver_submitter')
+        );
+        $data=$this->cash_funds_detailing_accounting_books(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->cash_funds_detailing_accounting_books(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỐ KẾ TOÁN CHI TIẾT QUỸ TIỀN MẶT')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Ke_Toan_Chi_Tiet_Quy_Tien_Mat.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function cash_funds_detailing_accounting_books($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1297,7 +1589,14 @@ class Reports extends Admin_controller
             
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }
@@ -1320,9 +1619,112 @@ class Reports extends Admin_controller
         }
         return false;
     }
-    public function order_tracking_book_report_PO()
+    public function order_tracking_book_report_PO_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('view_date'),
+            _l('account_date'),
+            _l('code_noo'),
+            _l('orders_explan'),
+            _l('product_code'),
+            _l('product_name'),
+            _l('unit_name'),
+            _l('quantity'),
+            _l('unit_cost'),
+            _l('sale_revenue'),
+        );
+        $data=$this->order_tracking_book_report_PO(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->order_tracking_book_report_PO(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỔ THEO DÕI CHI TIẾT ĐẶT HÀNG (PO)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $__data=$this->order_tracking_book_report_PO(true)['sums'];
+        $sum_value=array('Tổng Cộng','','','','','','',$__data['SL'],'',$__data['DTB']);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+            else
+            {
+
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Theo_Doi_Chi_Tiet_Dat_Hang_Po.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function order_tracking_book_report_PO($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1458,14 +1860,114 @@ class Reports extends Admin_controller
             }
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }
 
-    public function order_tracking_monthly_report()
+    public function order_tracking_monthly_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            "",
+            "Tháng 1",
+            "Tháng 2",
+            "Tháng 3",
+            "Tháng 4",
+            "Tháng 5",
+            "Tháng 6",
+            "Tháng 7",
+            "Tháng 8",
+            "Tháng 9",
+            "Tháng 10",
+            "Tháng 11",
+            "Tháng 12"
+        );
+        $data=$this->order_tracking_monthly_report(true)->aaData;
+
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->order_tracking_monthly_report(true)->aaData[0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','ĐƠN ĐẶT HÀNG TRONG THÁNG (SO)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Don_Dat_Hang_Trong_Thang_SO.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function order_tracking_monthly_report($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1497,14 +1999,126 @@ class Reports extends Admin_controller
             $result->aaData=array();
             $result->aaData=$aaData;
 
-            echo json_encode($result);die;
+            if($pdf==false)
+            {
+                echo json_encode($result);die;
+            }
+            else
+            {
+                return $result;
+            }
             
         }
     }
 
-    public function order_tracking_book_report()
+    public function order_tracking_book_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('view_date'),
+            _l('account_date'),
+            _l('code_noo'),
+            _l('orders_explan'),
+            _l('product_code'),
+            _l('product_name'),
+            _l('unit_name'),
+            _l('quantity'),
+            _l('unit_cost'),
+            _l('sale_revenue'),
+            _l('delivered_quantity'),
+            _l('rest_quantity'),
+        );
+        $data=$this->order_tracking_book_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->order_tracking_book_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỔ THEO DÕI CHI TIẾT ĐƠN BÁN HÀNG (SO)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $__data=$this->order_tracking_book_report(true)['sums'];
+        $sum_value=array('Tổng Cộng','','','','','','',$__data['SL'],'',$__data['DSB'],$__data['DG'],$__data['CG']);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+            else
+            {
+
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Theo_Doi_Chi_Tiet_Đon_Ban_Hang_So.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function order_tracking_book_report($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1581,20 +2195,7 @@ class Reports extends Admin_controller
             $output  = $result['output'];
             $rResult = $result['rResult'];
 
-            // print_r($rResult);die;
-            
             $x       = 0;
-
-            // $footer_data = array(
-            //     'total' => 0,
-            //     'subtotal' => 0,
-            //     'total_tax' => 0,
-            //     'discount_total' => 0,
-            //     'adjustment' => 0,
-            //     'amount_open' => 0
-            // );
-       
-
             $footer_data = array(
                 'SL' => 0,
                 'DSB' => 0,
@@ -1650,8 +2251,6 @@ class Reports extends Admin_controller
 
                     $row[] = $_data;
                 }
-
-                // var_dump($row);die;
                 $output['aaData'][] = $row;
                 $x++;
             }
@@ -1666,14 +2265,22 @@ class Reports extends Admin_controller
             
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
+
             die();
         }
     }
 
-    public function diaries_report()
+    public function diaries_report($pdf=false)
     {
-        if ($this->input->is_ajax_request()) 
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
@@ -1697,28 +2304,12 @@ class Reports extends Admin_controller
 
             
             $where  = array(
-                // 'AND status != 5'
             );
 
             $custom_date_select = $this->get_where_report_period('tblsales.date');
             if ($custom_date_select != '') {
                 array_push($where, $custom_date_select);
             }
-
-            // if ($this->input->post('sale_agent_invoices')) {
-            //     $agents  = $this->input->post('sale_agent_invoices');
-            //     $_agents = array();
-            //     if (is_array($agents)) {
-            //         foreach ($agents as $agent) {
-            //             if ($agent != '') {
-            //                 array_push($_agents, $agent);
-            //             }
-            //         }
-            //     }
-            //     if (count($_agents) > 0) {
-            //         array_push($where, 'AND sale_agent IN (' . implode(', ', $_agents) . ')');
-            //     }
-            // }
             $by_currency = $this->input->post('report_currency');
             if ($by_currency) {
 
@@ -1732,21 +2323,6 @@ class Reports extends Admin_controller
                 $currency = $this->currencies_model->get_base_currency();
             }
             $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
-
-            // if ($this->input->post('invoice_status')) {
-            //     $statuses  = $this->input->post('invoice_status');
-            //     $_statuses = array();
-            //     if (is_array($statuses)) {
-            //         foreach ($statuses as $status) {
-            //             if ($status != '') {
-            //                 array_push($_statuses, $status);
-            //             }
-            //         }
-            //     }
-            //     if (count($_statuses) > 0) {
-            //         array_push($where, 'AND status IN (' . implode(', ', $_statuses) . ')');
-            //     }
-            // }
 
             $aColumns     = $select;
             $sIndexColumn = "id";
@@ -1767,16 +2343,6 @@ class Reports extends Admin_controller
 
             
             $x       = 0;
-
-            // $footer_data = array(
-            //     'total' => 0,
-            //     'subtotal' => 0,
-            //     'total_tax' => 0,
-            //     'discount_total' => 0,
-            //     'adjustment' => 0,
-            //     'amount_open' => 0
-            // );
-
             $footer_data = array(
                 'TDT' => 0,
                 'DTHH' => 0,
@@ -1850,7 +2416,6 @@ class Reports extends Admin_controller
                     $row[] = $_data;
                 }
 
-                // var_dump($row);die;
                 $output['aaData'][] = $row;
                 $x++;
             }
@@ -1862,10 +2427,124 @@ class Reports extends Admin_controller
             
 
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }
+    public function diaries_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+                        _l('STT'),
+                        _l('view_date'),
+                        _l('account_date'),
+                        _l('code_noo'),
+                        _l('invoice_date'),
+                        _l('invoice_no'),
+                        _l('orders_explan'),
+                        _l('total_revenue'),
+                        _l('goods_revenue'),
+                        _l('others_revenue'),
+                        _l('discount'),
+                        _l('returns_value'),
+                        _l('net_revenue'),
+                        _l('customer_name')
+                    );
+        $data=$this->diaries_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->diaries_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','SỔ NHẬT KÝ BÁN HÀNG')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $__data=$this->diaries_report(true)['sums'];
+        $sum_value=array('Tổng Cộng','','','','','',$__data['TDT'],$__data['DTHH'],$__data['DTK'],$__data['CK'],$__data['GTTV'],$__data['DTT']);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+            else
+            {
+
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="So_Nhat_ky_Ban_Hang.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+
 
     public function expenses($type = 'simple_report')
     {

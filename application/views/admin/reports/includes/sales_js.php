@@ -402,13 +402,7 @@
      if ($.fn.DataTable.isDataTable('.table-diaries-report')) {
        $('.table-diaries-report').DataTable().destroy();
      }
-     // _table_api = initDataTable('.table-diaries-report', admin_url + 'reports/diaries_report', false, false, fnServerParams, [
-     //   [2, 'DESC'],
-     //   [0, 'DESC']
-     //   ]);
-
      initDataTable('.table-diaries-report', admin_url + 'reports/diaries_report', false, false, fnServerParams, [0, 'DESC']);
-     // .column(2).visible(false, false).columns.adjust()
    }
 
    function order_tracking_book_report() {

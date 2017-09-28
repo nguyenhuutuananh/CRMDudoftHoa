@@ -18,6 +18,12 @@
          </div>
 
          <div class="clearfix"></div>
+         <style>
+            .dt-buttons .buttons-collection{
+               display: none!important;
+            }
+         </style>
+         <a href="<?=admin_url('reports/order_tracking_book_report_pdf')?>" class="btn mright5 btn-info pull-left display-block">Xuất Excel</a>
       </div>
       <table class="table table table-striped table-order-tracking-book-report">
          <thead>
