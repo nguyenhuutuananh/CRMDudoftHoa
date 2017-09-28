@@ -12,8 +12,8 @@
       <table class="table table table-striped table-cash-funds-detailing-accounting-books-report">
          <thead>
             <tr>
-               <th><?php echo _l('view_date'); ?></th>
-               <th><?php echo _l('account_date'); ?></th>               
+               <th><?php echo _l('account_date'); ?></th>
+               <th><?php echo _l('view_date'); ?></th>               
                <th><?php echo _l('code_vouchers_receipts'); ?></th>
                <th><?php echo _l('code_vouchers_votes'); ?></th>
                <th><?php echo _l('orders_explan'); ?></th>
@@ -33,9 +33,9 @@
                <td></td>
                <td></td>
                <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td class="SPSN"></td>
+               <td class="SPSC"></td>
+               <td class="ST"></td>
                <td></td>
             </tr>
          </tfoot>
