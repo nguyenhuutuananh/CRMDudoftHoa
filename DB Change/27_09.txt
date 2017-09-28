@@ -1,0 +1,3 @@
+ALTER TABLE `tblsale_items` ADD `delivery_quantity` INT NULL AFTER `export_quantity`;
+
+ALTER TABLE `tblaccounts` ADD `amount` FLOAT NULL DEFAULT '0' AFTER `accountExplain`;

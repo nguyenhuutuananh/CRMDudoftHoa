@@ -1676,7 +1676,7 @@ function get_item_groups() {
     return $groups;
 }
 
-function get_table_where($table, $where = array(),$order_by="")
+function get_table_where($table, $where = array(),$order_by="",$result='result_array')
 {
     $CI =& get_instance();
     if($where!=array())
@@ -1687,7 +1687,7 @@ function get_table_where($table, $where = array(),$order_by="")
     {
         $CI->db->order_by($order_by);
     }
-    $result=$CI->db->get($table)->result_array();
+    $result=$CI->db->get($table)->$result();
     if ($result) {
         return $result;
     } else {
@@ -1737,6 +1737,44 @@ function get_value_tk_co($table,$field,$id,$id_tk)
             return $result->sub_total;
         }
         return "";
+    }
+}
+
+function getDeliverdQuantity($sale_id,$product_id=NULL)
+{
+    $CI =& get_instance();
+    if(is_numeric($sale_id))
+    {
+        $CI->db->select_sum('delivery_quantity');
+        $CI->db->select_sum('quantity');
+        if($product_id)
+        {
+            $CI->db->where('product_id',$product_id);
+        }
+        $CI->db->where('sale_id',$sale_id);
+        $result=$CI->db->get('tblsale_items')->row();
+
+        if ($result) {
+            return $result;
+        }
+        return false;
+    }
+}
+
+function getTotalSOPayment($sale_id)
+{
+    $CI =& get_instance();
+    if(is_numeric($sale_id))
+    {
+        $CI->db->select('tblsales.total');
+        $CI->db->select_sum('subtotal');
+        $CI->db->where('sales',$sale_id);
+        $CI->db->join('tblsales','tblsales.id=tblreceipts_contract.sales');
+        $result=$CI->db->get('tblreceipts_contract')->row();
+        if ($result) {
+            return $result;
+        }
+        return false;
     }
 }
 

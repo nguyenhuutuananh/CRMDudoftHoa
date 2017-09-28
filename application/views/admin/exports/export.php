@@ -113,17 +113,14 @@
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
                         <div class="row">
-                            <div class="col-md-4">
-                                <?php 
+                            <?php 
                                     if($item->rel_id)
                                     {
                                         $arr=array('disabled'=>true);
-                                        echo form_hidden('warehouse_type',$warehouse_type_id);
                                         echo form_hidden('warehouse_name',$warehouse_id);
                                     }
-                                    echo render_select('warehouse_type', $warehouse_types, array('id', 'name'),'warehouse_type',$warehouse_type_id,$arr);
+                                    
                                 ?>
-                            </div>
                             <div class="col-md-4">
                                 <?php 
                                     echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
@@ -213,6 +210,16 @@
                                     if(isset($item) && count($item->items) > 0) {
                                         
                                         foreach($item->items as $value) {
+                                            $export_quantity=0;
+                                            $max=0;
+                                            $max=$value->quantity-$value->export_quantity;
+                                            $export_quantity=($value->export_quantity?$value->export_quantity:0);
+                                            $sub_total=$max*$value->unit_cost;
+                                            $tax=$sub_total*$value->tax_rate/100;
+                                            $amount=$sub_total+$tax;
+
+                                            if($max>0)
+                                            {
                                         ?>
                                     <tr class="sortable item">
                                         <td>
@@ -223,20 +230,8 @@
                                        
                                         <td>
                                         <input style="width: 100px; <?=$style?>" min="0" max="<?=$value->quantity-$value->export_quantity?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?=($value->quantity==$value->export_quantity)? 0 : $value->quantity-$value->export_quantity ?>">
-                                        <?php 
-                                        $export_quantity=0;
-                                        $max=0;
-                                            // if($value->export_quantity!=NULL || $value->export_quantity!='')
-                                            {
-                                                $max=$value->quantity-$value->export_quantity;
-                                                $export_quantity=($value->export_quantity?$export_quantity:0);
-                                                $sub_total=$max*$value->unit_cost;
-                                                $tax=$sub_total*$value->tax_rate/100;
-                                                $amount=$sub_total+$tax;
-                                                
-                                            }
+                                        <?php                                         
                                             echo "(".$export_quantity.'/'.$value->quantity.')';
-
                                         ?>
                                         </td>
 <!-- <input type="hidden" data-store="<?=$value->warehouse_type->product_quantity ?>" name="items[<?=$i?>][warehouse]" value="<?=$value->warehouse_id?>"> -->
@@ -253,6 +248,8 @@
                                             $i++;
                                         }
                                     }
+
+                                }
                                     ?>
                                 </tbody>
                             </table>

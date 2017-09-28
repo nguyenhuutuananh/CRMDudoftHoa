@@ -82,7 +82,7 @@ class Votes extends Admin_controller
                 $data['currencies']=$this->votes_model->get_table_where('tblcurrencies');
                 $data['contract']=$this->votes_model->get_contract();
                 $data['tk_no']=$this->votes_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
-                $data['tk_co']=$this->votes_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
+                $data['tk_co']=$this->votes_model->get_table_where('tblaccounts');
                 $data['votes_contract']=$this->votes_model->get_votes_contract();
                 $data['votes_contract_purchase']=$this->votes_model->get_votes_purchase();
                 $data['code_vouchers']=$this->votes_model->get_vouchers();
@@ -96,7 +96,7 @@ class Votes extends Admin_controller
                 $data['currencies']=$this->votes_model->get_table_where('tblcurrencies');
                 $data['contract']=$this->votes_model->get_contract();
                 $data['tk_no']=$this->votes_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
-                $data['tk_co']=$this->votes_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
+                $data['tk_co']=$this->votes_model->get_table_where('tblaccounts');
                 $data['votes_contract']=$this->votes_model->get_votes_contract();
                 $data['votes_contract_purchase']=$this->votes_model->get_votes_purchase();
 

@@ -19,6 +19,9 @@
    "report_to": '[name="report-to"]',
    "report_currency": '[name="currency"]',
    "invoice_status": '[name="invoice_status"]',
+   "PO_status_gen": '[name="PO_status_gen"]',
+   "PO_status": '[name="PO_status"]',
+   "SO_status_gen": '[name="SO_status_gen"]',
    "SO_status": '[name="SO_status"]',
    "estimate_status": '[name="estimate_status"]',
    "sale_agent_invoices": '[name="sale_agent_invoices"]',
@@ -26,18 +29,23 @@
    "proposals_sale_agents": '[name="proposals_sale_agents"]',
    "proposal_status": '[name="proposal_status"]',
    "years_report": '[name="years_report"]',
+   "SO_status_delivery": '[name="SO_status_delivery"]',
+   "SO_status_payment": '[name="SO_status_payment"]',
+
+
  }
  $(function() {
-   $('select[name="currency"],select[name="SO_status"],select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="payments_years"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
+   $('select[name="currency"],select[name="PO_status_gen"],select[name="PO_status"],select[name="SO_status_gen"],select[name="SO_status"],select[name="SO_status_payment"],select[name="SO_status_delivery"],select[name="years_report"],select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="payments_years"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
      gen_reports();
    });
 
-   $('select[name="invoice_status"],select[name="SO_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
+   $('select[name="invoice_status"],select[name="estimate_status"],select[name="sale_agent_invoices"],select[name="sale_agent_estimates"],select[name="proposals_sale_agents"],select[name="proposal_status"]').on('change', function() {
      var value = $(this).val();
      if (value != null) {
        if (value.indexOf('') > -1) {
          if (value.length > 1) {
            value.splice(0, 1);
+
            $(this).selectpicker('val', value);
          }
        }
@@ -133,9 +141,23 @@
      $(this).find('tfoot').addClass('bold');
      $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
      $(this).find('tfoot td.SL').html(sums.SL);
-     $(this).find('tfoot td.DTB').html(sums.DTB);
+     $(this).find('tfoot td.DSB').html(sums.DSB);
+     $(this).find('tfoot td.DG').html(sums.DG);
+     $(this).find('tfoot td.CG').html(sums.CG);
    });
-
+  $('.table-general-order-tracking-book-report').on('draw.dt', function() {
+       var invoiceReportsTable = $(this).DataTable();
+       var sums = invoiceReportsTable.ajax.json().sums;
+       $(this).find('tfoot').addClass('bold');
+       $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
+       $(this).find('tfoot td.SL').html(sums.SL);
+       $(this).find('tfoot td.DSB').html(sums.DSB);
+       $(this).find('tfoot td.DTT').html(sums.DTT);
+       $(this).find('tfoot td.DG').html(sums.DG);
+       $(this).find('tfoot td.CG').html(sums.CG);
+       $(this).find('tfoot td.DT').html(sums.DT);
+       $(this).find('tfoot td.CT').html(sums.CT);
+     });
    $('.table-order-tracking-book-PO-report').on('draw.dt', function() {
      var invoiceReportsTable = $(this).DataTable();
      var sums = invoiceReportsTable.ajax.json().sums;
@@ -214,6 +236,9 @@
    $('#order-tracking-monthly-report').addClass('hide');
    report_from_choose.addClass('hide');
    report_year_choose.addClass('hide');
+   $('#general-order-tracking-book-report-PO').addClass('hide');
+   $('#general-order-tracking-book-report').addClass('hide');
+    $('#cash-funds-detailing-accounting-books').addClass('hide');
 
 
    $('select[name="months-report"]').selectpicker('val', '');
@@ -257,6 +282,12 @@
         $('#order-tracking-book-report-PO').removeClass('hide');
       }else if(type == 'order-tracking-monthly-report'){
         $('#order-tracking-monthly-report').removeClass('hide');
+      }else if(type == 'general-order-tracking-book-report-PO'){
+        $('#general-order-tracking-book-report-PO').removeClass('hide');
+      }else if(type == 'general-order-tracking-book-report'){
+        $('#general-order-tracking-book-report').removeClass('hide');
+      }else if(type == 'cash-funds-detailing-accounting-books'){
+        $('#cash-funds-detailing-accounting-books').removeClass('hide');
       }
 
       gen_reports();
@@ -386,6 +417,17 @@
      }
 
      initDataTable('.table-order-tracking-book-report', admin_url + 'reports/order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+     var SO_status=$('select[name="SO_status"]').selectpicker('val');
+     if(SO_status==6)
+     {
+         _table_api = initDataTable('.table-order-tracking-book-report', admin_url + 'reports/order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+     }
+     else
+     {
+        _table_api = initDataTable('.table-order-tracking-book-report', admin_url + 'reports/order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+        _table_api.column(10).visible(false, false);
+        _table_api.column(11).visible(false, false).columns.adjust();
+     }
    }
 
    function order_tracking_book_report_PO() {
@@ -394,6 +436,42 @@
      }
 
      initDataTable('.table-order-tracking-book-PO-report', admin_url + 'reports/order_tracking_book_report_PO', false, false, fnServerParams, [0, 'DESC']);
+   }
+
+   function general_order_tracking_book_report_PO() {
+     if ($.fn.DataTable.isDataTable('.table-general-order-tracking-book-PO-report')) {
+       $('.table-general-order-tracking-book-PO-report').DataTable().destroy();
+     }
+
+     initDataTable('.table-general-order-tracking-book-PO-report', admin_url + 'reports/general_order_tracking_book_report_PO', false, false, fnServerParams, [0, 'DESC']);
+   }
+
+   function general_order_tracking_book_report() {
+
+     if ($.fn.DataTable.isDataTable('.table-general-order-tracking-book-report')) {
+       $('.table-general-order-tracking-book-report').DataTable().destroy();
+     }
+     var SO_status_gen=$('select[name="SO_status_gen"]').selectpicker('val');
+     if(SO_status_gen==6)
+     {
+         _table_api = initDataTable('.table-general-order-tracking-book-report', admin_url + 'reports/general_order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+         _table_api.column(8).visible(false, false);
+         _table_api.column(9).visible(false, false).columns.adjust();
+     }
+     else if(SO_status_gen==7)
+     {
+         _table_api = initDataTable('.table-general-order-tracking-book-report', admin_url + 'reports/general_order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+         _table_api.column(6).visible(false, false);
+         _table_api.column(7).visible(false, false).columns.adjust();
+     }
+     else
+     {
+        _table_api = initDataTable('.table-general-order-tracking-book-report', admin_url + 'reports/general_order_tracking_book_report', false, false, fnServerParams, [0, 'DESC']);
+        _table_api.column(6).visible(false, false);
+        _table_api.column(7).visible(false, false);
+        _table_api.column(8).visible(false, false);
+        _table_api.column(9).visible(false, false).columns.adjust();
+     }
    }
 
    function order_tracking_monthly_report() {
@@ -439,6 +517,14 @@
      initDataTable('.table-proposals-report', admin_url + 'reports/proposals_report', false, false, fnServerParams, [0, 'DESC']);
    }
 
+   function cash_funds_detailing_accounting_books() {
+    if ($.fn.DataTable.isDataTable('.table-cash-funds-detailing-accounting-books-report')) {
+     $('.table-cash-funds-detailing-accounting-books-report').DataTable().destroy();
+    }
+
+     initDataTable('.table-cash-funds-detailing-accounting-books-report', admin_url + 'reports/cash_funds_detailing_accounting_books', false, false, fnServerParams, [0, 'DESC']);
+   }
+
    // Main generate report function
    function gen_reports() { 
      if (!$('.chart-income').hasClass('hide')) {
@@ -472,6 +558,15 @@
      }
      else if(!$('#order-tracking-monthly-report').hasClass('hide')){
       order_tracking_monthly_report();
+     }
+     else if(!$('#general-order-tracking-book-report-PO').hasClass('hide')){
+      general_order_tracking_book_report_PO();
+     }
+     else if(!$('#general-order-tracking-book-report').hasClass('hide')){
+      general_order_tracking_book_report();
+     }
+     else if(!$('#cash-funds-detailing-accounting-books').hasClass('hide')){
+      cash_funds_detailing_accounting_books();
      }
   }
 

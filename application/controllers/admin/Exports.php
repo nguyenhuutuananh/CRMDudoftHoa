@@ -138,7 +138,6 @@ class Exports extends Admin_controller
 
     public function sale_delivery($id)
     {
-
          if (!has_permission('export_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('export_items');
@@ -150,6 +149,7 @@ class Exports extends Admin_controller
                     access_denied('export_items');
             }
             $data                 = $this->input->post();
+
             $success = $this->exports_model->update_delivery($data, $id);
             if ($success == true) {
                 set_alert('success', _l('updated_successfuly', _l('deliveries')));

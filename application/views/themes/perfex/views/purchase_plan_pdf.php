@@ -272,7 +272,7 @@ $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
 $pdf->writeHTML($tblhtml, true, false, false, false, '');
 
-$pdf->Ln(20);
+$pdf->Ln(5);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td>" . mb_ucfirst(_l('purchase_user'), "UTF-8") . "</td>
@@ -291,8 +291,7 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
             <td>" . $invoice->user_name . "</td>
             <td>" . $invoice->user_head_name . "</td>
             <td>" . $invoice->user_admin_name . "</td>
-        </tr>
-        
+        </tr>        
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
 

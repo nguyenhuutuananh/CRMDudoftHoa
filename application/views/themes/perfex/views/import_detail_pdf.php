@@ -140,6 +140,16 @@ if($invoice->rel_type=='internal')
 {
     $plan_name=_l('internals');
 }
+if($invoice->rel_type=='return')
+{
+    $plan_name=_l('returns');
+}
+if($invoice->rel_type=='contract')
+{
+    $plan_name=_l('importfromcontract');
+}
+
+
 
 $pdf->SetFont($font_name, 'B', 20);
 $pdf->Cell(0, 0, mb_strtoupper($plan_name, 'UTF-8') , 0, 1, 'C', 0, '', 0);
@@ -161,8 +171,9 @@ $pdf->writeHTMLCell('', '', '', '', _l('Họ tên người giao hàng: ').'<b>'.
 $pdf->ln(2);
 
 $contract=getContractByImportID($invoice->id);
-
-$pdf->writeHTMLCell('', '', '', '', _l('Theo HĐ số ')._l('blank10').$contract->code._l('blank10').mb_strtolower(getStrDate($contract->date_create),'UTF-8')._l(' của ').$contract->supplier_name , 0, 1, false, true, 'L', true);
+$strHD='';
+if($contract) $strHD=_l('blank10').$contract->code._l('blank10').mb_strtolower(getStrDate($contract->date_create),'UTF-8')._l(' của ').$contract->supplier_name;
+$pdf->writeHTMLCell('', '', '', '', _l('Theo HĐ số ').$strHD , 0, 1, false, true, 'L', true);
 $pdf->ln(2);
 
 $warehouse=getWarehouseByID($warehouse_id);

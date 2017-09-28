@@ -1,14 +1,18 @@
     <div id="order-tracking-book-report" class="hide">
       <div class="row">
+         
          <div class="col-md-4">
             <div class="form-group">
-               <!-- multiple -->
                <label for="SO_status"><?php echo _l('report_invoice_status'); ?></label>
-               <select name="SO_status"  class="selectpicker"  data-width="100%">
+               <select name="SO_status" class="selectpicker"  data-width="100%">
                   <option value="" selected><?php echo _l('invoice_status_report_all'); ?></option>
-                  <?php foreach($sale_SO_statuses as $status){ ?>
-                  <option value="<?=$status['id']?>"><?=$status['text']?></option>
-                  <?php } ?>
+                  <option value="1"><?= _l('Chưa duyệt')?></option>
+                  <option value="2"><?= _l('Đã duyệt')?></option>
+                  <option value="3"><?= _l('Chưa tạo phiếu xuất')?></option>
+                  <option value="4"><?= _l('Đang tạo phiếu xuất')?></option>
+                  <option value="5"><?= _l('Đã tạo phiếu xuất')?></option>
+                  <option value="6"><?= _l('Giao hàng')?></option>
+                  <!-- <option value="7"><?= _l('Thanh toán')?></option> -->
                </select>
             </div>
          </div>
@@ -28,6 +32,9 @@
                <th><?php echo _l('quantity'); ?></th>
                <th><?php echo _l('unit_cost'); ?></th>
                <th><?php echo _l('sale_revenue'); ?></th>
+               <!-- Giao hàng -->
+               <th><?php echo _l('delivered_quantity'); ?></th>
+               <th><?php echo _l('rest_quantity'); ?></th>
             </tr>
          </thead>
          <tbody></tbody>
@@ -42,7 +49,9 @@
                <td></td>
                <td class="SL"></td>
                <td></td>
-               <td class="DTB"></td>
+               <td class="DSB"></td>
+               <td class="DG"></td>
+               <td class="CG"></td>
             </tr>
          </tfoot>
       </table>

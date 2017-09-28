@@ -702,6 +702,8 @@ $lang['als_accounts']                          = 'Hệ thống tài khoản';
 $lang['als_votes']                          	= 'Phiếu chi';
 $lang['als_debit']                          	= 'Báo nợ';
 
+$lang['code_vouchers_votes'] = "Số phiếu chi";
+
 # Tickets
 $lang['new_ticket']                                         = 'Mở vé mới';
 $lang['tickets']                                            = 'Vé';
@@ -4055,8 +4057,8 @@ $lang['net_revenue']="Doanh thu thuần";
 $lang['report_diary_status']="Trạng thái";
 $lang['sale_item_select']="Đơn hàng bán";
 $lang['deliver']="Người giao hàng";
-// $lang['returns_value']="Giá trị trả lại";
-// $lang['returns_value']="Giá trị trả lại";
+$lang['returns']="Phiếu nhập hàng (Hàng trả về)";
+$lang['importfromcontract']="Phiếu nhập hàng (Hợp đồng)";
 
 $lang['_day']="Ngày";
 $lang['_month']="Tháng";
@@ -4087,8 +4089,10 @@ $lang['add_true']="Thêm dữ liệu thành công";
 $lang['add_false']="Thêm dữ liệu không thành công";
 $lang['als_report_have_']="Giấy báo có";
 $lang['order_no']="STT";
-$lang['order_tracking_book_SO']="Sổ theo dõi đơn hàng bán(SO)";
-$lang['order_tracking_book_PO']="Sổ theo dõi đơn đặt hàng(PO)";
+$lang['order_tracking_book_SO']="Sổ theo dõi chi tiết đơn hàng bán(SO)";
+$lang['order_tracking_book_PO']="Sổ theo dõi chi tiết đơn đặt hàng(PO)";
+$lang['general_order_tracking_book_SO']="Sổ theo dõi tổng hợp đơn hàng bán(SO)";
+$lang['general_order_tracking_book_PO']="Sổ theo dõi tổng hợp đơn đặt hàng(PO)";
 $lang['total_number_monthly_orders_report']="Tổng đơn đặt hàng bán trong tháng";
 
 $lang['order_no']="STT";
@@ -4110,6 +4114,28 @@ $lang['weight']="Trọng lượng";
 $lang['deliver']="Người giao hàng";
 $lang['chief_accountant']="Kế toán trưởng";
 $lang['no']="Số: ";
+$lang['sale_quantity']="Số lượng bán";
+// $lang['sale_revenue']="Số: ";
+$lang['no']="Số: ";
+$lang['report_invoice_status_delivery']="Trạng thái giao hàng";
+$lang['report_invoice_status_payment']="Trạng thái thanh toán";
+$lang['rest_quantity']="Còn lại";
+$lang['delivered_quantity']="Đã giao";
+$lang['rest_payment']="Còn lại";
+$lang['paid_payment']="Đã thanh toán";
+$lang['cash_funds_detailing_accounting_books']="Sổ kế toán chi tiết quỹ tiền mặt";
+$lang['reciprocal_tk']="TK đối ứng";
+$lang['bank_deposit_book']="Sổ tiền gửi ngân hàng";
+$lang['incurred_tk_no']="Số phát sinh nợ";
+$lang['incurred_tk_co']="Số phát sinh có";
+$lang['rest_tk']="Số tồn";
+$lang['receiver_submitter']="Người nhận/Người nộp";
+
+
+
+
+
+
 
 
 

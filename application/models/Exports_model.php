@@ -52,10 +52,57 @@ class Exports_model extends CRM_Model
             {
                 $this->decreaseWarehouse($id);
             }
+            if($data['delivery_status']==2)
+            {
+                $this->updateSODeliveryQuanity($id);
+            }
             return true;
         }
         return false;
     }
+
+    public function updateSODeliveryQuanity($id)
+    {
+        $this->db->select('tblexport_items.*,tblexports.rel_id');
+        $this->db->where('tblexports.id',$id);
+        $this->db->join('tblexport_items','tblexport_items.export_id=tblexports.id');
+        $info=$this->db->get('tblexports')->result();
+        $sale_id=$info[0]->rel_id;
+        if($info)
+        {
+            foreach ($info as $key => $item) {
+                $this->increaseSODeliveryQuanity($sale_id,$item->product_id,$item->quantity);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function increaseSODeliveryQuanity($sale_id,$product_id,$quantity)
+    {        
+        $product=$this->getSaleItemByID($sale_id,$product_id);
+        $delivery_quantity=$quantity+$product->delivery_quantity;
+        $this->db->update('tblsale_items',array('delivery_quantity'=>$delivery_quantity),array('id'=>$product->id));
+        if ($this->db->affected_rows()>0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function decreaseSODeliveryQuanity($sale_id,$product_id,$quantity)
+    {
+        $product=$this->getSaleItemByID($sale_id,$product_id);
+        $delivery_quantity=$product->delivery_quantity-$quantity;
+        $this->db->update('tblsale_items',array('delivery_quantity'=>$delivery_quantity),array('id'=>$product->id));
+        if ($this->db->affected_rows()>0) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
     public function decreaseWarehouse($id)
     {
@@ -427,6 +474,37 @@ class Exports_model extends CRM_Model
         if ($this->db->affected_rows() > 0) {
             $this->db->where('export_id', $id);
             $this->db->delete('tblexport_items');
+            return true;
+        }
+        return false;
+    }
+
+    public function delete_delivery($id)
+    {
+        $delivery=array(
+            'delivery_code'=>NULL,
+            'deliverer_id'=>NULL,
+            'note'=>NULL,
+            'delivery_date'=>NULL,
+            'delivery_status'=>0
+            );
+
+        $this->db->select('tblexport_items.*,tblexports.rel_id,tblexports.delivery_status');
+        $this->db->where('tblexports.id',$id);
+        $this->db->join('tblexport_items','tblexport_items.export_id=tblexports.id');
+        $info=$this->db->get('tblexports')->result();
+
+        $status=$info[0]->delivery_status;
+        $sale_id=$info[0]->rel_id;
+        if($status==2)
+        {
+            foreach ($info as $key => $item) {
+                $this->decreaseSODeliveryQuanity($sale_id,$item->product_id,$item->quantity);
+            }
+        }
+
+        $this->db->update('tblexports',$delivery,array('id'=>$id));
+        if ($this->db->affected_rows() > 0) {
             return true;
         }
         return false;

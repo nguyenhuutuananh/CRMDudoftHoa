@@ -2012,7 +2012,8 @@ function get_dt_export_buttons(table) {
         postfixButtons: ['colvisRestore'],
         className: 'btn btn-default-dt-options dt-column-visibility',
         text: dt_button_column_visibility
-    }, {
+    }, 
+    {
         text: dt_button_reload,
         className: 'btn btn-default-dt-options',
         action: function(e, dt, node, config) {

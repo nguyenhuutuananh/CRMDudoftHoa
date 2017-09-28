@@ -192,7 +192,7 @@ class Deliveries extends Admin_controller
             die('Không tìm thấy mục nào');
         }
 
-        $success    = $this->exports_model->delete($id);
+        $success    = $this->exports_model->delete_delivery($id);
         $alert_type = 'warning';
         $message    = _l('Không thể xóa dữ liệu');
         if ($success) {
@@ -253,6 +253,11 @@ class Deliveries extends Admin_controller
             ));
         }
         die;
+    }
+
+    public function updateSODeliveryQuanity($id)
+    {
+        $this->exports_model->updateSODeliveryQuanity($id);
     }
 
     

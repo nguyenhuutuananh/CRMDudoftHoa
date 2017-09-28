@@ -167,7 +167,7 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;min-height: 500px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>

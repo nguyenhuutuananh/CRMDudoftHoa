@@ -11,15 +11,39 @@
                       <!-- Sale Diary -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'diaries-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sale_diary'); ?></a></p>
-                      <!-- So theo doi don hang ban SO -->
+                      <!-- So theo doi tong hop don dat hang PO -->
                       <hr class="hr-10" />
-                      <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-book-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('order_tracking_book_SO'); ?></a></p>
-                      <!-- So theo doi don dat hang PO -->
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'general-order-tracking-book-report-PO'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('general_order_tracking_book_PO'); ?></a></p>
+                      <!-- So theo doi chi tiet don dat hang PO -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-book-report-PO'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('order_tracking_book_PO'); ?></a></p>
+                      <!-- So theo doi tong hop don hang ban SO -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'general-order-tracking-book-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('general_order_tracking_book_SO'); ?></a></p>
+                      <!-- So theo doi chi tiet don hang ban SO -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-book-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('order_tracking_book_SO'); ?></a></p>                      
                       <!-- Tổng cộng đơn hàng bán trong tháng -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'order-tracking-monthly-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sales_order_tracking_monthly_report'); ?></a></p>
+                      <!-- Sổ quỹ -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'cash-funds-detailing-accounting-books'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('cash_funds_detailing_accounting_books'); ?></a></p>
+                      <!-- Tổng cộng đơn hàng bán trong tháng -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'bank-deposit-books'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('bank_deposit_book'); ?></a></p>
+
+                      
+
+                      <hr class="hr-10" />
+                      <?php if(total_rows('tblinvoices',array('status'=>5)) > 0){ ?>
+                      <p class="text-danger">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?php echo _l('sales_report_cancelled_invoices_not_included'); ?>
+                     </p>
+                     <?php } ?>
+                  </div>
+                  <div class="col-md-4 border-right">
+                    <!--  -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'invoices-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('invoice_report'); ?></a></p>
                       <hr class="hr-10" />
@@ -30,14 +54,7 @@
                       <p><a href="#" class="font-medium" onclick="init_report(this,'estimates-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('estimates_report'); ?></a></p>
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'customers-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('report_sales_type_customer'); ?></a></p>
-                      <hr class="hr-10" />
-                      <?php if(total_rows('tblinvoices',array('status'=>5)) > 0){ ?>
-                      <p class="text-danger">
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <?php echo _l('sales_report_cancelled_invoices_not_included'); ?>
-                     </p>
-                     <?php } ?>
-                  </div>
-                  <div class="col-md-4 border-right">
+                    <!--  -->
                     <h4 class="bold no-margin font-medium"><?php echo _l('charts_based_report'); ?></h4>
                     <hr class="hr-10" />
                     <p><a href="#" class="font-medium" onclick="init_report(this,'total-income'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('report_sales_type_income'); ?></a></p>
@@ -146,6 +163,13 @@
                <?php $this->load->view('admin/reports/includes/sales_order_tracking_books_PO'); ?>
                <!-- Sale sales_order_tracking_monthly -->
                <?php $this->load->view('admin/reports/includes/sales_order_tracking_monthly_report'); ?>
+               <!-- Sale sales_general_order_tracking_books_PO -->
+               <?php $this->load->view('admin/reports/includes/sales_general_order_tracking_books_PO'); ?>
+               <!-- Sale sales_general_order_tracking_books -->
+               <?php $this->load->view('admin/reports/includes/sales_general_order_tracking_books'); ?>
+               <!-- sale_cash_funds_detailing_accounting_books -->
+               <?php $this->load->view('admin/reports/includes/sale_cash_funds_detailing_accounting_books'); ?>
+
             </div>
          </div>
       </div>
