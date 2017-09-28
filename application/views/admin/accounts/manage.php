@@ -20,6 +20,7 @@
                                 <th>Tên tài khoản</th>
                                 <th>Tính chất</th>
                                 <th>Tên tiếng anh</th>
+                                <th>Số dư đầu kỳ</th>
                                 <th><?=_l('actions')?></th>
                             </thead>
                             <tbody>
@@ -60,6 +61,9 @@
                     </div>
                     <div class="col-md-12">
                         <?php echo render_select('idAccountAttribute', $accountAttributes, array('idAttribute', 'attributeName'), 'Tính chất', '', array(), array(), '', '', false); ?>
+                    </div>
+                    <div class="col-md-12">
+                        <?php echo render_input('amount','Số dư đầu kỳ','0','number'); ?>
                     </div>
                     <div class="col-md-12">
                         <?php echo render_textarea('accountExplain', 'Diễn giải'); ?>
@@ -107,6 +111,7 @@
                 newTr.append('<td>'+obj.accountName+'</td>');
                 newTr.append('<td>'+obj.attributeName+'</td>');
                 newTr.append('<td>'+obj.accountEnglishName+'</td>');
+                newTr.append('<td>'+obj.amount+'</td>');
                 newTr.append('<td>' 
                 + '<a href="#" data-loading-text="<i class=\'fa fa-circle-o-notch fa-spin\'></i>" class="btn btn-default btn-icon" onclick="view_init_department('+obj.idAccount+', this); return false;"><i class="fa fa-eye"></i></a>'
                 + '<a href="' + admin_url +'accounts/delete/' + obj.idAccount + '" class="btn btn-danger btn-icon delete-reminder-other"><i class="fa fa-remove"></i></a></td>');
@@ -163,6 +168,7 @@
                     $('#accountEnglishName').val(data.accountEnglishName);
                     $('#generalAccount').selectpicker('val', data.generalAccount);
                     $('#idAccountAttribute').selectpicker('val', data.idAccountAttribute);
+                    $('#amount').val(data.amount);
                     $('#accountExplain').val(data.accountExplain);
                     jQuery('#id_type').prop('action',admin_url+'accounts/ajax/'+id);
                 }

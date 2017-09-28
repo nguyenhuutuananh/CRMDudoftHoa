@@ -121,6 +121,16 @@
      $(this).find('tfoot td.amount_open').html(sums.amount_open);
    });
 
+   $('.table-cash-funds-detailing-accounting-books-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<?php echo _l('invoice_total'); ?>");
+     $(this).find('tfoot td.SPSN').html(sums.SPSN);
+     $(this).find('tfoot td.SPSC').html(sums.SPSC);
+     $(this).find('tfoot td.ST').html(sums.ST);
+   });
+
    $('.table-diaries-report').on('draw.dt', function() {
      var invoiceReportsTable = $(this).DataTable();
      var sums = invoiceReportsTable.ajax.json().sums;
@@ -165,6 +175,16 @@
      $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
      $(this).find('tfoot td.SL').html(sums.SL);
      $(this).find('tfoot td.DTB').html(sums.DTB);
+   });
+
+   $('.table-bank-deposit-books-report').on('draw.dt', function() {
+     var invoiceReportsTable = $(this).DataTable();
+     var sums = invoiceReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<b><?php echo mb_strtoupper(_l('invoice_total'),'UTF-8'); ?></b>");
+     $(this).find('tfoot td.SPSN').html(sums.SPSN);
+     $(this).find('tfoot td.SPSC').html(sums.SPSN);
+     $(this).find('tfoot td.ST').html(sums.ST);
    });
 
    $('.table-order-tracking-monthly-report').on('draw.dt', function() {
@@ -220,6 +240,7 @@
      report_wrapper.removeClass('hide');
    }
    $('head title').html($(e).text());
+   
    $('.customers-group-gen').addClass('hide');
    report_customers_groups.addClass('hide');
    report_customers.addClass('hide');
@@ -238,8 +259,8 @@
    report_year_choose.addClass('hide');
    $('#general-order-tracking-book-report-PO').addClass('hide');
    $('#general-order-tracking-book-report').addClass('hide');
-    $('#cash-funds-detailing-accounting-books').addClass('hide');
-
+   $('#cash-funds-detailing-accounting-books').addClass('hide');
+   $('#bank-deposit-books').addClass('hide');
 
    $('select[name="months-report"]').selectpicker('val', '');
        // Clear custom date picker
@@ -288,6 +309,8 @@
         $('#general-order-tracking-book-report').removeClass('hide');
       }else if(type == 'cash-funds-detailing-accounting-books'){
         $('#cash-funds-detailing-accounting-books').removeClass('hide');
+      }else if(type == 'bank-deposit-books'){
+        $('#bank-deposit-books').removeClass('hide');
       }
 
       gen_reports();
@@ -525,6 +548,14 @@
      initDataTable('.table-cash-funds-detailing-accounting-books-report', admin_url + 'reports/cash_funds_detailing_accounting_books', false, false, fnServerParams, [0, 'DESC']);
    }
 
+   function bank_deposit_books() {
+    if ($.fn.DataTable.isDataTable('.table-bank-deposit-books-report')) {
+     $('.table-bank-deposit-books-report').DataTable().destroy();
+    }
+
+     initDataTable('.table-bank-deposit-books-report', admin_url + 'reports/bank_deposit_books', false, false, fnServerParams, [0, 'DESC']);
+   }
+
    // Main generate report function
    function gen_reports() { 
      if (!$('.chart-income').hasClass('hide')) {
@@ -567,6 +598,9 @@
      }
      else if(!$('#cash-funds-detailing-accounting-books').hasClass('hide')){
       cash_funds_detailing_accounting_books();
+     }
+     else if(!$('#bank-deposit-books').hasClass('hide')){
+      bank_deposit_books();
      }
   }
 

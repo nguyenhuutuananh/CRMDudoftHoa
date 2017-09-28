@@ -4123,17 +4123,40 @@ $lang['rest_quantity']="Còn lại";
 $lang['delivered_quantity']="Đã giao";
 $lang['rest_payment']="Còn lại";
 $lang['paid_payment']="Đã thanh toán";
-$lang['cash_funds_detailing_accounting_books']="Sổ kế toán chi tiết quỹ tiền mặt";
+$lang['cash_funds_detailing_accounting_books']="Sổ quỹ tiền mặt (111)";
 $lang['reciprocal_tk']="TK đối ứng";
-$lang['bank_deposit_book']="Sổ tiền gửi ngân hàng";
+$lang['bank_deposit_books']="Sổ tiền gửi ngân hàng (112)";
 $lang['incurred_tk_no']="Số phát sinh nợ";
 $lang['incurred_tk_co']="Số phát sinh có";
 $lang['rest_tk']="Số tồn";
 $lang['receiver_submitter']="Người nhận/Người nộp";
+$lang['code_noo']="Số chứng từ";
+$lang['have_']="Thu";
+$lang['debit_']="Chi";
+$lang['rest_']="Tồn";
+$lang['als_reports_buys_submenu']="Mua hàng";
+$lang['als_reports_warehouses']="Tồn kho";
+$lang['als_reports_debt']="Công nợ";
+$lang['debts_reports']="Báo cáo công nợ";
+$lang['debts_purchases']="Báo cáo mua hàng";
+$lang['debts_warehouses']="Báo cáo tồn kho";
+$lang['genernal_receivable_debts_report']="Tổng hợp công nợ phải thu (131)";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['customer_code']="Mã khách hàng";
+$lang['tk_debt']="TK công nợ";
+$lang['debt_no']="Số dư đầu kỳ nợ";
+$lang['debt_co']="Số dư đầu kỳ có";
+$lang['incurred_debt_no']="Số phát sinh nợ";
+$lang['incurred_debt_co']="Số phát sinh có";
+$lang['surplus_debt_no']="Số dư cuối kỳ nợ";
+$lang['surplus_debt_co']="Số dư cuối kỳ có";
 
-
-
-
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
 
 
 
