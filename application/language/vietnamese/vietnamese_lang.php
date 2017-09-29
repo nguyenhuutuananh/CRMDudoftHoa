@@ -4141,6 +4141,7 @@ $lang['debts_reports']="Báo cáo công nợ";
 $lang['debts_purchases']="Báo cáo mua hàng";
 $lang['debts_warehouses']="Báo cáo tồn kho";
 $lang['genernal_receivable_debts_report']="Tổng hợp công nợ phải thu (131)";
+$lang['debts_genernal_receivable_suppliers']="Tổng hợp công nợ nhà cung cấp (331)";
 $lang['receivable_debts_report']="Chi tiết công nợ phải thu";
 $lang['customer_code']="Mã khách hàng";
 $lang['tk_debt']="TK công nợ";
@@ -4152,11 +4153,9 @@ $lang['surplus_debt_no']="Số dư cuối kỳ nợ";
 $lang['surplus_debt_co']="Số dư cuối kỳ có";
 
 $lang['receivable_debts_report']="Chi tiết công nợ phải thu";
-$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
-$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
-$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
-$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
-$lang['receivable_debts_report']="Chi tiết công nợ phải thu";
+$lang['suppliers_name']="Tên nhà cung cấp";
+$lang['suppliers_code']="Mã nhà cung cấp";
+$lang['debt']="Công nợ";
 
 
 

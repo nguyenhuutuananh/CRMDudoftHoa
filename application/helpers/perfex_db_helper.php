@@ -982,7 +982,7 @@ function data_tables_init($aColumns, $sIndexColumn, $sTable, $join = array(), $w
     $sLimit
     ";
 
-
+//return $sQuery;
     $rResult = $CI->db->query($sQuery)->result_array();
 
     /* Data set length after filtering */

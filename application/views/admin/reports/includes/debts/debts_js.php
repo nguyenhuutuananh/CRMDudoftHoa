@@ -69,8 +69,10 @@
      report_wrapper.removeClass('hide');
    }
   $('#genernal-receivables-debts-report').addClass('hide');
+  $('#genernal-receivables-suppliers-debts-report').addClass('hide');
 
   $('select[name="months-report"]').selectpicker('val', '');
+
        // Clear custom date picker
        report_to.val('');
        report_from.val('');
@@ -87,6 +89,9 @@
        if (type == 'genernal-receivables-debts-report') {
          $('#genernal-receivables-debts-report').removeClass('hide');
        }
+      if (type == 'genernal-receivables-suppliers-debts-report') {
+         $('#genernal-receivables-suppliers-debts-report').removeClass('hide');
+       }
       gen_reports();
     }
   // Main generate report function
@@ -94,12 +99,21 @@
      if (!$('#genernal-receivables-debts-report').hasClass('hide')) { 
        genernal_receivable_debts_report();
      }
+     if (!$('#genernal-receivables-suppliers-debts-report').hasClass('hide')) {
+           genernal_receivables_suppliers_debts_report();
+     }
   }
   function genernal_receivable_debts_report() {
     if ($.fn.DataTable.isDataTable('.table-genernal-receivables-debts-report')) {
      $('.table-genernal-receivables-debts-report').DataTable().destroy();
     }
-
      initDataTable('.table-genernal-receivables-debts-report', admin_url + 'reports/genernal_receivable_debts_report', false, false, fnServerParams, [0, 'DESC']);
+
+  }
+  function genernal_receivables_suppliers_debts_report() {
+    if ($.fn.DataTable.isDataTable('.table-genernal-receivables-suppliers-debts-report')) {
+     $('.table-genernal-receivables-suppliers-debts-report').DataTable().destroy();
+    }
+     initDataTable('.table-genernal-receivables-suppliers-debts-report', admin_url + 'reports/genernal_receivables_suppliers_debts_report', false, false, fnServerParams, [0, 'DESC']);
    }
 </script>

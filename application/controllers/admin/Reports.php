@@ -3002,21 +3002,149 @@ class Reports extends Admin_controller
     {
         echo json_encode($this->reports_model->leads_monthly_report($month));
     }
-
-    public function genernal_receivable_debts_report()
+    public function get_tk_sales($id_client="",$colum="",$type=false,$date_start="",$date_end="")
     {
-        if ($this->input->is_ajax_request()) 
+        $this->db->select('sum(tblsale_items.amount) as cum_money');
+        $this->db->join('tblsale_items','tblsale_items.sale_id=tblsales.id','left');
+        $this->db->where('tblsales.customer_id',$id_client);
+        if($date_start!=""&&$date_end!="")
+        {
+            if($type==false)
+            {
+                $this->db->where('tblsales.date < "'.$date_start.'"');
+            }
+            else
+            {
+                $this->db->where('tblsales.date BETWEEN "'.$date_start.'" AND "'.$date_end.'"');
+            }
+        }
+        $this->db->where('tblsale_items.'.$colum,6);
+        $result= $this->db->get('tblsales')->row();
+        if($result)
+        {
+            return $result->cum_money;
+        }
+        return 0;
+    }
+
+
+
+
+
+    public function genernal_receivable_debts_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('customer_code'),
+            _l('customer_name'),
+            _l('tk_debt'),
+            _l('debt_no'),
+            _l('debt_co'),
+            _l('incurred_debt_no'),
+            _l('surplus_debt_no'),
+            _l('surplus_debt_co')
+        );
+        $data=$this->genernal_receivable_debts_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->genernal_receivable_debts_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','TỔNG CÔNG NỢ PHẢI THU (131)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Tong_Cong_Phai_Thu_131.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function genernal_receivable_debts_report($pdf=false)
+    {
+        if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
             $this->load->model('invoices_model');
             $this->load->model('sales_model');
             
             //Thu
+            $mounth_report=$this->input->post('report_months');
+            if ($mounth_report != ''&&$mounth_report) {
+                if (is_numeric($mounth_report)) {
+                    $minus_months       = date('Y-m-d', strtotime("-$mounth_report MONTH"));
+                    $start_date=$minus_months;
+                    $start_end=date('Y-m-d');
+
+                }
+                else if ($mounth_report == 'custom') {
+                    $start_date = to_sql_date($this->input->post('report_from'));
+                    $start_end   = to_sql_date($this->input->post('report_to'));
+                }
+            }
             $select = array(
-                'tblreport_have.date_of_accounting as date_of_accounting',
-                'tblreport_have.day_vouchers as day_vouchers',
-                'code_vouchers as code_vouchers',
-                'tblreport_have_contract.note as note',
+                'tblclients.code',
+                'company',
+                '2',
+                '3',
                 '4',
                 '5',
                 '6',
@@ -3026,35 +3154,15 @@ class Reports extends Admin_controller
 
             
             $where  = array(
-                // 'AND status != 5'
             );
-
-            $by_currency = $this->input->post('report_currency');
-            if ($by_currency) {
-
-                $_temp = substr($select[11], 0, -1);
-                $_temp .= ' AND currency =' . $by_currency . ')';
-                $select[11] = $_temp;
-
-                $currency = $this->currencies_model->get($by_currency);
-                array_push($where, 'AND currency=' . $by_currency);
-            } else {
-                $currency = $this->currencies_model->get_base_currency();
-            }
-            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
-
             $aColumns     = $select;
-            $sIndexColumn = "id";
-            $sTable       = 'tblreport_have';
+            $sIndexColumn = "userid";
+            $sTable       = 'tblclients';
             $join         = array(
-                'LEFT JOIN tblreport_have_contract ON tblreport_have_contract.id_report_have = tblreport_have.id',
             );
-
             $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
-                'tblreport_have_contract.tk_no',
-                'tblreport_have_contract.tk_co',
-                'tblreport_have_contract.subtotal as total',
-                'tblreport_have.id as id'
+                'userid',
+                'debt'
             ));
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -3075,83 +3183,386 @@ class Reports extends Admin_controller
                     } else {
                         $_data = $aRow[$aColumns[$i]];
                     }
-                    if($aColumns[$i]=='date_of_accounting' || $aColumns[$i]=='day_vouchers' )
+
+                    if($aColumns[$i]=='tblclients.code'||$aColumns[$i]=='company')
                     {
-                        $_data=_d($aRow[$aColumns[$i]]);
+                        $_data='<a href="'.admin_url('clients/client/'.$aRow['userid']).'">'.$aRow[$aColumns[$i]].'</a>';
                     }
-                    if($aColumns[$i]=='note')
+                    if($aColumns[$i]==2)
                     {
-                        $_data=strip_tags($aRow[$aColumns[$i]]);
+                        $_data=get_code_tk(6);
                     }
-                    if($aColumns[$i]=='code_vouchers')
+                    if($aColumns[$i]==3)
                     {
-                        // get_option('prefix_vouchers_receipts')
-                        // get_option('prefix_vouchers_votes')
-                        if(substr($aRow[$aColumns[$i]], 0 ,2)=='PT')
+                        $data=$aRow['debt'];
+                        if($data<0)
                         {
-                            $_data='<a href="' . admin_url('report_have/report_have/' . $aRow['id']) . '" target="_blank">' . $aRow['code_vouchers'] . '</a>';
+                            $data=0;
+                        }
+                        if($start_date&&$start_end)
+                        {
+                            $data_tk=$this->get_tk_sales($aRow['userid'],'tk_no',false,$start_date,$start_end);
+                            if($data_tk)
+                            {
+                                $_data=_format_number($data_tk+$data);
+                            }
+                            else
+                            {
+                                $_data=_format_number($data);
+                            }
                         }
                         else
                         {
-                            $_data='<a href="' . admin_url('debit/debit/' . $aRow['id']) . '" target="_blank">' . $aRow['code_vouchers'] . '</a>';
+                            $_data=_format_number($data);
                         }
                     }
-
-                    if( $aColumns[$i]=='4')
+                    if($aColumns[$i]==4)
                     {
-                        if(substr(get_code_tk($aRow['tk_no']),0,3)=='112')
+                        $data=$aRow['debt'];
+                        if($data>0)
                         {
-                            $_data= get_code_tk($aRow['tk_co']);
-                        }else
-                        {
-                             $_data= get_code_tk($aRow['tk_no']);
+                            $data=0;
                         }
-                    }
+                        if($start_date&&$start_end)
+                        {
+                            $data_tk=$this->get_tk_sales($aRow['userid'],'tk_co',false,$start_date,$start_end);
+                            if($data_tk)
+                            {
+                                $_data=_format_number($data_tk+($data*(-1)));
+                            }
+                            else
+                            {
+                                $_data=_format_number($data*(-1))   ;
+                            }
+                        }
+                        else
+                        {
+                            $_data=_format_number($data*(-1));
+                        }
 
-                     if( $aColumns[$i]=='5')
+                    }
+                    if($aColumns[$i]==5)
                     {
-                        if(substr(get_code_tk($aRow['tk_no']),0,3)=='112')
+                        $data_tk=$this->get_tk_sales($aRow['userid'],'tk_no',true,$start_date,$start_end);
+                        if($data_tk)
                         {
-                            $_data= $aRow['total'];
-                        }else{
-                            $_data='0';
+                            $_data=_format_number($data_tk);
                         }
-                        $footer_data['SPSN']+=$_data;
+                        else
+                        {
+                            $_data=0;
+                        }
                     }
-                    if( $aColumns[$i]=='6'){
-                    
-                       
-                        if(substr(get_code_tk($aRow['tk_co']),0,3)=='112')
+                    if($aColumns[$i]==6)
+                    {
+                        $data_tk=$this->get_tk_sales($aRow['userid'],'tk_co',true,$start_date,$start_end);
+                        if($data_tk)
                         {
-                            $_data= $aRow['total'];
-                        }else{
-                            $_data='0';
+                            $_data=_format_number($data_tk);
                         }
-                        $footer_data['SPSC']+=$_data;
-                    }   
-
+                        else
+                        {
+                            $_data=0;
+                        }
+                    }
                     $row[] = $_data;
                 }
 
-                // var_dump($row);die;
-
-                $soducongdon+=$row['5']-$row['6'];
-                $row['5']=_format_number($row['5']);
-                $row['6']=_format_number($row['6']);
-                $row['7']=_format_number($soducongdon);
-                $footer_data['ST']=$soducongdon;
                
                 $output['aaData'][] = $row;
                 $x++;
             }
-
-            foreach ($footer_data as $key => $total) {
-                $footer_data[$key] = format_money($total, $currency_symbol);
-
-            }
-
             $output['sums'] = $footer_data;
-            echo json_encode($output);
+            if($pdf==false){
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
+            die();
+        }
+    }
+
+
+
+
+
+    public function get_tk_import_suppliers($id_supplier="",$colum="",$type=false,$date_start="",$date_end="")
+    {
+        $this->db->select('sum(tblimport_items.sub_total) as cum_money');
+        $this->db->join('tblimport_items','tblimport_items.import_id=tblimports.id','left');
+        $this->db->where('tblimports.supplier_id',$id_supplier);
+        if($date_start!=""&&$date_end!="")
+        {
+            if($type==false)
+            {
+                $this->db->where('tblimports.date < "'.$date_start.'"');
+            }
+            else
+            {
+                $this->db->where('tblimports.date BETWEEN "'.$date_start.'" AND "'.$date_end.'"');
+            }
+        }
+        $this->db->where('tblimport_items.'.$colum,34);
+        $result= $this->db->get('tblimports')->row();
+        if($result)
+        {
+            return $result->cum_money;
+        }
+        return 0;
+    }
+
+    public function genernal_receivables_suppliers_debts_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('suppliers_name'),
+            _l('tk_debt'),
+            _l('debt_no'),
+            _l('debt_co'),
+            _l('incurred_debt_no'),
+            _l('incurred_debt_co'),
+            _l('surplus_debt_no'),
+            _l('surplus_debt_co')
+        );
+        $data=$this->genernal_receivables_suppliers_debts_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->genernal_receivables_suppliers_debts_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','TỔNG CÔNG NỢ NHÀ CUNG CẤP (331)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Tong_Cong_No_Nha_Cung_Cap_331.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+    public function genernal_receivables_suppliers_debts_report($pdf=false)
+    {
+        if ($this->input->is_ajax_request()||$pdf==true)
+        {
+            $this->load->model('currencies_model');
+            $this->load->model('invoices_model');
+            $this->load->model('sales_model');
+
+            //Thu
+            $mounth_report=$this->input->post('report_months');
+            if ($mounth_report != ''&&$mounth_report) {
+                if (is_numeric($mounth_report)) {
+                    $minus_months       = date('Y-m-d', strtotime("-$mounth_report MONTH"));
+                    $start_date=$minus_months;
+                    $start_end=date('Y-m-d');
+
+                }
+                else if ($mounth_report == 'custom') {
+                    $start_date = to_sql_date($this->input->post('report_from'));
+                    $start_end   = to_sql_date($this->input->post('report_to'));
+                }
+            }
+            $select = array(
+                'supplier_code',
+                'tblsuppliers.company',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8'
+            );
+
+
+            $where  = array(
+            );
+            $aColumns     = $select;
+            $sIndexColumn = "userid";
+            $sTable       = 'tblsuppliers';
+            $join         = array(
+            );
+            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+                'userid','debt'
+            ));
+            $output  = $result['output'];
+            $rResult = $result['rResult'];
+
+            $x       = 0;
+
+            $footer_data = array(
+                'SPSN' => 0,
+                'SPSC' => 0,
+                'ST' => 0
+            );
+
+            foreach ($rResult as $aRow) {
+                $row = array();
+                for ($i = 0; $i < count($aColumns); $i++) {
+                    if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                        $_data = $aRow[strafter($aColumns[$i], 'as ')];
+                    } else {
+                        $_data = $aRow[$aColumns[$i]];
+                    }
+
+                    if($aColumns[$i]=='supplier_code'||$aColumns[$i]=='company')
+                    {
+                        $_data='<a href="'.admin_url('suppliers/supplier/'.$aRow['userid']).'">'.$aRow[$aColumns[$i]].'</a>';
+                    }
+                    if($aColumns[$i]==2)
+                    {
+                        $_data=get_code_tk(34);
+                    }
+                    if($aColumns[$i]==3)
+                    {
+                        $data=$aRow['debt'];
+                        if($data>0)
+                        {
+                            $data=0;
+                        }
+                        if($start_date&&$start_end)
+                        {
+                            $data_tk=$this->get_tk_import_suppliers($aRow['userid'],'tk_no',false,$start_date,$start_end);
+                            if($data_tk)
+                            {
+                                $_data=_format_number($data_tk+($data*(-1)));
+                            }
+                            else
+                            {
+                                $_data=_format_number($data*(-1))   ;
+                            }
+                        }
+                        else
+                        {
+                            $_data=_format_number($data*(-1));
+                        }
+
+                    }
+                    if($aColumns[$i]==4)
+                    {
+                        $data=$aRow['debt'];
+                        if($data<0)
+                        {
+                            $data=0;
+                        }
+                        if($start_date&&$start_end)
+                        {
+                            $data_tk=$this->get_tk_import_suppliers($aRow['userid'],'tk_co',false,$start_date,$start_end);
+                            if($data_tk)
+                            {
+                                $_data=_format_number($data_tk+$data);
+                            }
+                            else
+                            {
+                                $_data=_format_number($data);
+                            }
+                        }
+                        else
+                        {
+                            $_data=_format_number($data);
+                        }
+
+                    }
+                    if($aColumns[$i]==5)
+                    {
+                        $data_tk=$this->get_tk_import_suppliers($aRow['userid'],'tk_no',true,$start_date,$start_end);
+                        if($data_tk)
+                        {
+                            $_data=_format_number($data_tk);
+                        }
+                        else
+                        {
+                            $_data=0;
+                        }
+                    }
+                    if($aColumns[$i]==6)
+                    {
+                        $data_tk=$this->get_tk_import_suppliers($aRow['userid'],'tk_co',true,$start_date,$start_end);
+                        if($data_tk)
+                        {
+                            $_data=_format_number($data_tk);
+                        }
+                        else
+                        {
+                            $_data=0;
+                        }
+                    }
+                    $row[] = $_data;
+                }
+
+
+                $output['aaData'][] = $row;
+                $x++;
+            }
+            $output['sums'] = $footer_data;
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }

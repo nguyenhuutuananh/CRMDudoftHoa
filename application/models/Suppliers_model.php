@@ -101,28 +101,9 @@ class Suppliers_model extends CRM_Model
         }
         $data['datecreated'] = date('Y-m-d H:i:s');
         $data                = do_action('before_client_added', $data);
-        $this->db->insert('tblclients', $data);
+        $this->db->insert('tblsuppliers', $data);
         $userid = $this->db->insert_id();
         if ($userid) {
-            if (isset($custom_fields)) {
-                $_custom_fields = $custom_fields;
-                // Possible request from the register area with 2 types of custom fields for contact and for comapny/customer
-                if (count($custom_fields) == 2) {
-                    unset($custom_fields);
-                    $custom_fields['customers']                = $_custom_fields['customers'];
-                    $contact_data['custom_fields']['contacts'] = $_custom_fields['contacts'];
-                } else if (count($custom_fields) == 1) {
-                    if (isset($_custom_fields['contacts'])) {
-                        $contact_data['custom_fields']['contacts'] = $_custom_fields['contacts'];
-                        unset($custom_fields);
-                    }
-                }
-                handle_custom_fields_post($userid, $custom_fields);
-            }
-            // If request from client area or lead convert to client add as contact too
-            if ($client_or_lead_convert_request == true) {
-                $contact_id = $this->add_contact($contact_data, $userid, $client_or_lead_convert_request);
-            }
             if (isset($groups_in)) {
                 foreach ($groups_in as $group) {
                     $this->db->insert('tblcustomergroups_in', array(
@@ -143,7 +124,7 @@ class Suppliers_model extends CRM_Model
                 $_is_staff = get_staff_user_id();
             }
 
-            logActivity('New Client Created [' . $_new_client_log . ']', $_is_staff);
+            logActivity('New suppliers Created [' . $_new_client_log . ']', $_is_staff);
         }
         return $userid;
     }
@@ -198,7 +179,7 @@ class Suppliers_model extends CRM_Model
         ));
         $data  = $_data['data'];
         $this->db->where('userid', $id);
-        $this->db->update('tblclients', $data);
+        $this->db->update('tblsuppliers', $data);
 
         if ($this->db->affected_rows() > 0) {
             $affectedRows++;
@@ -208,54 +189,13 @@ class Suppliers_model extends CRM_Model
             // Update all unpaid invoices
             $this->db->where('clientid', $id);
             $this->db->where('status !=', 2);
-            $invoices = $this->db->get('tblinvoices')->result_array();
-            foreach ($invoices as $invoice) {
-                $this->db->where('id', $invoice['id']);
-                $this->db->update('tblinvoices', array(
-                    'billing_street' => $data['billing_street'],
-                    'billing_city' => $data['billing_city'],
-                    'billing_state' => $data['billing_state'],
-                    'billing_zip' => $data['billing_zip'],
-                    'billing_country' => $data['billing_country'],
-                    'shipping_street' => $data['shipping_street'],
-                    'shipping_city' => $data['shipping_city'],
-                    'shipping_state' => $data['shipping_state'],
-                    'shipping_zip' => $data['shipping_zip'],
-                    'shipping_country' => $data['shipping_country']
-                ));
-                if ($this->db->affected_rows() > 0) {
-                    $affectedRows++;
-                }
-            }
+
             // Update all estimates
             $this->db->where('clientid', $id);
-            $estimates = $this->db->get('tblestimates')->result_array();
-            foreach ($estimates as $estimate) {
-                $this->db->where('id', $estimate['id']);
-                $this->db->update('tblestimates', array(
-                    'billing_street' => $data['billing_street'],
-                    'billing_city' => $data['billing_city'],
-                    'billing_state' => $data['billing_state'],
-                    'billing_zip' => $data['billing_zip'],
-                    'billing_country' => $data['billing_country'],
-                    'shipping_street' => $data['shipping_street'],
-                    'shipping_city' => $data['shipping_city'],
-                    'shipping_state' => $data['shipping_state'],
-                    'shipping_zip' => $data['shipping_zip'],
-                    'shipping_country' => $data['shipping_country']
-                ));
-                if ($this->db->affected_rows() > 0) {
-                    $affectedRows++;
-                }
-            }
         }
 
         if (!isset($groups_in)) {
             $groups_in = false;
-        }
-
-        if ($this->handle_update_groups($id, $groups_in)) {
-            $affectedRows++;
         }
         if ($affectedRows > 0) {
             logActivity('Customer Info Updated [' . $data['company'] . ']');

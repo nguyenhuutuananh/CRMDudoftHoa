@@ -32,12 +32,14 @@ class Suppliers extends Admin_controller
                 access_denied('customers');
             }
         }
+        $group="";
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
                 if (!has_permission('customers', '', 'create')) {
                     access_denied('customers');
                 }
                 $data                 = $this->input->post();
+                $data['supplier_code']=get_option('prefix_supplier').$data['supplier_code'];
                 $save_and_add_contact = false;
                 if (isset($data['save_and_add_contact'])) {
                     unset($data['save_and_add_contact']);
@@ -55,7 +57,9 @@ class Suppliers extends Admin_controller
                         access_denied('customers');
                     }
                 }
-                $success = $this->suppliers_model->update($this->input->post(), $id);
+                $data=$this->input->post();
+                unset($data['supplier_code']);
+                $success = $this->suppliers_model->update($data, $id);
                 if ($success == true) {
                     set_alert('success', _l('updated_successfuly', _l('supplier')));
                 }

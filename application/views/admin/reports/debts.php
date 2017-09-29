@@ -13,8 +13,10 @@
                       <p><a href="#" class="font-medium" onclick="init_report(this,'genernal-receivables-debts-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('genernal_receivable_debts_report'); ?></a></p>
                       <hr class="hr-10" />
                       <!-- receivable_debts_report -->
-                      <p><a href="#" class="font-medium" onclick="init_report(this,'receivables-debts-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('receivable_debts_report'); ?></a></p>
-                      
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'genernal-receivables-suppliers-debts-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('receivable_debts_report'); ?></a></p>
+                        <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'genernal-receivables-suppliers-debts-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('debts_genernal_receivable_suppliers'); ?></a></p>
+
                     </div>
                   <div class="col-md-4 border-right" style="display: none;">
                     <h4 class="bold no-margin font-medium"><?php echo _l('charts_based_report'); ?></h4>                     
@@ -104,7 +106,8 @@
                <h4 class="no-mtop" id="report_tiltle" ><?php echo _l('reports_sales_generated_report'); ?></h4>
                <hr />
                <!-- debts_genernal_receivable -->
-               <?php $this->load->view('admin/reports/includes/debts_genernal_receivable'); ?>
+               <?php $this->load->view('admin/reports/includes/debts/debts_genernal_receivable'); ?>
+               <?php $this->load->view('admin/reports/includes/debts/debts_genernal_receivable_suppliers'); ?>
 
             </div>
          </div>
@@ -113,7 +116,7 @@
 </div>
 </div>
 <?php init_tail(); ?>
-<?php $this->load->view('admin/reports/includes/debts_js'); ?>
+<?php $this->load->view('admin/reports/includes/debts/debts_js'); ?>
 </body>
 </html>
 

@@ -41,7 +41,7 @@
                                 if($supplier)
                                 {
 
-                                  $number=$supplier->supplier_code;
+                                  $number=str_replace(get_option('prefix_supplier'),'',$supplier->supplier_code);
                                 }
                                 else
                                 {
@@ -161,6 +161,8 @@
                 }
                 echo render_select('source_approach', $sources, array('id','name'),'source_from', !isset($supplier) ? $default_source_id : $supplier->source_approach, array('data-none-selected-text'=>_l('dropdown_non_selected_tex'))); 
                 ?>
+               <?php $value=( isset($supplier) ? $supplier->debt : ''); ?>
+               <?php echo render_input( 'debt', 'debt',$value); ?>
 
           </div>
           <div class="col-md-6">
@@ -221,6 +223,7 @@
 
             <?php $value=( isset($supplier) ? $supplier->website : ''); ?>
             <?php echo render_input( 'website', 'client_website',$value); ?>
+
             
             
        </div>
