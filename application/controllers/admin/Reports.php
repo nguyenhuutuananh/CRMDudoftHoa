@@ -82,16 +82,16 @@ class Reports extends Admin_controller
     }
 
     /* Purchases reports */
-    public function purchases()
-    {
-        var_dump(expression);
-    }
+    // public function purchases()
+    // {
+    //     var_dump(expression);
+    // }
 
     /* Warehouse reports */
-    public function warehouses()
-    {
-        var_dump(expression);
-    }
+    // public function warehouses()
+    // {
+    //     var_dump(expression);
+    // }
 
     /* Debts reports */
     public function debts()
