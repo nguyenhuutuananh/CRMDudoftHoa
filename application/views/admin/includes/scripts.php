@@ -84,7 +84,13 @@ if($alertclass != ''){
         $(function(){
             alert_float('<?php echo $alertclass; ?>','<?php echo $alert_message; ?>');
         });
-    </script>
+</script>
     <?php } ?>
+    <script>
+    $(function() {
+        $('body.hide-sidebar').find('ul').removeClass('in');
+        $('.hide-sidebar #side-menu').find('li').removeClass('active');
+    })
+</script>
 
 
