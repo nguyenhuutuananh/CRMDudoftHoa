@@ -6,6 +6,64 @@ class Reports_model extends CRM_Model
     {
         parent::__construct();
     }
+
+    public function PO_status_stats()
+    {
+        $this->load->model('leads_model');
+        $statuses = array(
+                            array('id'=>0,'name'=>'Chưa duyệt'),
+                            array('id'=>2,'name'=>'Đã duyệt'),
+                            array('id'=>3,'name'=>'Chưa tạo đơn hàng'),
+                            array('id'=>4,'name'=>'Đang tạo đơn hàng'),
+                            array('id'=>5,'name'=>'Đã tạo đơn hàng'),);
+        // $statuses = $this->leads_model->get_status();
+        $colors   = get_system_favourite_colors();
+        $chart    = array(
+            'labels' => array(),
+            'datasets' => array(),
+            'label'=> 'Dataset 1'
+        );
+
+        $_data                         = array();
+        $_data['data']                 = array();
+        $_data['backgroundColor']      = array();
+        $_data['hoverBackgroundColor'] = array();
+
+        foreach ($statuses as $key => $status) {
+            $this->db->where('status', $status['id']);
+            if($status['id']==3)
+            {
+                $this->db->where('export_status', 0);
+            }
+            if($status['id']==4)
+            {
+                $this->db->where('export_status', 1);
+            }
+            if($status['id']==5)
+            {
+                $this->db->where('export_status', 2);
+            }
+            // if (!$this->is_admin) {
+            //     $this->db->where('(addedfrom = ' . get_staff_user_id() . ' OR is_public = 1 OR assigned = ' . get_staff_user_id() . ')');
+            // }
+            if($status['color'] == ''){
+                $status['color'] = '#737373';
+            }
+            array_push($chart['labels'], $status['name']);
+            array_push($_data['backgroundColor'], $colors[$key]);
+            array_push($_data['hoverBackgroundColor'], adjust_color_brightness($status['color'], -20));
+            array_push($_data['data'], $this->db->count_all_results('tblsale_orders'));
+        }
+
+        // var_dump($_data);die;
+
+        $chart['datasets'][] = $_data;
+        // echo "<pre>";
+        // var_dump($chart);die;
+        return $chart;
+
+    }
+
     /**
      *  Leads conversions monthly report
      * @param   mixed $month  which month / chart

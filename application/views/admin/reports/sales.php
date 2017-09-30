@@ -147,6 +147,18 @@
          </div>
       </div>
       <div class="col-md-12">
+        <!-- CHART -->
+        <div class="row" id="PO_SO">
+          <div class="col-md-6 col-sm-12">
+            <!-- sales_chart_PO_SO -->
+            <?php $this->load->view('admin/reports/includes/sales_chart_PO'); ?>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- sales_chart_PO_SO -->
+            <?php $this->load->view('admin/reports/includes/sales_chart_SO'); ?>
+          </div>
+        </div>
+         
          <div class="panel_s hide" id="report">
             <div class="panel-body">
                <h4 class="no-mtop" id="report_tiltle" ><?php echo _l('reports_sales_generated_report'); ?></h4>
@@ -175,6 +187,7 @@
                <?php $this->load->view('admin/reports/includes/sale_cash_funds_detailing_accounting_books'); ?>
               <!-- sale_bank_deposit_books -->
                <?php $this->load->view('admin/reports/includes/sale_bank_deposit_books'); ?>
+
             </div>
          </div>
       </div>

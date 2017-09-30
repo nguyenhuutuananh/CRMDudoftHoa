@@ -36,6 +36,7 @@ class Home extends Admin_controller
 
         $data['projects_status_stats']                = json_encode($this->home_model->projects_status_stats());
         $data['leads_status_stats']                   = json_encode($this->home_model->leads_status_stats());
+        
         $data['google_ids_calendars']                 = $this->misc_model->get_google_calendar_ids();
         $data['bodyclass']                            = 'home invoices_total_manual';
         $this->load->model('announcements_model');

@@ -77,6 +77,8 @@ class Reports extends Admin_controller
         $data['MONTHS']=[
                     "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
                 ];
+        $data['PO_status_stats']   = json_encode($this->reports_model->PO_status_stats());
+        $data['SO_status_stats']   = true;
         $data['chart_js_assets']   = true;
         $data['title']                 = _l('sales_reports');
         $this->load->view('admin/reports/sales', $data);

@@ -1,4 +1,9 @@
 <script>
+  $(function(){
+    if (!$('.chart-PO-SO').hasClass('hide')) {
+       PO_SO_chart_report();
+     }
+  });
  var salesChart;
  var groupsChart;
  var paymentMethodsChart;
@@ -350,6 +355,48 @@
      });
    }
 
+   // Generate PO-SO charts
+   function PO_SO_chart_report() {
+    var PO_chart_, SO_chart_;
+    var PO_chart = $('#chart-PO');
+    var SO_chart = $('#chart-SO');
+     if (typeof(PO_chart_) !== 'undefined') {
+       PO_chart_.destroy();
+     }
+     if (typeof(SO_chart_) !== 'undefined') {
+       SO_chart_.destroy();
+     }
+     if (PO_chart.length > 0) {
+            // Leads overview status
+            PO_chart_=new Chart(PO_chart, {
+                type: 'doughnut',
+                data: <?php echo $PO_status_stats; ?>,
+                options:{
+                          maintainAspectRatio:true,
+                          legend: {
+                                      position: 'right',
+                                  },
+                          title: {
+                                display: false,
+                                text: 'Chart.js Doughnut Chart'
+                            },
+                          animation: {
+                                        animateScale: true,
+                                        animateRotate: true
+                                    }
+                        }
+            });
+        }
+      if (SO_chart.length > 0) {
+            // Leads overview status
+            SO_chart_=new Chart(SO_chart, {
+                type: 'doughnut',
+                data: <?php echo $PO_status_stats; ?>,
+                options:{maintainAspectRatio:false}
+            });
+        }
+   }
+
    function report_by_payment_modes() {
      if (typeof(paymentMethodsChart) !== 'undefined') {
        paymentMethodsChart.destroy();
@@ -552,6 +599,7 @@
 
    // Main generate report function
    function gen_reports() { 
+     
      if (!$('.chart-income').hasClass('hide')) {
        total_income_bar_report();
      } else if (!$('.chart-payment-modes').hasClass('hide')) {
