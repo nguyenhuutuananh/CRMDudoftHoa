@@ -8,7 +8,7 @@
                 <?php $this->load->view('admin/includes/widgets/top_stats'); ?>
             </div>
             <div class="col-md-8">
-                <?php $this->load->view('admin/includes/widgets/finance_overview'); ?>
+                <!-- <?php $this->load->view('admin/includes/widgets/finance_overview'); ?> -->
                 <?php $this->load->view('admin/includes/widgets/user_data'); ?>
                 <?php $this->load->view('admin/includes/widgets/calendar'); ?>
                  <div class="row">
@@ -40,5 +40,11 @@
 <?php init_tail(); ?>
 <?php $this->load->view('admin/utilities/calendar_template'); ?>
 <?php $this->load->view('admin/includes/dashboard_js'); ?>
+<script type="text/javascript">
+var staffProjectsParams = {};   
+ // initDataTable('.table-sales', admin_url + 'sales/list_sales', 'undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
+ initDataTable('.table-sale_orders', admin_url+'sale_orders/list_sale_orders','undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
+
+</script>
 </body>
 </html>

@@ -1,22 +1,27 @@
   <div class="panel_s user-data">
    <div class="panel-body home-activity">
      <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active">
+      <!-- <li role="presentation" class="active">
         <a href="#home_tab_tasks" aria-controls="home_tab_tasks" role="tab" data-toggle="tab">
           <i class="fa fa-tasks menu-icon text-info"></i><?php echo _l('home_my_tasks'); ?>
         </a>
+      </li> -->
+      <li role="presentation" class="active" class="active">
+        <a href="#home_my_projects_PO" onclick="home_new_PO(true);" aria-controls="home_my_projects_PO" role="tab" data-toggle="tab">
+          <i class="fa fa-bars menu-icon text-info"></i><?php echo _l('home_new_PO'); ?>
+        </a>
       </li>
       <li role="presentation">
-        <a href="#home_my_projects" onclick="init_table_staff_projects(true);" aria-controls="home_my_projects" role="tab" data-toggle="tab">
-          <i class="fa fa-bars menu-icon text-info"></i><?php echo _l('home_my_projects'); ?>
+        <a href="#home_my_projects" onclick="home_new_SO(true);" aria-controls="home_my_projects" role="tab" data-toggle="tab">
+          <i class="fa fa-bars menu-icon text-info"></i><?php echo _l('home_new_SO'); ?>
         </a>
       </li>
       <?php if((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()){ ?>
-      <li role="presentation">
+      <!-- <li role="presentation">
         <a href="#home_tab_tickets" onclick="init_table_tickets(true);" aria-controls="home_tab_tickets" role="tab" data-toggle="tab">
           <i class="fa fa-ticket menu-icon text-info"></i><?php echo _l('home_tickets'); ?>
         </a>
-      </li>
+      </li> -->
       <?php } ?>
       <?php if(is_staff_member()){ ?>
       <li role="presentation">
@@ -35,7 +40,7 @@
       <?php } ?>
     </ul>
     <div class="tab-content">
-     <div role="tabpanel" class="tab-pane active" id="home_tab_tasks">
+     <!-- <div role="tabpanel" class="tab-pane active" id="home_tab_tasks">
       <a href="<?php echo admin_url('tasks/list_tasks'); ?>" class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
       <div class="clearfix"></div>
       <div class="_hidden_inputs _filters _tasks_filters">
@@ -51,7 +56,7 @@
         ?>
       </div>
       <?php $this->load->view('admin/tasks/_table'); ?>
-    </div>
+    </div> -->
     <?php if((get_option('access_tickets_to_none_staff_members') == 1 && !is_staff_member()) || is_staff_member()){ ?>
     <div role="tabpanel" class="tab-pane" id="home_tab_tickets">
      <a href="<?php echo admin_url('tickets'); ?>" class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
@@ -67,15 +72,37 @@
      <?php echo AdminTicketsTableStructure(); ?>
    </div>
    <?php } ?>
-   <div role="tabpanel" class="tab-pane" id="home_my_projects">
-    <a href="<?php echo admin_url('projects'); ?>" class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
+   <div role="tabpanel" class="tab-pane active" id="home_my_projects_PO">
+    <a href="<?php echo admin_url('sales'); ?>" class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
     <div class="clearfix"></div>
     <?php render_datatable(array(
-      _l('project_name'),
-      _l('project_start_date'),
-      _l('project_deadline'),
-      _l('project_status'),
-      ),'staff-projects'); ?>
+          _l('#'),
+          _l('Mã đơn hàng'),
+          _l('Mã hợp đồng'),
+          _l('Khách hàng'),
+          _l('total_amount'),
+          _l('Người tạo'),
+          _l('Trạng thái'),
+          _l('Được duyệt bởi'),
+          _l('Ngày tạo'),
+          _l('options')
+      ),'sale_orders'); ?>
+    </div>
+   <div role="tabpanel" class="tab-pane" id="home_my_projects">
+    <a href="<?php echo admin_url('sales'); ?>" class="mbot20 inline-block full-width"><?php echo _l('home_widget_view_all'); ?></a>
+    <div class="clearfix"></div>
+    <?php render_datatable(array(
+        _l('#'),
+        _l('Mã đơn hàng'),
+        _l('Mã đơn hàng(SO)'),
+        _l('Khách hàng'),
+        _l('total_amount'),
+        _l('Người tạo'),
+        _l('Trạng thái'),
+        _l('Được duyệt bởi'),
+        _l('Ngày tạo'),
+        _l('options')
+    ),'sales'); ?>
     </div>
     <?php if(is_staff_member()){ ?>
     <div role="tabpanel" class="tab-pane" id="home_announcements">

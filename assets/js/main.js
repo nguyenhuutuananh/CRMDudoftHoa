@@ -3886,6 +3886,24 @@ function init_table_staff_projects(manual) {
     initDataTable('.table-staff-projects', admin_url + 'projects/staff_projects', 'undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
 }
 
+function home_new_SO(manual) {
+    if (typeof(manual) == 'undefined' && $('body').hasClass('home')) {
+        return false;
+    }
+
+    if ($('body').find('.table-staff-projects').length == 0) {
+        return;
+    }
+
+    var staffProjectsParams = {},
+    //     Staff_Projects_Filters = $('._hidden_inputs._filters.staff_projects_filter input');
+    // $.each(Staff_Projects_Filters, function() {
+    //     staffProjectsParams[$(this).attr('name')] = '[name="' + $(this).attr('name') + '"]';
+    // });
+
+    initDataTable('.table-sales', admin_url + 'sales/list_sales', 'undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
+}
+
 function do_task_checklist_items_height(task_checklist_items) {
     if (typeof(task_checklist_items) == 'undefined') {
         task_checklist_items = $('body').find("textarea[name='checklist-description']");

@@ -59,6 +59,9 @@ class Home extends Admin_controller
             $wps_currency = $data['base_currency']->id;
         }
         $data['weekly_payment_stats'] = json_encode($this->home_model->get_weekly_payments_statistics($wps_currency));
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('sales',array('order_id'=>$order_id));
+        }
         $this->load->view('admin/home', $data);
 
     }
@@ -68,6 +71,12 @@ class Home extends Admin_controller
         if ($this->input->is_ajax_request()) {
             echo json_encode($this->home_model->get_weekly_payments_statistics($currency));
             die();
+        }
+    }
+    public function list_sales($order_id=NULL)
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('sales',array('order_id'=>$order_id));
         }
     }
 }

@@ -1,6 +1,12 @@
     <div id="genernal-receivables-debts-report" class="">
       <div class="row">
          <div class="clearfix"></div>
+         <style>
+            .dt-buttons .buttons-collection{
+               display: none!important;
+            }
+         </style>
+         <a href="<?=admin_url('reports/genernal_receivable_debts_report_pdf')?>" class="btn mright5 btn-info pull-left display-block">Xuất Excel</a>
       </div>
       <table class="table table table-striped table-genernal-receivables-debts-report">
          <thead>

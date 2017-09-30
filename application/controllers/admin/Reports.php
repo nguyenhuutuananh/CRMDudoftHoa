@@ -54,6 +54,7 @@ class Reports extends Admin_controller
         if (is_using_multiple_currencies()) {
             $this->load->model('currencies_model');
             $data['currencies'] = $this->currencies_model->get();
+
         }
         $this->load->model('sales_model');
         $this->load->model('sale_oders_model');
@@ -894,15 +895,16 @@ class Reports extends Admin_controller
             $this->load->model('sales_model');
 
             $select = array(
-                'tblclients.code',
+                'tblsale_orders.date',
+                'CONCAT(tblsale_orders.prefix,tblsale_orders.code) as sale_code',
                 'tblclients.company',
-                '131',
-                '11',
-                '12',
-                '21',
-                '22',
-                '31',
-                '32',
+                '(SELECT SUM(tblsale_order_items.quantity) FROM tblsale_order_items WHERE tblsale_order_items.sale_id=tblsale_orders.id ) as total_quantity',
+                'tblsale_orders.total',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5'
             );
 
             
@@ -910,7 +912,7 @@ class Reports extends Admin_controller
                 // 'AND status != 5'
             );
 
-            $custom_date_select = $this->get_where_report_period('tblsales.date');
+            $custom_date_select = $this->get_where_report_period('tblsale_orders.date');
             if ($custom_date_select != '') {
                 array_push($where, $custom_date_select);
             }
@@ -941,15 +943,28 @@ class Reports extends Admin_controller
 
             }
             
+            // $aColumns     = $select;
+            // $sIndexColumn = "userid";
+            // $sTable       = 'tblclients';
+            // $join         = array(
+            //     // 'LEFT JOIN tblclients ON tblclients.userid = tblsale_orders.customer_id'
+            // );
+
+            // $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(     
+                
+            // ));
             $aColumns     = $select;
-            $sIndexColumn = "userid";
-            $sTable       = 'tblclients';
+            $sIndexColumn = "id";
+            $sTable       = 'tblsale_orders';
             $join         = array(
-                // 'LEFT JOIN tblclients ON tblclients.userid = tblsale_orders.customer_id'
+                'LEFT JOIN tblclients ON tblclients.userid = tblsale_orders.customer_id'
             );
 
             $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(     
-                
+                'tblsale_orders.id as sale_id',
+                'tblsale_orders.customer_id',
+                '(SELECT SUM(tblsale_order_items.amount) FROM tblsale_order_items WHERE tblsale_order_items.reject_id=tblsale_orders.id ) as total_return_value',
+                '(SELECT SUM(tblsale_order_items.discount) FROM tblsale_order_items WHERE tblsale_order_items.sale_id=tblsale_orders.id ) as total_discount_value'
             ));
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -971,7 +986,6 @@ class Reports extends Admin_controller
                 'TDT' => 0,
                 'DTT' => 0
             );
-            var_dump($rResult);die;
             foreach ($rResult as $aRow) {
 
                 $row = array();
@@ -2548,19 +2562,19 @@ class Reports extends Admin_controller
             if ($custom_date_select != '') {
                 array_push($where, $custom_date_select);
             }
-            $by_currency = $this->input->post('report_currency');
-            if ($by_currency) {
+            // $by_currency = $this->input->post('report_currency');
+            // if ($by_currency) {
 
-                $_temp = substr($select[11], 0, -1);
-                $_temp .= ' AND currency =' . $by_currency . ')';
-                $select[11] = $_temp;
+            //     $_temp = substr($select[11], 0, -1);
+            //     $_temp .= ' AND currency =' . $by_currency . ')';
+            //     $select[11] = $_temp;
 
-                $currency = $this->currencies_model->get($by_currency);
-                array_push($where, 'AND currency=' . $by_currency);
-            } else {
-                $currency = $this->currencies_model->get_base_currency();
-            }
-            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
+            //     $currency = $this->currencies_model->get($by_currency);
+            //     array_push($where, 'AND currency=' . $by_currency);
+            // } else {
+            //     $currency = $this->currencies_model->get_base_currency();
+            // }
+            // $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
 
             $aColumns     = $select;
             $sIndexColumn = "id";
@@ -3317,6 +3331,7 @@ class Reports extends Admin_controller
         $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
         $title_colum=array(
             _l('STT'),
+            _l('suppliers_code'),
             _l('suppliers_name'),
             _l('tk_debt'),
             _l('debt_no'),

@@ -2413,6 +2413,7 @@ $lang['home_proposal_overview'] = 'Tổng quan đề xuất';
 $lang['home_lead_overview'] = 'Tổng quan';
 
 $lang['home_my_projects'] = 'Đơn hàng của tôi';
+$lang['home_new_SO'] = 'Đơn hàng bán mới nhất(SO)';
 $lang['home_announcements'] = 'Thông Báo';
 
 # Settings
@@ -4156,7 +4157,7 @@ $lang['receivable_debts_report']="Chi tiết công nợ phải thu";
 $lang['suppliers_name']="Tên nhà cung cấp";
 $lang['suppliers_code']="Mã nhà cung cấp";
 $lang['debt']="Công nợ";
-
+$lang['home_new_PO']="Đơn đặt hàng(PO)";
 
 
 
