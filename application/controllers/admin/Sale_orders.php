@@ -144,12 +144,14 @@ class Sale_orders extends Admin_controller
 
         $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
         $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
-
+        // var_dump($data['item']->items[0]);die;
         $where_clients = 'tblclients.active=1';
 
         if (!has_permission('customers', '', 'view')) {
             $where_clients .= ' AND tblclients.userid IN (SELECT customer_id FROM tblcustomeradmins WHERE staff_id=' . get_staff_user_id() . ')';
         }
+
+        
 
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();

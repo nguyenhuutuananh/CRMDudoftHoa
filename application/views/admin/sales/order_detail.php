@@ -121,6 +121,7 @@
                         $arr['disabled']=true;
                     }
                     $selected=(isset($item) ? $item->customer_id : '');
+                    if($arr) echo form_hidden('customer_id',$selected);
                     echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,$arr); 
                     ?>
 
@@ -143,6 +144,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <?php 
+                                if($arr) echo form_hidden('warehouse_name',$warehouse_id);
                                     echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
                                 ?>
                             </div>

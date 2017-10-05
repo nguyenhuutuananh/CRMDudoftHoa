@@ -116,6 +116,23 @@
 
     initDataTable('.table-purchase-cost', '<?=admin_url('purchase_cost')?>', [], [],'undefined',[0,'DESC']);
   });
+  $('body').on('click', '.delete-remind', function() {
+        var r = confirm(confirm_action_prompt);
+        
+        if (r == false) {
+            return false;
+        } else {
+            $.get($(this).attr('href'), function(response) {
+                alert_float(response.alert_type, response.message);
+                // Looop throug all availble reminders table to reload the data
+                var table='.table-purchase-cost';
+                    if ($.fn.DataTable.isDataTable(table)) {
+                        $('body').find(table).DataTable().ajax.reload();
+                    }
+            }, 'json');
+        }
+        return false;
+    });
 </script>
 </body>
 </html>

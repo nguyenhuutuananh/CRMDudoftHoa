@@ -209,6 +209,7 @@ class Purchase_suggested_model extends CRM_Model
                 $warehouse_id=$data['id_warehouse'];
                 unset($data['items']);
                 unset($data['warehouse_id']);
+
                 
                 $this->db->insert('tblorders', $data);
                 
@@ -229,6 +230,7 @@ class Purchase_suggested_model extends CRM_Model
                             'taxrate' => $tax->taxrate,
                             'tk_no' => $value['tk_no'],
                             'tk_co' => $value['tk_co'],
+                            'discount_percent' => $value['discount_percent']
                         );     
                         $this->db->insert('tblorders_detail', $data_order);
 

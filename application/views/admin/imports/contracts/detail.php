@@ -139,20 +139,14 @@
                 <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
                     <!-- Cusstomize from invoice -->
                     <div class="panel-body mtop10">
-                        <div class="row" style="display: none;">
-                            <div class="col-md-4">
-                            <?php
-                            $selected=(isset($item) ? $warehouse_type : '');
-                            echo render_select('warehouse_type',$warehouse_types,array('id','name'),'warehouse_type',$selected); 
-                            ?>
-                            </div>
+                        <div class="row">
                             <div class="col-md-4">
                             <?php
                             $selected=(isset($item) ? $warehouse_id : '');
                             echo render_select('warehouse_id',$warehouses,array('warehouseid','warehouse'),'warehouse_name',$selected); 
                             ?>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4"  style="display: none;">
                                 <div class="form-group mbot25">
                                 <label for="custom_item_select"><?=_l('item_name')?></label>
                                     <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
@@ -174,22 +168,23 @@
                             <div class="col-md-5 text-right show_quantity_as_wrapper">
                                 
                             </div>
-                        </div>
-                        
+                        </div>                        
 
-                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;min-height: 500px">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_warehouse'); ?></th>
-                                        <th width="15%" class="text-left"><?php echo _l('item_quantity'); ?></th>
-                                        
-                                        <th width="10%" class="text-left"><?php echo _l('item_price_buy'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
+                                        <th style="max-width: 100px;min-width: 100px" class="text-left"><?php echo _l('tk_no_1561'); ?></th>
+                                        <th style="max-width: 100px;min-width: 100px" class="text-left"><?php echo _l('tk_co_331'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('exchange_rate'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_price_buy'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('into_money'); ?></th>
+                                        <th style="min-width: 200px" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('discount'); ?></th>
+                                        <th class="text-left"><?php echo _l('purchase_price'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -260,22 +255,39 @@
                                             echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
-                                        <td><?php echo $value->warehouse_name; ?></td>
+                                        <td>
+                                            <?=number_format($value->exchange_rate)?>
+                                        </td>
                                         <?php
-                                            $max=$value->quantity-$value->quantity_net;
+                                            // $max=$value->quantity-$value->quantity_net;
+                                            $max=$value->quantity;
                                          ?>
                                         <td><input class="mainQuantity" type="number" min="0" max="<?=$max?>" name="items[<?php echo $i; ?>][quantity_net]" value="<?php echo $value->quantity; ?>"></td>
+
                                         <?php 
-                                        // var_dump($value);
-                                            $amount=0;
-                                            // $amount=$value->
+                                            $price_buy=$value->exchange_rate*$value->unit_cost;
+                                            $sub_total=$price_buy*$value->quantity;
+                                            $tax=$sub_total*$value->tax_rate/100;
+                                            $discount=$sub_total*$value->discount_percent/100;
+                                            $amount=$value->sub_total+$tax-$discount;
                                          ?>
-                                        <td><input type="hidden" class="exchange_rate" name="items[<?=$i?>][exchange_rate]" value="<?=$value->exchange_rate?>" /><input type="hidden" class="price_buy" name="items[<?=$i?>][price_buy]" value="<?=$value->unit_cost?>" /><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>
+
+                                        <td>
+                                            <?php echo number_format($price_buy); ?>
+                                            <input type="hidden" class="exchange_rate" name="items[<?=$i?>][exchange_rate]" value="<?=$value->exchange_rate?>" />
+                                            <input type="hidden" class="price_buy" name="items[<?=$i?>][price_buy]" value="<?=$value->unit_cost?>" />
+                                            <input type="hidden" class="tax_rate" name="items[<?=$i?>][tax_rate]" value="<?=$value->tax_rate?>" />
+                                            <input type="hidden" class="discount_percent" name="items[<?=$i?>][discount_percent]" value="<?=$value->discount_percent?>" />
+
+                                        </td>
+                                        <td><?php echo number_format($sub_total); ?></td>
+                                        <td><?php echo number_format($tax); ?></td>
+                                        <td><?php echo number_format($discount); ?></td>
+                                        <td><?php echo number_format($amount); ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
-                                            $totalPrice += $value->sub_total;
+                                            $totalPrice += $amount;
                                             $i++;
                                         }
                                     }
@@ -385,7 +397,7 @@
                     var td2 = $('<td>'+value.name+'</td>');
                     var td3 = $('<td></td>');
                     var selectTd3 = $('tr.main').find('td:nth-child(3) select').clone();
-                    selectTd3.val($('tr.main').find('td:nth-child(3) select').selectpicker('val'));
+                    selectTd3.val(value.tk_no);
                     selectTd3.removeAttr('id');
                     var tk_no='items['+uniqueArray+'][tk_no]';
                     selectTd3.attr('name',tk_no);
@@ -393,22 +405,46 @@
 
                     var td4 = $('<td></td>');
                     var selectTd4 = $('tr.main').find('td:nth-child(4) select').clone();
-                    selectTd4.val($('tr.main').find('td:nth-child(4) select').selectpicker('val'));
+                    selectTd4.val(value.tk_co);
                     selectTd4.removeAttr('id');
                     var tk_co='items['+uniqueArray+'][tk_co]';
                     selectTd4.attr('name',tk_co);
                     td4.append(selectTd4);
 
-                    var td5 = $('<td>'+value.warehouse_name+'</td>');
-                    var td6 = $('<td><input type="hidden" name="items['+uniqueArray+'][quantity]" value="'+value.product_quantity+'" /><input type="number" min="0" max="'+value.product_quantity+'" class="mainQuantity" name="items['+uniqueArray+'][quantity_net]" value="'+value.product_quantity+'" /></td>');
-                    var td7 = $('<td><input type="hidden" class="exchange_rate" name="items['+uniqueArray+'][exchange_rate]" value="'+value.exchange_rate+'" /><input type="hidden" class="price_buy" name="items['+uniqueArray+'][price_buy]" value="'+value.price_buy+'" />'+formatNumber(value.price_buy)+'</td>');
-                    var amount=parseFloat(value.product_quantity)*parseFloat(value.price_buy)*parseFloat(value.exchange_rate);
-                    if(isNaN(parseFloat(amount)))
+                    var price_buy=parseFloat(value.price_buy)*parseFloat(value.exchange_rate);
+                    if(isNaN(parseFloat(price_buy)))
                     {
-                        amount=0;
+                        price_buy=0;
                     }
+                    var sub_total=parseFloat(value.product_quantity)*price_buy;
+                    if(isNaN(parseFloat(sub_total)))
+                    {
+                        sub_total=0;
+                    }
+                    var tax=sub_total*value.taxrate/100;
+                    if(isNaN(parseFloat(tax)))
+                    {
+                        tax=0;
+                    }
+                    var discount=sub_total*value.discount/100;
+                    if(isNaN(parseFloat(discount)))
+                    {
+                        discount=0;
+                    }
+                    var amount=sub_total+tax-discount;
+                    // console.log(value);
                     
-                    var td8 = $('<td>'+formatNumber(amount)+'</td>');
+
+                    var td5 = $('<td>'+formatNumber(value.exchange_rate)+'</td>');
+                    var td6 = $('<td><input type="hidden" name="items['+uniqueArray+'][quantity]" value="'+value.product_quantity+'" /><input type="number" min="0" max="'+value.product_quantity+'" class="mainQuantity" name="items['+uniqueArray+'][quantity_net]" value="'+value.product_quantity+'" /></td>');
+                    var td7 = $('<td><input type="hidden" class="exchange_rate" name="items['+uniqueArray+'][exchange_rate]" value="'+value.exchange_rate+'" /><input type="hidden" class="price_buy" name="items['+uniqueArray+'][price_buy]" value="'+value.price_buy+'" /><input type="hidden" class="tax_rate" name="items['+uniqueArray+'][tax_rate]" value="'+value.taxrate+'" /><input type="hidden" class="discount_percent" name="items['+uniqueArray+'][discount_percent]" value="'+value.discount_percent+'" />'+formatNumber(price_buy)+'</td>');
+                    
+                    
+                    
+                    var td8 = $('<td>'+formatNumber(sub_total)+'</td>');
+                    var td9 = $('<td>'+formatNumber(tax)+'</td>');
+                    var td10 = $('<td>'+formatNumber(discount)+'</td>');
+                    var td11 = $('<td>'+formatNumber(amount)+'</td>');
                     $('#warehouse_id').selectpicker('val',value.warehouse_id);
                     $('#warehouse_id').selectpicker('refresh');
                     newTr.append(td1);
@@ -419,6 +455,9 @@
                     newTr.append(td6);
                     newTr.append(td7);
                     newTr.append(td8);
+                    newTr.append(td9);
+                    newTr.append(td10);
+                    newTr.append(td11);
                     $('table.item-purchase tbody').append(newTr);
                     uniqueArray++;
                     total++;
@@ -576,7 +615,7 @@
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += $(value).find('td:nth-child(6) > input').val() * $(value).find('td:nth-child(7)').text().replace(/\,/g, '')*$(value).find('td:nth-child(7) > input.exchange_rate').val();
+            totalPrice += parseFloat($(value).find('td:nth-child(11)').text().trim().replace(/\,/g, ''));
         });
         $('.totalPrice').text(formatNumber(totalPrice));
     };
@@ -606,16 +645,27 @@
     $(document).on('keyup', '.mainQuantity,.quantity',(e)=>{
         
         var currentQuantityInput = $(e.currentTarget);
+             
         var Giatd = currentQuantityInput.parent().find(' + td');
+        var Tong = Giatd.find(' + td');  
+        var taxtd = currentQuantityInput.parent().find(' + td + td + td');
+        var discounttd = currentQuantityInput.parent().find(' + td + td + td + td');
+        var amounttd = currentQuantityInput.parent().find(' + td + td + td + td + td');
         
-        var Gia=Giatd.text().replace(/\,/g, '');
+        var Gia=Giatd.text().trim().replace(/\,/g, '');
         var Tygia=Giatd.find('input.exchange_rate').val();
-        console.log(Giatd);
-        console.log(Gia);
-        console.log(Tygia);
+        var discount_percent=Giatd.find('input.discount_percent').val();
+        var tax_rate=Giatd.find('input.tax_rate').val();
 
-        var Tong = Giatd.find(' + td');
-        Tong.text(formatNumber(Gia * currentQuantityInput.val()*Tygia));
+        var tong=Gia * currentQuantityInput.val();
+        var tax=tong * tax_rate/100;
+        var discount=tong * discount_percent/100;
+        var amount=tong + tax - discount;
+
+        Tong.text(formatNumber(tong));
+        taxtd.text(formatNumber(tax));
+        discounttd.text(formatNumber(discount));
+        amounttd.text(formatNumber(amount));
         refreshTotal();
     });
     $('#warehouse_type').change(function(e){

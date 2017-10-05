@@ -10,7 +10,7 @@ $aColumns     = array(
     'tblorders.date_create',
     'tblorders.id_user_create',
     'tblorders.user_head_id',
-    'IF(tblorders.user_head_id=0,0,1)',
+    'IF(tblorders.user_head_id>0,1,0)',
 );
 
 $sIndexColumn = "id";
@@ -44,7 +44,7 @@ foreach ($rResult as $aRow) {
         }
         $array_user = ['tblorders.id_user_create', 'tblorders.user_head_id'];
         if(in_array($aColumns[$i],$array_user)) {
-            if($_data != '0') {
+            if($_data != '0' && $_data != '') {
                 $_data = '<a href="' . admin_url('profile/' . $_data) . '">' . staff_profile_image($_data, array(
                         'staff-profile-image-small mright5'
                     ), 'small', array(
@@ -56,8 +56,8 @@ foreach ($rResult as $aRow) {
                 $_data = "";
             }
         }
-        if($aColumns[$i] == 'IF(tblorders.user_head_id=0,0,1)') {
-            if($aRow['IF(tblorders.user_head_id=0,0,1)']==0)
+        if($aColumns[$i] == 'IF(tblorders.user_head_id>0,1,0)') {
+            if($aRow['IF(tblorders.user_head_id>0,1,0)']==0)
             {
                 $type='warning';
                 $status='Chưa duyệt';
@@ -67,11 +67,14 @@ foreach ($rResult as $aRow) {
                 $type='success';
                 $status='Đã duyệt';
             }
-            $_data = '<span class="inline-block label label-'.$type.'" task-status-table="'.$aRow['IF(tblorders.user_head_id=0,0,1)'].'">' . $status.'';
+
+            // print_r($rResult);die;
+
+            $_data = '<span class="inline-block label label-'.$type.'" task-status-table="'.$aRow['IF(tblorders.user_head_id>0,1,0)'].'">' . $status.'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))
             {
-                if($aRow['IF(tblorders.user_head_id=0,0,1)']!=1){
-                    $_data.='<a href="javacript:void(0)" onclick="var_status('.$aRow['IF(tblorders.user_head_id=0,0,1)'].','.$aRow['tblorders.id'].')">
+                if($aRow['IF(tblorders.user_head_id>0,1,0)']!=1){
+                    $_data.='<a href="javacript:void(0)" onclick="var_status('.$aRow['IF(tblorders.user_head_id>0,1,0)'].','.$aRow['tblorders.id'].')">
                     <i class="fa fa-check task-icon task-unfinished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['tblpurchase_suggested.status']]) . '"></i>';
                 }
                 else
@@ -81,8 +84,8 @@ foreach ($rResult as $aRow) {
                 }
             }
             else {
-                if($aRow['IF(tblorders.user_head_id=0,0,1)']==0) {
-                    $_data .= '<a href="javacript:void(0)" onclick="var_status(' . $aRow['IF(tblorders.user_head_id=0,0,1)'] . ',' . $aRow['tblorders.id'] . ')">
+                if($aRow['IF(tblorders.user_head_id>0,1,0)']==0) {
+                    $_data .= '<a href="javacript:void(0)" onclick="var_status(' . $aRow['IF(tblorders.user_head_id>0,1,0)'] . ',' . $aRow['tblorders.id'] . ')">
                     <i class="fa fa-check task-icon task-unfinished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['tblpurchase_suggested.status']]) . '"></i>';
                 }
                 else
@@ -91,19 +94,17 @@ foreach ($rResult as $aRow) {
                     <i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['tblpurchase_suggested.status']]) . '"></i>';
                 }
             }
-            $_data.='
-                </a>
-            </span>';
+            $_data.='</a></span>';
             
         }
         $row[] = $_data;
     }
     $options = '';
-    if(is_admin() && $aRow['IF(tblorders.user_head_id=0,0,1)']==1 && $aRow['converted']==0 && $aRow['isLock'] == 1)
+    if(is_admin() && $aRow['IF(tblorders.user_head_id>0,1,0)']==1 && $aRow['converted']==0 && $aRow['isLock'] == 1)
     {
         $options=icon_btn('purchase_orders/convert_to_contract/'. $aRow['tblorders.id'] , 'exchange', 'btn-default');
     }
-    else if(is_admin() && $aRow['IF(tblorders.user_head_id=0,0,1)']==1 && $aRow['converted']==0 && $aRow['isLock'] == 0) {
+    else if(is_admin() && $aRow['IF(tblorders.user_head_id>0,1,0)']==1 && $aRow['converted']==0 && $aRow['isLock'] == 0) {
         $options=icon_btn('purchase_orders/lock/'. $aRow['tblorders.id'] , 'lock', 'btn-default');
     }
     $options .= icon_btn('purchase_orders/detail_pdf/'. $aRow['tblorders.id'] .'?pdf=true' , 'file-pdf-o', 'btn-default', array('target'=>'_blank'));

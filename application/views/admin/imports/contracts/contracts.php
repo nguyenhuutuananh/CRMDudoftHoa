@@ -66,13 +66,14 @@
         var filterList = {
             'filterStatus' : '[id="filterStatus"]',
         };
-        initDataTable('.table-contract', window.location.href, [1], [1], filterList);
+        initDataTable('.table-contract', window.location.href, [1], [1], filterList,[1,'DESC']);
         $.each(filterList, (filterIndex, filterItem) => {
             $('input' + filterItem).on('change', () => {
                 $('.table-contract').DataTable().ajax.reload();
             });
         });
     });
+    
     function var_status(status,id)
     {
         dataString={id:id,status:status};

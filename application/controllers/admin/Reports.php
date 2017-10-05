@@ -51,11 +51,11 @@ class Reports extends Admin_controller
     /* Sales reportts */
     public function sales()
     {
-        if (is_using_multiple_currencies()) {
-            $this->load->model('currencies_model');
-            $data['currencies'] = $this->currencies_model->get();
+        // if (is_using_multiple_currencies()) {
+        //     $this->load->model('currencies_model');
+        //     $data['currencies'] = $this->currencies_model->get();
 
-        }
+        // }
         $this->load->model('sales_model');
         $this->load->model('sale_oders_model');
         $this->load->model('invoices_model');
@@ -77,8 +77,9 @@ class Reports extends Admin_controller
         $data['MONTHS']=[
                     "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
                 ];
+        // var_dump($this->reports_model->report_by_payment_modes());die;
         $data['PO_status_stats']   = json_encode($this->reports_model->PO_status_stats());
-        $data['SO_status_stats']   = true;
+        $data['SO_status_stats']   = json_encode($this->reports_model->SO_status_stats());;
         $data['chart_js_assets']   = true;
         $data['title']                 = _l('sales_reports');
         $this->load->view('admin/reports/sales', $data);
@@ -1952,6 +1953,7 @@ class Reports extends Admin_controller
                 }
             }
         }
+
         $__data=$this->order_tracking_book_report_PO(true)['sums'];
         $sum_value=array('Tổng Cộng','','','','','','',$__data['SL'],'',$__data['DTB']);
         for($i=0;$i<$n;$i++)
@@ -3007,6 +3009,7 @@ class Reports extends Admin_controller
     }
     public function report_by_payment_modes()
     {
+
         echo json_encode($this->reports_model->report_by_payment_modes());
     }
     public function report_by_customer_groups()
@@ -3580,6 +3583,447 @@ class Reports extends Admin_controller
             {
                 return $output;
             }
+            die();
+        }
+    }
+   
+    public function detailed_sales_contract_report($pdf=false)
+    {
+        if ($this->input->is_ajax_request()||$pdf==true)
+        {
+            $this->load->model('currencies_model');
+            $this->load->model('invoices_model');
+            $this->load->model('sales_model');
+            $select = array(
+                'tblcontracts.datestart',
+                'CONCAT(tblcontracts.prefix,tblcontracts.code) as contract_code',                
+                'tblclients.company',
+                'tblitems.code',
+                'tblitems.name',
+                'tblunits.unit',
+                'tblcontract_items.quantity',
+                '1',
+                '2',
+                'tblcontract_items.amount',
+                '3',
+                '4'
+            );
+
+            
+            $where  = array(
+                // 'AND status != 5'
+            );
+
+            $custom_date_select = $this->get_where_report_period('tblcontracts.datestart');
+            if ($custom_date_select != '') {
+                array_push($where, $custom_date_select);
+            }
+
+            $by_currency = $this->input->post('report_currency');
+            if ($by_currency) {
+
+                $_temp = substr($select[11], 0, -1);
+                $_temp .= ' AND currency =' . $by_currency . ')';
+                $select[11] = $_temp;
+
+                $currency = $this->currencies_model->get($by_currency);
+                array_push($where, 'AND currency=' . $by_currency);
+            } else {
+                $currency = $this->currencies_model->get_base_currency();
+            }
+            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
+
+            // if ($this->input->post('SO_status_gen')) {
+            //     $statuses  = $this->input->post('SO_status_gen');
+            //     if (count($statuses) > 0) {
+            //         if($statuses==1) array_push($where, 'AND status<>2');
+            //         if($statuses==2) array_push($where, 'AND status='.$statuses);
+            //         if($statuses==3) array_push($where, 'AND export_status='.'0');
+            //         if($statuses==4) array_push($where, 'AND export_status='.'1');
+            //         if($statuses==5) array_push($where, 'AND export_status='.'2');
+            //     }
+
+            // }
+            
+            $aColumns     = $select;
+            $sIndexColumn = "id";
+            $sTable       = 'tblcontracts';
+            $join         = array(
+                'LEFT JOIN tblclients ON tblclients.userid = tblcontracts.client',
+                'LEFT JOIN tblcontract_items ON tblcontract_items.contract_id = tblcontracts.id',
+                'LEFT JOIN tblitems ON tblitems.id = tblcontract_items.product_id',
+                'LEFT JOIN tblunits ON tblunits.unitid = tblcontract_items.unit_id'
+            );
+            // var_dump($where);die;
+            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+                // 'tblinvoices.prefix',
+                'tblcontract_items.product_id as product_id',                
+                'tblcontracts.id as contract_id',
+                // 'tblinvoices.id as invoice_id'
+            ));
+            $output  = $result['output'];
+            $rResult = $result['rResult'];
+
+            $x       = 0;
+            $footer_data = array(
+                'SL' => 0,
+                'SLDG' => 0,
+                'SLCL' => 0,
+                'DSHD' => 0,
+                'DSTH' => 0,
+                'DSCL' => 0,
+            );
+            
+            foreach ($rResult as $aRow) {
+                $item=getDeliverdQuantityByContractID($aRow['contract_id'],$aRow['product_id']);
+                $row = array();
+                for ($i = 0; $i < count($aColumns); $i++) {
+                    if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                        $_data = $aRow[strafter($aColumns[$i], 'as ')];
+                    } else {
+                        $_data = $aRow[$aColumns[$i]];
+                    }
+
+                    if(strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]]) && strafter($aColumns[$i], 'as ')=='contract_code')
+                    {
+                        $_data = '<a href="' . admin_url('contracts/contract/' . $aRow['contract_id']) . '" target="_blank">' . $aRow['contract_code'] . '</a>';
+                    }
+                    if($aColumns[$i]=='tblcontracts.datestart')
+                    {
+                        $_data=_d($aRow[$aColumns[$i]]);
+                    }
+                    if($aColumns[$i]=='tblcontract_items.quantity')
+                    {
+                        $footer_data['SL']+=$aRow[$aColumns[$i]];
+                        $_data = _format_number($aRow['tblcontract_items.quantity']);
+                    }
+                    if($aColumns[$i]=='tblcontract_items.amount')
+                    {
+                        if($aColumns[$i]=='tblcontract_items.amount')
+                            $footer_data['DSHD']+=$aRow[$aColumns[$i]];
+                        $_data = format_money($aRow[$aColumns[$i]]);
+                    }
+                    if($aColumns[$i]=='1')
+                    {   
+                        $delivered_quantity=$item->delivery_quantity;
+                        $footer_data['SLDG']+=$delivered_quantity;
+                        $_data = _format_number($delivered_quantity);
+                        if($_data== false) $_data=0;
+
+                    }
+                    if($aColumns[$i]=='2')
+                    {   
+                        $rest_quantity=$aRow['tblcontract_items.quantity']-$item->delivery_quantity;
+                        $footer_data['SLCL']+=$rest_quantity;
+                        $_data = _format_number($rest_quantity);
+                        if($_data==false) $_data=0;
+                    }
+                    if($aColumns[$i]=='3')
+                    {   
+                        $delivered_amount=getEffectuatedAmount($item->unit_cost,$item->delivery_quantity,$item->tax_rate);
+                        $footer_data['DSTH']+=$delivered_amount;
+                        $_data = format_money($delivered_amount);
+                        if($_data== false) $_data=0;
+                    }
+                    if($aColumns[$i]=='4')
+                    {   
+                        $rest_amount=$aRow['tblcontract_items.amount']-getEffectuatedAmount($item->unit_cost,$item->delivery_quantity,$item->tax_rate);
+                        $footer_data['DSCL']+=$rest_amount;
+                        $_data = format_money($rest_amount);
+                        if($_data== false) $_data=0;
+                    }
+                    
+
+                    $row[] = $_data;
+                }
+                $output['aaData'][] = $row;
+                $x++;
+            }
+
+            foreach ($footer_data as $key => $total) {
+                $footer_data[$key] = format_money($total, $currency_symbol);
+                if($key=='SL' || $key=='SLDG' || $key=='SLCL')
+                    $footer_data[$key] = _format_number($total);
+
+            }
+
+            
+
+            $output['sums'] = $footer_data;
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
+
+            die();
+        }
+    }
+
+    public function detailed_sales_contract_report_pdf(){
+        $colum=array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA');
+        $title_colum=array(
+            _l('STT'),
+            _l('contract_date'),
+            _l('contract_code'),
+            _l('customer_name'),
+            _l('product_code'),
+            _l('product_name'),
+            _l('contract_unit'),
+            _l('contract_quantity'),
+            _l('contract_quantity_delivered'),
+            _l('contract_quantity_rest'),
+            _l('contract_sales'),
+            _l('contract_sales_effectuated'),
+            _l('contract_sales_rest')
+        );
+        $data=$this->detailed_sales_contract_report(true)['aaData'];
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+        $this->load->library('PHPExcel');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getActiveSheet()->setTitle('tiêu đề');
+
+        $n=count($this->detailed_sales_contract_report(true)['aaData'][0]);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i])->setAutoSize(true);
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->getColumnDimension($colum[$i+1])->setAutoSize(true);
+            }
+        }
+
+        $BStyle = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => '111112'),
+                'size'  => 11,
+                'name'  => 'Times New Roman'
+            )
+        );
+        $objPHPExcel->getActiveSheet()->SetCellValue('A1','CÔNG TY TNHH DUDOFF VIỆT NAM');
+        $objPHPExcel->getActiveSheet()->SetCellValue('A2','TỔNG CÔNG NỢ NHÀ CUNG CẤP (331)')->getStyle('A2')->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle()->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(100);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
+        $objPHPExcel->getActiveSheet()->mergeCells('A2:N2');
+        for($i=0;$i<$n;$i++) {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].'3', $title_colum[$i])->getStyle($colum[$i].'3')->applyFromArray($BStyle);
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+            else
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].'3', $title_colum[$i+1])->getStyle($colum[$i+1].'3')->applyFromArray($BStyle);
+            }
+        }
+        foreach($data as $key=>$value)
+        {
+            for($i=0;$i<$n;$i++)
+            {
+                if($i==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].($key+4),($key+1));
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+                else
+                {
+                    $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].($key+4),strip_tags($value[$i]));
+                }
+            }
+        }
+
+        $__data=$this->detailed_sales_contract_report(true)['sums'];
+        $sum_value=array('Tổng Cộng','','','','','',$__data['SL'],$__data['SLDG'],$__data['SLCL'],$__data['DSHD'],$__data['DSTH'],$__data['DSCL']);
+        for($i=0;$i<$n;$i++)
+        {
+            if($i==0)
+            {
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+            else
+            {
+
+                $objPHPExcel->getActiveSheet()->setCellValue($colum[$i+1].(count($data)+4),strip_tags($sum_value[$i]));
+            }
+        }
+
+        $objPHPExcel->getActiveSheet()->freezePane('A3');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel5');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Bao_Cao_Chi_Tiet_Hop_Dong_Ban_Hang.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objWriter->save('php://output');
+        exit();
+
+    }
+
+    public function sales_analysis_products_report($pdf=false)
+    {
+        if ($this->input->is_ajax_request()||$pdf==true)
+        {
+            $this->load->model('currencies_model');
+
+            $select = array(
+                'tblcategories.category',
+                'tblitems.name',                
+                'tblunits.unit',
+                'tblsale_items.quantity',
+                'tblsale_items.discount',
+                'tblsale_items.sub_total',
+                'tblsale_items.amount',
+                '1',
+                '2'
+            );
+
+            
+            $where  = array(
+                // 'AND status != 5'
+            );
+
+            $custom_date_select = $this->get_where_report_period('tblsales.date');
+            if ($custom_date_select != '') {
+                array_push($where, $custom_date_select);
+            }
+
+            $by_currency = $this->input->post('report_currency');
+            if ($by_currency) {
+
+                $_temp = substr($select[11], 0, -1);
+                $_temp .= ' AND currency =' . $by_currency . ')';
+                $select[11] = $_temp;
+
+                $currency = $this->currencies_model->get($by_currency);
+                array_push($where, 'AND currency=' . $by_currency);
+            } else {
+                $currency = $this->currencies_model->get_base_currency();
+            }
+            $currency_symbol = $this->currencies_model->get_currency_symbol($currency->id);
+
+            // if ($this->input->post('SO_status_gen')) {
+            //     $statuses  = $this->input->post('SO_status_gen');
+            //     if (count($statuses) > 0) {
+            //         if($statuses==1) array_push($where, 'AND status<>2');
+            //         if($statuses==2) array_push($where, 'AND status='.$statuses);
+            //         if($statuses==3) array_push($where, 'AND export_status='.'0');
+            //         if($statuses==4) array_push($where, 'AND export_status='.'1');
+            //         if($statuses==5) array_push($where, 'AND export_status='.'2');
+            //     }
+
+            // }
+            
+            $aColumns     = $select;
+            $sIndexColumn = "id";
+            $sTable       = 'tblsales';
+            $join         = array(
+                'LEFT JOIN tblclients ON tblclients.userid = tblsales.customer_id',
+                'LEFT JOIN tblsale_items ON tblsale_items.sale_id = tblsales.id',
+                'LEFT JOIN tblitems ON tblitems.id = tblsale_items.product_id',
+                'LEFT JOIN tblcategories ON tblcategories.id = tblitems.category_id',
+                'LEFT JOIN tblunits ON tblunits.unitid = tblsale_items.unit_id'
+            );
+            // var_dump($where);die;
+            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+                // 'tblinvoices.prefix',
+                'tblsale_items.product_id as product_id',                
+                'tblsales.id as sale_id',
+                // 'tblinvoices.id as invoice_id'
+            ));
+            $output  = $result['output'];
+            $rResult = $result['rResult'];
+
+            $x       = 0;
+            $footer_data = array(
+                'SL' => 0,
+                'DSB' => 0,
+                'DG' => 0,
+                'CG' => 0,
+            );
+            
+            foreach ($rResult as $aRow) {
+                $item=getDeliverdQuantity($aRow['sale_id'],$aRow['product_id']);
+                $row = array();
+                for ($i = 0; $i < count($aColumns); $i++) {
+                    if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
+                        $_data = $aRow[strafter($aColumns[$i], 'as ')];
+                    } else {
+                        $_data = $aRow[$aColumns[$i]];
+                    }
+
+                    if(strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]]) && strafter($aColumns[$i], 'as ')=='sale_code')
+                    {
+                        $_data = '<a href="' . admin_url('sales/sale_detail/' . $aRow['sale_id']) . '" target="_blank">' . $aRow['sale_code'] . '</a>';
+                    }
+                    if($aColumns[$i]=='tblsales.account_date' || $aColumns[$i]=='tblsales.date')
+                    {
+                        $_data=_d($aRow[$aColumns[$i]]);
+                    }
+                    if($aColumns[$i]=='tblsale_items.quantity')
+                    {
+                        $footer_data['SL']+=$aRow[$aColumns[$i]];
+                        $_data = _format_number($aRow['tblsale_items.quantity']);
+                    }
+                    if($aColumns[$i]=='tblsale_items.sub_total' ||$aColumns[$i]=='tblsale_items.discount' || $aColumns[$i]=='tblsale_items.amount')
+                    {
+                        if($aColumns[$i]=='tblsale_items.amount')
+                            $footer_data['DSB']+=$aRow[$aColumns[$i]];
+                        $_data = format_money($aRow[$aColumns[$i]]);
+                    }
+                    // if($aColumns[$i]=='1')
+                    // {   
+                    //     $delivered_quantity=$item->delivery_quantity;
+                    //     $footer_data['DG']+=$delivered_quantity;
+                    //     $_data = _format_number($item->delivery_quantity);
+                    //     if($_data== false) $_data=0;
+
+                    // }
+                    // if($aColumns[$i]=='2')
+                    // {   
+                    //     $rest_quantity=$item->quantity-$item->delivery_quantity;
+                    //     $footer_data['CG']+=$rest_quantity;
+                    //     $_data = _format_number($rest_quantity);
+                    //     if($_data==false) $_data=0;
+                    // }
+                    
+
+                    $row[] = $_data;
+                }
+                $output['aaData'][] = $row;
+                $x++;
+            }
+
+            foreach ($footer_data as $key => $total) {
+                $footer_data[$key] = format_money($total, $currency_symbol);
+                if($key=='SL' || $key=='DG' || $key=='CG')
+                    $footer_data[$key] = _format_number($total);
+
+            }
+
+            
+
+            $output['sums'] = $footer_data;
+            if($pdf==false)
+            {
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
+
             die();
         }
     }

@@ -157,12 +157,13 @@ $tblHtml = '
         <th width="5%;" valign="middle" align="center">#</th>
         <th width="10%" valign="middle" align="center">
             <i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip"></i>'. _l('item_code').'</th>
-        <th width="25%" valign="middle" align="center">'. _l('item_name') .'</th>
+        <th width="18%" valign="middle" align="center">'. _l('item_name') .'</th>
         <th width="10%" valign="middle" align="center">'. _l('item_unit') .'</th>
         <th width="10%" valign="middle" align="center">'. _l('item_quantity') .'</th>
         <th width="10%" valign="middle" align="center">'. _l('item_price_buy') .'</th>
         <th width="10%" valign="middle" align="center">'. _l('tax') . '</th>
-        <th width="20%" valign="middle" align="center">'. _l('purchase_total_price') . '</th>
+        <th width="10%" valign="middle" align="center">'. _l('discount'). '</th>
+        <th width="17%" valign="middle" align="center">'. _l('purchase_price') . '</th>
     </tr>
         ';
 // Items
@@ -172,6 +173,8 @@ $totalPrice = 0;
 foreach($purchase_order->products as $value) {
     // print_r($value);
     // exit();
+    $total_tax=0;
+    $total_discount=0;
     $i++;
     $tblHtml .= '
         <tr>
@@ -181,21 +184,29 @@ foreach($purchase_order->products as $value) {
             <td>'.$value->unit.'</td>
             <td style="text-align:center">'.number_format($value->product_quantity).'</td>
             <td style="text-align:right">'.number_format($value->product_price_buy).'</td>
-            <td>'.$value->rate.' %</td>
+            <td style="text-align:right">'.$value->rate.' %</td>
+            <td style="text-align:right">'.$value->discount_percent.' %</td>
             <td style="text-align:right">'.number_format($value->product_quantity*$value->product_price_buy + ($value->product_quantity*$value->product_price_buy)* ($value->rate)/100).'</td>
-        </tr>
-    ';
+        </tr>';
+    $total_discount+=($value->product_quantity*$value->product_price_buy)* $value->discount_percent/100;
     $totalPrice += ($value->product_quantity*$value->product_price_buy + ($value->product_quantity*$value->product_price_buy)* $value->rate/100);
 }
-
 $tblHtml .= '
         <tr>
+            <td colspan="5" style="text-align: right">'._l('purchase_total_price').'(Chưa giảm)</td>
+            <td colspan="4" style="text-align: right">' . number_format($totalPrice). '</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: right">'._l('purchase_totalmoneydiscount').'</td>
+            <td colspan="4" style="text-align: right">' . number_format($total_discount). '</td>
+        </tr>
+        <tr>
             <td colspan="5" style="text-align: right">'._l('purchase_total_price').'</td>
-            <td colspan="3" style="text-align: right">' . number_format($totalPrice). '</td>
+            <td colspan="4" style="text-align: right">' . format_money($totalPrice-$total_discount,getCurrencyByID($purchase_order->currency_id)->symbol). '</td>
         </tr>
         <tr>
             <td colspan="5" style="text-align: right">'._l('purchase_total_items').'</td>
-            <td colspan="3" style="text-align: right">' . number_format($i). '</td>
+            <td colspan="4" style="text-align: right">' . number_format($i). '</td>
         </tr>
 ';
 $tblHtml .= '</table>';
@@ -206,7 +217,7 @@ $pdf->writeHTML($tblHtml, true, false, false, false, '');
 
 // $detail = _l('user_head').': <b>' . $purchase_suggested->user_head_name . '</b> <br /> <br />';
 // $detail .= _l('user_admin').': <b>' . $purchase_suggested->user_admin_name . '</b> <br /> <br />';
-$pdf->Ln(20);
+$pdf->Ln(5);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td><b>" . mb_ucfirst(_l('orders_user_create'), "UTF-8") . "</b>

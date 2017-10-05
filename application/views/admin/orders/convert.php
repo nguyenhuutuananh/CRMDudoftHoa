@@ -121,7 +121,7 @@
                 echo render_textarea('explan', 'orders_explan', $reason, array(), array(), '', 'tinymce');
                 ?>
                 <?php 
-                    $default_warehouse = "";
+                    $default_warehouse = $warehouse_id;
                     echo render_select('id_warehouse', $warehouses, array('warehouseid', 'warehouse'), 'Kho nhập mua', $default_warehouse);
                 ?>
             </div>
@@ -139,25 +139,26 @@
                                     
                                 </div>
                             </div>
-                            <div class="table-responsive s_table table_purchase_suggested">
+                            <div class="table-responsive s_table table_purchase_suggested" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                                 <table class="table items item-export no-mtop">
                                     <thead>
                                         <tr>
                                             <th><input type="hidden" id="itemID" value="" /></th>
-                                            <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                            <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('tk_no_1561'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('tk_co_331'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                             
-                                            <th class="text-left">Tỷ giá</th>
+                                            <th style="min-width: 100px" class="text-left">Tỷ giá</th>
                                             <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
-                                            <th></th>
-                                            
+                                            <th style="min-width: 100px" class="text-left"><?php echo _l('moneytax'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                            <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                            <th></th>                                            
                                         </tr>
                                     </thead>
                                     
@@ -169,6 +170,7 @@
                                         if(isset($purchase_suggested) && count($purchase_suggested->items) > 0) {
                                             
                                             foreach($purchase_suggested->items as $value) {
+                                                // var_dump($value);die;
                                                 $value = (array)$value;
                                                 if($value['order_id']!=0) continue;
                                             ?>
@@ -180,14 +182,16 @@
                                             <!-- TK NO -->
                                             <td>
                                                 <?php
-                                                $selected=(isset($value) ? $value['tk_no'] : '');
+                                                $selected=(isset($value) ? $value['tk_no'] : '107');
+                                                if(empty($selected)) $selected='107';
                                                 echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                                 ?>
                                             </td>
                                             <!-- TK CO -->
                                             <td>
                                                 <?php
-                                                $selected=(isset($value) ? $value['tk_co'] : '');
+                                                $selected=(isset($value) ? $value['tk_co'] : '34');
+                                                if(empty($selected)) $selected='34';
                                                 echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                                 ?>
                                             </td>
@@ -223,11 +227,18 @@
                                                 <?php echo number_format($value['price_buy']*$value['product_quantity']) ?>
                                             </td>
                                             <td>
-                                                <?php echo ($value['taxrate']) ?> %
+                                                <?php echo ($value['taxrate'])?$value['taxrate']:0 ?> %
                                             </td>
                                             <td>
                                                 <?php echo number_format((($value['taxrate']*($value['price_buy']*$value['product_quantity']))/100)) ?>
                                             </td>
+                                            <td>
+                                                <?php echo render_input('items['.$i.'][discount_percent]', '', 0,'number',array(),array(),'','discount_percent'); ?>
+                                            </td>
+                                            <td>
+                                            <?php $discount=($value['discount_percent']*($value['price_buy']*$value['product_quantity']))/100; ?>
+                                            <?php echo render_input('items['.$i.'][discount]', '', $discount,'number',array(),array(),'','discount'); ?>
+                                        </td>
                                             <td><a href="#" class="btn btn-success pull-right" onclick="return addTrItem(this);"><i class="fa fa-plus"></i></a></td>
                                         </tr>
                                             <?php
@@ -268,25 +279,26 @@
                                     
                                 </div>
                             </div>
-                            <div class="table-responsive s_table table_purchase_orders">
+                            <div class="table-responsive s_table table_purchase_orders" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                                 <table class="table items item-export no-mtop">
                                     <thead>
                                         <tr>
                                             <th><input type="hidden" id="itemID" value="" /></th>
-                                            <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></> <?php echo _l('item_name'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                            <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('tk_no_1561'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('tk_co_331'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                             
-                                            <th class="text-left">Tỷ giá</th>
+                                            <th style="min-width: 100px" class="text-left">Tỷ giá</th>
                                             <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
-                                            <th></th>
-                                            
+                                            <th style="min-width: 100px" class="text-left"><?php echo _l('moneytax'); ?></th>
+                                            <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                            <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                            <th></th>                                           
                                         </tr>
                                     </thead>
                                     
@@ -332,6 +344,12 @@
                                             </td>
                                             <td>
                                                 <?php echo number_format($value['price_buy']*$value['product_quantity']) ?>
+                                            </td>
+                                             <td>
+                                                <?php echo render_input('items['.$i.'][discount_percent]', '', 0,'number',array(),array(),'','discount_percent'); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo number_format((($value['discount_percent']*($value['price_buy']*$value['product_quantity']))/100)) ?>
                                             </td>
                                             <td><a href="#" class="btn btn-danger pull-right" onclick="removeTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                         </tr>
@@ -570,6 +588,19 @@
         var currentPriceBuyInput = $(e.currentTarget);
         calculateTotal(e.currentTarget);
     });
+    $(document).on('keyup', '.discount_percent', (e)=>{
+        var currentPriceBuyInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('keyup', '.discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=currentDiscountInput.parents('td').prev().find('input');
+        var tong=currentDiscountInput.parents('tr').find('.mainPriceBuy').parents().find('+ td').text().trim().replace(/\,|%/g, '');
+        discount_percent.val(currentDiscountInput.val()*100/tong);
+        console.log(discount_percent.val());
+        
+        calculateTotal(e.currentTarget);
+    });
     $(document).on('keyup', '.mainQuantity', (e)=>{
         var currentQuantityInput = $(e.currentTarget);
         let elementToCompare;
@@ -600,17 +631,23 @@
         calculateTotal(e.currentTarget);
     });
     var calculateTotal = (currentInput) => {
-        currentInput = $(currentInput);     
+        currentInput = $(currentInput);   
         let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
         let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
         let tdTong = gia.parent().find(' + td');
         tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
         let tdtax = gia.parent().find(' + td + td');
+
+        let tddiscount_percent = gia.parent().find(' + td + td + td + td');
+        let tdmoneydiscount = tddiscount_percent.find(' + td');         
+        let discount_percent=$(tddiscount_percent).find('input').val().replace(/\,|%/g, '');
+
         let tdmoneytax = gia.parent().find(' + td + td +td');
         let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
         let vartax=$(tdtax).html().replace(/\,|%/g, '');
         tdTong.text(formatNumber( tong ) );
         tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
+        tdmoneydiscount.text(formatNumber( (tong*discount_percent) / 100 ));
     };
     var changeStatics = () => {
         let totalPurchaseSuggestedItem = $('.table_purchase_suggested tbody tr:visible').length;

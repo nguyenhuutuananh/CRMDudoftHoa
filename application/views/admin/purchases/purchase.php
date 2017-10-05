@@ -432,7 +432,8 @@
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
-
+            		
+        console.log(itemFound)
 		$('#select_currency').find('option:first').attr('selected', 'selected');
         $('#select_currency').selectpicker('refresh');
 
@@ -474,10 +475,10 @@
                 dataType : 'json',
             })
             .done(function(data){
+
             	if(data!=null && data!=false)
             	{
             		maxquanitty=data.maximum_quantity-data.total_quantity;
-            		console.log(data.maximum_quantity+' '+data.total_quantity+' '+product_id)
             		$('#warehouse_id option:selected').attr('data-store',maxquanitty);	
             	}
             	//Change data-store mainQuantity Input

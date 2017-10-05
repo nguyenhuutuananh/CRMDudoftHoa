@@ -1736,6 +1736,9 @@ $lang['invoice_table_item_price']                = 'Giá bán';
 $lang['invoice_table_discount_%']                = "Chiết khấu(%)";
 $lang['invoice_table_discount']                = 'Chiết khấu';
 
+$lang['discount_%']                = "Chiết khấu(%)";
+$lang['discount_money']                = 'Tiền chiết khấu';
+
 $lang['invoice_recurring_indicator']             = 'Định kỳ';
 
 # Estimates
@@ -3907,6 +3910,8 @@ $lang['purchase_contracts'] = "Hợp đồng mua";
 $lang['contract_buy'] = "Hợp đồng mua";
 $lang['contract_ban'] = "Hợp đồng bán";
 $lang['total_money'] = "Tổng tiền";
+$lang['into_money'] = "Thành tiền";
+
 $lang['tk_no'] = "Tài khoản nợ";
 $lang['tk_co'] = "Tài khoản có";
 $lang['votes'] = "Phiếu chi";
@@ -4102,6 +4107,7 @@ $lang['product_name']="Tên hàng";
 $lang['unit_name']="ĐVT";
 $lang['quantity']="Số lượng";
 $lang['revenue']="Doanh số";
+$lang['income']="Doanh thu";
 $lang['sale_revenue']="Doanh số bán";
 $lang['announcement_name']="Tên thông báo ";
 $lang['announcement_show_my_name']="Thông báo hiển thị tên của tôi";
@@ -4158,8 +4164,30 @@ $lang['suppliers_name']="Tên nhà cung cấp";
 $lang['suppliers_code']="Mã nhà cung cấp";
 $lang['debt']="Công nợ";
 $lang['home_new_PO']="Đơn đặt hàng(PO)";
+$lang['sales_analysis_report']="Báo cáo phân tích bán hàng";
+$lang['detailed_sales_contract_report']="Báo cáo chi tiết hợp đồng bán";
+$lang['contract_code']="Số hợp đồng";
+$lang['contract_date']="Ngày";
+$lang['contract_unit']="ĐVT";
+$lang['contract_quantity']="Số lượng";
+$lang['contract_quantity_delivered']="Số lượng đã giao";
+$lang['contract_quantity_rest']="Số lượng còn lại";
+$lang['contract_sales']="Doanh số hợp đồng";
+$lang['contract_sales_effectuated']="Doanh số đã thực hiện";
+$lang['contract_sales_rest']="Doanh số chưa thực hiện";
+$lang['products_report']="Sản phẩm";
+$lang['staffs_report']="Nhân viên";
+$lang['customers_report']="Khách hàng";
+$lang['consume_area_report']="Vùng tiêu thụ";
+$lang['category_name']="Danh mục";
+$lang['proportion']="Tỷ trọng";
+$lang['profit']="Lợi nhuận";
+$lang['tk_no_1561']="TK kho";
+$lang['tk_co_331']="TK công nợ";
+$lang['purchase_totalmoneydiscount']="Tổng chiết khấu";
 
-
+$lang['purchase_price']="Giá trị";
+$lang['exchange_rate']="Tỷ giá";
 
 
 

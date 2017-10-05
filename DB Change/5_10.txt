@@ -1,0 +1,1 @@
+ALTER TABLE `tblorders_detail` CHANGE `original_price_buy` `original_price_buy` DECIMAL(25,2) NULL DEFAULT '0';

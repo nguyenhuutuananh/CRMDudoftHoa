@@ -158,31 +158,31 @@
                                 
                             </div>
                         </div>
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                             <table class="table items item-export no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('tk_no_1561'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('tk_co_331'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
-                                        
-                                        <th class="text-left">Tỷ giá</th>
+                                        <th style="min-width: 100px" class="text-left">Tỷ giá</th>
                                         <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
-                                        <th></th>
-                                        
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('moneytax'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                        <th></th>                                          
                                     </tr>
                                 </thead>
                                 
                                 <tbody>
-                                    <tr class="main" <?=$display?> >
+                                    <tr class="main" style="display: none;" >
                                         <td><input type="hidden" id="itemID" value="" /></td>
                                         <td>
                                             <?php echo _l('item_name'); ?>
@@ -241,6 +241,7 @@
                                     $i=0;
                                     $totalPrice=0;
                                     $total_money_tax=0;
+                                    $total_money_discount=0;
                                     $total_money=0;
                                     if(isset($item) && count($item->products) > 0) {
                                         foreach($item->products as $value) {
@@ -255,14 +256,16 @@
                                         <!-- TK NO -->
                                         <td>
                                             <?php
-                                            $selected=(isset($value) ? $value['tk_no'] : '');
+                                            $selected=(isset($value) ? $value['tk_no'] : '107');
+                                            if(empty($selected)) $selected='107';
                                             echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
                                         <!-- TK CO -->
                                         <td>
                                             <?php
-                                            $selected=(isset($value) ? $value['tk_co'] : '');
+                                            $selected=(isset($value) ? $value['tk_co'] : '34');
+                                            if(empty($selected)) $selected='34';
                                             echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
@@ -310,6 +313,16 @@
                                             <?php echo number_format((($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100) ?>
                                             <?php $total_money_tax=$total_money_tax+(($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100?>
                                         </td>
+                                       <td>
+                                            <?php echo render_input('items['.$i.'][discount_percent]', '', $value['discount_percent'],'number',array(),array(),'','discount_percent'); ?>
+                                        </td>
+                                        <td>
+                                            <?php $discount=($value['discount_percent']*($value['price_buy']*$value['product_quantity']))/100; 
+                                                    $total_money_discount+=$discount;
+                                            ?>
+
+                                            <?php echo render_input('items['.$i.'][discount]', '', $discount,'number',array(),array(),'','discount'); ?>
+                                        </td>
                                         <td></td>
                                     </tr>
                                         <?php
@@ -339,10 +352,17 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td><span class="bold"><?php echo _l('purchase_totalmoneydiscount'); ?> :</span>
+                                        </td>
+                                        <td class="total_money_tax">
+                                            <?php echo number_format($total_money_discount) ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td><span class="bold"><?php echo _l('purchase_totalmoney_items'); ?> :</span>
                                         </td>
                                         <td class="total_money_money">
-                                            <?php echo number_format($total_money) ?>
+                                            <?php echo format_money($total_money,getCurrencyByID($purchase_order->currency_id)->symbol) ?>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -600,33 +620,43 @@
         }
     });
 	var calculateTotal = (currentInput) => {
-		currentInput = $(currentInput);		
-		let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
-		let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
-		let tdTong = gia.parent().find(' + td');
-		tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
-
+        currentInput = $(currentInput);   
+        let soLuong = currentInput.parents('tr').find('.mainQuantity'); 
+        let gia = currentInput.parents('tr').find('.mainPriceBuy'); 
+        let tdTong = gia.parent().find(' + td');
+        tdTong.text( formatNumber( String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '')) );
         let tdtax = gia.parent().find(' + td + td');
+
+        let tddiscount_percent = gia.parent().find(' + td + td + td + td');
+        let tdmoneydiscount = tddiscount_percent.find(' + td');         
+        let discount_percent=$(tddiscount_percent).find('input').val().replace(/\,|%/g, '');
+
         let tdmoneytax = gia.parent().find(' + td + td +td');
         let tong = String(soLuong.val()).replace(/\,/g, '') * String(gia.val()).replace(/\,/g, '');
-        let vartax=$(tdtax).html().replace(/\,|%/g, '');
-        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
-        let price=$('.mainPriceBuy');
-        let total_money_tax=0;
-        let total_money=0;
-        $.each($(price), function( index, value ) {
-            total_money=parseFloat((total_money))+parseFloat($(value).parent().find(' + td').html().replace(/\,|%/g, ''));
-            total_money_tax=parseFloat(total_money_tax)+parseFloat($(value).parent().find(' + td + td +td').html().replace(/\,|%/g, ''));
-        })
+        let vartax=$(tdtax).text().trim().replace(/\,|%/g, '');
 
-        $('.total_money_tax').html(formatNumber(total_money_tax));
-        $('.total_money_money').html(formatNumber(total_money));
-        refreshTotal();
-	};
+        tdTong.text(formatNumber( tong ) );
+        tdmoneytax.text(formatNumber( (tong*vartax) / 100 ));
+
+        $(tdmoneydiscount).find('input').val(((tong*discount_percent) / 100 ));
+    };
 	$(document).on('keyup', '.mainPriceBuy', (e)=>{
 		var currentPriceBuyInput = $(e.currentTarget);
 		calculateTotal(e.currentTarget);
 	});
+    $(document).on('keyup', '.discount_percent', (e)=>{
+        var currentDiscountPercentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('keyup', '.discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=currentDiscountInput.parents('td').prev().find('input');
+        var tong=currentDiscountInput.parents('tr').find('.mainPriceBuy').parents().find('+ td').text().trim().replace(/\,|%/g, '');
+        discount_percent.val(currentDiscountInput.val()*100/tong);
+        console.log(discount_percent.val());
+        
+        calculateTotal(e.currentTarget);
+    });
     $(document).on('keyup', '.mainQuantity', (e)=>{
         var currentQuantityInput = $(e.currentTarget);
         let elementToCompare;

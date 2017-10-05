@@ -169,7 +169,7 @@ class Contracts extends Admin_controller
 
             $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
             $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
-            
+            // var_dump($data['warehouse_id']);die;
 
             if (!$data['item']) {
                 blank_page('Sale Not Found');

@@ -4,6 +4,7 @@ class Imports extends Admin_controller
 {
     function __construct()
     {
+        
         parent::__construct();
         $this->load->model('imports_model');
         $this->load->model('invoice_items_model');
@@ -218,8 +219,8 @@ class Imports extends Admin_controller
                 }
                 $success = $this->imports_model->update($data, $id);
                 if ($success == true) {
-                    set_alert('success', _l('updated_successfuly', _l('adjustments')));
-                    redirect(admin_url('imports/imp_contreact'));
+                    set_alert('success', _l('updated_successfuly', _l('importwhfromcontract')));
+                    redirect(admin_url('imports/imp_contract'));
                 }
                 else
                 {
@@ -232,13 +233,20 @@ class Imports extends Admin_controller
 
         } else {
             $data['item'] = $this->imports_model->getImportByID($id);
-            // var_dump($id);die();
             $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
             $data['warehouse_type']=$this->warehouse_model->getWarehouses($data['warehouse_id'])->kindof_warehouse;
+
+            foreach($data['item']->items as $key=>$value) {
+            $warehouse_id=$value->warehouse_id;
+            $data['item']->items[$key]->warehouse_type = $this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
+            }
+
             if (!$data['item']) {
                 blank_page('Purchase Not Found');
             }
         }
+
+        // print_r($data['item']->items);die;
 
         $data['accounts_no'] = $this->accounts_model->get_tk_no();
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
@@ -246,7 +254,7 @@ class Imports extends Admin_controller
         $data['contracts']=$this->purchase_contacts_model->get();
         $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
-        $data['warehouses']= (is_numeric($id)?$this->warehouse_model->getWarehousesByType2($data['warehouse_type']):$this->warehouse_model->getWarehouses());
+        $data['warehouses']= $this->warehouse_model->getWarehouses();
 
         $data['title'] = $title;
         $this->load->view('admin/imports/contracts/detail', $data);

@@ -86,4 +86,18 @@ class Purchase_cost_model extends CRM_Model
         }
         return false;
     }
+
+    public function delete($id)
+    {
+        if (is_admin()) {
+            $this->db->where('id', $id);
+            $this->db->delete('tblpurchase_costs');
+            if ($this->db->affected_rows() > 0) {
+                $this->db->where('purchase_costs_id', $id);
+                $this->db->delete('tblpurchase_costs_detail');
+                return true;
+            }
+        }
+        return false;
+    }
 }

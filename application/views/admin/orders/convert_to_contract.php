@@ -161,22 +161,24 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- Cusstomize from invoice -->
                 <div class="panel-body mtop10">
-                
+                <!-- style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px" -->
                     <div class="table-responsive s_table">
                         <table class="table items item-export no-mtop">
                             <thead>
                                 <tr>
                                     <th><input type="hidden" id="itemID" value="" /></th>
-                                    <th width="" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                    <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                    <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                    <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                     
-                                    <th class="text-left">Tỷ giá</th>
+                                    <th style="min-width: 100px" class="text-left">Tỷ giá</th>
                                     <th width="" class="text-left"><?php echo _l('Tiền tệ'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('item_price_buy'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('purchase_total_price'); ?></th>
                                     <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-                                    <th width="" class="text-left"><?php echo _l('moneytax'); ?></th>
+                                    <th style="min-width: 100px" class="text-left"><?php echo _l('moneytax'); ?></th>
+                                    <th style="min-width: 100px" class="text-left"><?php echo _l('discount_%'); ?></th>
+                                    <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
                                     <th></th>
                                     
                                 </tr>
@@ -187,6 +189,7 @@
                                 $i = 0;
                                 $totalPrice = 0;
                                 $total_money_tax=0;
+                                $total_money_discount=0;
                                 $total_money=0;
                                 if (isset($order) && count($order->products) > 0) {
 
@@ -218,7 +221,7 @@
                                         $array_disabled = array();
                                         if($lock) {
                                             $array_disabled = array('disabled'=>'disabled');
-                                        }
+                                        }                                        
                                         echo render_input('items['.$i.'][exchange_rate]', '', $value['exchange_rate'], 'text', array(), $array_disabled, '', "mainExchange_Rate");
                                     ?>
                                     </td>
@@ -238,12 +241,23 @@
                                     <td>
                                         <?php echo number_format((($value['price_buy'] * $value['product_quantity'])*$value['taxrate'])/100) ?>
 
-                                        <?php $total_money_tax=$total_money_tax+(($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100?>
+                                        <?php $total_money_tax=$total_money_tax+(($value['price_buy']*$value['product_quantity'])*$value['taxrate'])/100
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php echo render_input('items['.$i.'][discount_percent]', '', $value['discount_percent'],'number',$array_disabled,array(),'','discount_percent'); ?>
+                                    </td>
+                                    <td>
+                                        <?php $discount=($value['discount_percent']*($value['price_buy']*$value['product_quantity']))/100; 
+                                             $total_money_discount+=$discount;
+                                        ?>
+
+                                        <?php echo render_input('items['.$i.'][discount]', '', $discount,'number',$array_disabled,array(),'','discount'); ?>
                                     </td>
                                     <td></td>
                                 </tr>
                                     <?php
-                                        // $totalPrice += $value['price_buy']*$value['quantity_required'];
                                     $i++;
                                 }
                             }
@@ -266,6 +280,13 @@
                                     </td>
                                     <td class="total_money_tax">
                                         <?php echo number_format($total_money_tax) ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="bold"><?php echo _l('purchase_totalmoneydiscount'); ?> :</span>
+                                    </td>
+                                    <td class="total_money_tax">
+                                        <?php echo number_format($total_money_discount) ?>
                                     </td>
                                 </tr>
                                 <tr>
