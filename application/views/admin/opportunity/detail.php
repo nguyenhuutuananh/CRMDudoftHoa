@@ -12,32 +12,6 @@
     <div class="row">
     <div class="additional"></div>
     <div class="col-md-12">
-        <?php
-         if(isset($receipt))
-            {
-                if($receipt->status==0)
-                {
-                    $type='warning';
-                    $status='Chưa duyệt';
-                }
-                elseif($receipt->status==1)
-                {
-                    $type='info';
-                    $status='Đã xác nhận';
-                }
-                else
-                {
-                    $type='success';
-                    $status='Đã duyệt';
-                }
-            }
-            else
-            {
-                $type='warning';
-                $status='Đề xuất mới';
-            }
-
-        ?>
         <?php $disabled='disabled';?>
         <div class="ribbon <?=$type?>"><span><?=$status?></span></div>
         <ul class="nav nav-tabs profile-tabs" role="tablist">

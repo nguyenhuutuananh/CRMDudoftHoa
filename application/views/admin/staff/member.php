@@ -173,6 +173,12 @@ $selected=(isset($member) ? $member->gender : '');
 <?php $value = (isset($member) ? $member->phonenumber : ''); ?>
 <?php echo render_input('phonenumber','staff_add_edit_phonenumber',$value); ?>
 
+
+<?php $value = (isset($member) ? $member->email_marketing : ''); ?>
+<?php echo render_input('_email_marketing','email_marketing',$value); ?>
+<?php $value = (isset($member) ? $member->password_email_marketing : ''); ?>
+<?php echo render_input('password_email_marketing','password_email_marketing',$value,'password'); ?>
+
 <!-- <div class="form-group">
  <label for="facebook" class="control-label"><i class="fa fa-facebook"></i> <?php echo _l('staff_add_edit_facebook'); ?></label>
  <input type="text" class="form-control" name="facebook" value="<?php if(isset($member)){echo $member->facebook;} ?>">

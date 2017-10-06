@@ -41,7 +41,7 @@
 <?php $this->load->view('admin/utilities/calendar_template'); ?>
 <?php $this->load->view('admin/includes/dashboard_js'); ?>
 <script type="text/javascript">
-var staffProjectsParams = {};   
+var staffProjectsParams = {};
  // initDataTable('.table-sales', admin_url + 'sales/list_sales', 'undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
  initDataTable('.table-sale_orders', admin_url+'sale_orders/list_sale_orders','undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
  // .column(8).visible(false, false).columns.adjust()

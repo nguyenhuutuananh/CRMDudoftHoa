@@ -57,6 +57,31 @@ class Clients extends Admin_controller
         }
     }
     /* Edit client or add new client*/
+
+
+
+    public function init_opportunity($client="")
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->perfex_base->get_table_data('opportunity',array('client'=>$client));
+        }
+    }
+    public function delete_opportunity()
+    {
+        if($this->input->post())
+        {
+            $id=$this->input->post('id');
+            $this->db->where('id',$id);
+            $this->db->delete('tblopportunity');
+            if($this->db->affected_rows() > 0){
+                echo json_encode(array('success'=>true,'message'=>_l('delete_true')));
+            }
+            else
+            {
+                echo json_encode(array('success'=>false,'message'=>_l('delete_false')));
+            }
+        }
+    }
     public function client($id = '')
     {
         if (!has_permission('customers', '', 'view')) {

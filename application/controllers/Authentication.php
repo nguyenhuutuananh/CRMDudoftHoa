@@ -11,7 +11,6 @@ class Authentication extends CI_Controller
         load_admin_language();
         $this->load->model('Authentication_model');
         $this->load->library('form_validation');
-
         $this->form_validation->set_message('required', _l('form_validation_required'));
         $this->form_validation->set_message('valid_email', _l('form_validation_valid_email'));
         $this->form_validation->set_message('matches', _l('form_validation_matches'));
@@ -43,7 +42,8 @@ class Authentication extends CI_Controller
                     redirect(site_url('authentication/admin'));
                 }
                 do_action('after_staff_login');
-                redirect(site_url('admin'));
+//                redirect(site_url('admin'));
+                redirect(admin_url().'home/home');
             }
         }
         $data['title'] = _l('admin_auth_login_heading');

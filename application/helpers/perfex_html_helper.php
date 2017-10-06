@@ -23,6 +23,7 @@ function clear_textarea_breaks($text)
  * @param  string $string
  * @return string
  */
+
 function nl2br_save_html($string)
 {
     if(! preg_match("#</.*>#", $string)) // avoid looping if no tags in the string.
@@ -1754,4 +1755,22 @@ function strip_html_tags($str, $allowed = '')
     return strip_tags($str, $allowed);
     return $str;
 } //function strip_html_tags ENDS
+
+function format_status_email($id)
+{
+    $label = get_status_label($id);
+    if ($id == 2) {
+        $label = 'light-green';
+        $status_name="Email được xem";
+    }
+    else if ($id == 1) {
+        $label = 'info';
+        $status_name="Email chết";
+    } else if ($id == 0) {
+        $label = 'warning';
+        $status_name="Email được gửi";
+    }
+    $class = 'label label-' . $label;
+    return '<span class="inline-block ' . $class . '">' . $status_name . '</span>';
+}
 ?>
