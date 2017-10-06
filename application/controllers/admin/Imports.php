@@ -13,9 +13,10 @@ class Imports extends Admin_controller
         $this->load->model('purchase_contacts_model');
         $this->load->model('suppliers_model');
     }
-    public function index() {
+    public function index($id=NULL) {
         // var_dump($this->imports_model->getImportByID(64));die();
         // var_dump($this->db->query("SHOW COLUMNS FROM tbloptions")->result_array());die();
+        $this->imports_model->updateWarehouse($id);
     }
 
     public function imp_return() 

@@ -94,7 +94,8 @@ foreach ($rResult as $aRow) {
         }
 
         if($aColumns[$i] == "tblpurchase_costs.purchase_contract_id"){
-            $_data = $aRow["contract_code"];
+            $_data = '<a href="'.admin_url('purchase_contracts/view/').$aRow['tblpurchase_costs.purchase_contract_id'].'">'.$aRow["contract_code"].'</a>';
+
         }
         if($aColumns[$i] == "tblpurchase_costs.date_created" || $aColumns[$i] == "tblpurchase_costs.user_head_date"){
             $_data = _d($aRow[$aColumns[$i]]);

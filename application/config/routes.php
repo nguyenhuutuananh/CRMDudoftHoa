@@ -55,6 +55,7 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['admin']  = "admin/home";
+$route['admin/imports']  = "admin/imports/imp_contract";
 // Misc controller rewrites
 $route['admin/access_denied']  = "admin/misc/access_denied";
 $route['admin/not_found']  = "admin/misc/not_found";

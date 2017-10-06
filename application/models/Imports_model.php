@@ -57,7 +57,8 @@ class Imports_model extends CRM_Model
 
     public function updateWarehouse($id)
     {
-        $imports=$this->getImportByID($id);
+        $imports=$this->getImportByID($id);        
+
         $count=0;
         if($imports)
         {
@@ -67,26 +68,32 @@ class Imports_model extends CRM_Model
                 if($imports->rel_type=='transfer' && isset($value->warehouse_id_to))
                 {
                     $count+=increaseProductQuantity($value->warehouse_id_to,$value->product_id,$value->quantity);
+                    increaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id_to,$value->quantity,NULL,$imports->date);
                     $count+=decreaseProductQuantity($value->warehouse_id,$value->product_id,$value->quantity);
-
+                    decreaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id,$value->quantity,NULL,$imports->date);
                 }
                 //Tang kho
                 else
                 {
+                    $quantity=$value->quantity;
+                    if($imports->rel_type=='contract') $quantity=$value->quantity_net;
                     $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
                     if($item)
                     {   
-                        $total_quantity=$value->quantity+$item->product_quantity;
+                        // Update Quantity
+                        $total_quantity=$quantity+$item->product_quantity;
                         $data=array('product_quantity'=>$total_quantity);
                         $this->db->update('tblwarehouses_products',$data,array('id'=>$item->id));
                         $count++;
                     }
                     else
                     {
+                        $total_quantity=$quantity;
+                        // Insert Quantity
                         $data=array(
                             'product_id'=>$value->product_id,
                             'warehouse_id'=>$value->warehouse_id,
-                            'product_quantity'=>$value->quantity
+                            'product_quantity'=>$total_quantity
                             );
                         $this->db->insert('tblwarehouses_products',$data);
                         $insert_id=$this->db->insert_id();
@@ -96,9 +103,16 @@ class Imports_model extends CRM_Model
                             $count++;
                         }
                     }
+                       
+                        $entered_price=$value->unit_cost;
+                        if($imports->rel_type=='contract')
+                        {
+                            $entered_price=getOrginalPrice($id,$value->product_id)->original_price_buy;
+                        }
+                        //Update Warehouse Product Details
+                        increaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id,$quantity,$entered_price,$imports->date);
                 }
                 
-                //Update Warehouse Product Details
                 
             }
         }        

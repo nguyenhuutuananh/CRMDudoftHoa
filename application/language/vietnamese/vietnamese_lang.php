@@ -4189,7 +4189,7 @@ $lang['purchase_totalmoneydiscount']="Tổng chiết khấu";
 $lang['purchase_price']="Giá trị";
 $lang['exchange_rate']="Tỷ giá";
 
-
+$lang['purchase_costs']="Chi phí mua hàng";
 
 
 

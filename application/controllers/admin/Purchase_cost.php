@@ -30,7 +30,7 @@ class Purchase_cost extends Admin_controller
                 access_denied('customers');
             }
         }
-        $data['title'] = _l('purchase_contract');
+        $data['title'] = _l('purchase_costs');
         $this->load->view('admin/purchase_cost/manage', $data);
     }
     public function detail($id='') {
@@ -159,6 +159,7 @@ class Purchase_cost extends Admin_controller
                 //All
                 $this->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
                 $cost_items=$this->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$cost->purchase_contract_id))->result();
+
             }
         }
         else
@@ -167,6 +168,7 @@ class Purchase_cost extends Admin_controller
             $this->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
             $cost_items=$this->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$contract_id))->result();
         }
+
 
         
         $this->db->select('tblorders_detail.*,tblpurchase_contracts.id as contract_id');
@@ -181,7 +183,6 @@ class Purchase_cost extends Admin_controller
         }
         $items=$this->db->get('tblorders_detail')->result();
 
-
         //So du CP
         // 1 Gia Tri
         // 2 So Luong
@@ -194,26 +195,29 @@ class Purchase_cost extends Admin_controller
                     $total+=$amount;
                     $arrProduct[$product->product_id]['price']=$pricebuy;
                     $arrProduct[$product->product_id]['amount']=$amount;
+                    $arrProduct[$product->product_id]['quanity']=$product->product_quantity;
                  }
-                 // var_dump($arrProduct);die;
+
         foreach ($cost_items as $key => $item) {
             if($item->type==1)
             {
                 // Update Orginal Price
                 foreach ($arrProduct as $key => $product) {
                     $percent=number_format(($product['amount']/($total)),2,'.','');
-                    $amount=$item->cost*$percent;
+                    $amount=($item->cost*$percent)/4;
                     $arrProduct[$key][]=$amount;
-
-                    // var_dump($percent);die;
                  } 
             }
             elseif($item->type==2)
             {
                 // Update Orginal Price
-                $quanity=$this->getTotalQuantityProducts($cost->purchase_contract_id);
+                $contract_id=$contract_id;
+                if(isset($cost->purchase_contract_id)) $contract_id=$cost->purchase_contract_id;
+                $quanity=$this->getTotalQuantityProducts($contract_id);
+
                 $Xcost=$item->cost/$quanity;
                 foreach ($arrProduct as $key => $product) {
+
                     $arrProduct[$key][]=$Xcost;
                  }
             }
@@ -227,7 +231,7 @@ class Purchase_cost extends Admin_controller
             else
             {
                 $original_price_buy=$this->sumArrayByKey($arrProduct[$item->product_id],true);
-            }         
+            } 
             $this->db->update('tblorders_detail',array('original_price_buy'=>$original_price_buy),array('id'=>$item->id));
             if($this->db->affected_rows()>0)
                 $affected=true;
@@ -263,6 +267,21 @@ class Purchase_cost extends Admin_controller
         if($result)
             return $result->product_quantity;
         return 0;
+    }
+
+    public function setAllOrginalPriceContracts()
+    {
+        $this->db->select('id,code,id_order');
+        $contracts=$this->db->get('tblpurchase_contracts')->result();
+        foreach ($contracts as $key => $contract) {
+            $affected=$this->updateOriginalPriceBuy(NULL,$contract->id);
+        }
+        if($affected)
+        {
+            return true;
+        }
+        return false;
+
     }
     /* Get task data in a right pane */
     public function delete($id)
