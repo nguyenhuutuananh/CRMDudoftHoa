@@ -93,4 +93,28 @@ if($alertclass != ''){
     })
 </script>
 
+<script>
+    setInterval(function(){
+        jQuery.ajax({
+            type: "post",
+            url: "<?=admin_url()?>email_marketing/set_status",
+            data: '',
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                if(result.data)
+                {
+                    alert_float('success',result.messager);
+                }
+                else {
+                    $.each(result, function( index, value ) {
+                       alert_float('success',value.email+' (trong chiến dịch: '+value.subject+' )');
+                    })
+                }
+            }
+        });
+
+    }, 10000);
+</script>
+
 

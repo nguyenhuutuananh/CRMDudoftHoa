@@ -6,6 +6,7 @@ class Campaign extends Admin_controller
     {
         parent::__construct();
         $this->load->model('campaign_model');
+        $this->load->model('email_marketing_model');
     }
     public function index()
     {
@@ -17,8 +18,144 @@ class Campaign extends Admin_controller
                 access_denied('customers');
             }
         }
+
+        $data['email_plate'] = $this->email_marketing_model->get_email_templete();
         $data['title'] = _l('campaign');
         $this->load->view('admin/campaign/manage', $data);
+    }
+    public function send_email()
+    {
+        $data=$this->input->post();
+        $this->email->initialize();
+        $message = $data['message'];
+        $name_file = $data['file_send'];
+        $to_email_bc = $data['email_bcc'];
+        $subject = $data['subject'];
+        if($to_email_bc=="")
+        {
+            $_data['message_display'] = _l('find_email_not_null');
+            $_data['tb']='danger';
+            echo json_encode($_data);die();
+        }
+        if($subject=="")
+        {
+            $_data['message_display'] = _l('subject_not_null');
+            $_data['tb']='danger';
+            echo json_encode($_data);die();
+        }
+
+
+        $config_email=get_table_where('tblstaff',array('staffid'=>get_staff_user_id()));
+
+        $sender_email = $config_email[0]['email_marketing'];
+        $user_password = $config_email[0]['password_email_marketing'];
+        if($sender_email==""||$user_password=="")
+        {
+
+            $sender_email=get_option('smtp_email');
+            $user_password=get_option('smtp_password');
+        }
+        if($sender_email!=""&&$user_password!="") {
+
+            $template = $data['view_template'];
+            $count_send = 0;
+            $username = get_staff_full_name();
+            $id_log = $this->email_marketing_model->log_sent_email($subject, $message, $data['file_send'], $template);
+            if ($name_file) {
+                $name_file = explode(',', $name_file);
+                if ($name_file != array()) {
+                    foreach ($name_file as $file) {
+                        if ($file != "") {
+                            $this->email->attach(get_upload_path_by_type('email') . $file);
+                        }
+                    }
+                }
+            }
+
+            $to_email_bc = explode(',', $to_email_bc);
+            foreach ($to_email_bc as $rom_bc) {
+                $config['smtp_user'] = $sender_email;
+                $config['smtp_pass'] = $user_password;
+                $this->email->initialize($config);
+                $this->email->set_newline("\r\n");
+                $this->email->from($sender_email, $username);
+                $this->email->set_mailtype("html");
+                $this->email->bcc($rom_bc);
+
+                $message_sent = $this->get_content($rom_bc, $message);
+                $this->email->subject($subject);
+                $id_email = $this->log_sent_email($rom_bc, 2, $id_log);
+                $this->email->message($message_sent . "<img border='0' src='" . admin_url() . "images_code/images_code?id=" . $id_email . "' width='1' height='1'>");
+                if ($this->email->send()) {
+                    $count_send++;
+                }
+            }
+            if ($count_send > 0) {
+                $_data['message_display'] = 'Message has been sent';
+                $_data['tb']='info';
+            }
+            else {
+                $this->email_marketing_model->delete_log_email($id_log);
+                $_data['message_display'] = 'Message could not be sent!. <br>' . 'Mailer Error: ' . $this->email->print_debugger();
+                $_data['tb']='danger';
+            }
+        }
+        else
+        {
+            $_data['message_display'] = 'Can not find email account';
+            $_data['tb']='danger';
+        }
+        echo json_encode($_data);
+
+    }
+    public function get_content($id,$content="")
+    {
+        $this->db->where('email',$id);
+        $client=$this->db->get('tblclients')->row();
+        $field=$this->db->list_fields('tblclients');
+        $field_staff=$this->db->list_fields('tblclients');
+        foreach($field as $rom)
+        {
+            $content=preg_replace('"{tblclients.'.$rom.'}"',$client->$rom,$content);
+        }
+        foreach($field_staff as $rom_s)
+        {
+            $content=preg_replace('"{tblstaff.'.$rom_s.'}"',$client->$rom_s,$content);
+        }
+        return $content;
+
+    }
+    public function log_sent_email($email,$type,$id_log)
+    {
+        $this->db->insert('tblemail_send',array('email'=>$email,'type'=>$type,'id_log'=>$id_log));
+        $insert_id = $this->db->insert_id();
+        if ($insert_id) {
+            logActivity('Send email [ID:' . $insert_id);
+            return $insert_id;
+        }
+        return false;
+    }
+
+    public function get_opportunity()
+    {
+        $id=$this->input->post('id');
+        if(is_numeric($id))
+        {
+            $this->db->select('email');
+            $this->db->where('campaign',$id);
+            $data_opprtunity=$this->db->get('tblopportunity')->result_array();
+            $array=array_values($data_opprtunity);
+            $data=array();
+            foreach($array as $key=>$value)
+            {
+                $data[]=$value['email'];
+            }
+            $_data=implode(',',array_unique($data));
+            if($_data!="")
+            {
+                echo $_data;
+            }
+        }
     }
     public function campaign($id="")
     {
@@ -91,7 +228,6 @@ class Campaign extends Admin_controller
 
             $data['warehouses']=$this->campaign_model->get_table_where('tblwarehouses');
             $data['items']= $this->campaign_model->get_full_items('','');
-
             $this->load->view('admin/campaign/detail',$data);
         }
 

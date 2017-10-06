@@ -4158,6 +4158,91 @@ $lang['suppliers_name']="Tên nhà cung cấp";
 $lang['suppliers_code']="Mã nhà cung cấp";
 $lang['debt']="Công nợ";
 $lang['home_new_PO']="Đơn đặt hàng(PO)";
+$lang['email_marketing']="Email marketing";
+$lang['been_send_email']="Email đã gửi";
+$lang['template_mail']="Mẩu email";
+$lang['opportunity']="Cơ hội";
+$lang['create_opportunity']="Tạo Cơ hội";
+$lang['delete_true']="Xóa thành công";
+$lang['delete_false']="Xóa không thành công";
+
+
+$lang['_email_marketing']="Tài khoản gửi email";
+$lang['password_email_marketing']="Mật khẩu email";
+$lang['tb']="Thông báo";
+$lang['null_email']="Email để gửi của hệ thống và email của tài khoản đang đăng nhập null.. vui lòng cập nhật tài khoản email của tài khoản hoặc của hệ thống";
+$lang['used_email_user']="Đang sử dụng email của tài khoản để gửi email";
+$lang['used_email_setting']="Đang sử dụng email hệ thống để gửi email";
+$lang['tb']="Thông báo";
+$lang['als_email_marketing']="Email marketing";
+$lang['information_log_email']="Thông tin lịch sử email đã gửi";
+$lang['count_group_email']="Tổng số đợt gửi email";
+$lang['count_email']="Tổng số email đã gửi";
+$lang['count_email_view']="Tổng số email được xem";
+$lang['send_email_client']="Gửi email cho khách hàng";
+$lang['find_email_not_null']="Không tìm thấy email gửi đến";
+$lang['subject_not_null']="Vui lòng nhập chủ đề";
+$lang['email_content']="Nội dung email";
+$lang['not_find_email_campaign']="Không tìm thấy email trong chiến dịch để gửi email";
+
+
+$lang['tblclients.code']="Mã nhân viên";
+$lang['tblclients.title']="Danh xưng";
+$lang['tblclients.company']="Tên";
+$lang['tblclients.short_name']="Tên ngắn gọn";
+$lang['tblclients.phonenumber']="Số điện thoại";
+
+$lang['tblclients.mobilephone_number']="Số điện thoại di động";
+$lang['tblclients.address_room_number']="Số phòng";
+$lang['tblclients.address_building']="Tòa nhà";
+$lang['tblclients.address_home_number']="Số nhà";
+$lang['tblclients.address']="Đường";
+$lang['tblclients.address_town']="Khu phố/thôn/ấp";
+$lang['tblclients.country']="Quốc gia";
+$lang['tblclients.address_area']="Khu vực";
+$lang['tblclients.city']="Thành phố";
+$lang['tblclients.state']="Quận/huyện";
+$lang['tblclients.address_ward']="Phường/xã/thị trấn";
+$lang['tblclients.fax']="Fax";
+$lang['tblclients.email']="Email";
+$lang['tblclients.id_card']="Số chứng minh nhân dân";
+$lang['tblclients.vat']="Mã số thuế";
+$lang['tblclients.birthday']="Ngày sinh";
+$lang['tblclients.source_approach']="Nguồn tiếp cận";
+$lang['tblclients.user_referrer']="Nguồn giới thiệu";
+$lang['tblclients.default_currency']="Tiền tệ";
+$lang['tblclients.debt']="Công nợ";
+$lang['tblclients.shipping_area']="Khu vực";
+$lang['tblclients.shipping_country']="Quốc gia";
+$lang['tblclients.shipping_city']="Thành phố";
+$lang['tblclients.shipping_state']="shipping_state";
+$lang['tblclients.shipping_ward']="Phường/xã/thị trấn";
+$lang['tblclients.shipping_room_number']="Số phòng";
+$lang['tblclients.shipping_building']="Tòa nhà";
+$lang['tblclients.shipping_home_number']="Số nhà";
+$lang['tblclients.shipping_street']="Địa chỉ";
+$lang['tblclients.shipping_town']="Khu phố/thôn/ấp";
+$lang['tblclients.shipping_zip']="Mã bưu chính";
+
+
+$lang['tblclients.type_of_organization']="Loại hình tổ chức";
+$lang['tblclients.bussiness_registration_number']="Số ĐKKD";
+$lang['tblclients.legal_representative']="Đại diện pháp luật";
+$lang['tblclients.website']="Website";
+$lang['tblclients.business']="Lĩnh vực kinh doanh";
+$lang['tblclients.cooperative_day']="Ngày hợp tác";
+
+$lang['tblstaff.staff_code']="Mã nhân viên";
+$lang['tblstaff.fullname']="Tên nhân viên";
+$lang['tblstaff.email']="Email";
+$lang['tblstaff.phonenumber']="Số điện thoại";
+
+
+
+$lang['group']="Nhóm";
+$lang['view_menu']="Chọn danh mục";
+
+
 
 
 

@@ -68,7 +68,7 @@
             font-size: 13px;
              z-index: 5!important;
             background-color: black;
-        } 
+        }
 
         body.hide-sidebar #side-menu li.active a:hover {
             color: #fff;
@@ -93,21 +93,21 @@
             z-index: 20!important;
             background-color: #25252b;
             padding: 7px 10px 7px 45px;
-        } 
+        }
         body.hide-sidebar #side-menu li.active>a{
             color: #fff;
             text-transform: uppercase;
             font-size: 13px;
             z-index: 20!important;
             background-color: black;
-        } 
+        }
         body.hide-sidebar #side-menu li.active a:hover+ul.nav.nav-second-level.collapse.in a {
             color: #fff;
             text-transform: uppercase;
             font-size: 13px;
             z-index: 20!important;
             background-color: black;
-        } 
+        }
         body.hide-sidebar #side-menu li .nav-second-level li.active a
         {
                 border-radius: 0px;
@@ -115,7 +115,7 @@
                 margin: 0px;
                 background-color:#25252b;
         }
-    
+
 </style>
     <?php $isRTL = (is_rtl() ? 'true' : 'false'); ?>
     <?php render_custom_styles(array('general','tabs','buttons','admin','modals','tags')); ?>
@@ -140,5 +140,5 @@
         </script>
         <?php do_action('app_admin_head'); ?>
     </head>
-    <body <?php if(is_rtl()){ echo 'dir="rtl"';} ?> class="<?php echo 'page'.($this->uri->segment(2) ? '-'.$this->uri->segment(2) : '') . '-'.$this->uri->segment(1); ?> admin <?php if(isset($bodyclass)){echo $bodyclass . ' '; } ?><?php if($this->session->has_userdata('is_mobile') && $this->session->userdata('is_mobile') == true){echo 'hide-sidebar ';} ?><?php if(is_rtl()){echo 'rtl';} ?> hide-sidebar">
+    <body <?php if(is_rtl()){ echo 'dir="rtl"';} ?> class="<?php echo 'page'.($this->uri->segment(2) ? '-'.$this->uri->segment(2) : '') . '-'.$this->uri->segment(1); ?> admin <?php if(isset($bodyclass)){echo $bodyclass . ' '; } ?><?php if($this->session->has_userdata('is_mobile') && $this->session->userdata('is_mobile') == true){echo 'hide-sidebar ';} ?><?php if(is_rtl()){echo 'rtl';} ?>">
         <?php do_action('after_body_start'); ?>

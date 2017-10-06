@@ -63,11 +63,13 @@
                <?php echo _l('client_report'); ?>
             </a>
          </li>
-        <!-- <li role="presentation" class="" >
-            <a href="#billing_and_shipping" aria-controls="billing_and_shipping" role="tab" data-toggle="tab">
-               <?php echo _l('billing_shipping'); ?>
-            </a>
-        </li> -->
+         <li class="dropdown" role="presentation">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#marketing">Marketing <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li><a href="#tab-opportunity" onclick="tab_opportunity(<?=$client->userid?>)" data-toggle="tab"><?=_l('opportunity')?></a></li>
+               <li><a href="#tab-email-marketing" data-toggle="tab"><?=_l('email_marketing')?></a></li>
+            </ul>
+         </li>
       </ul>
    </div>
    <!-- Tab panes -->
@@ -88,6 +90,14 @@
       <div role="tabpanel" class="tab-pane" id="tab_lead_care_of">
          <?php $_client['client']=$client->userid?>
          <?php $this->load->view('admin/clients/modals/lead_care_of',$_client['client']); ?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tab-opportunity">
+         <?php $_client['client']=$client->userid?>
+         <?php $this->load->view('admin/clients/modals/opportunity',$_client['client']); ?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="tab-email-marketing">
+         <?php $_client['client']=$client->userid?>
+         <?php $this->load->view('admin/clients/modals/email_marketing',$_client['client']); ?>
       </div>
       <?php $this->load->view('admin/clients/modals/report'); ?>
       <?php if(isset($lead)){ ?>

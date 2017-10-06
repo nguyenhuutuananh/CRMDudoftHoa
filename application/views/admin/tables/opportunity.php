@@ -5,18 +5,34 @@ $plan_status=array(
     "0"=>"Chưa được xác nhận chọn để xác nhận"
 );
 
-$aColumns     = array(
-    'campaign',
-    'client',
-    'contact',
-    'create_by',
-    'performance',
-    'staff_in',
-    'expected',
-    'end_date',
-    '8',
-    'step'
-);
+if(!$client)
+{
+    $aColumns     = array(
+        'campaign',
+        'client',
+        'contact',
+        'create_by',
+        'performance',
+        'staff_in',
+        'expected',
+        'end_date',
+        '8',
+        'step'
+    );
+}
+else
+{
+    $aColumns     = array(
+        'campaign',
+        'contact',
+        'performance',
+        'staff_in',
+        'expected',
+        'end_date',
+        '8',
+        'step'
+    );
+}
 
 $sIndexColumn = "id";
 $sTable       = 'tblopportunity';
@@ -25,10 +41,10 @@ $where = array();
 $order_by = 'tblopportunity.id ASC';
 $order_by = '';
 $status=$this->_instance->input->post('filterStatus');
-//if($status)
-//{
-//    array_push($where,' AND status='.$status);
-//}
+if($client)
+{
+    array_push($where,' AND client='.$client);
+}
 $join             = array(
 );
 
@@ -41,6 +57,7 @@ $additionalSelect = array(
     '(select tblcampaign.name from tblcampaign where tblcampaign.id = tblopportunity.campaign) as name_campaign',
     '(select tblcampaign.id from tblcampaign where tblcampaign.id = tblopportunity.campaign) as id_campaign',
     'tblclients.company',
+    'userid',
     'tblcampaign_step.name',
     '(select tblstaff.fullname from tblstaff where tblstaff.staffid = tblopportunity.create_by) as creator',
     '(select tblstaff.fullname from tblstaff where tblstaff.staffid = tblopportunity.staff_in) as _staff_in',
@@ -56,14 +73,19 @@ foreach ($rResult as $aRow) {
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
         if($aColumns[$i] == "client"){
-            $_data = '<a href="'.admin_url('client/client/').$aRow['tblclients.userid'].'">'.$aRow['company'].'</a>';
+            $_data = '<a href="'.admin_url('client/client/').$aRow['userid'].'">'.$aRow['company'].'</a>';
         }
         if($aColumns[$i] == "campaign"){
             $_data = '<a href="'.admin_url('campaign/campaign/').$aRow['id_campaign'].'">'.$aRow['name_campaign'].'</a>';
         }
         if($aColumns[$i] == "step"){
             $step=get_table_where('tblcampaign_step',array('tblcampaign_step.id_campaign'=>$aRow['id_campaign']),'id asc');
-            $_data='<div class="container">
+            $style="";
+            if($client)
+            {
+                $style='style="max-width:600px"';
+            }
+            $_data='<div class="container" '.$style.'>
                 <div class="row bs-wizard" style="border-bottom:0;">';
                     foreach($step as $st)
                     {
@@ -127,12 +149,22 @@ foreach ($rResult as $aRow) {
         if($aColumns[$i]=='8')
         {
             $options = '';
-            $options.='<a href="'.base_url().'opportunity/opportunity/'.$aRow['id'].'" class="btn btn-default btn-icon">
-                    <i class="fa fa-pencil-square-o"></i>
-              </a>';
-            $options.='<a href="'.base_url().'opportunity/delete/'.$aRow['id'].'" class="btn btn-danger _delete btn-icon" data-toggle="tooltip" data-placement="left" title="'._l('_tb_delete_campaign').'" data-original-title="'._l('_tb_delete_campaign').'">
-            <i class="fa fa-remove"></i>
-            </a>';
+            if(!$client)
+            {
+                $options.='<a href="'.admin_url().'opportunity/opportunity/'.$aRow['id'].'" class="btn btn-default btn-icon">
+                        <i class="fa fa-pencil-square-o"></i>
+                  </a>';
+                $options.='<a href="'.admin_url().'opportunity/delete/'.$aRow['id'].'" class="btn btn-danger _delete btn-icon" data-toggle="tooltip" data-placement="left" title="'._l('_tb_delete_campaign').'" data-original-title="'._l('_tb_delete_campaign').'">
+                <i class="fa fa-remove"></i>
+                </a>';
+            }
+            else
+            {
+                $options.='<a href="javacript:void(0)" onclick="delete_opportunity('.$aRow['id'].')" class="btn btn-danger _delete btn-icon" data-toggle="tooltip" data-placement="left" title="'._l('_tb_delete_campaign').'" data-original-title="'._l('_tb_delete_campaign').'">
+                <i class="fa fa-remove"></i>
+                </a>';
+            }
+
             $_data=$options;
         }
         $row[] = $_data;

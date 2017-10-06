@@ -546,26 +546,29 @@ class Staff_model extends CRM_Model
         $hook_data           = do_action('before_update_staff_member', $hook_data);
         $data                = $hook_data['data'];
         $id                  = $hook_data['userid'];
+        unset($data['primary']);
 
-        if (is_admin()) {
-            if (isset($data['administrator'])) {
-                $data['admin'] = 1;
-                unset($data['administrator']);
-            } else {
-                if ($id != get_staff_user_id()) {
-                    if ($id == 1) {
-                        return array(
-                            'cant_remove_main_admin' => true
-                        );
-                    }
-                } else {
-                    return array(
-                        'cant_remove_yourself_from_admin' => true
-                    );
-                }
-                $data['admin'] = 0;
-            }
-        }
+//        return $data;
+//        if (is_admin()) {
+//            if (isset($data['administrator'])) {
+//                $data['admin'] = 1;
+//                unset($data['administrator']);
+//            } else {
+//                if ($id != get_staff_user_id()) {
+//                    if ($id == 1) {
+//                        return array(
+//                            'cant_remove_main_admin' => true
+//                        );
+//                    }
+//                }
+////                else {
+////                    return array(
+////                        'cant_remove_yourself_from_admin' => true
+////                    );
+////                }
+////                $data['admin'] = 0;
+//            }
+//        }
 
         $affectedRows = 0;
         if (isset($data['departments'])) {
@@ -669,7 +672,6 @@ class Staff_model extends CRM_Model
                 }
             }
         }
-
         $this->db->where('staffid', $id);
         $this->db->update('tblstaff', $data);
         if ($this->db->affected_rows() > 0) {

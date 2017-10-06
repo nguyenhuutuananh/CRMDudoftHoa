@@ -22,11 +22,8 @@ $where = array();
 $order_by = 'tblcampaign.id ASC';
 $order_by = '';
 $status=$this->_instance->input->post('filterStatus');
-//if($status)
-//{
-//    array_push($where,' AND status='.$status);
-//}
 $join             = array(
+
 );
 $additionalSelect = array(
     'tblcampaign.id',
@@ -94,6 +91,9 @@ foreach ($rResult as $aRow) {
     $options = '';
     $options.='<a href="'.admin_url().'campaign/campaign/'.$aRow['id'].'" class="btn btn-default btn-icon">
                     <i class="fa fa-pencil-square-o"></i>
+              </a>';
+    $options.='<a onclick="get_client_campaign('.$aRow['id'].')" data-toggle="modal" title="Send email" data-original-title="Send email" data-placement="left" data-target="#send_email-campaign" class="btn btn-success btn-icon">
+                    <i class="glyphicon glyphicon-envelope"></i>
               </a>';
     $options.='<a href="'.admin_url().'campaign/delete/'.$aRow['id'].'" class="btn btn-danger _delete btn-icon" data-toggle="tooltip" data-placement="left" title="'._l('_tb_delete_campaign').'" data-original-title="'._l('_tb_delete_campaign').'">
             <i class="fa fa-remove"></i>

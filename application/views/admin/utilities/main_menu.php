@@ -17,6 +17,10 @@
            $menu_active = json_decode($menu_active);
            $menu_inactive = get_option('aside_menu_inactive');
            $menu_inactive = json_decode($menu_inactive);
+           $group=array(array('id'=>1,'name'=>'Quản lý kinh doanh'),
+               array('id'=>2,'name'=>'Quản lý kế toán'),
+               array('id'=>3,'name'=>'Quản lý kỹ thuật và lắp ráp'),
+               array('id'=>4,'name'=>'Quản lý marketing'));
            ?>
            <div class="clearfix"></div>
            <div class="row">
@@ -62,6 +66,22 @@
                        <i class="<?php echo $item->icon; ?>"></i>
                      </span>
                    </div>
+                    <label class="control-label"><?php echo _l('group'); ?></label>
+                   <div class="select-group">
+                       <select class="selectpicker  main-item-type" data-width="100%" data-none-selected-text="Không có gì được chọn" data-live-search="true" tabindex="-98">
+                           <option value=""></option>
+                           <?php foreach($group as $rom){?>
+                               <?php
+                               $select='';
+                               if($rom['id']==$item->type)
+                               {
+                                   $select='selected';
+                               }
+                               ?>
+                               <option value="<?=$rom['id']?>" <?=$select?>><?=$rom['name']?></option>
+                           <?php }?>
+                       </select>
+                    </div>
                 </div>
                 <?php if(isset($item->children)){ ?>
                   <ol class="dd-list">
@@ -236,10 +256,12 @@
       var name = $(this).find('.main-item-options input.main-item-name').val();
       var url = $(this).find('.main-item-options input.main-item-url').val();
       var icon = $(this).find('.main-item-icon').val();
+      var type = $(this).find('.main-item-options select.main-item-type').val();
       main_menu.data('name', name);
       main_menu.data('url', url);
       main_menu.data('permission', $(this).data('permission'));
       main_menu.data('icon', icon);
+      main_menu.data('type', type);
 
     });
 

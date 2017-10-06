@@ -33,6 +33,74 @@
     </div>
   </div>
   <?php $this->load->view('admin/invoice_items/item'); ?>
+
+
+
+<div id="send_email-campaign" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><?=_l('send_email_client')?></h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="form-sendemail" action="<?=admin_url()?>campaign/send_email">
+                    <input type="hidden" name="email_bcc" id="email_bcc">
+                    <input type="hidden" name="campaign" id="campaign">
+                    <div class="form-group">
+                        <div class="checkbox checkbox-success mbot20 no-mtop">
+                            <input type="checkbox" name="type_email" id="type_email" onchange="kiemtra_type_email(this.value)">
+                            <label for="type_email">Sử dụng template</label>
+                        </div>
+                    </div>
+                    <div class="form-group select_template" style="display:none;">
+                        <label for="view_template">Mẫu email:</label>
+                        <?php echo render_select('view_template',$email_plate,array('id','name'),'','',array('onchange'=>'get_contentemail(this.value)','data-width'=>'100%','data-none-selected-text'=>_l('chọn Mẫu email'))); ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Chủ đề:</label>
+                        <input type="text" class="form-control" id="subject" name="subject"  value="" placeholder="Nhập chủ đề của bạn..." required >
+                    </div>
+                    <div class="form-group">
+                        <p class="bold"><?php echo _l('email_content'); ?></p>
+                        <?php echo render_textarea('message','','',array('data-task-ae-editor'=>true),array(),'','tinymce-task'); ?>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <p class="bold"><?php echo _l('file'); ?></p>
+                        <?php echo render_textarea('file_send','','',array('data-task-ae-editor'=>true),array(),'',''); ?>
+                    </div>
+
+                </form>
+                <div class="form-group file_dropzone"></div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <?php echo form_open_multipart(admin_url('email_marketing/upload_file'),array('class'=>'dropzone','id'=>'email-upload','onchane'=>'get_delete(this)')); ?>
+                    <input type="file" name="file" multiple />
+                    <?php echo form_close(); ?>
+                    <div class="text-right mtop15">
+                        <div id="dropbox-chooser"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <button type="button" onclick="send_email_campaign('form-sendemail')" class="btn btn-default">Gửi</button>
+            </div>
+        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
   <div class="modal fade" id="groups" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -92,7 +160,36 @@
   </div>
 </div>
 <?php init_tail(); ?>
+
 <script>
+    init_editor('.tinymce-task',{height:300});
+    function kiemtra_type_email(id)
+    {
+        if($('#type_email').prop('checked')==true)
+        {
+            $('.select_template').show();
+        }
+        else
+        {
+            $('#view_template').val(0).selectpicker('refresh');
+            $('.select_template').hide();
+            var content = tinymce.get("message").setContent('');
+        }
+    }
+    function get_contentemail(id)
+    {
+        jQuery.ajax({
+            type: "post",
+            url: "<?=admin_url()?>email_marketing/get_email/"+id,
+            data: '',
+            dataType:"json",
+            cache: false,
+            success: function (data) {
+                var content = tinymce.get("message").setContent(data.content);
+                $('#subject').val(data.subject);
+            }
+        });
+    }
   function var_status(status,id)
     {
         dataString={id:id,status:status};
@@ -112,7 +209,77 @@
         return false;
     }
 
+    Dropzone.options.clientAttachmentsUpload = false;
+    if ($('#email-upload').length > 0) {
+        new Dropzone('#email-upload', {
+            paramName: "file",
+            dictDefaultMessage:drop_files_here_to_upload,
+            dictFallbackMessage:browser_not_support_drag_and_drop,
+            dictRemoveFile:remove_file,
+            dictFileTooBig: file_exceds_maxfile_size_in_form,
+            dictMaxFilesExceeded:you_can_not_upload_any_more_files,
+            maxFilesize: max_php_ini_upload_size.replace(/\D/g, ''),
+            addRemoveLinks: false,
+            accept: function(file, done) {
+                done();
+            },
+            acceptedFiles: allowed_files,
+            error: function(file, response) {
+                alert_float('danger', response);
+            },
+            success: function(file, response) {
 
+                var mang=$('#file_send').val();
+                $('#file_send').val(mang+','+response);
+                s_tring=$('#file_send').val()
+                jQuery.ajax({
+                    type: "post",
+                    url: "<?=admin_url()?>email_marketing/tring_field",
+                    data: {s_tring:s_tring},
+                    cache: false,
+                    success: function (data) {
+                        debugger;
+                        $('#file_send').val(data);
+                    }
+                });
+
+                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                    $('.dz-preview').remove();
+                    $('.dz-default').show();
+                    count=$('.c_file').length;
+                    $('.file_dropzone').append('<div class="col-md-2 c_file" id="i_file-'+count+'" title='+response+'>'+response+' <a class="btn  btn-icon" onclick="delete_file('+count+')"><i class="glyphicon glyphicon-remove-circle"></i></a>' +
+                        '<img src="<?=base_url()?>assets/images/document.png" style="height:100px">'
+                        +'</div>')
+                }
+            }
+        });
+    }
+    function get_client_campaign(id)
+    {
+        $('#email_bcc').val('');
+        $('#view_template').val('').selectpicker('refresh');
+        $('#subject').val('');
+        var content = tinymce.get("message").setContent('');
+        jQuery.ajax({
+            type: "post",
+            url: "<?=admin_url()?>campaign/get_opportunity",
+            data: {id:id},
+            cache: false,
+            success: function (data) {
+                if(data!="")
+                {
+                    $('#email_bcc').val(data);
+                    $('#campaign').val(id);
+                }
+                else
+                {
+                    alert_float('danger','<?=_l('not_find_email_campaign')?>')
+                }
+
+            }
+        });
+
+    }
   $(function(){
     $('[data-toggle="btns"] .btn').on('click', function(){
         var $this = $(this);
@@ -131,19 +298,10 @@
         $('#filterStatus').val(2);
         $('#filterStatus').change();
     });
-//    $('#btnDatableFilterDidntConvert').click(() => {
-//        $('#filterStatus').val(3);
-//        $('#filterStatus').change();
-//    });
-//    $('#btnDatableFilterConverted').click(() => {
-//        $('#filterStatus').val(4);
-//        $('#filterStatus').change();
-//    });
-    
+
     var filterList = {
         'filterStatus' : '[id="filterStatus"]',
     };
-    //initDataTable('.table-purchase-suggested', '<?=admin_url('purchase_suggested')?>', [1], [1], filterList,[0,'DESC']);
     initDataTable('.table-campaign', window.location.href, [0], [0], filterList, [0,'DESC']);
     $.each(filterList, (filterIndex, filterItem) => {
       $('input' + filterItem).on('change', () => {
@@ -151,6 +309,27 @@
       });
     });
   });
+
+    function send_email_campaign(idfrom)
+    {
+        $('#message').val(tinymce.get("message").getContent());
+        var action=$('#'+idfrom).attr('action');
+        var form = $('#'+idfrom);
+        $.ajax( {
+            type: "POST",
+            url:action,
+            dataType : 'json',
+            data:form.serialize(),
+            success: function(data) {
+                if(data.tb)
+                {
+                    alert_float(data.tb,data.message_display);
+                    $('#send_email-campaign').modal('hide');
+                }
+
+            }
+        } );
+    }
 </script>
 </body>
 </html>
