@@ -259,8 +259,14 @@
                                             <select class="selectpicker" name="items[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
                                                 <?php if($tk_no){?>
                                                     <option></option>
-                                                    <?php foreach($tk_no as $rom){?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                    <?php foreach($tk_no as $rom){
+                                                        $select='';
+                                                        if($rom['idAccount']==$value->tk_no)
+                                                            $select='selected';
+
+                                                        ?>
+
+                                                        <option value="<?=$rom['idAccount']?>" <?=$select?> data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
                                                     <?php }?>
                                                 <?php }?>
                                             </select>
@@ -269,8 +275,13 @@
                                             <select class="selectpicker" name="items[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
                                                 <?php if($tk_co){?>
                                                     <option></option>
-                                                    <?php foreach($tk_co as $rom){?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                    <?php foreach($tk_co as $rom){
+                                                        $select='';
+                                                        if($rom['idAccount']==$value->tk_co)
+                                                            $select='selected';
+                                                        ?>
+
+                                                        <option value="<?=$rom['idAccount']?>" <?=$select?> data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
                                                     <?php }?>
                                                 <?php }?>
 

@@ -1,0 +1,7 @@
+ALTER TABLE `tblitems` CHANGE `description` `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `long_description` `long_description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `product_features` `product_features` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+ALTER TABLE `tblorders_detail` ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' AFTER `tk_co`;
+
+ALTER TABLE `tblorders_detail` CHANGE `discount_percent` `discount_percent` FLOAT NULL DEFAULT '0.00';
+
+ALTER TABLE `tblpurchase_contracts` ADD `warehouse_id` INT NULL AFTER `template`;

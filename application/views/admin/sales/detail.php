@@ -152,7 +152,7 @@
                             
                             <div class="col-md-4">
                                 <?php 
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
+                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id);
                                 ?>
                             </div>
                             <div class="col-md-4">

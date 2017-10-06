@@ -33,8 +33,7 @@ $result           = data_tables_init($aColumns, $sIndexColumn, $sTable ,$join, $
 
 $output           = $result['output'];
 $rResult          = $result['rResult'];
-
-foreach ($rResult as $aRow) {
+foreach ($rResult as $aRow) {    
     $row = array();
     $approval = false;
     for ($i = 0; $i < count($aColumns); $i++) {
@@ -97,6 +96,9 @@ foreach ($rResult as $aRow) {
         if($aColumns[$i] == "tblpurchase_costs.purchase_contract_id"){
             $_data = $aRow["contract_code"];
         }
+        if($aColumns[$i] == "tblpurchase_costs.date_created" || $aColumns[$i] == "tblpurchase_costs.user_head_date"){
+            $_data = _d($aRow[$aColumns[$i]]);
+        }
         $array_link = ['tblpurchase_costs.id', 'tblpurchase_costs.code'];
         if(in_array($aColumns[$i],$array_link)){
             $_data = '<a href="'.admin_url('purchase_cost/detail/').$aRow['tblpurchase_costs.id'].'">'.$_data.'</a>';
@@ -126,6 +128,12 @@ foreach ($rResult as $aRow) {
     {
         $options .= icon_btn('purchase_cost/detail/'. $aRow['tblpurchase_costs.id'] , 'eye', 'btn-default');
     }
+
+    $options .=icon_btn('purchase_cost/delete/'. $aRow['tblpurchase_costs.id'] , 'remove', 'btn-danger delete-remind',array(
+            'data-toggle'=>'tooltip',
+            'title'=>_l('delete'),
+            'data-placement'=>'top'
+            ));
     
     // $options .= icon_btn('purchase_cost/pdf/'. $aRow['tblpurchase_costs.id'] .'?pdf=true' , 'file-pdf-o', 'btn-default', array('target'=>'_blank'));
     // $options .= icon_btn('purchase_cost/pdf/'. $aRow['tblpurchase_costs.id'] .'?print=true' , 'print', 'btn-default', array('target'=>'_blank'));

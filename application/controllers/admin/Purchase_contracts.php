@@ -58,7 +58,7 @@ class Purchase_contracts extends Admin_controller
                             }
                         } else if ($type == 'other') {
                             array_push($_contract_merge_fields, $f);
-                        } else if ($type == 'clients') {
+                        } else if ($type == 'suppliers') {
                             array_push($_contract_merge_fields, $f);
                         }
                     }

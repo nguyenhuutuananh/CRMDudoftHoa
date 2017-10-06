@@ -118,6 +118,8 @@ class Sale_oders_model extends CRM_Model
             'date'=>to_sql_date($data['date']),
             'create_by'=>get_staff_user_id()
             );
+
+
         
         $this->db->insert('tblsale_orders', $import);
         $insert_id = $this->db->insert_id();
@@ -154,6 +156,7 @@ class Sale_oders_model extends CRM_Model
                     logActivity('Insert Sale Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
                  }
             }
+
 
             $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$insert_id));
             $this->db->update('tblcontracts',array('export_status'=>1),array('id'=>$data['rel_id']));
@@ -192,6 +195,9 @@ class Sale_oders_model extends CRM_Model
             $total=0;
             $affected_id=array();
             $affected_idR=array();
+            //New TK
+            $itemsTK=$data['item'];
+            $i=0;
             foreach ($items as $key => $item) {
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
@@ -208,14 +214,16 @@ class Sale_oders_model extends CRM_Model
                     'quantity'=>$item['quantity'],
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
-                    'tk_no'=>$item['tk_no'],
-                    'tk_co'=>$item['tk_co'],
+                    'tk_no'=>$itemsTK[$i]['tk_no'],
+                    'tk_co'=>$itemsTK[$i]['tk_co'],
                     'tax_id'=>$product->tax,
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
                     'warehouse_id'=>$data['warehouse_name']
                     );
+
+
                 $itm=$this->getSaleItem($id,$item['id']);
 
                 if($itm)
@@ -234,6 +242,7 @@ class Sale_oders_model extends CRM_Model
                         logActivity('Insert Sale Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
+                $i++;
             }
 
             if(!empty($affected_id))

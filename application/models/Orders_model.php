@@ -59,6 +59,7 @@ class Orders_model extends CRM_Model
                                 'exchange_rate' => $value['exchange_rate'],
                                 'tk_no' => $value['tk_no'],
                                 'tk_co' => $value['tk_co'],
+                                'discount_percent' => $value['discount_percent']
                             );
                             
                             $this->db->where('id', $item_exists->id);
@@ -90,6 +91,7 @@ class Orders_model extends CRM_Model
         return $this->db->get('tblwarehouses')->result_array();
     }
     public function convert_to_contact($id_order, $data) {
+
         $this->db->where('id', $id_order);
         $order = $this->db->get('tblorders')->row();
         if($order) {
@@ -97,10 +99,14 @@ class Orders_model extends CRM_Model
             $data_order = array(
                 'converted' => '1',
             );
+
             $this->db->update('tblorders', $data_order);
+            $data['warehouse_id']=$data['id_warehouse'];
+            unset($data['id_warehouse']);
+            $data['date_create']=to_sql_date($data['date_create']);
             $this->db->insert('tblpurchase_contracts', $data);
             if ($this->db->affected_rows() > 0) {
-                var_dump('bgfb');die();
+                
                 $new_id = $this->db->insert_id();
                 return $new_id;
             }

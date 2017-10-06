@@ -33,19 +33,21 @@ class Purchase_orders extends Admin_controller
         $data['warehouses'] = $this->orders_model->get_warehouses();
         $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         foreach($data['purchase_suggested']->items as $key=>$value) {
+            $warehouse_id=$value->warehouse_id;
             $data['purchase_suggested']->items[$key]->warehouse_type = (object)$this->warehouse_model->getQuantityProductInWarehouses($value->warehouse_id,$value->product_id);
         }
         $data['product_list'] = $purchase_suggested->items;
         $data['suppliers'] = $this->orders_model->get_suppliers();
         if($this->input->post()) {
             $data = $this->input->post();
-            
+
             $data['code'] = get_option('prefix_purchase_order') . $data['code'];
             $data['id_user_create'] = get_staff_user_id();
 
             $this->purchase_suggested_model->convert_to_order($id, $data);
             redirect(admin_url() . 'purchase_orders');
         }
+        $data['warehouse_id'] = $warehouse_id;
         $data['accounts_no'] = $this->accounts_model->get_tk_no();
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $this->load->view('admin/orders/convert', $data);
@@ -54,6 +56,7 @@ class Purchase_orders extends Admin_controller
         $data = array();
         $data['title'] = _l('convert_to_purchase_contract');
         $order = $this->orders_model->get($id);
+        // var_dump($order->user_head_id);die;
         if(!$order || $order->user_head_id == 0) {
             redirect(admin_url() . 'purchase_orders');
         }
@@ -95,7 +98,6 @@ class Purchase_orders extends Admin_controller
             $data['code'] = get_option('prefix_contract') . $data['code'];
             $data['id_user_create'] = get_staff_user_id();
             $data['id_supplier'] = $order->id_supplier;
-            
             unset($data['items']);
             $data['template'] = $this->contract_templates_model->get_contract_template_by_id(2)->content;
 
@@ -107,6 +109,7 @@ class Purchase_orders extends Admin_controller
         $this->load->view('admin/orders/convert_to_contract', $data);
     }
     public function view($id='') {
+        // var_dump($id);die;
         if(is_numeric($id)) {
             $order = $this->orders_model->get($id);
             if($order) {

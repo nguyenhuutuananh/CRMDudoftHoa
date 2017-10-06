@@ -298,39 +298,70 @@ $tblhtml.='</tr>';
 // Items
 $tblhtml .= '<tbody>';
 $grand_total=0;
-for ($i=0; $i < count($invoice->items) ; $i++) { 
+$grand_total_tax=0;
+$grand_total_discount=0;
+for ($i=0; $i < count($invoice->items) ; $i++) {
+
+     $unit_cost=$invoice->items[$i]->unit_cost;
+     $sub_total=$invoice->items[$i]->sub_total;
+     if($invoice->rel_type='contract') 
+        {
+            $unit_cost=$invoice->items[$i]->exchange_rate*$invoice->items[$i]->unit_cost;
+            $sub_total=$unit_cost*$invoice->items[$i]->quantity_net;
+            $tax=$sub_total*$invoice->items[$i]->tax_rate/100;
+            $discount=$sub_total*$invoice->items[$i]->discount_percent/100;
+            // var_dump($invoice->items[$i]->discount_percent);die;
+            $grand_total_tax+=$tax;
+            $grand_total_discount+=$discount;
+        }
     $rowspan=count($invoice->items);
-    $grand_total+=$invoice->items[$i]->sub_total;
+    $grand_total+=$sub_total;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
     $tblhtml.='<td align="right">'.$invoice->items[$i]->unit_name.'</td>';
     $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';    
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->quantity_net.'</td>';
-    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
+    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity_net).'</td>';
+    $tblhtml.='<td align="right">'.format_money($unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
     $tblhtml.='<td  rowspan="'.$rowspan.'" align="left">'.$invoice->reason.'</td>';
     $tblhtml.='</tr>';
 }
-
+    $relsult=$grand_total+$grand_total_tax-$grand_total_discount;
+    
+    if($invoice->rel_type='contract'){
+    $tblhtml.='<tr>';
+    // $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng tiền').'</b></td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total).'</td>';
+    $tblhtml.='</tr>';
 
     $tblhtml.='<tr>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"><b>'._l('Tổng tiền').'</b></td>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right">'.format_money($grand_total).'</td>';
+    // $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng thuế').'</b></td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_tax).'</td>';
     $tblhtml.='</tr>';
+
+    $tblhtml.='<tr>';
+    // $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng chiết khấu').'</b></td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_discount).'</td>';
+    $tblhtml.='</tr>';
+    }
+
+    $tblhtml.='<tr>';
+    // $tblhtml.='<td align="right"></td>';
+    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng giá trị').'</b></td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($relsult).'</td>';
+    $tblhtml.='</tr>';
+
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
 $pdf->writeHTML($tblhtml, true, false, false, false, '');
 
 $strmoney='<ul>';
-$strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($grand_total,get_option('default_currency')).'</i>'.'</li>';
+$strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($relsult,get_option('default_currency')).'</i>'.'</li>';
 $strmoney.='<li>'._l('certificate_root')._l('blank10').$contract->code.'</li>';;
 $strmoney.='</ul>';
 $pdf->writeHTML($strmoney, true, false, false, false, 'L');

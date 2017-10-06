@@ -86,18 +86,19 @@ foreach ($rResult as $aRow) {
         if ($aColumns[$i] == 'tblquotes.code') {
             $_data=$aRow['prefix'].$aRow['tblquotes.code'];
         }
-        if ($aColumns[$i] == 'date') {
-            $_data=_d($aRow['date']);
+        if ($aColumns[$i] == 'tblquotes.date') {
+            $_data=_d($aRow['tblquotes.date']);
         }
-        if ($aColumns[$i] == 'total') {
-            $_data=format_money($aRow['total']);
+        if ($aColumns[$i] == 'tblquotes.total') {
+            $_data=format_money($aRow['tblquotes.total']);
         }
-        if ($aColumns[$i] == 'status') {
-            $_data='<span class="inline-block label label-'.get_status_label($aRow['status']).'" task-status-table="'.$aRow['status'].'">' . format_status_quote($aRow['status'],false,true).'';
+        // var_dump($aRow);die;
+        if ($aColumns[$i] == 'tblquotes.status') {
+            $_data='<span class="inline-block label label-'.get_status_label($aRow['tblquotes.status']).'" task-status-table="'.$aRow['tblquotes.status'].'">' . format_status_quote($aRow['tblquotes.status'],false,true).'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))
             {
-                if($aRow['status']!=2){
-                    $_data.='<a href="javacript:void(0)" onclick="var_status('.$aRow['status'].','.$aRow['id'].')">';
+                if($aRow['tblquotes.status']!=2){
+                    $_data.='<a href="javacript:void(0)" onclick="var_status('.$aRow['tblquotes.status'].','.$aRow['id'].')">';
                 }
                 else
                 {
@@ -105,15 +106,15 @@ foreach ($rResult as $aRow) {
                 }
             }
             else {
-                if($aRow['status']==0) {
-                    $_data .= '<a href="javacript:void(0)" onclick="var_status(' . $aRow['status'] . ',' . $aRow['id'] . ')">';
+                if($aRow['tblquotes.status']==0) {
+                    $_data .= '<a href="javacript:void(0)" onclick="var_status(' . $aRow['tblquotes.status'] . ',' . $aRow['id'] . ')">';
                 }
                 else
                 {
                     $_data .= '<a href="javacript:void(0)">';
                 }
             }
-            $_data.='<i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['status']]) . '"></i>
+            $_data.='<i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['tblquotes.status']]) . '"></i>
                     </a>
                 </span>';
         }
@@ -143,7 +144,7 @@ foreach ($rResult as $aRow) {
         $_data .= icon_btn('quotes/pdf/' . $aRow['id'].'?pdf=true', 'print', 'btn-default',array('target' => '_blank','data-toggle'=>'tooltip',
             'title'=>_l('dt_button_print'),
             'data-placement'=>'top'));
-        if($aRow['status']==2 && $aRow['export_status']!=1)
+        if($aRow['tblquotes.status']==2 && $aRow['export_status']!=1)
         {
             //Tao Hop Dong
             $_data .= icon_btn('quotes/contract_output/'. $aRow['id'] , 'exchange','btn-default',array(

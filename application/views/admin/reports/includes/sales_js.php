@@ -1,4 +1,10 @@
 <script>
+  $(function(){
+    if (!$('.chart-PO-SO').hasClass('hide')) {
+       PO_SO_chart_report();
+     }
+  });
+ var chartSPO=true;
  var salesChart;
  var groupsChart;
  var paymentMethodsChart;
@@ -231,9 +237,22 @@
      $(this).find('tfoot td.discount_total').html(sums.discount_total);
      $(this).find('tfoot td.adjustment').html(sums.adjustment);
    });
+   $('.table-detailed-sales-contract-report').on('draw.dt', function() {
+     var valReportsTable = $(this).DataTable();
+     var sums = valReportsTable.ajax.json().sums;
+     $(this).find('tfoot').addClass('bold');
+     $(this).find('tfoot td').eq(0).html("<?php echo _l('invoice_total'); ?>");
+     $(this).find('tfoot td.SL').html(sums.SL);
+     $(this).find('tfoot td.SLDG').html(sums.SLDG);
+     $(this).find('tfoot td.SLCL').html(sums.SLCL);
+     $(this).find('tfoot td.DSHD').html(sums.DSHD);
+     $(this).find('tfoot td.DSTH').html(sums.DSTH);
+     $(this).find('tfoot td.DSCL').html(sums.DSCL);
+   });
  });
 
  function init_report(e, type) {
+    $('#PO_SO').addClass('hide');
     $('#report_tiltle').text($(e).text());
    var report_wrapper = $('#report');
    if (report_wrapper.hasClass('hide')) {
@@ -261,6 +280,8 @@
    $('#general-order-tracking-book-report').addClass('hide');
    $('#cash-funds-detailing-accounting-books').addClass('hide');
    $('#bank-deposit-books').addClass('hide');
+   $('#detailed-sales-contract-report').addClass('hide');
+   $('#sales-analysis-report').addClass('hide');
 
    $('select[name="months-report"]').selectpicker('val', '');
        // Clear custom date picker
@@ -311,6 +332,10 @@
         $('#cash-funds-detailing-accounting-books').removeClass('hide');
       }else if(type == 'bank-deposit-books'){
         $('#bank-deposit-books').removeClass('hide');
+      }else if(type == 'detailed-sales-contract-report'){
+        $('#detailed-sales-contract-report').removeClass('hide');
+      }else if(type == 'sales-analysis-report'){
+        $('#sales-analysis-report').removeClass('hide');
       }
 
       gen_reports();
@@ -348,6 +373,77 @@
         }
       })
      });
+   }
+
+   // Generate PO-SO charts
+   function PO_SO_chart_report() {
+    var PO_chart_, SO_chart_;
+    var PO_chart = $('#chart-PO');
+    var SO_chart = $('#chart-SO');
+     if (typeof(PO_chart_) !== 'undefined') {
+       PO_chart_.destroy();
+     }
+     if (typeof(SO_chart_) !== 'undefined') {
+       SO_chart_.destroy();
+     }
+     if (PO_chart.length > 0) {
+            // Leads overview status
+            PO_chart_=new Chart(PO_chart, {
+                type: 'doughnut',
+                data: <?php echo $PO_status_stats; ?>,
+                options:{
+                         tooltips: {
+                                  callbacks: {
+                                    label: function(tooltipItem, data) {
+                                      console.log(data)
+                                      return data.labels[tooltipItem.index]+" ("+data.datasets[0].quantity[tooltipItem.index]+" "+data.datasets[0].grand_total[tooltipItem.index]+")";
+                                                    }
+                                                }
+                                            },
+                          maintainAspectRatio:true,
+                          legend: {
+                                      position: 'right',
+                                  },
+                          title: {
+                                display: true,
+                                text: 'Biểu đồ Đơn Đặt Hàng (PO)'
+                            },
+                          animation: {
+                                        animateScale: true,
+                                        animateRotate: true
+                                    }
+                        }
+            });
+        }
+      if (SO_chart.length > 0) {
+            // Leads overview status
+            SO_chart_=new Chart(SO_chart, {
+                type: 'doughnut',
+                data: <?php echo $SO_status_stats; ?>,
+                options:{
+                         tooltips: {
+                                  callbacks: {
+                                    label: function(tooltipItem, data) {
+                                      console.log(data)
+                                      return data.labels[tooltipItem.index]+" ("+data.datasets[0].quantity[tooltipItem.index]+" "+data.datasets[0].grand_total[tooltipItem.index]+")";
+                                                    }
+                                                }
+                                            },
+                          maintainAspectRatio:true,
+                          legend: {
+                                      position: 'right',
+                                  },
+                          title: {
+                                display: true,
+                                text: 'Biểu đồ Đơn Hàng Bán (SO)'
+                            },
+                          animation: {
+                                        animateScale: true,
+                                        animateRotate: true
+                                    }
+                        }
+            });
+        }
    }
 
    function report_by_payment_modes() {
@@ -549,9 +645,24 @@
 
      initDataTable('.table-bank-deposit-books-report', admin_url + 'reports/bank_deposit_books', false, false, fnServerParams, [0, 'DESC']);
    }
+   function detailed_sales_contract_report() {
+    if ($.fn.DataTable.isDataTable('.table-detailed-sales-contract-report')) {
+     $('.table-detailed-sales-contract-report').DataTable().destroy();
+    }
+
+     initDataTable('.table-detailed-sales-contract-report', admin_url + 'reports/detailed_sales_contract_report', false, false, fnServerParams, [0, 'DESC']);
+   }
+   function sales_analysis_products_report() {
+    if ($.fn.DataTable.isDataTable('.table-products-report')) {
+     $('.table-products-report').DataTable().destroy();
+    }
+
+     initDataTable('.table-products-report', admin_url + 'reports/sales_analysis_products_report', false, false, fnServerParams, [0, 'DESC']);
+   }
 
    // Main generate report function
    function gen_reports() { 
+     
      if (!$('.chart-income').hasClass('hide')) {
        total_income_bar_report();
      } else if (!$('.chart-payment-modes').hasClass('hide')) {
@@ -595,6 +706,12 @@
      }
      else if(!$('#bank-deposit-books').hasClass('hide')){
       bank_deposit_books();
+     }
+     else if(!$('#detailed-sales-contract-report').hasClass('hide')){
+      detailed_sales_contract_report();
+     }
+     else if(!$('#sales-analysis-report').hasClass('hide')){
+      sales_analysis_products_report();
      }
   }
 

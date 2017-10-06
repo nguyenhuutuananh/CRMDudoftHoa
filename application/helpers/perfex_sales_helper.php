@@ -2235,13 +2235,23 @@ function contract_purchase_pdf($contract) {
         //$str = str_replace(" ", "-", str_replace("&*#39;","",$str));
         return $str;
     }
+
     // auto get from option
-    
     preg_match_all('/\{([A-Za-z\_]*)\}/', $contract->template, $list_options);
+    
+
     foreach($list_options[1] as $value) {
         if(check_option($value))
             $contract->template = str_replace("{".$value."}", convert_vi_to_en(get_option($value)), $contract->template);    
     }
+    //Supplier option
+    
+    $supplier=getSupllier($contract->id_supplier);
+    
+    $contract->template = str_replace("{supplier_name}", convert_vi_to_en($supplier->company), $contract->template);
+    $contract->template = str_replace("{supplier_address}", convert_vi_to_en(getSupllier($contract->id_supplier,1)), $contract->template);
+    $contract->template = str_replace("{supplier_city}", convert_vi_to_en($supplier->city), $contract->template);
+    $contract->template = str_replace("{supplier_phone}", $supplier->phonenumber, $contract->template);
     // Another replacement
     $contract->template = str_replace("{contract_id}", $contract->code, $contract->template);
     $htmlTable = <<<EOL
@@ -2279,8 +2289,10 @@ EOL;
     $htmlTable = "";
     $i=0;
     $total = 0;
+    $total_discount = 0;
     foreach($contract->products as $value) {
         $total += $value->product_quantity * $value->product_price_buy + $value->product_quantity * $value->product_price_buy * $value->taxrate / 100;
+        $total_discount += $value->product_quantity * $value->product_price_buy * $value->discount_percent / 100;
         $htmlTable .= '
             <tr style="width: 50%;font-weight: bold;font-family: \'trebuchet ms\', geneva, sans-serif; font-size: 8pt;">
 
@@ -2321,11 +2333,24 @@ EOL;
         <td colspan="4">
         </td>
         <td colspan="2">
+        Discount
+        </td>
+        
+        <td>
+        '.number_format($total_discount).'
+        </td>
+        </tr>
+        <tr style="width: 50%;font-weight: bold;font-family: \'trebuchet ms\', geneva, sans-serif; font-size: 8pt;">
+        
+        
+        <td colspan="4">
+        </td>
+        <td colspan="2">
         Subtotal
         </td>
         
         <td>
-        '.number_format($total).'
+        '.number_format($total-$total_discount).'
         </td>
         </tr>
         <tr style="width: 50%;font-weight: bold;font-family: \'trebuchet ms\', geneva, sans-serif; font-size: 8pt;">

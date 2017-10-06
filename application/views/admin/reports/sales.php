@@ -11,6 +11,9 @@
                       <!-- Sale Diary -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'diaries-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sale_diary'); ?></a></p>
+                      <!-- detailed_sales_contract_report -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'detailed-sales-contract-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('detailed_sales_contract_report'); ?></a></p>
                       <!-- So theo doi tong hop don dat hang PO -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'general-order-tracking-book-report-PO'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('general_order_tracking_book_PO'); ?></a></p>
@@ -46,6 +49,9 @@
                       <!-- Tổng cộng đơn hàng bán trong tháng -->
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'bank-deposit-books'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('bank_deposit_books'); ?></a></p>
+                      <!-- sales_analysis_report -->
+                      <hr class="hr-10" />
+                      <p><a href="#" class="font-medium" onclick="init_report(this,'sales-analysis-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('sales_analysis_report'); ?></a></p>
                       <div  style="display: none;">
                       <hr class="hr-10" />
                       <p><a href="#" class="font-medium" onclick="init_report(this,'invoices-report'); return false;"><i class="fa fa-caret-down" aria-hidden="true"></i> <?php echo _l('invoice_report'); ?></a></p>
@@ -147,6 +153,18 @@
          </div>
       </div>
       <div class="col-md-12">
+        <!-- CHART -->
+        <div class="row" id="PO_SO">
+          <div class="col-md-6 col-sm-12">
+            <!-- sales_chart_PO_SO -->
+            <?php $this->load->view('admin/reports/includes/sales_chart_PO'); ?>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- sales_chart_PO_SO -->
+            <?php $this->load->view('admin/reports/includes/sales_chart_SO'); ?>
+          </div>
+        </div>
+         
          <div class="panel_s hide" id="report">
             <div class="panel-body">
                <h4 class="no-mtop" id="report_tiltle" ><?php echo _l('reports_sales_generated_report'); ?></h4>
@@ -175,6 +193,10 @@
                <?php $this->load->view('admin/reports/includes/sale_cash_funds_detailing_accounting_books'); ?>
               <!-- sale_bank_deposit_books -->
                <?php $this->load->view('admin/reports/includes/sale_bank_deposit_books'); ?>
+              <!-- sales_detailed_sales_contract_report -->
+               <?php $this->load->view('admin/reports/includes/sales_detailed_sales_contract_report'); ?>
+              <!-- sales_analysis_report -->
+              <?php $this->load->view('admin/reports/includes/sales_analysis_report'); ?>
             </div>
          </div>
       </div>

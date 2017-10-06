@@ -121,6 +121,29 @@ function getClient($id,$address_type=NULL)
     }
     return $CI->perfex_base->getClient($id,$address_type);
 }
+
+function getSupllier($id,$address_type=NULL)
+{
+
+    $CI =& get_instance();
+    if (!class_exists('perfex_base')) {
+        $CI->load->library('perfex_base');
+    }
+    return $CI->perfex_base->getSupllier($id,$address_type);
+}
+
+function getCurrencyByID($id)
+{
+
+    $CI =& get_instance();
+    if (is_numeric($id)) {
+        $currency=$CI->db->get_where('tblcurrencies',array('id'=>$id),1)->row();
+        if($currency) return $currency;
+    }
+    return false;
+    
+}
+
 /**
  * Check if contact id passed is primary contact
  * If you dont pass $contact_id the current logged in contact will be checked
@@ -1694,6 +1717,23 @@ function get_table_where($table, $where = array(),$order_by="",$result='result_a
         return array();
     }
 }
+
+function get_table_where_sum($table, $where = array(),$field='total')
+{
+    $CI =& get_instance();
+    $CI->db->select_sum($field);
+    if($where!=array())
+    {
+        $CI->db->where($where);
+    }
+    
+    $result=$CI->db->get($table)->row();
+    if ($result) {
+        return $result->$field;
+    } else {
+        return 0;
+    }
+}
 function get_code_tk($id)
 {
     $CI =& get_instance();
@@ -1777,4 +1817,117 @@ function getTotalSOPayment($sale_id)
         return false;
     }
 }
+
+
+
+function getDeliverdQuantityByContractID($contract_id,$product_id=NULL)
+{
+    $CI =& get_instance();
+    if(is_numeric($contract_id))
+    {
+        // $CI->db->select('tblsales.id,tblsale_items.product_id,tblsale_items.quantity,tblsale_items.export_quantity,tblsale_items.delivery_quantity');
+        $CI->db->select('tblcontracts.id as contract_id,tblsale_items.product_id,tblsale_items.unit_cost,tblsale_items.tax_rate');
+        $CI->db->select_sum('tblsale_items.amount');
+        $CI->db->select_sum('tblsale_items.delivery_quantity');
+        $CI->db->select_sum('tblsale_items.export_quantity');
+        $CI->db->select_sum('tblsale_items.quantity');
+        if($product_id)
+        {
+            $CI->db->where('product_id',$product_id);
+        }
+        $CI->db->where('tblcontracts.id',$contract_id);
+        $CI->db->join('tblsales','tblsales.id=tblsale_items.sale_id');
+        $CI->db->join('tblsale_orders','tblsale_orders.id=tblsales.rel_id');        
+        $CI->db->join('tblcontracts','tblcontracts.id=tblsale_orders.rel_id'); 
+        $result=$CI->db->get('tblsale_items')->row();
+
+        if ($result) {
+            return $result;
+        }
+        return false;
+    }
+}
+
+function getEffectuatedAmount($price,$quantity,$tax_rate)
+{
+    $CI =& get_instance();
+    if(is_numeric($price) && is_numeric($quantity) && is_numeric($tax_rate))
+    {
+        $sub_total=$price*$quantity;
+        $tax=$sub_total*$tax_rate/100;
+        $amount=$sub_total+$tax;
+
+        if ($amount) {
+            return $amount;
+        }
+        return 0;
+    }
+}
+
+function updateProductTotalQuantityByID($product_id=NULL)
+{
+    $CI =& get_instance();
+    $affected=false;
+    if(is_numeric($product_id) || is_null($product_id))
+    {
+        $CI->db->select('tblitems.id as product_id,tblwarehouses_products.product_quantity');
+        if($product_id)
+        {
+            $CI->db->select_sum('tblwarehouses_products.product_quantity');
+            $CI->db->where('tblwarehouses_products.product_id',$product_id);
+        }
+        $CI->db->join('tblwarehouses_products','tblwarehouses_products.product_id=tblitems.id','left'); 
+        $result=$CI->db->get('tblitems')->result();
+        
+        foreach ($result as $key => $item) {
+            $total_quantity=$item->product_quantity;
+            if(empty($item->product_quantity)) $total_quantity=0;
+            $CI->db->update('tblitems',array('quantity'=>$total_quantity),array('id'=>$item->product_id));
+
+            if($CI->db->affected_rows()>0)
+            {
+                $affected=true;
+            }
+        }
+        if ($affected) {
+            return true;
+        }
+        return false;
+    }
+}
+function getTaxByRate($tax_rate)
+{
+    $CI =& get_instance();
+    if(is_numeric($tax_rate))
+    {
+        $result=$CI->db->get_where('tbltaxes',array('taxrate'=>$tax_rate))->row();
+
+        if ($result) {
+            return $result;
+        }
+        return false;
+    }
+}
+
+function updateWarehouseProductDetails($product_id,$warehouse_id,$entered_date,$entered_quantity,$entered_price)
+{
+    $CI =& get_instance();
+    if(is_numeric($product_id) && is_numeric($entered_quantity) && is_numeric($entered_price))
+    {
+        $data_warehouse_detail=array(
+            'product_id'=>$product_id,
+            'entered_date'=>$entered_date,
+            'entered_quantity'=>$entered_quantity,
+            'entered_price'=>$entered_price
+        );
+
+        $CI->db->insert('tblwarehouse_product_details',$data_warehouse_detail);
+
+        if ($CI->db->affected_rows()>0) {
+            return true;
+        }
+        return false;
+    }
+}
+
 

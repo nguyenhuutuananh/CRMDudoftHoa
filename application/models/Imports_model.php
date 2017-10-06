@@ -54,6 +54,7 @@ class Imports_model extends CRM_Model
         }
         return false;
     }
+
     public function updateWarehouse($id)
     {
         $imports=$this->getImportByID($id);
@@ -97,6 +98,7 @@ class Imports_model extends CRM_Model
                     }
                 }
                 
+                //Update Warehouse Product Details
                 
             }
         }        
@@ -135,6 +137,7 @@ class Imports_model extends CRM_Model
         }
         return false;
     }
+
     public function update_warehouses_adjustment($data_vestion,$id)
     {
         if (is_admin()) {
@@ -148,6 +151,7 @@ class Imports_model extends CRM_Model
         }
         return false;
     }
+
     public function delete_warehouses_adjustment($id)
     {
         if (is_admin()) {
@@ -161,6 +165,7 @@ class Imports_model extends CRM_Model
         }
         return false;
     }
+
     public function cancel_warehouses_adjustment($id)
     {
         $import=$this->getImportByID($id);
@@ -194,6 +199,7 @@ class Imports_model extends CRM_Model
         }
         return false;
     }
+
     public function restore_warehouses_adjustment($id)
     {
         $import=$this->getImportByID($id);
@@ -280,7 +286,6 @@ class Imports_model extends CRM_Model
             'create_by'=>get_staff_user_id()
             );
 
-    
 
         
         $this->db->insert('tblimports', $import);
@@ -292,10 +297,17 @@ class Imports_model extends CRM_Model
 
             foreach ($items as $key => $item) {
                 $product=$this->getProductById($item['id']);
-                $sub_total=$product->price*$item['quantity'];                
+                $sub_total=$product->price*$item['quantity']; 
+
+                $tax_id=$product->tax;
+                $tax_rate=$product->tax_rate;
+
                 if($data['rel_id'] && $data['rel_type']=='contract')
                 {
+
                     $sub_total=$item['quantity_net']*$item['exchange_rate']*$item['price_buy'];
+                    $tax=$sub_total*$item['tax_rate']/100;
+                    $discount=$sub_total*$item['discount_percent']/100;
                 }
                 if($data['rel_type']=='return')
                 {
@@ -326,11 +338,13 @@ class Imports_model extends CRM_Model
                     'sub_total'=>$sub_total,
                     'tk_no'=>$item['tk_no'],
                     'tk_co'=>$item['tk_co'],
-                    'tax_id'=>$product->tax,
-                    'tax_rate'=>$product->tax_rate,
+                    'tax_id'=>$tax_id,
+                    'tax_rate'=>$tax_rate,
                     'tax'=>$tax,
                     'warehouse_id'=>$data['warehouse_id'],
-                    'warehouse_id_to'=>$data['warehouse_id_to']
+                    'warehouse_id_to'=>$data['warehouse_id_to'],
+                    'discount_percent'=>$item['discount_percent'],
+                    'discount'=>$discount
                     );
                  $this->db->insert('tblimport_items', $item_data);
                  if($this->db->affected_rows()>0)
@@ -356,7 +370,6 @@ class Imports_model extends CRM_Model
 
      public function update($data,$id)
    {
-
         $affected=0;
         $import=array(
             'supplier_id'=>$data['supplier_id'],
@@ -387,9 +400,15 @@ class Imports_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
+                
+                $tax_id=$product->tax;
+                $tax_rate=$product->tax_rate;
+
                 if($data['rel_id'] && $data['rel_type']=='contract')
                 {
                     $sub_total=$item['quantity_net']*$item['exchange_rate']*$item['price_buy'];
+                    $tax=$sub_total*$item['tax_rate']/100;
+                    $discount=$sub_total*$item['discount_percent']/100;
                 }
                 if($data['rel_type']=='return')
                 {
@@ -413,7 +432,9 @@ class Imports_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'warehouse_id'=>$data['warehouse_id'],
-                    'warehouse_id_to'=>$data['warehouse_id_to']
+                    'warehouse_id_to'=>$data['warehouse_id_to'],
+                    'discount_percent'=>$item['discount_percent'],
+                    'discount'=>$discount
                     );
                 if($itm)
                 {

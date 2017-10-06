@@ -44,6 +44,7 @@
 var staffProjectsParams = {};
  // initDataTable('.table-sales', admin_url + 'sales/list_sales', 'undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
  initDataTable('.table-sale_orders', admin_url+'sale_orders/list_sale_orders','undefined', 'undefined', staffProjectsParams, [2, 'ASC']);
+ // .column(8).visible(false, false).columns.adjust()
 
 </script>
 </body>

@@ -153,12 +153,23 @@ class Warehouse_model extends CRM_Model
     {
         if(is_numeric($warehouse_id) && is_numeric($product_id))
         {
+            //Ton tai trong kho
             $this->db->select('*');
             $this->db->from('tblwarehouses_products');
             $this->db->join('tblitems', 'tblitems.id = tblwarehouses_products.product_id', 'left');
             $this->db->where('tblwarehouses_products.product_id', $product_id);
             $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
             $result=$this->db->get()->row();
+            //Ko chua trong kho
+            if(empty($result))
+            {
+                $this->db->select('*');
+                $this->db->from('tblitems');
+                $this->db->join('tblwarehouses_products', 'tblwarehouses_products.product_id = tblitems.id', 'left');
+                $this->db->where('tblitems.id', $product_id);
+                // $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
+                $result=$this->db->get()->row();
+            }
             if($result)
             {
                 $this->db->select_sum('product_quantity');

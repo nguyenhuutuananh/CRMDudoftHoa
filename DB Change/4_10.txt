@@ -1,0 +1,3 @@
+ALTER TABLE `tblimport_items` ADD `discount_percent` FLOAT NULL DEFAULT '0' AFTER `tax`, ADD `discount` FLOAT NULL DEFAULT '0' AFTER `discount_percent`;
+
+ALTER TABLE `tblorders_detail` ADD `original_price_buy` FLOAT NULL DEFAULT '0' AFTER `discount_percent`;
