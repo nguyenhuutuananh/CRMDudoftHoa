@@ -234,7 +234,7 @@ ob_end_clean();
 <div id="header">
     <div class="hide-menu"><i class="fa fa-bars"></i></div>
     <div id="logo">
-        <?php get_company_logo('admin') ?>
+        <?php get_company_logo('admin/home/home') ?>
     </div>
     <nav>
         <div class="small-logo">

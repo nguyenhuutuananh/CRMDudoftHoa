@@ -156,6 +156,14 @@ class Imports extends Admin_controller
 
         } else {
             $data['item'] = $this->imports_model->getImportByID($id);
+            foreach($data['item']->items as $key=> $vla)
+            {
+                $this->db->select('entered_price');
+                $this->db->where('warehouse_id',$vla->warehouse_id);
+                $this->db->where('product_id',$vla->product_id);
+                $view_entered_price=$this->db->get('tblimport_items')->result_array();
+                $data['item']->items[$key]->array_entered_price=json_encode($view_entered_price);
+            }
             
             $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
 
@@ -170,12 +178,23 @@ class Imports extends Admin_controller
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['suppliers']=$this->suppliers_model->get();
         $data['contracts']=$this->purchase_contacts_model->get();
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
+        $data['money']=get_table_where('tblwarehouse_product_details');
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         
         $data['title'] = $title;
         $this->load->view('admin/imports/transfers/detail', $data);
+    }
+
+    public function get_entered_price($warehouse_id,$id)
+    {
+        $this->db->select('distinct(entered_price)');
+        $this->db->where('warehouse_id',$warehouse_id);
+        $this->db->where('product_id',$id);
+        $result=$this->db->get('tblwarehouse_product_details')->result_array();
+        echo json_encode($result);
+
     }
 
 
@@ -462,9 +481,7 @@ class Imports extends Admin_controller
         $staff_id=get_staff_user_id();
         $date=date('Y-m-d H:i:s');
         $data=array('status'=>$status);
-
         $inv=$this->imports_model->getImportByID($id);
-        // var_dump($inv);die();
         if(is_admin() && $status==0)
         {
             $data['user_head_id']=$staff_id;
@@ -496,15 +513,29 @@ class Imports extends Admin_controller
             $data['user_head_date']=$date;
         }
 
-        $success=fale;
+        $success=false;
         
         if(is_admin() || is_head($inv->create_by))
         {
-            $success=$this->imports_model->update_status($id,$data);
+            $update_quantity=$this->imports_model->update_warehouse_product($id);
+            if(!$update_quantity)
+            {
+                echo json_encode(array(
+                    'success' => $success,
+                    'result'=>false,
+                    'message' => _l('Số lượng sản phẩm trong kho không đũ để chuyển kho')
+                ));die();
+            }
+            else
+            {
+                $success=$this->imports_model->update_status($id,$data);
+            }
+
         }
         if($success) {
             echo json_encode(array(
                 'success' => $success,
+                'result'=>true,
                 'message' => _l('Xác nhận phiếu thành công')
             ));
         }
@@ -512,6 +543,7 @@ class Imports extends Admin_controller
         {
             echo json_encode(array(
                 'success' => $success,
+                'result'=>true,
                 'message' => _l('Không thể cập nhật dữ liệu')
             ));
         }

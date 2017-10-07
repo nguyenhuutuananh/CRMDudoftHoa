@@ -201,10 +201,11 @@
                                     <?php } ?> -->
                                     </select>
                                 </div>
+
                             </div>
                         
                             <div class="col-md-5 text-right show_quantity_as_wrapper">
-                                
+
                             </div>
                         </div>
                         
@@ -217,6 +218,7 @@
                                         <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('entered_price'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="15%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
@@ -246,6 +248,11 @@
                                             $selected=(isset($item) ? $item->tk_co : '');
                                             echo render_select('tk_co',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
+                                        </td>
+                                        <td>
+                                                <select class="selectpicker no-margin" data-width="100%" id="entered_price" data-none-selected-text="<?php echo _l('entered_price'); ?>" data-live-search="true">
+                                                    <option value=""></option>
+                                                </select>
                                         </td>
                                         <td>
                                             <input type="hidden" id="item_unit" value="" />
@@ -291,6 +298,20 @@
                                             $selected=(isset($value) ? $value->tk_co : '');
                                             echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
+                                        </td>
+                                        <td>
+                                            <select class="selectpicker no-margin" data-width="100%" name="items[<?php echo $i; ?>][entered_price]" data-none-selected-text="<?php echo _l('entered_price'); ?>" data-live-search="true">
+                                                <option value=""></option>
+                                                <?php foreach(json_decode($value->array_entered_price) as $rom){
+                                                    $selected="";
+                                                    if($rom->entered_price==$value->entered_price)
+                                                    {
+                                                        $selected="selected";
+                                                    }
+                                                    ?>
+                                                    <option value="<?=$rom->entered_price?>" <?=$selected?>><?=$rom->entered_price?></option>
+                                                <?php }?>
+                                            </select>
                                         </td>
                                         <td><?php echo $value->unit_name; ?></td>
                                         <?php
@@ -472,9 +493,10 @@
         var td4 = $('<td></td>');
 
         var td5 = $('<td></td>');
-        var td6 = $('<td><input class="mainQuantity" min="1" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
-        var td7 = $('<td></td>');
+        var td6 = $('<td></td>');
+        var td7 = $('<td><input class="mainQuantity" min="1" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td8 = $('<td></td>');
+        var td9 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -494,11 +516,18 @@
         selectTd4.attr('name',tk_co);
         td4.append(selectTd4);
 
-        td5.text($('tr.main').find('td:nth-child(5)').text());
-        td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
-        td6.find('input').attr('max',$('tr.main').find('td:nth-child(6) > input').attr('max'));
-        td7.text( $('tr.main').find('td:nth-child(7)').text() );
+        var selectTd5 = $('tr.main').find('td:nth-child(5) select').clone();
+        selectTd5.val($('tr.main').find('td:nth-child(5) select').selectpicker('val'));
+        selectTd5.removeAttr('id');
+        var entered_price='items['+uniqueArray+'][entered_price]';
+        selectTd5.attr('name',entered_price);
+        td5.append(selectTd5);
+
+        td6.text($('tr.main').find('td:nth-child(6)').text());
+        td7.find('input').val($('tr.main').find('td:nth-child(7) > input').val());
+        td7.find('input').attr('max',$('tr.main').find('td:nth-child(7) > input').attr('max'));
         td8.text( $('tr.main').find('td:nth-child(8)').text() );
+        td9.text( $('tr.main').find('td:nth-child(9)').text() );
         
         newTr.append(td1);
         newTr.append(td2);
@@ -508,6 +537,7 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-purchase tbody').append(newTr);
@@ -529,10 +559,11 @@
         trBar.find('td:nth-child(2)').text("Tên hàng hóa");
         trBar.find('td:nth-child(3) > select').val('').selectpicker('refresh');
         trBar.find('td:nth-child(4) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(5)').text('Đơn vị tính');
-        trBar.find('td:nth-child(6) > input').val('1');
-        trBar.find('td:nth-child(7)').text('Giá nhập');
-        trBar.find('td:nth-child(8)').text('0');
+        trBar.find('td:nth-child(5) > select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(6)').text('Đơn vị tính');
+        trBar.find('td:nth-child(7) > input').val('1');
+        trBar.find('td:nth-child(8)').text('Giá nhập');
+        trBar.find('td:nth-child(9)').text('0');
 
 
     };
@@ -557,24 +588,41 @@
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var warehouse_id=$('#warehouse_id').val();
-        getMaxProductQuantity(warehouse_id,id, function(data) {
+        $('#entered_price').html('').selectpicker("refresh");
+            $.ajax({
+                    url : admin_url + 'imports/get_entered_price/' +warehouse_id+'/'+ id,
+                    dataType : 'json',
+                })
+                .done(function(entered_price){
+                    if(entered_price)
+                    {
+                        console.log(entered_price);
+                        $.each($(entered_price), function( index, value ) {
+                            console.log(value);
+                            $('#entered_price').append('<option value="'+value.entered_price+'">'+formatNumber(value.entered_price)+'</option>');
+                        })
+                        $('#entered_price').selectpicker("refresh");
+                    }
+                });
 
+
+
+
+    getMaxProductQuantity(warehouse_id,id, function(data) {
             var maxquantity=data.product_quantity;
             var itemFound = findItem(id);
             if(typeof(itemFound) != 'undefined') {
                 var trBar = $('tr.main');
-                //console.log(trBar.find('td:nth-child(2) > input'));
-                
                 trBar.find('td:first > input').val(itemFound.id);
                 trBar.find('td:nth-child(2)').text(itemFound.name);
                 
-                trBar.find('td:nth-child(5)').text(itemFound.unit_name);
-                trBar.find('td:nth-child(5) > input').val(itemFound.unit);
+                trBar.find('td:nth-child(6)').text(itemFound.unit_name);
+                trBar.find('td:nth-child(6) > input').val(itemFound.unit);
                 
-                trBar.find('td:nth-child(6) > input').val(1);
-                trBar.find('td:nth-child(6) > input').attr('max',maxquantity);
-                trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
-                trBar.find('td:nth-child(8)').text(  formatNumber(itemFound.price * 1) );
+                trBar.find('td:nth-child(7) > input').val(1);
+                trBar.find('td:nth-child(7) > input').attr('max',maxquantity);
+                trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price));
+                trBar.find('td:nth-child(9)').text(  formatNumber(itemFound.price * 1) );
                 isNew = true;
                 $('#btnAdd').show();
             }
@@ -584,6 +632,7 @@
             }
         });
     });
+
     function getMaxProductQuantity(warehouse_id,product_id, callback){
         $.ajax({
           url : admin_url + 'warehouses/getProductQuantity/' +warehouse_id+'/'+ product_id,

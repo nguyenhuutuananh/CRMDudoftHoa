@@ -419,7 +419,6 @@
             $('.form-send').prop('class','col-md-6 form-send');
             $('.form-code').prop('class','col-md-6 form-code');
         }
-        console.log(form_send);
 
     }
 

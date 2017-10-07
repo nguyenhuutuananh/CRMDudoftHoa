@@ -140,5 +140,5 @@
         </script>
         <?php do_action('app_admin_head'); ?>
     </head>
-    <body <?php if(is_rtl()){ echo 'dir="rtl"';} ?> class="<?php echo 'page'.($this->uri->segment(2) ? '-'.$this->uri->segment(2) : '') . '-'.$this->uri->segment(1); ?> admin <?php if(isset($bodyclass)){echo $bodyclass . ' '; } ?><?php if($this->session->has_userdata('is_mobile') && $this->session->userdata('is_mobile') == true){echo 'hide-sidebar ';} ?><?php if(is_rtl()){echo 'rtl';} ?>">
+    <body <?php if(is_rtl()){ echo 'dir="rtl"';} ?> class="<?php echo 'page'.($this->uri->segment(2) ? '-'.$this->uri->segment(2) : '') . '-'.$this->uri->segment(1); ?> admin <?php if(isset($bodyclass)){echo $bodyclass . ' '; } ?><?php if($this->session->has_userdata('is_mobile') && $this->session->userdata('is_mobile') == true){echo 'hide-sidebar ';} ?><?php if(is_rtl()){echo 'rtl';} ?> hide-sidebar">
         <?php do_action('after_body_start'); ?>

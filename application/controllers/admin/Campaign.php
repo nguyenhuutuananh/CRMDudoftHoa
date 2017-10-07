@@ -19,6 +19,27 @@ class Campaign extends Admin_controller
             }
         }
 
+        $field=array('code','title','company','short_name','phonenumber',
+            'mobilephone_number','address_room_number','address_building','address_home_number',
+            'address','address_town','country','address_area','city','state','address_ward','fax',
+            'email','id_card','vat','birthday','user_referrer','groups_in','source_approach',
+            'default_currency','debt','shipping_area','shipping_country','shipping_area',
+            'shipping_city','shipping_state','shipping_ward','shipping_room_number',
+            'shipping_building','shipping_home_number','shipping_street','shipping_town',
+            'shipping_zip',
+
+        );
+        $field2=array(
+            'type_of_organization','bussiness_registration_number','legal_representative','website',
+            'business','cooperative_day',
+        );
+        $field_staff=array(
+            'staff_code','fullname','email','phonenumber',
+
+        );
+        $data['field']=$field;
+        $data['field2']=$field2;
+        $data['fieldstaff']=$field_staff;
         $data['email_plate'] = $this->email_marketing_model->get_email_templete();
         $data['title'] = _l('campaign');
         $this->load->view('admin/campaign/manage', $data);

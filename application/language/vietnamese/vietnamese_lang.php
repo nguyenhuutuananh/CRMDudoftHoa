@@ -4165,6 +4165,7 @@ $lang['suppliers_code']="Mã nhà cung cấp";
 $lang['debt']="Công nợ";
 $lang['home_new_PO']="Đơn đặt hàng(PO)";
 $lang['email_marketing']="Email marketing";
+$lang['___email_marketing']="Gửi email";
 $lang['been_send_email']="Email đã gửi";
 $lang['template_mail']="Mẩu email";
 $lang['opportunity']="Cơ hội";
@@ -4275,6 +4276,9 @@ $lang['purchase_totalmoneydiscount']="Tổng chiết khấu";
 
 $lang['purchase_price']="Giá trị";
 $lang['exchange_rate']="Tỷ giá";
+
+$lang['send_email_client_on_campaign']="Gửi email cho khách hàng trong chiến dịch";
+$lang['entered_price']="Đơn giá chuyển";
 
 
 
