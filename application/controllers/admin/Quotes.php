@@ -133,6 +133,7 @@ class Quotes extends Admin_controller
                 blank_page('Quote Not Found');
             }
         }
+        // var_dump($data['item']);die;
         $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
         $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
 

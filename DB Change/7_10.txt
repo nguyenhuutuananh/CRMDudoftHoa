@@ -1,0 +1,11 @@
+ALTER TABLE `tblclients` CHANGE `discount_percent` `discount_percent` DECIMAL(11,2) NULL DEFAULT '0';
+
+ALTER TABLE `tblquotes` ADD `adjustment` DECIMAL(25,0) NULL DEFAULT '0' AFTER `discount`;
+
+ALTER TABLE `tblquotes` ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' AFTER `shipping`;
+
+ALTER TABLE `tblquote_items` CHANGE `discount_percent` `discount_percent` DECIMAL(11,2) NULL DEFAULT '0';
+
+ALTER TABLE `tblcontract_items` ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' AFTER `discount`;
+
+ALTER TABLE `tblcontract_items` CHANGE `discount` `discount` DECIMAL(25,2) NULL DEFAULT '0';

@@ -1947,7 +1947,7 @@ function increaseWarehouseProductDetail($import_id,$product_id,$warehouse_id,$en
         'entered_price'=>$entered_price,
         'entered_date'=>$entered_date
     );
-    
+
     if (isset($import_id) && isset($product_id) && isset($warehouse_id) && is_numeric($entered_quantity)) {
         $product=$CI->db->get_where('tblwarehouse_product_details',array('import_id'=>$import_id,'product_id'=>$product_id,'warehouse_id'=>$warehouse_id,'entered_date'=>$entered_date,))->row();
 
@@ -2006,7 +2006,7 @@ function getOrginalPrice($import_id=NULL,$product_id=NULL)
     $CI =& get_instance();
     if(is_numeric($import_id) && is_numeric($product_id))
     {
-        $CI->db->select('tblimports.id as import_id,tblimports.rel_type,tblimports.rel_id as contract_id,tblpurchase_contracts.id_order as order_id,tblorders_detail.product_id,tblorders_detail.original_price_buy');
+        $CI->db->select('tblorders_detail.id as orders_detail_id ,tblimports.id as import_id,tblimports.rel_type,tblimports.rel_id as contract_id,tblpurchase_contracts.id_order as order_id, tblorders_detail.product_id, tblorders_detail.entered_quantity, tblorders_detail.original_price_buy');
         $CI->db->join('tblpurchase_contracts','tblpurchase_contracts.id=tblimports.rel_id','left'); 
         $CI->db->join('tblorders_detail','tblorders_detail.order_id=tblpurchase_contracts.id_order','left'); 
         $CI->db->where('tblimports.id',$import_id);
@@ -2018,5 +2018,24 @@ function getOrginalPrice($import_id=NULL,$product_id=NULL)
         return false;
     }
 }
+function updateTotalQuantityImport($import_id=NULL,$product_id=NULL)
+{
+    $CI =& get_instance();
+    if(is_numeric($import_id) && is_numeric($product_id))
+    {
+        
+        $import=$CI->db->get_where('tblimports',array('id'=>$import_id))->row();
+        $CI->db->select_sum('quantity_net');
+        $CI->db->join('tblimports','tblimports.id=tblimport_items.import_id','left');
+        $total_quantity=$CI->db->get_where('tblimport_items',array('rel_id'=>$import->rel_id,'product_id'=>$product_id))->row()->quantity_net;
 
+        $order_item=getOrginalPrice($import_id,$product_id);
+        $CI->db->update('tblorders_detail',array('entered_quantity'=>$total_quantity),array('id'=>$order_item->orders_detail_id));
+        if ($CI->db->affected_rows()) {
+            
+            return true;
+        }
+        return false;
+    }
+}
 

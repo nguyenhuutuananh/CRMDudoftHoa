@@ -58,13 +58,15 @@ class Purchase_contacts_model extends CRM_Model
 
     public function getContractsBySupplierID($supplier_id = '')
     {
-
+        $this->db->distinct();
         $this->db->select('tblpurchase_contracts.*');
         $this->db->from('tblpurchase_contracts');
+        $this->db->join('tblorders_detail',     'tblorders_detail.order_id = tblpurchase_contracts.id_order', 'left');
         if (is_numeric($supplier_id)) 
         {
             $this->db->where('tblpurchase_contracts.id_supplier', $supplier_id);
         }
+        $this->db->where('tblorders_detail.product_quantity>tblorders_detail.entered_quantity');
         $products= $this->db->get()->result();
         if($products)
             {

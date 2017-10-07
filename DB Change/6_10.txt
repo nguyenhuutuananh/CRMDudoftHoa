@@ -1,1 +1,7 @@
+ALTER TABLE `tblorders_detail` ADD `entered_quantity` INT NULL DEFAULT '0' AFTER `product_quantity`;
+
 ALTER TABLE `tblwarehouse_product_details` ADD `warehouse_id` INT NULL AFTER `product_id`;
+
+ALTER TABLE `tblclients` ADD `discount_percent` DECIMAL(11,2) NULL AFTER `debt`;
+
+ALTER TABLE `tblquote_items` ADD `discount_percent` DECIMAL NULL DEFAULT '0' AFTER `tax`;

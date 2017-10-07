@@ -260,9 +260,10 @@
                                         </td>
                                         <?php
                                             // $max=$value->quantity-$value->quantity_net;
+                                        // var_dump($value);
                                             $max=$value->quantity;
                                          ?>
-                                        <td><input class="mainQuantity" type="number" min="0" max="<?=$max?>" name="items[<?php echo $i; ?>][quantity_net]" value="<?php echo $value->quantity; ?>"></td>
+                                        <td><input class="mainQuantity" type="number" min="0" max="<?=$max?>" name="items[<?php echo $i; ?>][quantity_net]" value="<?php echo $value->quantity_net; ?>"></td>
 
                                         <?php 
                                             $price_buy=$value->exchange_rate*$value->unit_cost;
@@ -274,6 +275,7 @@
 
                                         <td>
                                             <?php echo number_format($price_buy); ?>
+                                            <input type="hidden" name="items[<?=$i?>][quantity]" value="<?=$value->quantity?>" />
                                             <input type="hidden" class="exchange_rate" name="items[<?=$i?>][exchange_rate]" value="<?=$value->exchange_rate?>" />
                                             <input type="hidden" class="price_buy" name="items[<?=$i?>][price_buy]" value="<?=$value->unit_cost?>" />
                                             <input type="hidden" class="tax_rate" name="items[<?=$i?>][tax_rate]" value="<?=$value->tax_rate?>" />
@@ -391,7 +393,12 @@
             })
             .done(function(data){ 
                 total=0;
+                var row=0;
                 $.each(data, function(key,value){
+                    
+                    var maxQ=value.product_quantity-value.entered_quantity;
+                    if(maxQ>0){
+                    row++;
                     var newTr = $('<tr class="item"></tr>');
                     var td1 = $('<td class="dragger"><input type="hidden" name="items[' + uniqueArray + '][id]" value="'+value.product_id+'" /></td>');
                     var td2 = $('<td>'+value.name+'</td>');
@@ -411,12 +418,14 @@
                     selectTd4.attr('name',tk_co);
                     td4.append(selectTd4);
 
+                    
+
                     var price_buy=parseFloat(value.price_buy)*parseFloat(value.exchange_rate);
                     if(isNaN(parseFloat(price_buy)))
                     {
                         price_buy=0;
                     }
-                    var sub_total=parseFloat(value.product_quantity)*price_buy;
+                    var sub_total=parseFloat(maxQ)*price_buy;
                     if(isNaN(parseFloat(sub_total)))
                     {
                         sub_total=0;
@@ -434,9 +443,10 @@
                     var amount=sub_total+tax-discount;
                     // console.log(value);
                     
+                    
 
                     var td5 = $('<td>'+formatNumber(value.exchange_rate)+'</td>');
-                    var td6 = $('<td><input type="hidden" name="items['+uniqueArray+'][quantity]" value="'+value.product_quantity+'" /><input type="number" min="0" max="'+value.product_quantity+'" class="mainQuantity" name="items['+uniqueArray+'][quantity_net]" value="'+value.product_quantity+'" /></td>');
+                    var td6 = $('<td><input type="hidden" name="items['+uniqueArray+'][quantity]" value="'+value.product_quantity+'" /><input type="number" min="0" max="'+maxQ+'" class="mainQuantity" name="items['+uniqueArray+'][quantity_net]" value="'+maxQ+'" /></td>');
                     var td7 = $('<td><input type="hidden" class="exchange_rate" name="items['+uniqueArray+'][exchange_rate]" value="'+value.exchange_rate+'" /><input type="hidden" class="price_buy" name="items['+uniqueArray+'][price_buy]" value="'+value.price_buy+'" /><input type="hidden" class="tax_rate" name="items['+uniqueArray+'][tax_rate]" value="'+value.taxrate+'" /><input type="hidden" class="discount_percent" name="items['+uniqueArray+'][discount_percent]" value="'+value.discount_percent+'" />'+formatNumber(price_buy)+'</td>');
                     
                     
@@ -459,10 +469,12 @@
                     newTr.append(td10);
                     newTr.append(td11);
                     $('table.item-purchase tbody').append(newTr);
+                }
                     uniqueArray++;
                     total++;
                     
                 });
+                
                 $('.selectpicker').selectpicker('refresh');
                 refreshTotal();
             });

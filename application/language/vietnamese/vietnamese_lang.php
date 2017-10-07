@@ -4277,8 +4277,13 @@ $lang['purchase_price']="Giá trị";
 $lang['exchange_rate']="Tỷ giá";
 
 $lang['purchase_costs']="Chi phí mua hàng";
-
-
+$lang['discount_percent_total']="Chiết khấu";
+$lang['adjustment_total']="Điều chỉnh";
+$lang['discount_percent']="Phần trăm chiết khấu";
+$lang['tk_no_131']="TK công nợ/Chi phí";
+$lang['tk_co_5111']="TK doanh thu";
+$lang['tk_tax_1331']="TK thuế";
+$lang['tk_ck_5211']="TK chiết khấu";
 
 
 
