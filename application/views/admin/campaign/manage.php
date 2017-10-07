@@ -32,62 +32,101 @@
       </div>
     </div>
   </div>
+<style>
+    .modal-lg-80{
+        width: 80%!important;
+    }
+</style>
   <?php $this->load->view('admin/invoice_items/item'); ?>
 
 
 
-<div id="send_email-campaign" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><?=_l('send_email_client')?></h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="form-sendemail" action="<?=admin_url()?>campaign/send_email">
-                    <input type="hidden" name="email_bcc" id="email_bcc">
-                    <input type="hidden" name="campaign" id="campaign">
-                    <div class="form-group">
-                        <div class="checkbox checkbox-success mbot20 no-mtop">
-                            <input type="checkbox" name="type_email" id="type_email" onchange="kiemtra_type_email(this.value)">
-                            <label for="type_email">Sử dụng template</label>
+        <div id="send_email-campaign" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg-80">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><?=_l('send_email_client_on_campaign')?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-6 form-send">
+                            <div style="text-align: right"><a onclick="full_col()"><i class="fa fa-expand"></i></a></div>
+                            <form method="post" id="form-sendemail" action="<?=admin_url()?>campaign/send_email">
+                                <input type="hidden" name="email_bcc" id="email_bcc">
+                                <input type="hidden" name="campaign" id="campaign">
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-success mbot20 no-mtop">
+                                        <input type="checkbox" name="type_email" id="type_email" onchange="kiemtra_type_email(this.value)">
+                                        <label for="type_email">Sử dụng template</label>
+                                    </div>
+                                </div>
+                                <div class="form-group select_template" style="display:none;">
+                                    <label for="view_template">Mẫu email:</label>
+                                    <?php echo render_select('view_template',$email_plate,array('id','name'),'','',array('onchange'=>'get_contentemail(this.value)','data-width'=>'100%','data-none-selected-text'=>_l('chọn Mẫu email'))); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">Chủ đề:</label>
+                                    <input type="text" class="form-control" id="subject" name="subject"  value="" placeholder="Nhập chủ đề của bạn..." required >
+                                </div>
+                                <div class="form-group">
+                                    <p class="bold"><?php echo _l('email_content'); ?></p>
+                                    <?php echo render_textarea('message','','',array('data-task-ae-editor'=>true),array(),'','tinymce-task'); ?>
+                                </div>
+                                <div class="form-group" style="display: none;">
+                                    <p class="bold"><?php echo _l('file'); ?></p>
+                                    <?php echo render_textarea('file_send','','',array('data-task-ae-editor'=>true),array(),'',''); ?>
+                                </div>
+
+                            </form>
+                            <div class="form-group file_dropzone"></div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <?php echo form_open_multipart(admin_url('email_marketing/upload_file'),array('class'=>'dropzone','id'=>'email-upload','onchane'=>'get_delete(this)')); ?>
+                                <input type="file" name="file" multiple />
+                                <?php echo form_close(); ?>
+                                <div class="text-right mtop15">
+                                    <div id="dropbox-chooser"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-md-6 form-code">
+                            <div class="panel_s">
+                                <div class="panel-body">
+                                    <div class="col-md-6 merge_fields_col">
+                                        <hr>
+                                        <h5>Thông tin chung</h5>
+                                        <hr>
+                                        <?php foreach($field as $row=> $fi){?>
+                                            <p style="font-size: 12px;"><?=_l('tblclients.'.$fi)?><span class="pull-right"><a href="#" class="add_merge_field">{tblclients.<?=$fi?>}</a></span></p>
+                                        <?php }?>
+                                    </div>
+
+                                    <div class="col-md-6 merge_fields_col">
+                                        <hr>
+                                        <h5>Doanh nghiệp</h5>
+                                        <hr>
+                                        <?php foreach($field2 as $row2=> $fi2){?>
+                                            <p><?=_l('tblclients.'.$fi2)?><span class="pull-right"><a href="#" class="add_merge_field">{tblclients.<?=$fi2?>}</a></span></p>
+                                        <?php }?>
+                                        <hr>
+                                        <h5>Nhân viên</h5>
+                                        <hr>
+                                        <?php foreach($fieldstaff as $num=>$fis){?>
+                                            <p style="font-size: 12px;"><?=_l('tblstaff.'.$fis)?><span class="pull-right"><a href="#" class="add_merge_field">{tblstaff.<?=$fis?>}</a></span></p>
+                                        <?php }?>
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group select_template" style="display:none;">
-                        <label for="view_template">Mẫu email:</label>
-                        <?php echo render_select('view_template',$email_plate,array('id','name'),'','',array('onchange'=>'get_contentemail(this.value)','data-width'=>'100%','data-none-selected-text'=>_l('chọn Mẫu email'))); ?>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Chủ đề:</label>
-                        <input type="text" class="form-control" id="subject" name="subject"  value="" placeholder="Nhập chủ đề của bạn..." required >
-                    </div>
-                    <div class="form-group">
-                        <p class="bold"><?php echo _l('email_content'); ?></p>
-                        <?php echo render_textarea('message','','',array('data-task-ae-editor'=>true),array(),'','tinymce-task'); ?>
-                    </div>
-                    <div class="form-group" style="display: none;">
-                        <p class="bold"><?php echo _l('file'); ?></p>
-                        <?php echo render_textarea('file_send','','',array('data-task-ae-editor'=>true),array(),'',''); ?>
-                    </div>
-
-                </form>
-                <div class="form-group file_dropzone"></div>
-                <div class="clearfix"></div>
-                <div class="form-group">
-                    <?php echo form_open_multipart(admin_url('email_marketing/upload_file'),array('class'=>'dropzone','id'=>'email-upload','onchane'=>'get_delete(this)')); ?>
-                    <input type="file" name="file" multiple />
-                    <?php echo form_close(); ?>
-                    <div class="text-right mtop15">
-                        <div id="dropbox-chooser"></div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="send_email_campaign('form-sendemail')" class="btn btn-info">Gửi</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="clearfix"></div>
-                <button type="button" onclick="send_email_campaign('form-sendemail')" class="btn btn-default">Gửi</button>
-            </div>
-        </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
 
@@ -163,6 +202,10 @@
 
 <script>
     init_editor('.tinymce-task',{height:300});
+    $('.add_merge_field').on('click', function(e) {
+        e.preventDefault();
+        tinymce.activeEditor.execCommand('mceInsertContent', false, $(this).text());
+    });
     function kiemtra_type_email(id)
     {
         if($('#type_email').prop('checked')==true)
@@ -278,6 +321,21 @@
 
             }
         });
+
+    }
+    function full_col()
+    {
+        var form_send=$('.form-send').attr('class');
+        if(form_send=='col-md-6 form-send')
+        {
+            $('.form-send').prop('class','col-md-12 form-send');
+            $('.form-code').prop('class','col-md-6 form-code hide');
+        }
+        else
+        {
+            $('.form-send').prop('class','col-md-6 form-send');
+            $('.form-code').prop('class','col-md-6 form-code');
+        }
 
     }
   $(function(){

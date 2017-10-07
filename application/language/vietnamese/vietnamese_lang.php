@@ -4165,6 +4165,7 @@ $lang['suppliers_code']="Mã nhà cung cấp";
 $lang['debt']="Công nợ";
 $lang['home_new_PO']="Đơn đặt hàng(PO)";
 $lang['email_marketing']="Email marketing";
+$lang['___email_marketing']="Gửi email";
 $lang['been_send_email']="Email đã gửi";
 $lang['template_mail']="Mẩu email";
 $lang['opportunity']="Cơ hội";
@@ -4284,6 +4285,11 @@ $lang['tk_no_131']="TK công nợ/Chi phí";
 $lang['tk_co_5111']="TK doanh thu";
 $lang['tk_tax_1331']="TK thuế";
 $lang['tk_ck_5211']="TK chiết khấu";
+
+$lang['send_email_client_on_campaign']="Gửi email cho khách hàng trong chiến dịch";
+$lang['entered_price']="Đơn giá chuyển";
+
+
 
 
 

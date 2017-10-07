@@ -83,9 +83,17 @@
             cache: false,
             success: function (response) {
                 response = JSON.parse(response);
-                if (response.success == true) {
+                if(!response.result)
+                {
                     $('.table-contract').DataTable().ajax.reload();
-                    alert_float('success', response.message);
+                    alert_float('danger', response.message);
+                }
+                else
+                {
+                    if (response.success == true) {
+                        $('.table-contract').DataTable().ajax.reload();
+                        alert_float('success', response.message);
+                    }
                 }
                 return false;
             }
