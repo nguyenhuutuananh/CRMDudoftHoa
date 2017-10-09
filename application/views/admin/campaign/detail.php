@@ -7,7 +7,7 @@
    <div class="panel_s">
      <div class="panel-body">
       <div class="clearfix"></div>
-          <h4 class="bold no-margin"><?php echo (isset($heading) ? $heading : ''); ?></h4>
+         <h4 class="bold no-margin"><?php echo (isset($campaign) ? _l('campaign_edit') : _l('campaign_add')); ?></h4>
   <hr class="no-mbot no-border" />
     <div class="row">
     <div class="additional"></div>
@@ -50,21 +50,20 @@
                           <?php echo render_select('staff_manage',$staff,array('staffid','fullname','staff_code'),_('staff_manage'),$selected_staff,$client_disabled); ?>
 
                           <?php
-                            if($_staff)
+                            if(isset($__staff))
                             {
                                 $campaign_staff=array();
-                                foreach($_staff as $rom)
+                                foreach($__staff as $rom)
                                 {
                                     $campaign_staff[]=$rom['id_staff'];
                                 }
                             }
                           ?>
                           <?php $selected_staff = (isset($campaign_staff) ? $campaign_staff : array());?>
-    <!--                      --><?php //$client_disabled = (isset($receipt) ? array('disabled'=>$disabled) : array());?>
                           <?php echo render_select('campaign_staff[]',$staff,array('staffid','fullname','staff_code'),_('staff'),$selected_staff,array('multiple'=>true)); ?>
                           <?php
                           $expense = (isset($campaign) ? $campaign->expense : "");
-                          echo  render_input('expense', _l('expense'), $expense);
+                          echo  render_input('expense', _l('expense'), _format_number($expense),'type',array("onkeyup"=>"formart_num('expense')"));
                           ?>
 
 
@@ -140,17 +139,14 @@
                         <!-- End Customize from invoice -->
                     </div>
                     <!-- End edited -->
-
-                    <?php if(isset($receipts) && $receipts->status == 0 || !isset($receipts)) { ?>
-                      <button class="btn btn-info mtop20 only-save customer-form-submiter" style="margin-left: 15px">
-                        <?php echo _l('submit'); ?>
-                    </button>
-                    <?php } ?>
                   </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="_items">
+                <div role="tabpanel" class="tab-pane" id="_items">
                     <?php $this->load->view('admin/campaign/items_detail');?>
                 </div>
+                <button class="btn btn-info mtop20 only-save customer-form-submiter" style="margin-left: 15px">
+                    <?php echo _l('submit'); ?>
+                </button>
             </div>
         <?php echo form_close(); ?>
 
@@ -245,7 +241,7 @@
         isNew = false;
         var trBar = $('tr.main');
         trBar.find('td:first > input').val("");
-        trBar.find('td:nth-child(1) input').val('');
+        $('#name_step').val('');
 
 
     };
@@ -313,10 +309,6 @@
         var _isNew = false;
         var _createTrItem = () => {
 //            if(!_isNew) return;
-            if(!$('div #warehouse_name option:selected').length || $('div #warehouse_name option:selected').val() == '') {
-                alert_float('danger', "Vui lòng chọn kho chứa sản phẩm!");
-                return;
-            }
             if( $('table._item-export tbody tr:gt(0)').find('input[value=' + $('tr._main').find('td:nth-child(1) > input').val() + ']').length ) {
                 $('table._item-export tbody tr:gt(0)').find('input[value=' + $('tr._main').find('td:nth-child(1) > input').val() + ']').parent().find('td:nth-child(2) > input').focus();
                 alert_float('danger', "Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!");
@@ -328,14 +320,13 @@
             }
             var newTr = $('<tr class="_sortable _item"></tr>');
 
-            var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
+            var td1 = $('<td><input type="hidden" name="_items[' + uniqueArray + '][id]" value="" /></td>');
             var td2 = $('<td class="dragger"></td>');
             var td3 = $('<td></td>');
-            var td4 = $('<td><input style="width: 100px" class="_mainQuantity form-control" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+            var td4 = $('<td><input style="width: 100px" class="_mainQuantity form-control" type="number" name="_items[' + uniqueArray + '][quantity]" value="" /></td>');
             var td5 = $('<td></td>');
             var td6 = $('<td></td>');
-            var td7 = $('<td><input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" /></td>');
-            var td8 = $('<td></td>');
+            var td7 = $('<td></td>');
 
             td1.find('input').val($('tr._main').find('td:nth-child(1) > input').val());
             td2.text($('tr._main').find('td:nth-child(2)').text());
@@ -344,10 +335,7 @@
 
             td5.text( $('tr._main').find('td:nth-child(5)').text());
             td6.text( $('tr._main').find('td:nth-child(6)').text());
-            var inputTax=$('tr._main').find('td:nth-child(7) > input');
-            td7.text( $('tr._main').find('td:nth-child(7)').text());
-            td7.append(inputTax);
-            td8.text($('tr._main').find('td:nth-child(8)').text());
+            td7.text($('tr._main').find('td:nth-child(7)').text());
             newTr.append(td1);
             newTr.append(td2);
             newTr.append(td3);
@@ -355,7 +343,6 @@
             newTr.append(td5);
             newTr.append(td6);
             newTr.append(td7);
-            newTr.append(td8);
 
             newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
             $('table._item-export tbody').append(newTr);
@@ -363,10 +350,11 @@
             _totalPrice += $('tr._main').find('td:nth-child(4) > input').val() * $('tr._main').find('td:nth-child(5)').text().replace(/\+/g, ' ');
            _uniqueArray++;
             _refreshTotal();
+            get_total();
         };
         var _refreshAll = () => {
             isNew = false;
-            $('#btnAdd').hide();
+//            $('#btnAdd').hide();
             $('#custom_item_select').val('');
             $('#custom_item_select').selectpicker('refresh');
             var trBar = $('tr._main');
@@ -378,8 +366,7 @@
             trBar.find('td:nth-child(4) > input').val('1');
             trBar.find('td:nth-child(5)').text("<?=_l('item_price')?>");
             trBar.find('td:nth-child(6)').text(0);
-            trBar.find('td:nth-child(7)').text("<?=_l('tax')?>");
-            trBar.find('td:nth-child(8)').text(0);
+            trBar.find('td:nth-child(7)').text(0);
         };
         var _deleteTrItem = (trItem) => {
             var _current = $(trItem).parent().parent();
@@ -398,14 +385,6 @@
         });
             $('.totalPrice').text(formatNumber(_totalPrice));
         };
-        $('#warehouse_name').change(function(e){
-            $('table tr._sortable._item').remove();
-            _total=0;
-            var _warehouse_id=$(this).val();
-            _loadProductsInWarehouse(_warehouse_id)
-            _refreshAll();
-            _refreshTotal();
-        });
         $('#custom_item_select').change((e)=>{
             var id = $(e.currentTarget).val();
             jQuery.ajax({
@@ -430,20 +409,16 @@
                         trBar.find('td:nth-child(3)').text(itemFound.unit_name);
                         trBar.find('td:nth-child(3) > input').val(itemFound.unit);
                         trBar.find('td:nth-child(4) > input').val(1);
-                        trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
-                        trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1));
-                        var taxValue = (parseFloat(itemFound.tax_rate) * parseFloat(itemFound.price) / 100);
-                        var inputTax = $('<input type="hidden" id="tax" data-taxrate="' + itemFound.tax_rate + '" value="' + itemFound.tax + '" />');
-                        trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
-                        trBar.find('td:nth-child(7)').append(inputTax);
-                        trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue) + parseFloat(itemFound.price)));
+                        trBar.find('td:nth-child(5)').text(formatNumber(parseFloat(itemFound.price)));
+                        trBar.find('td:nth-child(6)').text(formatNumber(parseFloat(itemFound.price * 1)));
+                        trBar.find('td:nth-child(7)').text(formatNumber(parseFloat(itemFound.price)));
                         isNew = true;
                         $('#_btnAdd').show();
                     }
-                    else {
-                        _isNew = false;
-                        $('#_btnAdd').hide();
-                    }
+//                    else {
+//                        _isNew = false;
+//                        $('#_btnAdd').hide();
+//                    }
                 }
             });
         });
@@ -466,7 +441,6 @@
             currentQuantityInput.attr('data-toggle', 'tooltip');
             currentQuantityInput.attr('data-trigger', 'manual');
             currentQuantityInput.attr('title', 'Số lượng vượt mức cho phép!');
-            // $('[data-toggle="tooltip"]').tooltip();
             currentQuantityInput.off('focus', '**').off('hover', '**');
             currentQuantityInput.tooltip('fixTitle').focus(()=>$(this).tooltip('show')).hover(()=>$(this).tooltip('show'));
             // error flag
@@ -481,15 +455,9 @@
             currentQuantityInput.focus();
         }
 
-        var Gia = currentQuantityInput.parent().find(' + td');
-        var GiaTri = Gia.find(' + td');
-        var Thue = GiaTri.find(' + td');
-        var Tong = Thue.find(' + td');
-        var inputTax=Thue.find('input');
+        var Gia = currentQuantityInput.parent().find(' +td+td');
+        var GiaTri = Gia.find(' +td');
         GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
-        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
-        Thue.append(inputTax);
-        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
         _refreshTotal();
         });
         $('#select_kindof_warehouse').change(function(e){
@@ -571,6 +539,47 @@
         }
 
         });
+
+        $(document).on('keyup', '._mainQuantity,.mainQuantity', (e)=>{
+            let total=0;
+            var colum = $('tr._sortable');
+            $.each(colum, function( index, value ) {
+                total+=parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            })
+            $('.totalPrice').html(formatNumber(total));
+        })
+        function get_total()
+        {
+            let total=0;
+            var colum = $('tr._sortable');
+            $.each(colum, function( index, value ) {
+                total+=parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            })
+            $('.totalPrice').html(formatNumber(total));
+        }
+        function format_Number(nStr, decSeperate, groupSeperate) {
+            //decSeperate= ki tu cach,groupSeperate= ki tu noi
+            nStr += '';
+            x = nStr.split(decSeperate);
+            x1 = x[0];
+            x2 = x.length > 1 ? ',' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+            }
+            return x1 + x2;
+        }
+        function formart_num(id_input)
+        {
+            key="";
+            money=$("#"+id_input).val().replace(/[^\d\.]/g, '');
+            a=money.split(",");
+            $.each(a , function (index, value){
+                key=key+value;
+            });
+            $("#"+id_input).val(format_Number(key, ',', ','));
+        }
+
 
     </script>
 </body>

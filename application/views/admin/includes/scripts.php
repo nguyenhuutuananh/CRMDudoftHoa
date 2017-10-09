@@ -57,7 +57,11 @@
 <?php } ?>
 <?php echo app_script('assets/js','main.js'); ?>
 <?php echo get_custom_fields_hyperlink_js_function(); ?>
+<<<<<<< HEAD
 <!-- <?php do_action('after_js_scripts_render'); ?> -->
+=======
+<?php //do_action('after_js_scripts_render'); ?>
+>>>>>>> a9bdc30457211d3c479c75295fb21dae6d3fb25f
 <?php
 $alertclass = "";
 if($this->session->flashdata('message-success')){
