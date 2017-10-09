@@ -2039,3 +2039,102 @@ function updateTotalQuantityImport($import_id=NULL,$product_id=NULL)
     }
 }
 
+function getSaleProductDetail($product_id=NULL,$warehouse_id=NULL,$export_quantity=NULL)
+{
+    
+    $CI =& get_instance();
+    if(is_numeric($warehouse_id) && is_numeric($product_id) && is_numeric($export_quantity))
+    {
+        $CI->db->where('entered_quantity >',0);
+        $CI->db->order_by('entered_date','ASC');
+        $details=$CI->db->get_where('tblwarehouse_product_details',array('warehouse_id'=>$warehouse_id,'product_id'=>$product_id))->result();
+        $result=array();
+
+        foreach ($details as $key => $item) {
+            $quantity=0;
+            if($export_quantity<=$item->entered_quantity) 
+            {
+                $quantity=$export_quantity;
+                $export_quantity=0;
+            }
+            else
+            {
+                $quantity=$item->entered_quantity;
+                $export_quantity-=$quantity;
+            }
+            array_push($result, (object)(array('wp_detail_id'=>$item->id,
+                                                  'product_id'=>$item->product_id,
+                                                  'quantity'=>$quantity,
+                                                  'entered_price'=>$item->entered_price
+                                                )));
+            if($export_quantity==0) break;
+        }
+        if ($result) {
+            
+            return $result;
+        }
+    }
+    return false;
+}
+
+function updateSaleProductDetail($rel_id=NULL,$product_id=NULL,$items=array(),$type='PO')
+{
+    $CI =& get_instance();
+    if(is_numeric($rel_id) && is_numeric($product_id) && is_array($items))
+    {
+
+        foreach ($items as $key => $item) {
+            $data=array(
+                        'rel_type'=>$type,
+                        'rel_id'=>$rel_id,
+                        'wp_detail_id'=>$item['wp_detail_id'],
+                        'product_id'=>$product_id,
+                        'quantity'=>$item['quantity'],
+                        'entered_price'=>$item['entered_price']
+                );
+            // var_dump($items);die;
+            $detail=$CI->db->get_where('tblsale_details',array('rel_type'=>$type,'rel_id'=>$rel_id,'wp_detail_id'=>$item['wp_detail_id'],'product_id'=>$product_id,'entered_price'=>$item['entered_price']))->row();
+
+            $affected=array();
+            if($detail)
+            {
+                $CI->db->update('tblsale_details',$data,array('id'=>$detail->id));
+                $affected[]=$detail->id;
+            }
+            else
+            {
+                $CI->db->insert('tblsale_details',$data);
+                $affected[]=$CI->db->insert_id();
+            }
+            if($CI->db->affected_rows()>0) $result=true;
+
+            if($affected)
+            {
+                $CI->db->where('rel_type',$type);
+                $CI->db->where('rel_id',$rel_id);
+                $CI->db->where_not_in('id', $affected);
+                $CI->db->delete('tblsale_details');
+            }
+        }
+        if ($result) {
+            
+            return true;
+        }
+    }
+    return false;
+}
+
+function getAllSaleProductDetails($rel_id=NULL,$product_id=NULL,$type='PO')
+{
+    
+    $CI =& get_instance();
+    if(is_numeric($rel_id) && is_numeric($product_id))
+    {
+        $details=$CI->db->get_where('tblsale_details',array('rel_type'=>$type,'rel_id'=>$rel_id,'product_id'=>$product_id))->result();
+        if ($details) {
+            
+            return $details;
+        }
+    }
+    return false;
+}

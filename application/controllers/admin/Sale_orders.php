@@ -45,6 +45,7 @@ class Sale_orders extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
+
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->sale_oders_model->add($data);
@@ -86,6 +87,7 @@ class Sale_orders extends Admin_controller
             $i=0;
             foreach ($data['item']->items as $key => $value) {       
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
+                $data['item']->items[$i]->exports=getAllSaleProductDetails($id,$value->product_id);
                 $i++;
             }
             $data['isedit']='1';

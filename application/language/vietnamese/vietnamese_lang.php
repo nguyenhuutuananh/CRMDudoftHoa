@@ -659,7 +659,7 @@ $lang['wd_sunday']    = 'Chủ Nhật';
 $lang['als_dashboard'] = 'Bảng Điều Khiển';
 $lang['als_clients']   = 'Khách Hàng';
 $lang['als_leads']     = 'Cuộc gọi';
-$lang['als_Marketing']     = 'Marketing';
+
 $lang['als_campaign']     = 'Chiến dịch';
 $lang['als_contracts'] = 'Hợp Đồng';
 
@@ -4285,13 +4285,16 @@ $lang['tk_no_131']="TK công nợ/Chi phí";
 $lang['tk_co_5111']="TK doanh thu";
 $lang['tk_tax_1331']="TK thuế";
 $lang['tk_ck_5211']="TK chiết khấu";
+$lang['tk_orginal_price']="TK giá vốn";
+$lang['tk_kho']="TK kho";
 
 $lang['send_email_client_on_campaign']="Gửi email cho khách hàng trong chiến dịch";
 $lang['entered_price']="Đơn giá chuyển";
+$lang['als_Marketing']     = 'Chiến dịch Marketing';
+$lang['money_goods']     = 'Tiền hàng';
+$lang['capital_expenditures']     = 'Giá vốn';
 
-
-
-
+$lang['item_price_orginal']     = 'Tiền vốn';
 
 
 

@@ -138,6 +138,10 @@ class Contracts_model extends CRM_Model
             $custom_fields = $data['custom_fields'];
             unset($data['custom_fields']);
         }
+        $quote=$this->db->get_where('tblquotes',array('id'=>$data['rel_id']))->row();
+        $data['discount_percent']=$quote->discount_percent;
+        $data['discount']=$quote->discount;
+        $data['adjustment']=$quote->adjustment;
         $data = do_action('before_contract_added', $data);
         $this->db->insert('tblcontracts', $data);
         $insert_id = $this->db->insert_id();

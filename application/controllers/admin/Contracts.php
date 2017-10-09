@@ -47,6 +47,7 @@ class Contracts extends Admin_controller
                     access_denied('contracts');
                 }
                 $data=$this->input->post();
+                
                 if($data['contract_type']==2)
                 {
                     $data['content']=$this->contract_templates_model->get_contract_template_by_id(1)->content;
@@ -164,9 +165,11 @@ class Contracts extends Admin_controller
             $i=0;
             foreach ($data['item']->items as $key => $value) { 
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
-                
+                $data['item']->items[$i]->exports=getSaleProductDetail($value->product_id,$value->warehouse_id,$value->quantity);
+                // var_dump(getSaleProductDetail($value->product_id,$value->warehouse_id,$value->quantity));die;
                 $i++;
             }
+            // var_dump($data['item']->items[0]->exports);die;
             $data['accounts_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
             $data['accounts_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
             $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;

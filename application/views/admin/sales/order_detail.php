@@ -142,187 +142,342 @@
                         <div class="panel-body">
                             <!-- <div class="panel-body mtop10"> -->
                         <div class="row">
-                            <div class="col-md-4">
-                                <?php 
-                                if($arr) echo form_hidden('warehouse_name',$warehouse_id);
-                                    echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
-                                ?>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group mbot25">
-                                <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
-                                    <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true" <?=($khoa? 'disabled': '')?> >
-                                        <option value=""></option>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#money_goods" onclick="" aria-controls="money_goods" role="tab" data-toggle="tab">
+                                        <i class="fa fa-money menu-icon text-info"></i><?php echo _l('money_goods'); ?>
+                                    </a>
+                                </li>
+                                <li role="presentation" >
+                                    <a href="#capital_expenditures" onclick="" aria-controls="capital_expenditures" role="tab" data-toggle="tab">
+                                        <i class="fa fa-credit-card-alt menu-icon text-info"></i><?php echo _l('capital_expenditures'); ?>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="money_goods">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <?php 
+                                            if($arr) echo form_hidden('warehouse_name',$warehouse_id);
+                                                echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
+                                            ?>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group mbot25">
+                                            <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
+                                                <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true" <?=($khoa? 'disabled': '')?> >
+                                                    <option value=""></option>
 
-                                        <?php foreach ($items as $product) { ?>
-                                        <option value="<?php echo $product['id']; ?>" data-subtext="">(<?php echo $product['code']; ?>) <?php echo $product['name']; ?></option>
-                                        <?php 
-                                        } ?>
-                                    </select>
+                                                    <?php foreach ($items as $product) { ?>
+                                                    <option value="<?php echo $product['id']; ?>" data-subtext="">(<?php echo $product['code']; ?>) <?php echo $product['name']; ?></option>
+                                                    <?php 
+                                                    } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 text-right show_quantity_as_wrapper"></div>
+                                    </div>
+
+                                    <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
+                                        <table class="table items item-purchase no-mtop">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="hidden" id="itemID" value="" /></th>
+                                                    <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_no_131'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_co_5111'); ?></th>
+                                                    <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                                    <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                                    
+                                                    <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
+                                                    <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_tax_1331'); ?></th>
+                                                    <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_ck_5211'); ?></th>
+                                                    <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                                    <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                                    <th style="min-width: 100px" class="text-left"><?php echo _l('sub_amount'); ?></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+                                                <tr class="main">
+                                                    <td><input type="hidden" id="itemID" value="" /></td>
+                                                    <td>
+                                                        <?php echo _l('item_name'); ?>
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
+                                                            <?php if($tk_no){?>
+                                                                <option></option>
+                                                                <?php foreach($tk_no as $rom){?>
+                                                                    <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                                <?php }?>
+                                                            <?php }?>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
+                                                            <?php if($tk_co){?>
+                                                                <option></option>
+                                                                <?php foreach($tk_co as $rom){?>
+                                                                    <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
+                                                                <?php }?>
+                                                            <?php }?>
+
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="hidden" id="item_unit" value="" />
+                                                        <?php echo _l('item_unit'); ?>
+                                                    </td>
+                                                    <td>
+                                                        <input style="width: 100px" class="mainQuantity" type="number" min="1" value="1"  class="form-control" placeholder="<?php echo _l('item_quantity'); ?>">
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <?php echo _l('item_price'); ?>
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        0
+                                                    </td>
+                                                    <!-- TK thue -->
+                                                    <td>
+                                                        <?php 
+                                                            echo render_select('tk_thue', $tk_no, array('idAccount','accountCode', 'accountName'));
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo _l('0'); ?>
+                                                        <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
+                                                    </td>
+                                                    <!-- TK ck -->
+                                                    <td>
+                                                        <?php 
+                                                            echo render_select('tk_ck', $tk_no, array('idAccount','accountCode', 'accountName'));
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <input style="width: 100px" class="discount_percent" type="number" min="0" value="0" placeholder="" aria-invalid="false">
+                                                    </td>
+                                                    <td>
+                                                        <input style="width: 100px" class="discount" type="number" min="0" value="0" placeholder="" aria-invalid="false">
+                                                    </td>
+                                                    <td>
+                                                        0
+                                                    </td>
+                                                    <td>
+                                                        <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $i=0;
+                                                $totalPrice=0;
+                                                if(isset($item) && count($item->items) > 0) {
+                                                    
+                                                    foreach($item->items as $value) {
+                                                    ?>
+                                                <tr class="sortable item">
+                                                    <td>
+                                                        <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
+                                                    </td>
+                                                    <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
+                                                    <!-- TK NO -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_no : '6');
+                                                        if(empty($selected)) $selected=6;
+                                                        echo render_select('items['.$i.'][tk_no]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <!-- TK CO -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_co : '187');
+                                                        if(empty($selected)) $selected=187;
+                                                        echo render_select('items['.$i.'][tk_co]',$tk_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo $value->unit_name; ?></td>
+                                                    <td><input style="width: 100px" class="mainQuantity" min="<?=$value->quantity?>" max="<?=$value->quantity?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" readonly></td>
+                                                        
+                                                    <td><?php echo number_format($value->unit_cost); ?></td>
+                                                    <td><?php echo number_format($value->sub_total); ?></td>
+                                                    <!-- TK Thue -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_thue : '92');
+                                                        if(empty($selected)) $selected=92;
+                                                        echo render_select('items['.$i.'][tk_thue]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo number_format($value->tax); ?>
+                                                        <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                                    </td>
+                                                    <!-- TK Chiet Khau -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_ck : '193');
+                                                        if(empty($selected)) $selected=93;
+                                                        echo render_select('items['.$i.'][tk_ck]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <input style="width: 100px;" name="items[<?=$i?>][discount_percent]" min="0" class="discount_percent" type="number" value="<?php echo $value->discount_percent; ?>">
+                                                    </td>
+                                                    <td>
+                                                        <input style="width: 100px;" name="items[<?=$i?>][discount]" class="discount" type="number" value="<?php echo $value->discount; ?>">
+                                                    </td>
+                                                    <td><?php echo number_format($value->amount); ?></td>
+                                                    <td><a <?=$display?> href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
+                                                </tr>
+                                                    <?php
+                                                        $totalPrice += $value->amount;
+                                                        $i++;
+                                                    }
+                                                    $discount=$item->discount;
+                                                    $adjustment=$item->adjustment;
+                                                    $grand_total=$item->total;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                     <div class="col-md-10 col-md-offset-2">
+                                        <table class="table text-right">
+                                            <tbody>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
+                                                    </td>
+                                                    <td colspan="2" class="total">
+                                                        <?php echo $i ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('discount_percent_total'); ?> :</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                          <input type="text" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm giảm giá" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                                          <span class="input-group-addon" id="basic-addon2">%</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="discount_percent_total">
+                                                        <?=format_money($discount?$discount:0)?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('adjustment_total'); ?> :</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                          <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="0">
+                                                          <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
+                                                        </div>
+                                                    </td>
+                                                    <td class="adjustment_total">
+                                                        <?=format_money($adjustment?$adjustment:0)?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
+                                                    </td>
+                                                    <td colspan="2" class="totalPrice">
+                                                        <?php echo number_format($grand_total) ?><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="capital_expenditures">
+                                    <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
+                                        <table class="table items item-purchase-capital-expenditures no-mtop">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th style="min-width: 200px" class="text-left"><?php echo _l('item_name'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_orginal_price'); ?></th>
+                                                    <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_kho'); ?></th>
+                                                    <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                                    <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                                    
+                                                    <th width="" class="text-left"><?php echo _l('item_price_orginal'); ?></th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+                                                <?php
+                                                $i=0;
+                                                $totalPrice=0;
+                                                if(isset($item) && count($item->items) > 0) {
+                                                
+                                                foreach($item->items as $value) {
+                                                ?>
+                                                <tr class="sortable item">
+                                                    <td>
+                                                        <input type="hidden" id="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
+                                                    </td>
+                                                    <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
+                                                    <!-- TK Gia Von -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_gv : '69');
+                                                        if(empty($selected)) $selected=69;
+                                                        echo render_select('items['.$i.'][tk_gv]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <!-- TK Kho -->
+                                                    <td>
+                                                        <?php
+                                                        $selected=(isset($value) ? $value->tk_kho : '107');
+                                                        if(empty($selected)) $selected=107;
+                                                        echo render_select('items['.$i.'][tk_kho]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $value->unit_name; ?>
+
+                                                        <?php 
+                                                        $tong_gv=0;
+                                                        foreach ($value->exports as $key => $valP) {
+                                                            $tong_gv+=$valP->quantity*$valP->entered_price;
+                                                            echo form_hidden('items['.$i.'][exports][wp_detail_id]',$valP->wp_detail_id);
+                                                            echo form_hidden('items['.$i.'][exports][quantity]',$valP->quantity);
+                                                            echo form_hidden('items['.$i.'][exports][entered_price]',$valP->entered_price);
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo _format_number($value->quantity); ?></td>
+                                                        
+                                                    <td><?php echo format_money($tong_gv); ?></td>
+                                                    
+                                                </tr>
+
+                                                <?php } } ?>
+                                            </tbody>
+                                        </table>
+                                   </div>
                                 </div>
                             </div>
+
+                            
+
+                            
                         
-                            <div class="col-md-5 text-right show_quantity_as_wrapper">
-                                
-                            </div>
+                            
                         </div>
                         
-
-                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;">
-                            <table class="table items item-purchase no-mtop">
-                                <thead>
-                                    <tr>
-                                        <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
-
-                                        <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-
-                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                
-                                <tbody>
-                                    <tr class="main">
-                                        <td><input type="hidden" id="itemID" value="" /></td>
-                                        <td>
-                                            <?php echo _l('item_name'); ?>
-                                        </td>
-                                        <td>
-                                            <input type="hidden" id="item_unit" value="" />
-                                            <?php echo _l('item_unit'); ?>
-                                        </td>
-                                        <td>
-                                            <select class="selectpicker" id="tk_no" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
-                                                <?php if($tk_no){?>
-                                                    <option></option>
-                                                    <?php foreach($tk_no as $rom){?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="selectpicker" id="tk_co" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
-                                                <?php if($tk_co){?>
-                                                    <option></option>
-                                                    <?php foreach($tk_co as $rom){?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>"><?=$rom['accountCode']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <input style="width: 100px" class="mainQuantity" type="number" min="1" value="1"  class="form-control" placeholder="<?php echo _l('item_quantity'); ?>">
-                                        </td>
-                                        
-                                        <td>
-                                            <?php echo _l('item_price'); ?>
-                                        </td>
-                                        
-                                        <td>
-                                            0
-                                        </td>
-                                        <td>
-                                            <?php echo _l('tax'); ?>
-                                            <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
-                                        </td>
-                                        <td>
-                                            0
-                                        </td>
-                                        <td>
-                                            <button style="display:none" id="btnAdd" type="button" onclick="createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
-                                        </td>
-                                    </tr>
-                                    <?php
-                                    $i=0;
-                                    $totalPrice=0;
-                                    if(isset($item) && count($item->items) > 0) {
-                                        foreach($item->items as $value) {
-
-                                        ?>
-                                    <tr class="sortable item">
-                                        <td>
-                                            <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
-                                        </td>
-                                        <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
-                                        <td><?php echo $value->unit_name; ?></td>
-                                        <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_no]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_no')?>">
-                                                <?php if($tk_no){?>
-                                                    <option></option>
-                                                    <?php foreach($tk_no as $rom){?>
-                                                        <?php $selected="";?>
-                                                        <?php if($rom['idAccount']==$value->tk_no){$selected='selected';}?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>" <?=$selected?>><?=$rom['accountCode']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="selectpicker" name="item[<?php echo $i ?>][tk_co]" data-width="100%" data-none-selected-text="<?php  echo _l('tk_co')?>">
-                                                <?php if($tk_co){?>
-                                                    <option></option>
-                                                    <?php foreach($tk_co as $rom){?>
-                                                        <?php $selected="";?>
-                                                        <?php if($rom['idAccount']==$value->tk_co){$selected='selected';}?>
-                                                        <option value="<?=$rom['idAccount']?>" data-subtext="<?=$rom['accountName']?>" <?=$selected?>><?=$rom['accountCode']?></option>
-                                                    <?php }?>
-                                                <?php }?>
-
-                                            </select>
-                                        </td>
-                                        <td><input style="width: 100px" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" <?=($khoa? 'readonly': '')?> ></td>
-                                            
-                                        <td><?php echo number_format($value->unit_cost); ?></td>
-                                        <td><?php echo number_format($value->sub_total); ?></td>
-                                        <td><?php echo number_format($value->tax) ?>
-                                            <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
-                                        </td>
-                                        <td><?php echo number_format($value->amount) ?></td>
-                                        <td><a href="#" class="btn btn-danger pull-right" <?=(!$isedit? 'style="display: none;"': 'style="display: block;"')?> onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
-                                    </tr>
-                                        <?php
-                                            $totalPrice += $value->amount;
-                                            $i++;
-                                        }
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-8 col-md-offset-4">
-                            <table class="table text-right">
-                                <tbody>
-                                    <tr>
-                                        <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
-                                        </td>
-                                        <td class="total">
-                                            <?php echo $i ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
-                                        </td>
-                                        <td class="totalPrice"><?=number_format($totalPrice)?>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    <!-- </div> -->
                         </div>
                     </div>
                     <?php (isset($item)) ? $display='block' : $display='none' ?>
-                    <div class="panel panel-info mtop20" style="display: <?=$display?>">
+                    <div class="panel panel-info mtop20" style="display: <?='none'?>">
                         <div class="panel-heading"><?=_l('list_returns')?></div>
                         <div class="panel-body">
                             <!-- <div class="panel-body mtop10"> -->

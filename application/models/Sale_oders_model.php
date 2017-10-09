@@ -105,6 +105,7 @@ class Sale_oders_model extends CRM_Model
 
     public function add($data)
     {
+        
         $import=array(
             'rel_type'=>$data['rel_type'],
             'rel_id'=>$data['rel_id'],
@@ -116,23 +117,27 @@ class Sale_oders_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
-            'create_by'=>get_staff_user_id()
+            'create_by'=>get_staff_user_id(),
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment']
             );
-
-
         
         $this->db->insert('tblsale_orders', $import);
         $insert_id = $this->db->insert_id();
+
         if ($insert_id) {
             logActivity('New Sale Added [ID:' . $insert_id . ', ' . $data['date'] . ']');
             $items=$data['items'];
-             $total=0;
-
+            $total=0;
+            //New TK
+            $itemsTK=$data['item'];
+            $i=0;
             foreach ($items as $key => $item) {
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $item_data=array(
                     'sale_id'=>$insert_id,
@@ -143,22 +148,32 @@ class Sale_oders_model extends CRM_Model
                     'unit_cost'=>$product->price,
                     'sub_total'=>$sub_total,
                     'tax_id'=>$product->tax,
-                    'tk_no'=>$item['tk_no'],
-                    'tk_co'=>$item['tk_co'],
+                    'tk_no'=>($itemsTK[$i]['tk_no']?$itemsTK[$i]['tk_no']:$item['tk_no']),
+                    'tk_co'=>($itemsTK[$i]['tk_co']?$itemsTK[$i]['tk_co']:$item['tk_co']),
+                    'tk_ck'=>$item['tk_ck'],
+                    'tk_thue'=>$item['tk_thue'],
+                    'tk_gv'=>$item['tk_gv'],
+                    'tk_kho'=>$item['tk_kho'],
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
+                
                  $this->db->insert('tblsale_order_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {
+                    updateSaleProductDetail($insert_id,$item['id'],$item['exports']);
                     logActivity('Insert Sale Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
                  }
+                 $i++;
             }
 
-
-            $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$insert_id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblsale_orders',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
             $this->db->update('tblcontracts',array('export_status'=>1),array('id'=>$data['rel_id']));
             return $insert_id;
         }
@@ -178,9 +193,9 @@ class Sale_oders_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
-            // 'export_status'=>NULL
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment']
             );
-         // var_dump($import);die();
         
         if($this->db->update('tblsale_orders',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
         {
@@ -203,7 +218,8 @@ class Sale_oders_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $warehouse_id=$data['warehouse_name'];
                 $item_data=array(
@@ -216,11 +232,17 @@ class Sale_oders_model extends CRM_Model
                     'sub_total'=>$sub_total,
                     'tk_no'=>$itemsTK[$i]['tk_no'],
                     'tk_co'=>$itemsTK[$i]['tk_co'],
+                    'tk_ck'=>$item['tk_ck'],
+                    'tk_thue'=>$item['tk_thue'],
+                    'tk_gv'=>$item['tk_gv'],
+                    'tk_kho'=>$item['tk_kho'],
                     'tax_id'=>$product->tax,
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
 
 
@@ -239,6 +261,7 @@ class Sale_oders_model extends CRM_Model
                     $this->db->insert('tblsale_order_items', $item_data);
                     if($this->db->affected_rows()>0)
                      {
+                        updateSaleProductDetail($insert_id,$item['id'],$item['exports']);
                         logActivity('Insert Sale Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
@@ -252,7 +275,10 @@ class Sale_oders_model extends CRM_Model
                 $this->db->delete('tblsale_order_items');
             }
 
-            $this->db->update('tblsale_orders',array('total'=>$total),array('id'=>$id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblsale_orders',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
+            
             foreach ($itemsR as $key => $item) {
                 $affected_idR[]=$item['id'];
                 $product=$this->getProductById($item['id']);
@@ -555,8 +581,11 @@ class Sale_oders_model extends CRM_Model
 
     public function delete($id)
     {
+        $rel_contract=$this->db->get_where('tblsale_orders',array('id'=>$id))->row();
+
         if($this->db->delete('tblsale_orders',array('id'=>$id)) && $this->db->delete('tblsale_order_items',array('sale_id'=>$id)));
         if ($this->db->affected_rows() > 0) {
+            $this->db->update('tblcontracts',array('export_status'=>0),array('id'=>$rel_contract->rel_id));
             $this->db->delete('tblsale_order_items',array('reject_id'=>$id));
             return true;
         }
