@@ -186,8 +186,12 @@ class Campaign extends Admin_controller
             {
                 $_data=$this->input->post();
                 $__data['items']=$_data['items'];
+                $__data['_items']=$_data['_items'];
                 $__data['campaign_staff']=$_data['campaign_staff'];
+                $_data['expense']=str_replace(',','',$_data['expense']);
                 unset($_data['items']);
+                unset($_data['_items']);
+                unset($_data['warehouse_name']);
                 unset($_data['campaign_staff']);
                 $_data['create_by']=get_staff_user_id();
                 $_data['create_data']=date('Y-m-d');
@@ -195,8 +199,9 @@ class Campaign extends Admin_controller
                 if($id)
                 {
                     $step_campaign=$this->campaign_model->insert_step($id,$__data['items']);
+                    $items_campaign=$this->campaign_model->insert_items($id,$__data['_items']);
                     $staff_campaign=$this->campaign_model->insert_staff($id,$__data['campaign_staff']);
-                    if($step_campaign&&$staff_campaign)
+                    if(($step_campaign)||($staff_campaign)||$items_campaign)
                     {
                         set_alert('success',_l('add_campain_true'));
                     }
@@ -213,16 +218,25 @@ class Campaign extends Admin_controller
                 $_data=$this->input->post();
                 $__data['items']=$_data['items'];
                 $__data['item']=$_data['item'];
+                $__data['_items']=$_data['_items'];
+                $__data['_item']=$_data['_item'];
                 $__data['campaign_staff']=$_data['campaign_staff'];
+                $_data['expense']=str_replace(',','',$_data['expense']);
                 unset($_data['items']);
                 unset($_data['item']);
+                unset($_data['_items']);
+                unset($_data['_item']);
+                unset($_data['warehouse_name']);
                 unset($_data['campaign_staff']);
-
                 $update_campaign=$this->campaign_model->update($id,$_data);
                 $_result=$this->campaign_model->update_step($id,$__data['item']);
                 $__result= $this->campaign_model->insert_step($id,$__data['items']);
                 $___result=$this->campaign_model->update_staff($id,$__data['campaign_staff']);
-                if($update_campaign||$_result||$__result||$___result)
+
+
+                $_____result=$this->campaign_model->update_items($id,$__data['_item']);
+                $______result=$this->campaign_model->insert_items($id,$__data['_items']);
+                if($update_campaign||$_result||$__result||$___result||$_____result||$______result)
                 {
                     set_alert('success',_l('update_campain_true'));
                 }
@@ -241,7 +255,8 @@ class Campaign extends Admin_controller
                 if($data['campaign'])
                 {
                     $data['campaign_step']=$this->campaign_model->get_table_where('tblcampaign_step',array('id_campaign'=>$data['campaign']->id));
-                    $data['_staff']=$this->campaign_model->get_table_where('tblcampaign_staff',array('id_campaign'=>$data['campaign']->id));
+                    $data['__staff']=$this->campaign_model->get_table_where('tblcampaign_staff',array('id_campaign'=>$data['campaign']->id));
+                    $data['_item']=$this->campaign_model->get_campaign_items($data['campaign']->id);
                 }
             }
             $data['staff']=$this->campaign_model->get_table_where('tblstaff');

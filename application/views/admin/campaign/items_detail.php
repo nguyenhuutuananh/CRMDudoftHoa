@@ -8,38 +8,9 @@
                 <div class="clearfix"></div>
                 <?php
             } ?>
-            <h4 class="bold no-margin"><?php echo (isset($item) ? _l('quote_edit') : _l('quote_add')); ?></h4>
-            <hr class="no-mbot no-border" />
             <div class="row">
                 <div class="additional"></div>
                 <div class="col-md-12">
-                    <?php
-                    if(isset($item))
-                    {
-                        if($item->status==0)
-                        {
-                            $type='warning';
-                            $status='Chưa duyệt';
-                        }
-                        elseif($item->status==1)
-                        {
-                            $type='info';
-                            $status='Đã xác nhận';
-                        }
-                        else
-                        {
-                            $type='success';
-                            $status='Đã duyệt';
-                        }
-                    }
-                    else
-                    {
-                        $type='warning';
-                        $status='Phiếu mới';
-                    }
-
-                    ?>
-                    <div class="ribbon <?=$type?>"><span><?=$status?></span></div>
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane " id="item_detail"></div>
                     </div>
@@ -49,16 +20,10 @@
                             <div class="panel-body mtop10">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <?php
-                                        echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_type_id);
-                                        ?>
-                                    </div>
-                                    <div class="col-md-4">
                                         <div class="form-group mbot25">
                                             <label for="custom_item_select" class="control-label"><?=_l('item_name')?></label>
                                             <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                                 <option value=""></option>
-
                                                 <?php foreach ($items as $product) { ?>
                                                     <option value="<?php echo $product['id']; ?>" data-subtext="">(<?php echo $product['code']; ?>) <?php echo $product['name']; ?></option>
                                                     <?php
@@ -79,7 +44,6 @@
 
                                             <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
                                             <th width="" class="text-left"><?php echo _l('amount'); ?></th>
-                                            <th width="" class="text-left"><?php echo _l('tax'); ?></th>
 
                                             <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                             <th></th>
@@ -109,29 +73,25 @@
                                                 0
                                             </td>
                                             <td>
-                                                <?php echo _l('tax'); ?>
-                                                <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
-                                            </td>
-                                            <td>
                                                 0
                                             </td>
                                             <td>
-                                                <button style="display:none" id="_btnAdd" type="button" onclick="_createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
+                                                <button  id="_btnAdd" type="button" onclick="_createTrItem(); return false;" class="btn pull-right btn-info"><i class="fa fa-check"></i></button>
                                             </td>
                                         </tr>
                                         <?php
                                         $i=0;
                                         $totalPrice=0;
-                                        if(isset($item) && count($item->items) > 0) {
+                                        if(isset($_item) && count($_item) > 0) {
 
-                                            foreach($item->items as $value) {
+                                            foreach($_item as $value) {
                                                 ?>
                                                 <tr class="_sortable _item">
                                                     <td>
-                                                        <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
+                                                        <input type="hidden" name="_item[<?php echo $i; ?>][id]" value="<?php echo $value['id_c']; ?>">
                                                     </td>
-                                                    <td class="dragger"><?php echo $value->product_name; ?></td>
-                                                    <td><?php echo $value->unit_name; ?></td>
+                                                    <td class="dragger"><?php echo $value['name']; ?></td>
+                                                    <td><?php echo $value['unit']; ?></td>
                                                     <?php
                                                     $err='';
                                                     if($value->quantity>$value->warehouse_type->product_quantity)
@@ -141,20 +101,16 @@
                                                     }
                                                     ?>
                                                     <td>
-                                                        <input style="width: 100px;" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
+                                                        <input style="width: 100px;" class="mainQuantity form-control" type="number" name="_item[<?php echo $i; ?>][quantity]" value="<?php echo $value['quantity_item']; ?>">
                                                     </td>
 
-                                                    <td><?php echo number_format($value->unit_cost); ?></td>
-                                                    <!-- <td><?=form_input('items['.$i.'][taxrate]',$value->taxrate)?><?php echo number_format($value->tax); ?></td> -->
-                                                    <td><?php echo number_format($value->sub_total); ?></td>
-                                                    <td><?php echo number_format($value->tax) ?>
-                                                        <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
-                                                    </td>
-                                                    <td><?php echo number_format($value->amount) ?></td>
+                                                    <td><?php echo number_format($value['price']); ?></td>
+                                                    <td><?php echo number_format($value['price_single']); ?></td>
+                                                    <td><?php echo number_format($value['total']) ?></td>
                                                     <td><a href="#" class="btn btn-danger pull-right" onclick="_deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                                 </tr>
                                                 <?php
-                                                $totalPrice += $value->amount;
+                                                $totalPrice += $value['total'];
                                                 $i++;
                                             }
                                         }

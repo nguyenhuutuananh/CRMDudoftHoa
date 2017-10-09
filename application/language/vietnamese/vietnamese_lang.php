@@ -4279,6 +4279,11 @@ $lang['exchange_rate']="Tỷ giá";
 
 $lang['send_email_client_on_campaign']="Gửi email cho khách hàng trong chiến dịch";
 $lang['entered_price']="Đơn giá chuyển";
+$lang['campaign_edit']="Sửa chiến dịch";
+$lang['campaign_add']="Thêm chiến dịch";
+$lang['add_campain_false']="Lỗi trong quá trình thêm chiến dịch";
+$lang['opportunity_edit']="Sửa cơ hội";
+$lang['opportunity_add']="Thêm cơ hội";
 
 
 

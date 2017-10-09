@@ -7,7 +7,7 @@
    <div class="panel_s">
      <div class="panel-body">
       <div class="clearfix"></div>
-          <h4 class="bold no-margin"><?php echo (isset($heading) ? $heading : ''); ?></h4>
+         <h4 class="bold no-margin"><?php echo (isset($opportunity) ? _l('opportunity_edit') : _l('opportunity_add')); ?></h4>
   <hr class="no-mbot no-border" />
     <div class="row">
     <div class="additional"></div>

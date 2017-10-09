@@ -6,7 +6,7 @@
         <?php if(has_permission('items','','create')){ ?>
         <div class="panel_s">
           <div class="panel-body _buttons">
-            <a href="<?php echo admin_url('receipts/receipts') ?>" class="btn btn-info pull-left"><?php echo _l('create_campaign'); ?></a>
+            <a href="<?php echo admin_url('campaign/campaign') ?>" class="btn btn-info pull-left"><?php echo _l('create_campaign'); ?></a>
           </div>
 
         </div>
