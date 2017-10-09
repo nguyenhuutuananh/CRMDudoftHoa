@@ -82,7 +82,8 @@
                     <?php $value = (isset($item) ? _d($item->datestart) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','view_date',$value); ?>
                     
-                    <?=form_hidden('rel_id',$item->id)?>
+                    <?=form_hidden('rel_id',$item->id);?>
+
                     <?=render_input('rel_code','contract_code',$item->prefix.$item->code,'text',array('readonly'=>true))?>
                     <?php
                     $default_name = (isset($item) ? $item->name : _l('sale_name'));
@@ -93,13 +94,15 @@
                     <?php
 
                     $selected=(isset($item) ? $item->client : '');
-                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected); 
+                    echo render_select('customer_id',$customers,array('userid','company'),'client',$selected,array('disabled'=>true)); 
+                    echo form_hidden('customer_id',$selected);
                     ?>
 
 
                     <?php 
                     $reason = (isset($item) ? $item->reason : "");
                     echo render_textarea('reason', 'note', $reason, array(), array(), '', 'tinymce');
+
                     ?>
                 </div>
 
@@ -145,19 +148,25 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
-                                        <th width="25%" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_no_131'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_co_5111'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_tax_1331'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_ck_5211'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -209,14 +218,52 @@
                                             <input type="hidden" name="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
                                         </td>
                                         <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
+                                        <!-- TK NO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '6');
+                                            if(empty($selected)) $selected=6;
+                                            echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <!-- TK CO -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_co : '187');
+                                            if(empty($selected)) $selected=187;
+                                            echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
                                         <td><?php echo $value->unit_name; ?></td>
                                         <td><input style="width: 100px" class="mainQuantity" min="<?=$value->quantity?>" max="<?=$value->quantity?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" readonly></td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
+                                        <!-- TK Thue -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '92');
+                                            if(empty($selected)) $selected=92;
+                                            echo render_select('items['.$i.'][tk_tax]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
                                         <td>
                                             <?php echo number_format($value->tax); ?>
                                             <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <!-- TK Chiet Khau -->
+                                        <td>
+                                            <?php
+                                            $selected=(isset($value) ? $value->tk_no : '193');
+                                            if(empty($selected)) $selected=93;
+                                            echo render_select('items['.$i.'][tk_ck]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?=$i?>][discount_percent]" min="0" class="discount_percent" type="number" value="<?php echo $value->discount_percent; ?>">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?=$i?>][discount]" class="discount" type="number" value="<?php echo $value->discount; ?>">
                                         </td>
                                         <td><?php echo number_format($value->amount); ?></td>
                                         <td><a <?=$display?> href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
@@ -225,25 +272,55 @@
                                             $totalPrice += $value->amount;
                                             $i++;
                                         }
+                                        $discount=$item->discount;
+                                        $adjustment=$item->adjustment;
+                                        $grand_total=$item->contract_value;
                                     }
                                     ?>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-8 col-md-offset-4">
+                        <div class="col-md-10 col-md-offset-2">
                             <table class="table text-right">
                                 <tbody>
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
                                         </td>
-                                        <td class="total">
+                                        <td colspan="2" class="total">
                                             <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('discount_percent_total'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                              <input type="text" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm giảm giá" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                              <span class="input-group-addon" id="basic-addon2">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="discount_percent_total">
+                                            <?=format_money($discount?$discount:0)?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('adjustment_total'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                              <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="0">
+                                              <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
+                                            </div>
+                                        </td>
+                                        <td class="adjustment_total">
+                                            <?=format_money($adjustment?$adjustment:0)?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
                                         </td>
-                                        <td class="totalPrice"><?=number_format($totalPrice)?>
+                                        <td colspan="2" class="totalPrice">
+                                            <?php echo number_format($grand_total) ?><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?>
                                         </td>
                                     </tr>
                                 </tbody>

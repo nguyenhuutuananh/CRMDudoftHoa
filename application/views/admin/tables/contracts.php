@@ -123,10 +123,11 @@ foreach ( $rResult as $aRow )
         } else {
             $_data = $aRow[ $aColumns[$i] ];
         }
+
         //strpos($aColumns[$i],'as') !== false && !isset($aRow[ $aColumns[$i] ]) && strafter($aColumns[$i],'as ')=='code'
-        if($aColumns[$i]=='rel_id')
+        if($aColumns[$i]=='CONCAT(prefix,tblcontracts.code) as code')
         {
-            $_data='<a href="'.admin_url('contracts/contract/'.$aRow['rel_id']).'">'. $aRow['rel_id'] . '</a>';
+            $_data='<a href="'.admin_url('contracts/contract/'.$aRow['tblcontracts.id']).'">'. $aRow['code'] . '</a>';
         }
         if($aColumns[$i]=='contract_value')
         {

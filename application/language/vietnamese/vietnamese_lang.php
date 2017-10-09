@@ -4277,6 +4277,15 @@ $lang['purchase_totalmoneydiscount']="Tổng chiết khấu";
 $lang['purchase_price']="Giá trị";
 $lang['exchange_rate']="Tỷ giá";
 
+$lang['purchase_costs']="Chi phí mua hàng";
+$lang['discount_percent_total']="Chiết khấu";
+$lang['adjustment_total']="Điều chỉnh";
+$lang['discount_percent']="Phần trăm chiết khấu";
+$lang['tk_no_131']="TK công nợ/Chi phí";
+$lang['tk_co_5111']="TK doanh thu";
+$lang['tk_tax_1331']="TK thuế";
+$lang['tk_ck_5211']="TK chiết khấu";
+
 $lang['send_email_client_on_campaign']="Gửi email cho khách hàng trong chiến dịch";
 $lang['entered_price']="Đơn giá chuyển";
 $lang['campaign_edit']="Sửa chiến dịch";
@@ -4284,8 +4293,6 @@ $lang['campaign_add']="Thêm chiến dịch";
 $lang['add_campain_false']="Lỗi trong quá trình thêm chiến dịch";
 $lang['opportunity_edit']="Sửa cơ hội";
 $lang['opportunity_add']="Thêm cơ hội";
-
-
 
 
 

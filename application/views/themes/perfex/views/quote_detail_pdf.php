@@ -166,7 +166,7 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $tblhtml.='<td align="right"><b>'._format_number($quantity_total).'</b></td>';
     $tblhtml.='<td align="right"></td>';
     $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td align="right"><b>'.format_money($grand_total,get_option('default_currency')).'</b></td>';
+    $tblhtml.='<td align="right"><b>'.format_money($invoice->total,get_option('default_currency')).'</b></td>';
     $tblhtml.='</tr>';
 
 $tblhtml .= '</tbody>';
@@ -180,8 +180,8 @@ if (get_option('total_to_words_enabled') == 1) {
     // Set the font again to normal like the rest of the pdf
     $pdf->SetFont($font_name, '', $font_size);
     $strmoney='<ul>';
-    $strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($grand_total, get_option('default_currency')).'</i>'.'</li>';
-    $strmoney.='<li>'._l('certificate_root')._l('blank___').'</li>';
+    $strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($invoice->total, get_option('default_currency')).'</i>'.'</li>';
+    $strmoney.='<li>'._l('certificate_root')._l('blank10').$invoice_number.'</li>';
     $strmoney.='</ul>';
     $pdf->writeHTMLCell(0, '', '', '', $strmoney, 0, 1, false, true, 'L', true);
 }

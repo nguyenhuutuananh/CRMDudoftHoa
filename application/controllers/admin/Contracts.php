@@ -9,6 +9,7 @@ class Contracts extends Admin_controller
         $this->load->model('contract_templates_model');
         $this->load->model('warehouse_model');
         $this->load->model('invoice_items_model');
+        $this->load->model('receipts_model');
     }
     /* List all contracts */
     public function index($clientid = false)
@@ -159,14 +160,15 @@ class Contracts extends Admin_controller
         } else {
             $title = _l('add_new', _l('sale_orders'));
             $data['item'] = $this->contracts_model->getContractByID($id);
-
+            
             $i=0;
             foreach ($data['item']->items as $key => $value) { 
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
                 
                 $i++;
             }
-
+            $data['accounts_no']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=1 or idAccountAttribute=3');
+            $data['accounts_co']=$this->receipts_model->get_table_where('tblaccounts','idAccountAttribute=2 or idAccountAttribute=3');
             $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
             $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
             // var_dump($data['warehouse_id']);die;

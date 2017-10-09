@@ -149,20 +149,20 @@
                             </div>
 
                         </div>
-                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;">
+                        <div class="table-responsive s_table" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 200px">
                             <table class="table items item-export no-mtop" border="">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
-                                        
-                                        <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-
-                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('item_price'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -192,6 +192,13 @@
                                         <td>
                                             <?php echo _l('tax'); ?>
                                             <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
+                                        </td>
+                                        
+                                        <td>
+                                            <input style="width: 100px" class="discount_percent" type="number" min="0" value="0"  class="form-control" placeholder="<?php echo _l(''); ?>">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px" class="discount" type="number" min="0" value="0"  class="form-control" placeholder="<?php echo _l(''); ?>">
                                         </td>
                                         <td>
                                             0
@@ -231,38 +238,75 @@
                                         <td><?php echo number_format($value->tax) ?>
                                             <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
                                         </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?=$i?>][discount_percent]" class="discount_percent" type="number" value="<?php echo $value->discount_percent; ?>">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?=$i?>][discount]" class="discount" type="number" value="<?php echo $value->discount; ?>">
+                                        </td>
                                         <td><?php echo number_format($value->amount) ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
                                     </tr>
                                         <?php
                                             $totalPrice += $value->amount;
+
                                             $i++;
                                         }
+                                        $discount=$item->discount;
+                                        $adjustment=$item->adjustment;
+                                        $grand_total=$item->total;
                                     }
                                     ?>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-8 col-md-offset-4">
+                        <div class="col-md-10 col-md-offset-2">
                             <table class="table text-right">
                                 <tbody>
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
                                         </td>
-                                        <td class="total">
+                                        <td colspan="2" class="total">
                                             <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('discount_percent_total'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                              <input type="text" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm giảm giá" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                              <span class="input-group-addon" id="basic-addon2">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="discount_percent_total">
+                                            <?=format_money($discount?$discount:0)?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('adjustment_total'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                              <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="0">
+                                              <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
+                                            </div>
+                                        </td>
+                                        <td class="adjustment_total">
+                                            <?=format_money($adjustment?$adjustment:0)?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
                                         </td>
-                                        <td class="totalPrice">
-                                            <?php echo number_format($totalPrice) ?> VND
+                                        <td colspan="2" class="totalPrice">
+                                            <?php echo number_format($grand_total) ?><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                     <!-- End Customize from invoice -->
                 </div>
@@ -325,7 +369,7 @@
             alert_float('danger', "Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!");
             return;
         }
-        if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #select_warehouse option:selected').data('store')) {
+        if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #warehouse_name option:selected').data('store')) {
             alert_float('danger', 'Kho ' + $('tr.main #select_warehouse option:selected').text() + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
             return;
         }
@@ -338,7 +382,9 @@
         var td5 = $('<td></td>');
         var td6 = $('<td></td>');
         var td7 = $('<td><input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" /></td>');
-        var td8 = $('<td></td>');
+        var td8 = $('<td><input style="width: 100px" name="items[' + uniqueArray + '][discount_percent]" class="discount_percent" type="number" min="0" value="0" placeholder=""></td>');
+        var td9 = $('<td><input style="width: 100px" name="items[' + uniqueArray + '][discount]" class="discount" type="number" min="0" value="0" placeholder=""></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
@@ -350,7 +396,10 @@
         var inputTax=$('tr.main').find('td:nth-child(7) > input');
         td7.text( $('tr.main').find('td:nth-child(7)').text());
         td7.append(inputTax);
-        td8.text($('tr.main').find('td:nth-child(8)').text());
+        td8.find('input').val($('tr.main').find('input.discount_percent').val());
+        
+        td9.find('input').val($('tr.main').find('input.discount').val());
+        td10.text($('tr.main').find('td:nth-child(10)').text());
         newTr.append(td1);
         newTr.append(td2);
         newTr.append(td3);
@@ -359,6 +408,8 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
+        newTr.append(td10);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
@@ -383,7 +434,9 @@
         trBar.find('td:nth-child(5)').text("<?=_l('item_price')?>");
         trBar.find('td:nth-child(6)').text(0);
         trBar.find('td:nth-child(7)').text("<?=_l('tax')?>");
-        trBar.find('td:nth-child(8)').text(0);
+        trBar.find('td:nth-child(8) > input').val('0');
+        trBar.find('td:nth-child(9) > input').val('0');
+        trBar.find('td:nth-child(10)').text(0);
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
@@ -397,10 +450,15 @@
         var items = $('table.item-export tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
+            totalPrice += parseFloat($(value).find('td:nth-child(10)').text().replace(/\,/g, ''));
             // * 
         });
-        $('.totalPrice').text(formatNumber(totalPrice));
+        var discount_percent=$('#discount_percent').val();
+        var discount=discount_percent*totalPrice/100;
+        var adjustment=parseFloat($('#adjustment').val());
+        var grand_total=totalPrice-discount+adjustment;
+        $('.discount_percent_total').text(formatNumber(discount));
+        $('.totalPrice').text(formatNumber(grand_total));
     };
     $('#warehouse_name').change(function(e){
         $('table tr.sortable.item').remove();
@@ -410,15 +468,22 @@
         refreshAll();
         refreshTotal();
     });
+    $('#customer_id').change(function(e){
+        var customer_id=$(this).val();
+        var data={};
+        data.customer_id=customer_id;
+        var url=admin_url + 'clients/getClientByID';
+        $.post(url, data).done(function(response) {
+            response = JSON.parse(response);
+            var discount_percent=response.success.discount_percent;
+            if(discount_percent==null) discount_percent=0;
+            $('#discount_percent').val(discount_percent);
+        });
+    });
+
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
-
-        $('#select_kindof_warehouse').val('');
-        $('#select_kindof_warehouse').selectpicker('refresh');
-        var warehouse_id=$('#select_warehouse');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
 
         if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.main');
@@ -434,7 +499,9 @@
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
             trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
             trBar.find('td:nth-child(7)').append(inputTax);
-            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(8) > input').val(0);
+            trBar.find('td:nth-child(9) > input').val(0);
+            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }
@@ -452,10 +519,10 @@
         var currentQuantityInput = $(e.currentTarget);
         let elementToCompare;
         if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
-            elementToCompare = currentQuantityInput.parents('tr').find('input:last');
+            elementToCompare = currentQuantityInput.parents('tr').find('input[data-store]');
         else
             elementToCompare = currentQuantityInput;
-        // console.log(elementToCompare)
+        // console.log(elementToCompare.val())
         if(parseInt(currentQuantityInput.val()) > parseInt(elementToCompare.attr('data-store'))){
             currentQuantityInput.attr("style", "width: 100px;border: 1px solid red !important");
             currentQuantityInput.attr('data-toggle', 'tooltip');
@@ -474,18 +541,59 @@
             // remove flag
             currentQuantityInput.removeClass('error');
             currentQuantityInput.focus();
-        }
+        }        
         
-        var Gia = currentQuantityInput.parent().find(' + td');
-        var GiaTri = Gia.find(' + td');
-        var Thue = GiaTri.find(' + td');
-        var Tong = Thue.find(' + td');
-        var inputTax=Thue.find('input');        
-        GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
-        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
-        Thue.append(inputTax);
-        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
+        calculateTotal(e.currentTarget);
         refreshTotal();
+    });
+    var calculateTotal = (currentInput) => {
+        currentInput = $(currentInput);   
+        let quantity = currentInput.parents('tr').find('.mainQuantity');
+        let quantityTd = quantity.parent();
+
+        let priceTd = quantityTd.find('+ td');
+
+        let amountTd = priceTd.find('+ td');
+        var amount=priceTd.text().replace(/\,/g, '') * quantity.val();
+        amountTd.text(formatNumber(amount));
+
+        let taxTd=amountTd.find('+ td');
+        var inputTax=taxTd.find('input')
+        var tax=parseFloat(inputTax.data('taxrate'))/100*parseFloat(amount);
+        taxTd.text(formatNumber(tax));
+        taxTd.append(inputTax);
+
+        let discountPercent=currentInput.parents('tr').find('.discount_percent');
+
+        let discount=currentInput.parents('tr').find('.discount');
+        var discountTd=discount.parent();
+        var discountValue=amount*discountPercent.val()/100;
+        discount.val(discountValue);
+
+        let subTotalTd=discountTd.find('+ td');
+        subTotalTd.text(formatNumber(amount+tax-discountValue));
+        refreshTotal();
+
+    };
+    $(document).on('keyup', '.discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=currentDiscountInput.parents('td').prev().find('input');
+        var tong=currentDiscountInput.parents('tr').find('.mainQuantity').parents().find('+ td + td').text().trim().replace(/\,|%/g, '');
+        discount_percent.val(currentDiscountInput.val()*100/tong);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('keyup', '.discount_percent', (e)=>{
+        var currentDiscountPercentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('blur', '#adjustment', (e)=>{
+        var currentInput = $(e.currentTarget);
+        $('.adjustment_total').text(formatNumber(parseFloat(currentInput.val())));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('blur', '#discount_percent', (e)=>{
+        var currentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
     });
     $('#select_kindof_warehouse').change(function(e){
         var warehouse_type = $(e.currentTarget).val();

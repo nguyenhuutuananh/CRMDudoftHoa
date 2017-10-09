@@ -36,11 +36,15 @@ foreach ($rResult as $aRow) {
         $_data = $aRow[$aColumns[$i]];
         
         if($aColumns[$i] == "tblpurchase_contracts.id_order"){
-            $_data = $aRow["order_code"];
+            $_data = '<a href="'.admin_url('purchase_orders/view/').$aRow['tblpurchase_contracts.id_order'].'">'.$aRow["order_code"].'</a>';
         }
         $array_link = ['tblpurchase_contracts.id', 'tblpurchase_contracts.code'];
         if(in_array($aColumns[$i],$array_link)){
             $_data = '<a href="'.admin_url('purchase_contracts/view/').$aRow['tblpurchase_contracts.id'].'">'.$_data.'</a>';
+        }
+        if($aColumns[$i]=='tblpurchase_contracts.date_create')
+        {
+            $_data = _d($aRow["tblpurchase_contracts.date_create"]);
         }
         $array_user = ['tblpurchase_contracts.id_user_create'];
         if(in_array($aColumns[$i],$array_user)) {

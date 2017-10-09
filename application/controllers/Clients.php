@@ -362,6 +362,8 @@ class Clients extends Clients_controller
             'success' => $this->tasks_model->remove_comment($id)
         ));
     }
+    
+
     public function edit_comment()
     {
         if (!is_client_logged_in()) {

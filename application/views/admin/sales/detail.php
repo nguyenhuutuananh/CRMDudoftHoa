@@ -180,22 +180,22 @@
                         </div>
                         
 
-                        <div class="table-responsive s_table no-dt" style="overflow-x: auto;overflow-y: hidden;">
+                        <div class="table-responsive s_table no-dt" style="overflow-x: auto;overflow-y: hidden;padding-bottom: 100px">
                             <table class="table items item-purchase no-mtop">
                                 <thead>
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_unit'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('item_quantity'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_no'); ?></th>
+                                        <th style="min-width: 100px;max-width: 100px;" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('item_unit'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
-                                        <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('amount'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tax'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('item_price'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('amount'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('tax'); ?></th>
 
-                                        <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
                                 </thead>

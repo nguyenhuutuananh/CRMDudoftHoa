@@ -71,6 +71,7 @@ class Quotes_model extends CRM_Model
 
     public function add($data)
     {
+        
         $quote=array(            
             'prefix'=>$data['prefix'],
             'name'=>$data['name'],
@@ -78,6 +79,8 @@ class Quotes_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>nl2br_save_html($data['reason']),
             'date'=>to_sql_date($data['date']),
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment'],
             'create_by'=>get_staff_user_id()
             );
         $this->db->insert('tblquotes', $quote);        
@@ -93,7 +96,8 @@ class Quotes_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $item_data=array(
                     'quote_id'=>$insert_id,
@@ -107,16 +111,20 @@ class Quotes_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount_percent'=>$item['discount_percent'],
+                    'discount'=>$item['discount']
                     );
+                
                  $this->db->insert('tblquote_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {                            
                     logActivity('Insert Quote Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
                  }
             }
-
-            $this->db->update('tblquotes',array('total'=>$total),array('id'=>$insert_id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblquotes',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
             return $insert_id;
         }
         return false;
@@ -141,7 +149,10 @@ class Quotes_model extends CRM_Model
             'code'=>$data['code'],
             'customer_id'=>$data['customer_id'],
             'reason'=>nl2br_save_html($data['reason']),
-            'date'=>to_sql_date($data['date'])
+            'date'=>to_sql_date($data['date']),
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment'],
+            // 'create_by'=>get_staff_user_id()
             );
         
         if($this->db->update('tblquotes',$quote,array('id'=>$id)) && $this->db->affected_rows()>0)
@@ -159,7 +170,8 @@ class Quotes_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $itm=$this->getQuoteItem($id,$item['id']);
                 $item_data=array(
@@ -174,7 +186,9 @@ class Quotes_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount_percent'=>$item['discount_percent'],
+                    'discount'=>$item['discount']
                     );
 
                 if($itm)
@@ -202,8 +216,9 @@ class Quotes_model extends CRM_Model
                     $this->db->where_not_in('product_id', $affected_id);
                     $this->db->delete('tblquote_items');
                 }
-
-            $this->db->update('tblquotes',array('total'=>$total),array('id'=>$id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblquotes',array('total'=>$total,'discount'=>$total_discount),array('id'=>$id));
             return $affected;
         }
         return false;

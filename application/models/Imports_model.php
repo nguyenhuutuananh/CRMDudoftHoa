@@ -57,7 +57,8 @@ class Imports_model extends CRM_Model
 
     public function updateWarehouse($id)
     {
-        $imports=$this->getImportByID($id);
+        $imports=$this->getImportByID($id);        
+
         $count=0;
         if($imports)
         {
@@ -67,26 +68,32 @@ class Imports_model extends CRM_Model
                 if($imports->rel_type=='transfer' && isset($value->warehouse_id_to))
                 {
                     $count+=increaseProductQuantity($value->warehouse_id_to,$value->product_id,$value->quantity);
+                    increaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id_to,$value->quantity,NULL,$imports->date);
                     $count+=decreaseProductQuantity($value->warehouse_id,$value->product_id,$value->quantity);
-
+                    decreaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id,$value->quantity,NULL,$imports->date);
                 }
                 //Tang kho
                 else
                 {
+                    $quantity=$value->quantity;
+                    if($imports->rel_type=='contract') $quantity=$value->quantity_net;
                     $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
                     if($item)
                     {   
-                        $total_quantity=$value->quantity+$item->product_quantity;
+                        // Update Quantity
+                        $total_quantity=$quantity+$item->product_quantity;
                         $data=array('product_quantity'=>$total_quantity);
                         $this->db->update('tblwarehouses_products',$data,array('id'=>$item->id));
                         $count++;
                     }
                     else
                     {
+                        $total_quantity=$quantity;
+                        // Insert Quantity
                         $data=array(
                             'product_id'=>$value->product_id,
                             'warehouse_id'=>$value->warehouse_id,
-                            'product_quantity'=>$value->quantity
+                            'product_quantity'=>$total_quantity
                             );
                         $this->db->insert('tblwarehouses_products',$data);
                         $insert_id=$this->db->insert_id();
@@ -96,9 +103,16 @@ class Imports_model extends CRM_Model
                             $count++;
                         }
                     }
+                       
+                        $entered_price=$value->unit_cost;
+                        if($imports->rel_type=='contract')
+                        {
+                            $entered_price=getOrginalPrice($id,$value->product_id)->original_price_buy;
+                        }
+                        //Update Warehouse Product Details
+                        increaseWarehouseProductDetail($id,$value->product_id,$value->warehouse_id,$quantity,$entered_price,$imports->date);
                 }
                 
-                //Update Warehouse Product Details
                 
             }
         }        
@@ -286,8 +300,6 @@ class Imports_model extends CRM_Model
             'create_by'=>get_staff_user_id()
             );
 
-
-        
         $this->db->insert('tblimports', $import);
         $insert_id = $this->db->insert_id();
         if ($insert_id) {
@@ -347,10 +359,12 @@ class Imports_model extends CRM_Model
                     'discount_percent'=>$item['discount_percent'],
                     'discount'=>$discount
                     );
+                // var_dump($item_data);die;
                  $this->db->insert('tblimport_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {
                     logActivity('Insert Import Item Added [ID:' . $insert_id . ', Item ID' . $item['id'] . ']');
+                    updateTotalQuantityImport($insert_id,$item['id']);
                  }
             }
             $this->db->update('tblimports',array('total'=>$total),array('id'=>$insert_id));
@@ -531,6 +545,7 @@ class Imports_model extends CRM_Model
                     'specifications'=>$product->description,
                     'unit_id'=>$product->unit,
                     'quantity'=>$item['quantity'],
+                    'quantity_net'=>$item['quantity_net'],
                     'unit_cost'=>(($data['rel_id'] && $data['rel_type']=='contract')?$item['price_buy']:$product->price),
                     'sub_total'=>$sub_total,
                     'tk_no'=>$item['tk_no'],
@@ -550,6 +565,7 @@ class Imports_model extends CRM_Model
                     if($this->db->affected_rows()>0)
                      {
                         logActivity('Edit Import Item Updated [ID:' . $id . ', Item ID' . $item['id'] . ']');
+                        
                      }
                 }
                 else
@@ -560,12 +576,25 @@ class Imports_model extends CRM_Model
                         logActivity('Insert Import Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
+                updateTotalQuantityImport($id,$item['id']);
             }
                 if(!empty($affected_id))
                 {
+                    
+                    $import=$this->db->get_where('tblimports',array('id'=>$id))->row();
+                    $contract=$this->db->get_where('tblpurchase_contracts',array('id'=>$import->rel_id))->row();
+                    $this->db->where('order_id', $contract->id_order);
+                    $this->db->where_not_in('product_id', $affected_id);
+                    $item_del=$this->db->get('tblorders_detail')->result();
+
                     $this->db->where('import_id', $id);
                     $this->db->where_not_in('product_id', $affected_id);
                     $this->db->delete('tblimport_items');
+
+                    foreach ($item_del as $key => $item) {
+                        updateTotalQuantityImport($id,$item->product_id);
+                    }
+
                 }
 
             $this->db->update('tblimports',array('total'=>$total),array('id'=>$id));

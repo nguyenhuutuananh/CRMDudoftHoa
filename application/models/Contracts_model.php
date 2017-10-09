@@ -52,10 +52,11 @@ class Contracts_model extends CRM_Model
     public function getContractByID($id = '')
     {
         
-        $this->db->select('*,tblcontracttypes.name as type_name,tblcontracts.id as id');
+        $this->db->select('tblcontracts.*,tblcontracttypes.name as type_name,tblcontracts.id as id');
         $this->db->join('tblcontracttypes', 'tblcontracttypes.id = tblcontracts.contract_type', 'left');
         $this->db->join('tblclients', 'tblclients.userid = tblcontracts.client');
         $this->db->from('tblcontracts');
+
         // $this->db->join('tblstaff','tblstaff.staffid=tblcontracts.create_by','left');
         if (is_numeric($id)) {
             $this->db->where('tblcontracts.id', $id);
@@ -112,6 +113,7 @@ class Contracts_model extends CRM_Model
      */
     public function add($data)
     {
+
         $data['dateadded'] = date('Y-m-d H:i:s');
         $data['addedfrom'] = get_staff_user_id();
 
@@ -169,7 +171,7 @@ class Contracts_model extends CRM_Model
         }
         else
         {
-            $this->db->select('"contract_id",product_id, serial_no, unit_id, quantity, tax_id,tax_rate,tax, discount, unit_cost, sub_total,amount, warehouse_id');
+            $this->db->select('"contract_id",product_id, serial_no, unit_id, quantity, tax_id,tax_rate,tax, discount,discount_percent, unit_cost, sub_total,amount, warehouse_id');
             $items=$this->db->get_where('tblquote_items',array('quote_id'=>$rel_id))->result_array();
             if(!$items)
             {

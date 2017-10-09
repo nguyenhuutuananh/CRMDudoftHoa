@@ -264,9 +264,16 @@
             <i class="fa fa-question-circle" data-toggle="tooltip" data-title="<?php echo _l('customer_currency_change_notice'); ?>"></i>
             <?php } ?>
             <?php echo render_select('default_currency',$currencies,array('id','name','symbol'),'invoice_add_edit_currency',$selected,$s_attrs); ?>
-                       <?php $value=( isset($client) ? $client->debt : ''); ?>
-                       <?php echo render_input( 'debt', 'debt',$value, 'number', array()); ?>
-
+           <?php $value=( isset($client) ? $client->debt : ''); ?>
+           <?php echo render_input( 'debt', 'debt',$value, 'number', array()); ?>
+           <div class="form-group">
+                <label for="discount_percent" class="control-label"><?=_l('discount')?></label>
+                <div class="input-group">
+                    <input type="number" name="discount_percent" id="discount_percent" class="form-control" placeholder="<?=_l('discount_percent')?>" aria-describedby="basic-addon2" value="<?=$client->discount_percent?$client->discount_percent:0?>">
+                    <span class="input-group-addon" id="basic-addon2"><?=_l('%')?></span>
+                </div>
+           </div>
+           
 
             <!-- <div class="form-group" <?php echo isset($client) ? ($client->client_type == 2 ? "" : "style=\"display:none\"") : "style=\"display:none\"" ?>>
                 <label for="default_language" class="control-label"><?php echo _l('localization_default_language'); ?>

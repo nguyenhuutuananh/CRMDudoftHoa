@@ -56,6 +56,15 @@ class Clients extends Admin_controller
             echo json_encode(get_all_province($country_id));
         }
     }
+
+    public function getClientByID($id=NULL)
+    {
+        if(empty($id)) $id=$this->input->post('customer_id');
+        echo json_encode(array(
+            'success' => $this->clients_model->get($id)
+        ));
+    }
+    
     /* Edit client or add new client*/
 
 
