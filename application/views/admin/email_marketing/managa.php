@@ -77,14 +77,30 @@
                                 <label for="">Email người nhận BCC:</label>
                                 <input type="text" id="email_to_bc" name="email_to_bc" class="tagemail form-control" placeholder="Email người nhận BCC" value="" data-role="tagsinput" onchange="review_null(3)">
                             </div>
-                            <div class="form-group">
-                            <button type="button" class="btn  btn-lg btn-primary" data-toggle="modal" data-target="#email_list">Lấy danh sách khách hàng</button>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn  btn-lg btn-primary" data-toggle="modal" data-target="#email_list"><i class="glyphicon glyphicon-duplicate"></i> Khách hàng</button>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn  btn-lg btn-success"  onclick="change_data(2)">CC</button>
+                                        <button type="button" class="btn btn-lg btn-info"  onclick="change_data(3)">BCC</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="clearfix"></div>
-                            <div class="form-group">
-                                <div class="btn-group">
-                                    <button type="button" class="btn  btn-lg btn-success"  onclick="change_data(2)">CC</button>
-                                    <button type="button" class="btn btn-lg btn-info"  onclick="change_data(3)">BCC</button>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn  btn-lg btn-primary" onclick="excel_file()">
+                                        <i class="glyphicon glyphicon-open-file"></i> Lấy danh sách email từ excel
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn-group group_excel" style="display: none;">
+                                        <button type="button" class="btn  btn-lg btn-success"  onclick="get_email_input(2)">CC</button>
+                                        <button type="button" class="btn btn-lg btn-info"  onclick="get_email_input(3)">BCC</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -164,6 +180,18 @@
                                         <?php echo render_textarea('file_send','','',array('data-task-ae-editor'=>true),array(),'',''); ?>
                                 </div>
                             <?php }?>
+                            <div class="checkbox checkbox-primary">
+                                <input type="radio" name="type_send" onclick="not_send_next()" id="type_send_true" value="1" checked>
+                                <label for="type_send_true">Gửi ngay</label>
+                            </div>
+                            <div class="checkbox checkbox-primary">
+                                <input type="radio" name="type_send" onclick="not_send_next()" value="0" id="type_send_false">
+                                <label for="type_send_false">Gửi sau</label>
+                            </div>
+
+                            <div id="send_next" class="collapse">
+                              <?php echo render_datetime_input('date_send','Thời gian gửi',date('Y-m-d H:i:s'))?>
+                            </div>
 
                     </form>
                             <div class="form-group file_dropzone"></div>
@@ -176,8 +204,51 @@
                                     <div id="dropbox-chooser"></div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <?php echo form_open_multipart(admin_url('email_marketing/get_email_to_excel'),array('id'=>'read-upload','onchane'=>'reading_upload(this)')); ?>
+                                <input type="file" name="file_excel" style="display: none;" />
+                                <?php echo form_close(); ?>
+                            </div>
                             <div class="clearfix"></div>
-                            <button type="submit" class="btn btn-default">Gửi</button>
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-envelope"></i> Gửi</button>
+<!--                            <button type="button" class="btn btn-success" onclick="not_send_next()" data-toggle="collapse" data-target="#send_next">Gửi sau</button>-->
+                            <button type="button" class="btn btn-info" onclick="view_template_email()"  data-toggle="modal" data-target="#view_email"><i class="glyphicon glyphicon-eye-open"></i> Xem trước</button>
+
+
+
+
+                                <div id="view_email" class="modal fade" role="dialog">
+                                    <div class="modal-dialog modal-lg">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title view_title">Xem thử</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <center>
+                                                    <div class="well view_well" style="width: 80%;">
+                                                        <button type="button" class="btn btn-info" id="btn_left" style="float: left" onclick="war_email()"><i class="glyphicon glyphicon-arrow-left"></i></button>
+                                                        <button type="button" class="btn btn-info" id="btn_right" style="float: right" onclick="war_email_next()"><i class="glyphicon glyphicon-arrow-right"></i></button>
+                                                        <div class="clearfix"></div>
+                                                        <center>
+
+                                                        </center>
+                                                    </div>
+                                                </center>
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -216,6 +287,92 @@
 </div>
 
 <?php init_tail(); ?>
+
+<script>
+    var excel_email=[];
+    var this_email=0;
+    function view_template_email()
+    {
+
+        var email =$('#email').val();
+        var email_to_cc=$('#email_to_cc').val();
+        var email_to_bc=$('#email_to_bc').val();
+        var full_email=email+','+email_to_cc+','+email_to_bc;
+        full_email.replace(',,',',');
+        var res=full_email.split(",");
+        res = $.grep(res, function(n, i){
+            return (n !== "" && n != null);
+        });
+        if(this_email>=0)
+        {
+            email_view=res[this_email];
+        }
+        if(this_email==0){$('#btn_left').hide();}
+        else {$('#btn_left').show();}
+
+        if(this_email<res.length-1){$('#btn_right').show();}
+        else {$('#btn_right').hide();}
+
+        $('#view_email .view_title ').html("Xem thử Email:"+email_view);
+        var content = tinymce.get("message").getContent();
+        $.ajax({
+            type: "post",
+            url: "<?=admin_url()?>email_marketing/view_content",
+            data: {email:email_view,content:content},
+            dataType:"json",
+            cache: false,
+            success: function (data) {
+                $('#view_email .modal-body .view_well center').html(data.content);
+            }
+        });
+    }
+
+
+    function not_send_next()
+    {
+        if($('#type_send_true').prop('checked'))
+        {
+            $('#date_send').val('');
+            $('#send_next').collapse("hide");
+            $('#date_send').removeAttr('required');
+
+        }
+        if($('#type_send_false').prop('checked'))
+        {
+            $('#date_send').prop("required", true);
+            $('#send_next').collapse("show");
+        }
+    }
+    function war_email()
+    {
+        if(this_email!=0)
+        {
+            this_email--;
+        }
+        view_template_email();
+    }
+    function war_email_next()
+    {
+        var email =$('#email').val();
+        var email_to_cc=$('#email_to_cc').val();
+        var email_to_bc=$('#email_to_bc').val();
+        var full_email=email+','+email_to_cc+','+email_to_bc;
+        full_email.replace(',,',',');
+        var res=full_email.split(",");
+        res = $.grep(res, function(n, i){
+            return (n !== "" && n != null);
+        });
+        if(this_email<res.length-1)
+        {
+            this_email++;
+        }
+        console.log(res.length);
+        console.log(this_email);
+        view_template_email();
+    }
+</script>
+
+
 <script>
     init_editor('.tinymce-task',{height:300});
     function kiemtra_type_email(id)
@@ -261,6 +418,7 @@
 
 </script>
 <script>
+
     $('.add_merge_field').on('click', function(e) {
         e.preventDefault();
         tinymce.activeEditor.execCommand('mceInsertContent', false, $(this).text());
@@ -421,6 +579,68 @@
         }
 
     }
+    function excel_file()
+    {
+        $('input[name="file_excel"]').click();
+    }
+    $('input[name="file_excel"]').change(function() {
+        form=$('#read-upload');
+        att=form.attr("action") ;
+
+        var file_data = $('input[name="file_excel"]').prop('files')[0];
+        var form_data = new FormData();
+        form_data.append('file_excel', file_data);
+        $.ajax({
+            url: att,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            type: 'post',
+            success: function (data) {
+                excel_email=data;
+                $.each(excel_email, function( index, value ) {
+                    $('#email').tagit('createTag',value.email);
+                })
+                email_not_null();
+
+            }
+        });
+    });
+    function get_email_input(type)
+    {
+        var reid="email";
+        if(type==2)
+        {reid="email_to_cc"}
+        if(type==3)
+        {reid="email_to_bc"}
+        change_data(type);
+        email_not_null();
+        if(excel_email!=[])
+        {
+            $.each(excel_email, function( index, value ) {
+                $('#'+reid).tagit('createTag',value.email);
+            })
+        }
+        else
+        {
+            alert_float('warning','Không tìm thấy email từ excel');
+        }
+    }
+
+    function email_not_null()
+    {
+        if(excel_email!=[])
+        {
+            $('.group_excel').show();
+        }
+        else
+        {
+            $('.group_excel').hide();
+        }
+    }
+
 
 </script>
 </body>

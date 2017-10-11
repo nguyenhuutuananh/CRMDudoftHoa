@@ -124,7 +124,18 @@ foreach ($rResult as $r=> $aRow) {
             $_data = ($currentall+1)-($currentPage+$r+1);
         }
         if($aColumns[$i] == 'tblitems.avatar' && file_exists($_data)) {
-            $_data = '<img src="'.base_url($_data).'" width="50px" />';
+            $_data='<div class="preview_image" style="width: auto;">
+                            <div class="display-block contract-attachment-wrapper img-'.$aRow['id'].'">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <a href="'.(file_exists($_data) ? base_url($_data) : base_url('assets/images/preview_no_available.jpg')).'" data-lightbox="customer-profile" class="display-block mbot5">
+                                        <div class="table-image">
+                                            <img src="'.(file_exists($_data) ? base_url($_data) : base_url('assets/images/preview_no_available.jpg')).'" style="width: auto;height: 100%;min-height: 300px;" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>';
+//            $_data = '<img src="'.base_url($_data).'" width="50px" />';
         }
         $format_number_column = ['tblitems.price','tblitems.minimum_quantity','tblitems.maximum_quantity'];
         if(in_array($aColumns[$i], $format_number_column)) {
@@ -132,12 +143,14 @@ foreach ($rResult as $r=> $aRow) {
         }
         if($aColumns[$i] == 'tblitems.description') {
 //            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
-            $_data =strip_tags($_data);
+//            $_data =strip_tags($_data);
+            $_data =$_data;
             // $_data = strlen($_data) > 50 ? substr($_data,0,50)."..." : $_data;
         }
         if($aColumns[$i] == 'tblitems.product_features') {
 //            $_data = strlen(strip_tags($_data)) > 50 ? mb_substr(strip_tags($_data),0,50,'utf-8')."..." : $_data;
-            $_data =strip_tags($_data);
+            $_data =$_data;
+//            $_data =strip_tags($_data);
         }
         // if($aColumns[$i] == 'tblitems.price') {
         //     $_data = number_format($aRow['tblitems.price'],0,',','.');

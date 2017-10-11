@@ -17,31 +17,33 @@ class Email_marketing extends Admin_controller
         if ($this->input->post()) {
 
             $this->email->initialize();
-            if ($this->input->post()) {
-                $data = $this->input->post();
-                $message = $this->input->post('message', FALSE);
-                $name_file = $data['file_send'];
-                $to_email = $data['email'];
-                $to_email_cc = $data['email_to_cc'];
-                $to_email_bc = $data['email_to_bc'];
-                $subject = $data['subject'];
-                $sender_email = $this->input->post('user_email');
-                $user_password = $this->input->post('user_password');
+            $data = $this->input->post();
+            $message = $this->input->post('message', FALSE);
+            $name_file = $data['file_send'];
+            $to_email = $data['email'];
+            $to_email_cc = $data['email_to_cc'];
+            $to_email_bc = $data['email_to_bc'];
+            $subject = $data['subject'];
+            $sender_email = $this->input->post('user_email');
+            $user_password = $this->input->post('user_password');
 
-                $template = $data['view_template'];
-                $count_send = 0;
-                $username = get_staff_full_name();
+            $template = $data['view_template'];
+            $count_send = 0;
+            $username = get_staff_full_name();
 
-                if ($name_file) {
-                    $name_file = explode(',', $name_file);
-                    if ($name_file != array()) {
-                        foreach ($name_file as $file) {
-                            if ($file != "") {
-                                $this->email->attach(get_upload_path_by_type('email') . $file);
-                            }
+            if ($name_file) {
+                $name_file = explode(',', $name_file);
+                if ($name_file != array()) {
+                    foreach ($name_file as $file) {
+                        if ($file != "") {
+                            $this->email->attach(get_upload_path_by_type('email') . $file);
                         }
                     }
                 }
+            }
+            if($data['type_send']==1)
+            {
+
                 if ($data['type_email']) {
                     if ($to_email_cc != "" || $to_email_bc != "" || $to_email != "") {
                         $id_log = $this->email_marketing_model->log_sent_email($subject, $message, $data['file_send'], $template, $data['campaign']);
@@ -63,6 +65,7 @@ class Email_marketing extends Admin_controller
                             $this->email->subject($subject);
                             $id_email = $this->log_sent_email($rom, 0, $id_log);
                             $this->email->message($message_sent . "<img border='0' src='" . admin_url() . "images_code/images_code?id=" . $id_email . "' width='1' height='1'>");
+                            sleep(2);
                             if ($this->email->send()) {
                                 $count_send++;
                             }
@@ -182,6 +185,42 @@ class Email_marketing extends Admin_controller
                     }
 
                 }
+            }
+            else
+            {
+                $date_send=$data['date_send'];
+                $array_add=array(
+                        'subject'=>$subject,
+                        'message'=>$message,
+                        'email_to'=>$to_email,
+                        'email_cc'=>$to_email_cc,
+                        'email_bcc'=>$to_email_bc,
+                        'file'=>$name_file,
+                        'date_create'=>date('Y-m-d'),
+                        'date_send'=>$date_send,
+                        'create_by'=>get_staff_user_id()
+                    );
+                if($data['type_email'])
+                {
+                    $data['template']=$template;
+                }
+
+                if($to_email||$to_email_cc||$to_email_bc)
+                {
+                    $this->db->insert('email_send_later',$array_add);
+                    if($this->db->insert_id())
+                    {
+                        $data['message_display'] = 'Gửi sau đã được lưu';
+                    }
+                    else
+                    {
+                        $data['message_display'] = 'Lưu email gửi sau đã bị lỗi';
+                    }
+                }
+                else
+                {
+                    $data['message_display'] = 'Lưu email gửi sau đã bị lỗi';
+                }
 
             }
         }
@@ -210,6 +249,93 @@ class Email_marketing extends Admin_controller
         $data['email_plate'] = $this->email_marketing_model->get_email_templete();
         $data['title'] = _l('Email marketing');
         $this->load->view('admin/email_marketing/managa', $data);
+    }
+
+
+
+
+
+    public function get_email_to_excel()
+    {
+//        if ($this->input->post()) {
+            $data_customer=array();
+            if (isset($_FILES['file_excel']['name']) && $_FILES['file_excel']['name'] != '') {
+            // Get the temp file path
+                $tmpFilePath = $_FILES['file_excel']['tmp_name'];
+
+                if (!empty($tmpFilePath) && $tmpFilePath != '') {
+                    // Setup our new file path
+                    $ext = strtolower(pathinfo($_FILES['file_excel']['name'], PATHINFO_EXTENSION));
+                    $type = $_FILES["file_excel"]["type"];
+                    $newFilePath = TEMP_FOLDER . $_FILES['file_excel']['name'];
+                    if (!file_exists(TEMP_FOLDER)) {
+                        mkdir(TEMP_FOLDER, 777);
+                    }
+                    if (move_uploaded_file($tmpFilePath, $newFilePath)) {
+                        $import_result = true;
+                        $fd            = fopen($newFilePath, 'r');
+                        $rows          = array();
+
+                        if($ext == 'csv') {
+                            while ($row = fgetcsv($fd)) {
+                                $rows[] = $row;
+                            }
+                        }
+                        else if($ext == 'xlsx' || $ext == 'xls') {
+                            if($type == "application/octet-stream" || $type == "application/vnd.ms-excel" || $type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                                require_once(APPPATH . "third_party" . DIRECTORY_SEPARATOR . 'PHPExcel' . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+
+                                $inputFileType = PHPExcel_IOFactory::identify($newFilePath);
+
+                                $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+
+                                $objReader->setReadDataOnly(true);
+                                $objPHPExcel =           $objReader->load($newFilePath);
+                                $allSheetName       = $objPHPExcel->getSheetNames();
+                                $objWorksheet       = $objPHPExcel->setActiveSheetIndex(0);
+                                $highestRow         = $objWorksheet->getHighestRow();
+                                $highestColumn      = $objWorksheet->getHighestColumn();
+
+                                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+                                for ($row = 1; $row <= $highestRow; ++$row) {
+                                    for ($col = 0; $col < $highestColumnIndex; ++$col) {
+                                        $value                     = $objWorksheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+                                        $rows[$row - 1][$col] = $value;
+                                    }
+                                }
+                            }
+                        }
+                        $data['total_rows_post'] = count($rows);
+                        fclose($fd);
+
+                        if (count($rows) <= 1) {
+                            set_alert('warning', 'Not enought rows for importing');
+                            redirect(admin_url('clients/import'));
+                        }
+                        if ($this->input->post('simulate')) {
+                            if (count($rows) > 500) {
+                                set_alert('warning', 'Recommended splitting the CSV file into smaller files. Our recomendation is 500 row, your CSV file has ' . count($rows));
+                            }
+                        }
+
+                        if (get_option('company_is_required') == 1) {
+                            array_push($required, 'company');
+                        }
+                        foreach($rows as $row) {
+                            if(!empty($row[0]))
+                            {
+                                $data_customer[] = array(
+                                    'email' => $row[0],
+                                    'name_email' => $row[1]
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            echo json_encode($data_customer);die();
+//        }
     }
     public function log_sent_email($email,$type,$id_log)
     {
@@ -246,7 +372,7 @@ class Email_marketing extends Admin_controller
             if($id=="")
             {
                 $data=$this->input->post();
-                $data['content']=$this->input->post('content');
+                $data['content']=$this->input->post('content',false);
                 $result= $this->email_marketing_model->add($data);
                 if($result)
                 {
@@ -262,8 +388,8 @@ class Email_marketing extends Admin_controller
             else
             {
                 $data=$this->input->post();
-                $data['content']=$this->input->post('content');
-               $result= $this->email_marketing_model->update($id,$data);
+                $data['content']=$this->input->post('content',false);
+                $result= $this->email_marketing_model->update($id,$data);
                 if($result)
                 {
                     set_alert('success', _l('Cập nhật Mẫu email thành công'));
@@ -392,9 +518,15 @@ class Email_marketing extends Admin_controller
         {
             $content=preg_replace('"{tblstaff.'.$rom_s.'}"',$client->$rom_s,$content);
         }
-        var_dump($content);die();
         return $content;
 
+    }
+    public function view_content()
+    {
+        $email=$this->input->post('email',false);
+        $content=$this->input->post('content',false);
+        $content_send=$this->get_content($email,$content);
+        echo json_encode(array('content'=>$content_send));
     }
     public function get_email_client()
     {

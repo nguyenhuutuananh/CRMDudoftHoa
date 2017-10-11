@@ -24,7 +24,7 @@ class Invoice_items extends Admin_controller
         $data['items_groups'] = $this->invoice_items_model->get_groups();
         $data['items_units'] = $this->invoice_items_model->get_units();
         $data['category_1'] = $this->category_model->get_level1();
-
+        $data['lightbox_assets'] = true;
         $data['title'] = _l('invoice_items');
         $this->load->view('admin/invoice_items/manage', $data);
     }
@@ -173,7 +173,7 @@ class Invoice_items extends Admin_controller
             $data['item'] = $item;
         }
 
-
+        $data['lightbox_assets'] = true;
         $data['title'] = $title;
         $this->load->view('admin/invoice_items/item_details', $data);
     }
