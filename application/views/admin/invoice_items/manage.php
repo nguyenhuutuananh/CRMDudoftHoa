@@ -3,6 +3,8 @@
    .dt-buttons .buttons-collection{
        display: none!important;
    }
+    .lb-nav.lb-prev{display: none;}
+   .lb-nav.lb-next{display: none;}
 </style>
 <div id="wrapper">
   <div class="content">
