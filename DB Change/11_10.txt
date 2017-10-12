@@ -1,0 +1,5 @@
+ALTER TABLE `tblsales` ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' AFTER `discount`, ADD `adjustment` DECIMAL(25,0) NULL DEFAULT '0' AFTER `discount_percent`;
+
+ALTER TABLE `tblsale_items` CHANGE `discount` `discount` DECIMAL(25,0) NULL DEFAULT '0';
+
+ALTER TABLE `tblsale_items` ADD `tk_thue` INT NULL AFTER `warehouse_id`, ADD `tk_ck` INT NULL AFTER `tk_thue`, ADD `tk_gv` INT NULL AFTER `tk_ck`, ADD `tk_kho` INT NULL AFTER `tk_gv`, ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' AFTER `tk_kho`;

@@ -81,7 +81,11 @@
                           <span class="input-group-addon">
                           <?php $prefix =($item) ? $item->prefix : get_option('prefix_sale_order'); ?>
                             <?=$prefix?>
-                            <?php echo form_hidden('rel_type', 'sale_order'); ?>
+                            <?php
+                            $rel_type='sale_order';
+                            if($item->rel_id) $rel_type='contract';
+                            echo form_hidden('rel_type', $rel_type); ?>
+
                             <?=form_hidden('prefix',$prefix)?>    
                             </span>
                             <?php 
@@ -106,7 +110,7 @@
                     <?php $value = (isset($item) ? _d($item->date) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','create_date',$value); ?>
 
-                      <?php $value = (isset($item) ? _d($item->date_ht) : _d(date('Y-m-d')));?>
+                    <?php $value = (isset($item) ? _d($item->date_ht) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date_ht','date_of_accounting',$value); ?>
                     
                     <?php
@@ -116,6 +120,7 @@
 
                     <?php
                     $arr=array();
+
                     if($item->rel_id)
                     {
                         $arr['disabled']=true;
@@ -140,6 +145,16 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading"><?=_l('list_products')?></div>
                         <div class="panel-body">
+                            <div class="hidden">
+                                <?php 
+                                    $selected=69;
+                                    echo render_select('tk_gv', $tk_no, array('idAccount','accountCode', 'accountName'),'',$selected);
+                                ?>
+                                <?php 
+                                    $selected=107;
+                                    echo render_select('tk_kho', $tk_no, array('idAccount','accountCode', 'accountName'),'',$selected);
+                                ?>
+                            </div>
                             <!-- <div class="panel-body mtop10"> -->
                         <div class="row">
                             <ul class="nav nav-tabs" role="tablist">
@@ -158,7 +173,7 @@
                                 <div role="tabpanel" class="tab-pane active" id="money_goods">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <?php 
+                                            <?php    
                                             if($arr) echo form_hidden('warehouse_name',$warehouse_id);
                                                 echo render_select('warehouse_name', $warehouses, array('warehouseid', 'warehouse'),'warehouse_name',$warehouse_id,$arr);
                                             ?>
@@ -278,8 +293,15 @@
                                                 $i=0;
                                                 $totalPrice=0;
                                                 if(isset($item) && count($item->items) > 0) {
-                                                    
                                                     foreach($item->items as $value) {
+                                                        $type='';
+                                                        $class='';
+                                                        if($value->quantity>$value->warehouse_type->product_quantity)
+                                                        {
+                                                            $type="width: 100px;border: 1px solid red !important";
+                                                            $class='error';
+                                                            $title='title="Số lượng vượt mức cho phép!" data-toggle="tooltip"';
+                                                        }
                                                     ?>
                                                 <tr class="sortable item">
                                                     <td>
@@ -303,7 +325,11 @@
                                                         ?>
                                                     </td>
                                                     <td><?php echo $value->unit_name; ?></td>
-                                                    <td><input style="width: 100px" class="mainQuantity" min="<?=$value->quantity?>" max="<?=$value->quantity?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" readonly></td>
+                                                    <?php
+                                                        $data_store=$value->warehouse_type->product_quantity; 
+                                                        if($arr) $strmax='max="'.$value->quantity.'"';
+                                                    ?>
+                                                    <td><input style="width: 100px;<?=$type?>" class="mainQuantity <?=$class?>" min="0" <?=$strmax?>  type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" <?='data-store="'.$data_store.'"'?> <?=$title?> <?=$item->rel_id?'readonly':''?>></td>
                                                         
                                                     <td><?php echo number_format($value->unit_cost); ?></td>
                                                     <td><?php echo number_format($value->sub_total); ?></td>
@@ -376,7 +402,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="form-group">
-                                                          <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="0">
+                                                          <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($adjustment?$adjustment:0)?>">
                                                           <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
                                                         </div>
                                                     </td>
@@ -414,7 +440,7 @@
                                             
                                             <tbody>
                                                 <?php
-                                                $i=0;
+                                                $index=0;
                                                 $totalPrice=0;
                                                 if(isset($item) && count($item->items) > 0) {
                                                 
@@ -422,7 +448,7 @@
                                                 ?>
                                                 <tr class="sortable item">
                                                     <td>
-                                                        <input type="hidden" id="items[<?php echo $i; ?>][id]" value="<?php echo $value->product_id; ?>">
+                                                        <input type="hidden" id="product_id" value="<?php echo $value->product_id; ?>">
                                                     </td>
                                                     <td class="dragger"><?php echo $value->product_name.' ('.$value->prefix.$value->code.')'; ?></td>
                                                     <!-- TK Gia Von -->
@@ -430,7 +456,7 @@
                                                         <?php
                                                         $selected=(isset($value) ? $value->tk_gv : '69');
                                                         if(empty($selected)) $selected=69;
-                                                        echo render_select('items['.$i.'][tk_gv]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        echo render_select('items['.$index.'][tk_gv]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                                         ?>
                                                     </td>
                                                     <!-- TK Kho -->
@@ -438,40 +464,35 @@
                                                         <?php
                                                         $selected=(isset($value) ? $value->tk_kho : '107');
                                                         if(empty($selected)) $selected=107;
-                                                        echo render_select('items['.$i.'][tk_kho]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
+                                                        echo render_select('items['.$index.'][tk_kho]',$tk_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                                         ?>
                                                     </td>
                                                     <td>
                                                         <?php echo $value->unit_name; ?>
-
+                                                    </td>
+                                                    <td><?php echo _format_number($value->quantity); ?>
                                                         <?php 
                                                         $tong_gv=0;
                                                         foreach ($value->exports as $key => $valP) {
                                                             $tong_gv+=$valP->quantity*$valP->entered_price;
-                                                            echo form_hidden('items['.$i.'][exports][wp_detail_id]',$valP->wp_detail_id);
-                                                            echo form_hidden('items['.$i.'][exports][quantity]',$valP->quantity);
-                                                            echo form_hidden('items['.$i.'][exports][entered_price]',$valP->entered_price);
+                                                            echo form_hidden('items['.$index.'][exports]['.$key.'][wp_detail_id]',$valP->wp_detail_id);
+                                                            echo form_hidden('items['.$index.'][exports]['.$key.'][quantity]',$valP->quantity);
+                                                            echo form_hidden('items['.$index.'][exports]['.$key.'][entered_price]',$valP->entered_price);
                                                         }
-                                                        ?>
+                                                        ?>                                                        
                                                     </td>
-                                                    <td><?php echo _format_number($value->quantity); ?></td>
                                                         
                                                     <td><?php echo format_money($tong_gv); ?></td>
                                                     
                                                 </tr>
 
-                                                <?php } } ?>
+                                                <?php $index++; }  } ?>
                                             </tbody>
                                         </table>
                                    </div>
                                 </div>
                             </div>
 
-                            
-
-                            
-                        
-                            
                         </div>
                         
                         </div>
@@ -698,7 +719,7 @@
                 dataType : 'json',
             })
             .done(function(data){  
-                console.log(data)
+                
                 $.each(data, function(key,value){
                     warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
                 });
@@ -748,40 +769,64 @@
             alert('Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!');
             return;
         }
+        if(parseFloat($('tr.main').find('input.mainQuantity').val())>parseFloat($('tr.main').find('input.mainQuantity').attr('data-store')))
+        {
+            alert_float('danger','Sản phẩm bạn nhập là ['+$('tr.main').find('input.mainQuantity').val()+'] lớn hơn số lượng trong kho ['+$('tr.main').find('input.mainQuantity').attr('data-store')+'], vui lòng lòng kiểm tra lại!');
+            return;
+        }
         var newTr = $('<tr class="sortable item"></tr>');        
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
         var td4 = $('<td></td>');
         var td5 = $('<td></td>');
-        var td6 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td6 = $('<td><input style="width: 100px" class="mainQuantity" min="0" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
         var td7 = $('<td></td>');
         var td8 = $('<td></td>');
         var td9 = $('<td></td>');
         var td10 = $('<td></td>');
+        var td11 = $('<td></td>');
+        var td12 = $('<td><input style="width: 100px" class="discount_percent" min="0" type="number" name="items[' + uniqueArray + '][discount_percent]" value="" /></td>');
+        var td13 = $('<td><input style="width: 100px" class="discount" min="0" type="number" name="items[' + uniqueArray + '][discount]" value="" /></td>');
+        var td14 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
-        td2.text($('tr.main').find('td:nth-child(2)').text());
-        td3.text($('tr.main').find('td:nth-child(3)').text());
+        td2.text($('tr.main').find('td:nth-child(2)').text());   
 
-        let tk_no = $('tr.main').find('td:nth-child(4)').find('select').clone();
+        let tk_no = $('tr.main').find('td:nth-child(3)').find('select').clone();
         tk_no.attr('name', 'items[' + uniqueArray + '][tk_no]');
-        tk_no.removeAttr('id').val($('tr.main').find('td:nth-child(4)').find('select').selectpicker('val'));
-        td4.append(tk_no);
+        tk_no.removeAttr('id').val($('tr.main').find('td:nth-child(3)').find('select').selectpicker('val'));
+        td3.append(tk_no);
 
-        let tk_co = $('tr.main').find('td:nth-child(5)').find('select').clone();
+        let tk_co = $('tr.main').find('td:nth-child(4)').find('select').clone();
         tk_co.attr('name', 'items[' + uniqueArray + '][tk_co]');
-        tk_co.removeAttr('id').val($('tr.main').find('td:nth-child(5)').find('select').selectpicker('val'));
-        td5.append(tk_co);
+        tk_co.removeAttr('id').val($('tr.main').find('td:nth-child(4)').find('select').selectpicker('val'));
+        td4.append(tk_co);
 
+        td5.text($('tr.main').find('td:nth-child(5)').text());
         td6.find('input').val($('tr.main').find('td:nth-child(6) > input').val());
+        td6.find('input').attr('data-store',$('tr.main').find('td:nth-child(6) > input').attr('data-store'));
         
-        td7.text( $('tr.main').find('td:nth-child(7)').text() );
-        td8.text( $('tr.main').find('td:nth-child(8)').text() );
-        var inputTax=$('tr.main').find('td:nth-child(9) > input');
-        td9.text( $('tr.main').find('td:nth-child(9)').text());
-        td9.append(inputTax);
-        td10.text($('tr.main').find('td:nth-child(10)').text());
+        td7.text( $('tr.main').find('td:nth-child(7)').text());
+        td8.text( $('tr.main').find('td:nth-child(8)').text());
+
+        let tk_thue = $('tr.main').find('td:nth-child(9)').find('select').clone();
+        tk_thue.attr('name', 'items[' + uniqueArray + '][tk_thue]');
+        tk_thue.removeAttr('id').val($('tr.main').find('td:nth-child(9)').find('select').selectpicker('val'));
+        td9.append(tk_thue);
+
+        var inputTax=$('tr.main').find('td:nth-child(10) > input');
+        td10.text( $('tr.main').find('td:nth-child(10)').text());
+        td10.append(inputTax);
+
+        let tk_ck = $('tr.main').find('td:nth-child(11)').find('select').clone();
+        tk_ck.attr('name', 'items[' + uniqueArray + '][tk_ck]');
+        tk_ck.removeAttr('id').val($('tr.main').find('td:nth-child(11)').find('select').selectpicker('val'));
+        td11.append(tk_ck);
+        td12.find('input').val($('tr.main').find('td:nth-child(12) > input').val());
+        td13.find('input').val($('tr.main').find('td:nth-child(13) > input').val());
+
+        td14.text($('tr.main').find('td:nth-child(14)').text());
 
         newTr.append(td1);
         newTr.append(td2);
@@ -793,11 +838,19 @@
         newTr.append(td8);
         newTr.append(td9);
         newTr.append(td10);
+        newTr.append(td11);
+        newTr.append(td12);
+        newTr.append(td13);
+        newTr.append(td14);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>');
         $('table.item-purchase tbody').append(newTr);
+        var product_id=$('tr.main').find('td:nth-child(1) > input').val();
+        var warehouse_id=$('#warehouse_name').val();
+        var quantity=$('tr.main').find('input.mainQuantity').val();
+        addCapitalExpendituresItem(product_id,warehouse_id,quantity,uniqueArray);
         total++;
-        totalPrice =parseInt(totalPrice)+ parseInt($('tr.main').find('td:nth-child(6) > input').val()) *  parseInt($('tr.main').find('td:nth-child(7)').text().replace(/\,|,/g, ''));
+        
         uniqueArray++;
         refreshTotal();
         $('.selectpicker').selectpicker('refresh');
@@ -809,69 +862,72 @@
         $('#custom_item_select').val('');
         $('#custom_item_select').selectpicker('refresh');
         var trBar = $('tr.main');
-        //console.log(trBar.find('td:nth-child(2) > input'));
-        
         trBar.find('td:first > input').val("");
         trBar.find('td:nth-child(2) ').text('<?=_l('item_name')?>');
-        trBar.find('td:nth-child(3) ').text('<?=_l('item_unit')?>');
-
-        trBar.find('td:nth-child(4) > select').val('').selectpicker('refresh');
-
-        trBar.find('td:nth-child(5) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(6) > input').val('');
+        trBar.find('td:nth-child(3) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(4) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(5) ').text('<?=_l('item_unit')?>');        
+        trBar.find('td:nth-child(6) > input').val('1');
         trBar.find('td:nth-child(7) ').text('<?=_l("item_price")?>');
         trBar.find('td:nth-child(8) ').text('<?=_l("0")?>');
-        trBar.find('td:nth-child(9) > select').val('').selectpicker('refresh');
-        trBar.find('td:nth-child(10) > select').find('option:gt(0)').remove().selectpicker('refresh');
+        trBar.find('td:nth-child(9) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(10)').val('0');
+        trBar.find('td:nth-child(11) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(12) > input').val('0');
+        trBar.find('td:nth-child(13) > input').val('0');
+        trBar.find('td:nth-child(14)').text('0');
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
         totalPrice -= current.find('td:nth-child(4) > input').val() * current.find('td:nth-child(5)').text().replace(/\,/g, '');
+        var product_id=$(trItem).parents('tr').find('td:nth-child(1) > input').val();
+        let row = $('#capital_expenditures tbody').find('td:has(#product_id[value='+product_id+'])').parent();
+        row.remove();
         $(trItem).parent().parent().remove();
         total--;
         refreshTotal();
     };
     var refreshTotal = () => {
-
         $('.total').text(formatNumber(total));
         var items = $('table.item-purchase tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(8)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(9)').text().replace(/\,/g, ''));
-            // * 
+            totalPrice += parseFloat($(value).find('td:nth-child(14)').text().replace(/\,/g, ''));
         });
-        $('.totalPrice').text(formatNumber(totalPrice));
+        var discount_percent=$('#discount_percent').val();
+
+        var discount=discount_percent*totalPrice/100;
+        
+        var adjustment=parseFloat($('#adjustment').val());
+        if(isNaN(adjustment)) adjustment=0;
+        var grand_total=totalPrice-discount+adjustment;
+        $('.discount_percent_total').text(formatNumber(discount));
+        $('.totalPrice').text(formatNumber(grand_total));
     };
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
-
         var itemFound = findItem(id);
-        console.log(itemFound)
-        $('#select_kindof_warehouse').val('');
-        $('#select_kindof_warehouse').selectpicker('refresh');
-        var warehouse_id=$('#select_warehouse');
-        warehouse_id.find('option:gt(0)').remove();
-        warehouse_id.selectpicker('refresh');
-
         if(typeof(itemFound) != 'undefined') {
             var trBar = $('tr.main');
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
-            trBar.find('td:nth-child(3)').text(itemFound.unit_name);
-            trBar.find('td:nth-child(3) > input').val(itemFound.unit);
-
-            trBar.find('td:nth-child(4) > select').val('');
-            trBar.find('td:nth-child(5) > select').val('');
-
+            trBar.find('td:nth-child(3) select').val('6').selectpicker('refresh');
+            trBar.find('td:nth-child(4) select').val('187').selectpicker('refresh');
+            trBar.find('td:nth-child(5)').text(itemFound.unit_name);
+            trBar.find('td:nth-child(5) > input').val(itemFound.unit);
             trBar.find('td:nth-child(6) > input').val(1);
             trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
-            trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price * 1) );
+            trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price*1));
+            trBar.find('td:nth-child(9) select').val('92').selectpicker('refresh');            
             var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
-            trBar.find('td:nth-child(9)').text(formatNumber(taxValue));
-            trBar.find('td:nth-child(9)').append(inputTax);
-            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(10)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(10)').append(inputTax);
+            trBar.find('td:nth-child(11) select').val('193').selectpicker('refresh');    
+            trBar.find('td:nth-child(12) > input').val(0);
+            trBar.find('td:nth-child(13) > input').val(0);
+            trBar.find('td:nth-child(14)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }
@@ -1003,9 +1059,7 @@
     };
 
     $(document).on('keyup', '.mainQuantity',(e)=>{
-        
         var currentQuantityInput = $(e.currentTarget);
-
         let elementToCompare;
         if(typeof(currentQuantityInput.attr('data-store')) == 'undefined' )
             elementToCompare = currentQuantityInput.parents('tr').find('input:last');
@@ -1032,31 +1086,166 @@
             currentQuantityInput.focus();
         }
 
-        var Gia = currentQuantityInput.parent().find(' + td');
-        var GiaTri = Gia.find(' + td');
-        var Thue = GiaTri.find(' + td');
-        var Tong = Thue.find(' + td');
-        var inputTax=Thue.find('input');        
-        GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
-        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
-        Thue.append(inputTax);
-        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
-        refreshTotal();
+
+        calculateTotal(e.currentTarget);
         refreshTotalR();
     });
 
+    var calculateTotal = (currentInput) => {
+        currentInput = $(currentInput);   
+        let quantity = currentInput.parents('tr').find('.mainQuantity');
+        let quantityTd = quantity.parent();
 
+        let priceTd = quantityTd.find('+ td');
 
+        let amountTd = priceTd.find('+ td');
+        var amount=priceTd.text().replace(/\,/g, '') * quantity.val();
+        amountTd.text(formatNumber(amount));
 
+        let taxTd=amountTd.find('+ td + td');
+        var inputTax=taxTd.find('input')
+        var tax=parseFloat(inputTax.data('taxrate'))/100*parseFloat(amount);
+        taxTd.text(formatNumber(tax));
+        taxTd.append(inputTax);
 
-    $('#select_kindof_warehouse').change(function(e){      
-        var warehouse_type = $(e.currentTarget).val();
-        var product = $(e.currentTarget).parents('tr').find('td:first input');
-        // alert(warehouse_type+'=='+product.val())
-        if(warehouse_type != '' && product.val() != '') {
-            loadWarehouses(warehouse_type,product.val()); 
-        }
+        let discountPercent=currentInput.parents('tr').find('.discount_percent');
+
+        let discount=currentInput.parents('tr').find('.discount');
+        var discountTd=discount.parent();
+        var discountValue=amount*discountPercent.val()/100;
+        discount.val(discountValue);
+
+        let subTotalTd=discountTd.find('+ td');
+        subTotalTd.text(formatNumber(amount+tax-discountValue));
+
+        refreshTotal();
+    };
+
+    function addCapitalExpendituresItem(product_id,warehouse_id,quantity,uniqueArray)
+    {
+        var data={
+         product_id: product_id,
+         warehouse_id: warehouse_id,
+         quantity: quantity
+       };
+        $.post(admin_url + 'sale_orders/getSaleProductDetail', data).done(function(response) {
+        response = JSON.parse(response);
+        // console.log(response);
+         // <input type="hidden" id="itemID" value="131">
+        var newTr = $('<tr class="sortable item"></tr>');        
+        var td1 = $('<td><input type="hidden" id="product_id" value="" /></td>');
+        var td2 = $('<td class="dragger"></td>');
+        var td3 = $('<td></td>');
+        var td4 = $('<td></td>');
+        var td5 = $('<td></td>');
+        var td6 = $('<td></td>');
+        var td7 = $('<td></td>');
+
+        td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
+        td2.text($('tr.main').find('td:nth-child(2)').text());
+
+        let tk_gv = $('#tk_gv').clone();
+        tk_gv.attr('name', 'items[' + uniqueArray + '][tk_gv]');
+        tk_gv.removeAttr('id').val($('#tk_gv').selectpicker('val'));
+        td3.append(tk_gv);
+
+        let tk_kho = $('#tk_kho').clone();
+        tk_kho.attr('name', 'items[' + uniqueArray + '][tk_kho]');
+        tk_kho.removeAttr('id').val($('#tk_kho').selectpicker('val'));
+        td4.append(tk_kho);
+
+        td5.text($('tr.main').find('td:nth-child(5)').text());
+        td6.text(formatNumber($('tr.main').find('td:nth-child(6) > input').val()));
+        var strExInput='';
+        var amount=0;
+        $.each(response,function(index,item){
+            amount+=item.quantity*item.entered_price;
+            strExInput+=hidden_input('items['+uniqueArray+'][exports]['+index+'][wp_detail_id]',item.wp_detail_id);
+            strExInput+=hidden_input('items['+uniqueArray+'][exports]['+index+'][quantity]',item.quantity)
+            strExInput+=hidden_input('items['+uniqueArray+'][exports]['+index+'][entered_price]',item.entered_price)
+        });
+        td6.append(strExInput);
+
+        td7.text(formatNumber(amount));
+        newTr.append(td1);
+        newTr.append(td2);
+        newTr.append(td3);
+        newTr.append(td4);
+        newTr.append(td5);
+        newTr.append(td6);
+        newTr.append(td7);
+
+        $('table.item-purchase-capital-expenditures tbody').append(newTr);
+        $('.selectpicker').selectpicker('refresh');
+       });
+        
+    }
+    // <tr class="sortable item">
+
+    $(document).on('keyup', '.discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=currentDiscountInput.parents('td').prev().find('input');
+        var tong=currentDiscountInput.parents('tr').find('.mainQuantity').parents().find('+ td + td').text().trim().replace(/\,|%/g, '');
+        discount_percent.val(currentDiscountInput.val()*100/tong);
+        calculateTotal(e.currentTarget);
     });
+    $(document).on('keyup', '.discount_percent', (e)=>{
+        var currentDiscountPercentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#adjustment', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var adjustment=parseFloat(currentInput.val());
+        if(isNaN(adjustment)) adjustment=0;
+        $('.adjustment_total').text(formatNumber(adjustment));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#discount_percent', (e)=>{
+        var currentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    // $(document).ready(function(){
+    //     var str='items[0][exports][0][quantity]';
+    //     console.log(str.split('][')[0].split('[')[1]);
+    // });
+
+    $(document).on('change', '.mainQuantity', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var product_id=currentInput.parents('tr').find('td:nth-child(1) > input').val();
+        let row = $('#capital_expenditures tbody').find('td:has(#product_id[value='+product_id+'])').parent();
+        var quantityTd=row.find('td:has(input[name$="[quantity]"])');
+        try 
+        {
+            var uniqueIndex=quantityTd.find('input[name$="[quantity]"]').attr('name').split('][')[0].split('[')[1];       
+            var warehouse_id=$('#warehouse_name').val();
+            var quantity=currentInput.val();
+            var data={
+                     product_id: product_id,
+                     warehouse_id: warehouse_id,
+                     quantity: quantity
+                    };
+            quantityTd.text(formatNumber(currentInput.val()));
+            $.post(admin_url + 'sale_orders/getSaleProductDetail', data, 'json').done(function(response) {
+                response = JSON.parse(response);
+                var amount=0;
+                var strExInput='';
+                $.each(response,function(index,item){
+                amount+=item.quantity*item.entered_price;
+                strExInput+=hidden_input('items['+uniqueIndex+'][exports]['+index+'][wp_detail_id]',item.wp_detail_id);
+                strExInput+=hidden_input('items['+uniqueIndex+'][exports]['+index+'][quantity]',item.quantity)
+                strExInput+=hidden_input('items['+uniqueIndex+'][exports]['+index+'][entered_price]',item.entered_price)
+                    });
+                quantityTd.append(strExInput);
+                quantityTd.find('+ td').text(formatNumber(amount));
+            });
+        }
+        catch(err) {
+            //Error
+        }
+        
+
+    });
+
     function loadWarehouses(warehouse_type, filter_by_product,default_value=''){
         var warehouse_id=$('#select_warehouse');
         warehouse_id.find('option:gt(0)').remove();
@@ -1079,10 +1268,28 @@
         }
     }
 
+     $(document).on('change', '#warehouse_name,#custom_item_select',function(e){
+        var warehouse_id=$('#warehouse_name').val();
+        var product_id=$('#custom_item_select').val();
+        if(warehouse_id.length && product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductQuantity/' + warehouse_id + '/' + product_id,
+                dataType : 'json',
+            })
+            .done(function(data){
+            var quantityMax=data.product_quantity;
+            if(isNaN(parseFloat(quantityMax))) quantityMax=0;          
+               $('#warehouse_name option:selected').attr('data-store',quantityMax);
+               $('tr.main').find('input.mainQuantity').attr('data-store',quantityMax);
+            });
+        }
+    });
+
      $('.customer-form-submiter').on('click', (e)=>{
         if($('input.error').length) {
             e.preventDefault();
-            alert('Giá trị không hợp lệ!');    
+            alert('Giá trị không hợp lệ!');  
+            return;  
         }
         if(<?=json_encode($item)?>)
         {
@@ -1098,6 +1305,21 @@
 
         }
     });
+
+    $('#customer_id').change(function(e){
+        var customer_id=$(this).val();
+        var data={};
+        data.customer_id=customer_id;
+        var url=admin_url + 'clients/getClientByID';
+        $.post(url, data).done(function(response) {
+            response = JSON.parse(response);
+            var discount_percent=response.success.discount_percent;
+            if(discount_percent==null) discount_percent=0;
+            $('#discount_percent').val(discount_percent);
+            refreshTotal();
+        });
+    });
+
     
 </script>
 </body>

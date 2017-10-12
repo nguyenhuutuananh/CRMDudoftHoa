@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-add_action('after_render_single_aside_menu','my_custom_menu_items');
-include('plugins/messaging/init.php');
+// add_action('after_render_single_aside_menu','my_custom_menu_items');
+// include('plugins/messaging/init.php');
 
 // function my_custom_menu_items($order){
 //     if($order == 1){

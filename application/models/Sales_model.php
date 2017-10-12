@@ -102,6 +102,7 @@ class Sales_model extends CRM_Model
 
     public function add($data)
    {
+    
         $import=array(
             'rel_type'=>$data['rel_type'],
             'rel_id'=>$data['rel_id'],
@@ -113,7 +114,9 @@ class Sales_model extends CRM_Model
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
             'account_date'=>to_sql_date($data['account_date']),
-            'create_by'=>get_staff_user_id()
+            'create_by'=>get_staff_user_id(),
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment']
             );
         
         $this->db->insert('tblsales', $import);
@@ -128,7 +131,8 @@ class Sales_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $item_data=array(
                     'sale_id'=>$insert_id,
@@ -144,12 +148,19 @@ class Sales_model extends CRM_Model
                     'amount'=>$amount,
                     'warehouse_id'=>$data['warehouse_name'],
                     'tk_no'=>$item['tk_no'],
-                    'tk_co'=>$item['tk_co']
+                    'tk_co'=>$item['tk_co'],
+                    'tk_ck'=>$item['tk_ck'],
+                    'tk_thue'=>$item['tk_thue'],
+                    'tk_gv'=>$item['tk_gv'],
+                    'tk_kho'=>$item['tk_kho'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
                  $this->db->insert('tblsale_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {
-                    $affect_product[]=$item['id'];  
+                    $affect_product[]=$item['id'];
+                    updateSaleProductDetail($insert_id,$item['id'],$item['exports'],'SO');  
                     logActivity('Insert Sale Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
                     if(!empty($data['rel_id']))
                     {
@@ -160,11 +171,14 @@ class Sales_model extends CRM_Model
                  }
             }
             $this->checkExportOrder($data['rel_id']);
-            $this->db->update('tblsales',array('total'=>$total),array('id'=>$insert_id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblsales',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
             return $insert_id;
         }
         return false;
     }
+
     public function checkExportOrder($id)
     {
         if(!$id)
@@ -223,6 +237,7 @@ class Sales_model extends CRM_Model
 
      public function update($data,$id)
    {
+
         $affected=0;
          $import=array(
             'rel_type'=>$data['rel_type'],
@@ -232,7 +247,9 @@ class Sales_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
-            'account_date'=>to_sql_date($data['account_date'])
+            'account_date'=>to_sql_date($data['account_date']),            
+            'discount_percent'=>$data['discount_percent'],
+            'adjustment'=>$data['adjustment']
             );
         
         if($this->db->update('tblsales',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
@@ -251,7 +268,8 @@ class Sales_model extends CRM_Model
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
                 $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$tax-$discount;
                 $total+=$amount;
                 $itm=$this->getSaleItem($id,$item['id']);
                 $item_data=array(
@@ -268,7 +286,13 @@ class Sales_model extends CRM_Model
                     'amount'=>$amount,
                     'warehouse_id'=>$data['warehouse_name'],
                     'tk_no'=>$item['tk_no'],
-                    'tk_co'=>$item['tk_co']
+                    'tk_co'=>$item['tk_co'],
+                    'tk_ck'=>$item['tk_ck'],
+                    'tk_thue'=>$item['tk_thue'],
+                    'tk_gv'=>$item['tk_gv'],
+                    'tk_kho'=>$item['tk_kho'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
                 if($itm)
                 {
@@ -286,6 +310,7 @@ class Sales_model extends CRM_Model
                         logActivity('Insert Sale Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
+                updateSaleProductDetail($id,$item['id'],$item['exports'],'SO');
             }
                 if(!empty($affected_id))
                 {
@@ -294,7 +319,10 @@ class Sales_model extends CRM_Model
                     $this->db->delete('tblsale_items');
                 }
 
-            $this->db->update('tblsales',array('total'=>$total),array('id'=>$id));
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment'];
+            $this->db->update('tblsales',array('total'=>$total,'discount'=>$total_discount),array('id'=>$id));
+
             return $id;
         }
         return false;
@@ -357,6 +385,7 @@ class Sales_model extends CRM_Model
     {
         if($this->db->delete('tblsales',array('id'=>$id)) && $this->db->delete('tblsale_items',array('sale_id'=>$id)));
         if ($this->db->affected_rows() > 0) {
+            deleteSaleProductDetails($id,'SO');
             return true;
         }
         return false;

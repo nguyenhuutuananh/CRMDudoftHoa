@@ -69,7 +69,7 @@
                           <span class="input-group-addon">
                           <?php $prefix =($item) ? get_option('prefix_sale_order') : ''; ?>
                             <?=$prefix?>
-                            <?php echo form_hidden('rel_type', 'sale_order'); ?>
+                            <?php echo form_hidden('rel_type', 'contract'); ?>
                             <?=form_hidden('prefix',$prefix)?>    
                             </span>
                             <?php 
@@ -81,6 +81,9 @@
 
                     <?php $value = (isset($item) ? _d($item->datestart) : _d(date('Y-m-d')));?>
                     <?php echo render_date_input('date','view_date',$value); ?>
+
+                    <?php $value = (isset($item) ?_d(date('Y-m-d')) : '' );?>
+                    <?php echo render_date_input('date_ht','date_of_accounting',$value); ?>
                     
                     <?=form_hidden('rel_id',$item->id);?>
 
@@ -266,7 +269,7 @@
                                                     <td>
                                                         <?php
                                                         $selected=(isset($value) ? $value->tk_ck : '193');
-                                                        if(empty($selected)) $selected=93;
+                                                        if(empty($selected)) $selected=193;
                                                         echo render_select('items['.$i.'][tk_ck]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                                         ?>
                                                     </td>
@@ -392,9 +395,9 @@
                                                         $tong_gv=0;
                                                         foreach ($value->exports as $key => $valP) {
                                                             $tong_gv+=$valP->quantity*$valP->entered_price;
-                                                            echo form_hidden('items['.$i.'][exports][wp_detail_id]',$valP->wp_detail_id);
-                                                            echo form_hidden('items['.$i.'][exports][quantity]',$valP->quantity);
-                                                            echo form_hidden('items['.$i.'][exports][entered_price]',$valP->entered_price);
+                                                            echo form_hidden('items['.$i.'][exports]['.$key.'][wp_detail_id]',$valP->wp_detail_id);
+                                                            echo form_hidden('items['.$i.'][exports]['.$key.'][quantity]',$valP->quantity);
+                                                            echo form_hidden('items['.$i.'][exports]['.$key.'][entered_price]',$valP->entered_price);
                                                         }
                                                         ?>
                                                     </td>

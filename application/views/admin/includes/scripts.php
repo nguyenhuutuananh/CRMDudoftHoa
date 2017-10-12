@@ -9,6 +9,8 @@
         init_btn_with_tooltips();
     });
 </script>
+<!-- Zoom Image -->
+
 <script src="<?php echo base_url('assets/plugins/bootstrap/js/bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/plugins/datatables/datatables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/plugins/app-build/metis-tagit-areyousure-bootstrapcolorpicker-dropzone-datetimepicker.min.js'); ?>"></script>

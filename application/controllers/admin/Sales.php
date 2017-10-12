@@ -10,6 +10,8 @@ class Sales extends Admin_controller
         $this->load->model('clients_model');
         $this->load->model('warehouse_model');
         $this->load->model('accounts_model');
+        $data['isSO'] = true;
+
     }
     
 
@@ -19,6 +21,7 @@ class Sales extends Admin_controller
         $this->list_sales($order_id);
         $data['title'] = _l('sale_orders');
         $data['order_id'] = $order_id;
+        $data['isSO'] = true;
         $this->load->view('admin/sales/manage', $data);
     }
 
@@ -38,7 +41,6 @@ class Sales extends Admin_controller
 
     public function sale_detail($id='') 
     {
-       
         if (!has_permission('sale_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('sale_items');
@@ -51,6 +53,7 @@ class Sales extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
+
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->sales_model->add($data);
@@ -89,6 +92,7 @@ class Sales extends Admin_controller
             $i=0;
             foreach ($data['item']->items as $key => $value) {       
                 $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
+                $data['item']->items[$i]->exports=getAllSaleProductDetails($id,$value->product_id,'SO');
                 $i++;
             }
 

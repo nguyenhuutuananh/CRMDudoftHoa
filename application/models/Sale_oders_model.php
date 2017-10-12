@@ -122,6 +122,9 @@ class Sale_oders_model extends CRM_Model
             'adjustment'=>$data['adjustment']
             );
         
+        // updateSaleProductDetail(200,$data['items'][0]['id'],$data['items'][0]['exports']);
+        // echo "<pre>";
+        // var_dump($data['items'][0]['exports']);die;
         $this->db->insert('tblsale_orders', $import);
         $insert_id = $this->db->insert_id();
 
@@ -129,6 +132,7 @@ class Sale_oders_model extends CRM_Model
             logActivity('New Sale Added [ID:' . $insert_id . ', ' . $data['date'] . ']');
             $items=$data['items'];
             $total=0;
+
             //New TK
             $itemsTK=$data['item'];
             $i=0;
@@ -196,7 +200,9 @@ class Sale_oders_model extends CRM_Model
             'discount_percent'=>$data['discount_percent'],
             'adjustment'=>$data['adjustment']
             );
-        
+        echo "<pre>";
+    // var_dump($data);die;
+        // updateSaleProductDetail($id,$data['items'][0]['id'],$data['items'][0]['exports']);die;
         if($this->db->update('tblsale_orders',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
         {
             logActivity('Edit Sale Updated [ID:' . $id . ', Date' . date('Y-m-d') . ']');
@@ -213,6 +219,8 @@ class Sale_oders_model extends CRM_Model
             //New TK
             $itemsTK=$data['item'];
             $i=0;
+            // echo "<pre>";
+            // var_dump($items);die;
             foreach ($items as $key => $item) {
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
@@ -261,10 +269,11 @@ class Sale_oders_model extends CRM_Model
                     $this->db->insert('tblsale_order_items', $item_data);
                     if($this->db->affected_rows()>0)
                      {
-                        updateSaleProductDetail($insert_id,$item['id'],$item['exports']);
+                        
                         logActivity('Insert Sale Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
+                updateSaleProductDetail($id,$item['id'],$item['exports']);
                 $i++;
             }
 
@@ -274,11 +283,10 @@ class Sale_oders_model extends CRM_Model
                 $this->db->where_not_in('product_id', $affected_id);
                 $this->db->delete('tblsale_order_items');
             }
-
             $total_discount=$data['discount_percent']*$total/100;
             $total=$total-$total_discount+$data['adjustment'];
-            $this->db->update('tblsale_orders',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
-            
+
+            $this->db->update('tblsale_orders',array('total'=>$total,'discount'=>$total_discount),array('id'=>$id));
             foreach ($itemsR as $key => $item) {
                 $affected_idR[]=$item['id'];
                 $product=$this->getProductById($item['id']);
@@ -585,6 +593,7 @@ class Sale_oders_model extends CRM_Model
 
         if($this->db->delete('tblsale_orders',array('id'=>$id)) && $this->db->delete('tblsale_order_items',array('sale_id'=>$id)));
         if ($this->db->affected_rows() > 0) {
+            deleteSaleProductDetails($id);
             $this->db->update('tblcontracts',array('export_status'=>0),array('id'=>$rel_contract->rel_id));
             $this->db->delete('tblsale_order_items',array('reject_id'=>$id));
             return true;

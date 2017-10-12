@@ -67,7 +67,8 @@ foreach ($rResult as $aRow) {
             $_data=$j;
         }
         if ($aColumns[$i] == 'tblsale_orders.code') {
-            $_data=$aRow['prefix'].$aRow['tblsale_orders.code'];
+            $code=$aRow['prefix'].$aRow['tblsale_orders.code'];
+            $_data=$_data='<a href="'.admin_url('sale_orders/sale_detail/'.$aRow['id']).'">'. $code . '</a>';
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);

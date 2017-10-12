@@ -2041,7 +2041,6 @@ function updateTotalQuantityImport($import_id=NULL,$product_id=NULL)
 
 function getSaleProductDetail($product_id=NULL,$warehouse_id=NULL,$export_quantity=NULL)
 {
-    
     $CI =& get_instance();
     if(is_numeric($warehouse_id) && is_numeric($product_id) && is_numeric($export_quantity))
     {
@@ -2079,11 +2078,14 @@ function getSaleProductDetail($product_id=NULL,$warehouse_id=NULL,$export_quanti
 
 function updateSaleProductDetail($rel_id=NULL,$product_id=NULL,$items=array(),$type='PO')
 {
+    // var_dump($items);die;
     $CI =& get_instance();
     if(is_numeric($rel_id) && is_numeric($product_id) && is_array($items))
     {
 
+        $affected=array();
         foreach ($items as $key => $item) {
+
             $data=array(
                         'rel_type'=>$type,
                         'rel_id'=>$rel_id,
@@ -2092,10 +2094,9 @@ function updateSaleProductDetail($rel_id=NULL,$product_id=NULL,$items=array(),$t
                         'quantity'=>$item['quantity'],
                         'entered_price'=>$item['entered_price']
                 );
-            // var_dump($items);die;
+    
             $detail=$CI->db->get_where('tblsale_details',array('rel_type'=>$type,'rel_id'=>$rel_id,'wp_detail_id'=>$item['wp_detail_id'],'product_id'=>$product_id,'entered_price'=>$item['entered_price']))->row();
 
-            $affected=array();
             if($detail)
             {
                 $CI->db->update('tblsale_details',$data,array('id'=>$detail->id));
@@ -2107,15 +2108,16 @@ function updateSaleProductDetail($rel_id=NULL,$product_id=NULL,$items=array(),$t
                 $affected[]=$CI->db->insert_id();
             }
             if($CI->db->affected_rows()>0) $result=true;
-
+            
+        }
             if($affected)
             {
                 $CI->db->where('rel_type',$type);
                 $CI->db->where('rel_id',$rel_id);
+                $CI->db->where('product_id',$product_id);
                 $CI->db->where_not_in('id', $affected);
                 $CI->db->delete('tblsale_details');
             }
-        }
         if ($result) {
             
             return true;
@@ -2134,6 +2136,21 @@ function getAllSaleProductDetails($rel_id=NULL,$product_id=NULL,$type='PO')
         if ($details) {
             
             return $details;
+        }
+    }
+    return false;
+}
+
+function deleteSaleProductDetails($rel_id=NULL,$type='PO')
+{
+    $CI =& get_instance();
+    if(is_numeric($rel_id))
+    {
+        $CI->db->where('rel_id',$rel_id);
+        $CI->db->where('rel_type',$type);
+        $CI->db->delete('tblsale_details');
+        if ($CI->db->affected_rows()>0) {
+            return true;
         }
     }
     return false;

@@ -1466,9 +1466,9 @@ $(function() {
         }
     });
     // Recaulciate total on these changes
-    $('body').on('change', 'input[name="adjustment"],select.tax', function() {
-        calculate_total();
-    });
+    // $('body').on('change', 'input[name="adjustment"],select.tax', function() {
+    //     calculate_total();
+    // });
     // Discount type for estimate/invoice
     $('body').on('change', 'select[name="discount_type"]', function() {
         // if discount_type == ''
@@ -1479,23 +1479,23 @@ $(function() {
         calculate_total();
     });
     // In case user enter discount percent but there is no discount type set
-    $('body').on('change', 'input[name="discount_percent"]', function() {
-        if ($('select[name="discount_type"]').val() == '' && $(this).val() != 0) {
-            alert('Select discount type');
-            $('html,body').animate({
-                    scrollTop: 0
-                },
-                'slow');
-            $('#wrapper').highlight($('label[for="discount_type"]').text());
-            setTimeout(function() {
-                $('#wrapper').unhighlight();
-            }, 3000);
-            return false;
-        }
-        if ($(this).valid() == true) {
-            calculate_total();
-        }
-    });
+    // $('body').on('change', 'input[name="discount_percent"]', function() {
+    //     if ($('select[name="discount_type"]').val() == '' && $(this).val() != 0) {
+    //         alert('Select discount type');
+    //         $('html,body').animate({
+    //                 scrollTop: 0
+    //             },
+    //             'slow');
+    //         $('#wrapper').highlight($('label[for="discount_type"]').text());
+    //         setTimeout(function() {
+    //             $('#wrapper').unhighlight();
+    //         }, 3000);
+    //         return false;
+    //     }
+    //     if ($(this).valid() == true) {
+    //         calculate_total();
+    //     }
+    // });
     // Add item to preview from the dropdown for invoices estimates
     $('body').on('change', 'select[name="item_select"]', function() {
 
@@ -4752,96 +4752,96 @@ function get_main_values() {
     return response;
 }
 // Calculate invoice total - NOT RECOMENDING EDIT THIS FUNCTION BECUASE IS VERY SENSITIVE
-function calculate_total() {
-    var calculated_tax,
-        taxrate,
-        item_taxes,
-        row,
-        _amount,
-        _tax_name,
-        taxes = {},
-        taxes_rows = [],
-        subtotal = 0,
-        total = 0,
-        quantity = 1;
-    total_discount_calculated = 0,
-        rows = $('.table.table-main-invoice-edit tbody tr.item,.table.table-main-estimate-edit tbody tr.item'),
-        adjustment = $('input[name="adjustment"]').val(),
-        discount_area = $('tr#discount_percent'),
-        discount_percent = $('input[name="discount_percent"]').val();
-    discount_type = $('select[name="discount_type"]').val();
+// function calculate_total() {
+//     var calculated_tax,
+//         taxrate,
+//         item_taxes,
+//         row,
+//         _amount,
+//         _tax_name,
+//         taxes = {},
+//         taxes_rows = [],
+//         subtotal = 0,
+//         total = 0,
+//         quantity = 1;
+//     total_discount_calculated = 0,
+//         rows = $('.table.table-main-invoice-edit tbody tr.item,.table.table-main-estimate-edit tbody tr.item'),
+//         adjustment = $('input[name="adjustment"]').val(),
+//         discount_area = $('tr#discount_percent'),
+//         discount_percent = $('input[name="discount_percent"]').val();
+//     discount_type = $('select[name="discount_type"]').val();
 
-    $('.tax-area').remove();
+//     $('.tax-area').remove();
 
-    $.each(rows, function() {
-        quantity = $(this).find('[data-quantity]').val();
-        if (quantity == '') {
-            quantity = 1;
-            $(this).find('[data-quantity]').val(1);
-        }
-        _amount = parseFloat($(this).find('td.rate input').val()) * quantity;
-        $(this).find('td.amount').html(accounting.formatNumber(_amount));
-        subtotal += _amount;
-        row = $(this);
-        item_taxes = $(this).find('select.tax').selectpicker('val');
+//     $.each(rows, function() {
+//         quantity = $(this).find('[data-quantity]').val();
+//         if (quantity == '') {
+//             quantity = 1;
+//             $(this).find('[data-quantity]').val(1);
+//         }
+//         _amount = parseFloat($(this).find('td.rate input').val()) * quantity;
+//         $(this).find('td.amount').html(accounting.formatNumber(_amount));
+//         subtotal += _amount;
+//         row = $(this);
+//         item_taxes = $(this).find('select.tax').selectpicker('val');
 
-        if (item_taxes) {
-            $.each(item_taxes, function(i, taxname) {
-                taxrate = row.find('select.tax [value="' + taxname + '"]').data('taxrate');
-                calculated_tax = (_amount / 100 * taxrate);
-                if (!taxes.hasOwnProperty(taxname)) {
-                    if (taxrate != 0) {
-                        _tax_name = taxname.split('|');
-                        tax_row = '<tr class="tax-area"><td>' + _tax_name[0] + '(' + taxrate + '%)</td><td id="tax_id_' + slugify(taxname) + '"></td></tr>';
-                        $(discount_area).after(tax_row);
-                        taxes[taxname] = calculated_tax;
-                    }
-                } else {
-                    // Increment total from this tax
-                    taxes[taxname] = taxes[taxname] += calculated_tax;
-                }
-            });
-        }
-    });
+//         if (item_taxes) {
+//             $.each(item_taxes, function(i, taxname) {
+//                 taxrate = row.find('select.tax [value="' + taxname + '"]').data('taxrate');
+//                 calculated_tax = (_amount / 100 * taxrate);
+//                 if (!taxes.hasOwnProperty(taxname)) {
+//                     if (taxrate != 0) {
+//                         _tax_name = taxname.split('|');
+//                         tax_row = '<tr class="tax-area"><td>' + _tax_name[0] + '(' + taxrate + '%)</td><td id="tax_id_' + slugify(taxname) + '"></td></tr>';
+//                         $(discount_area).after(tax_row);
+//                         taxes[taxname] = calculated_tax;
+//                     }
+//                 } else {
+//                     // Increment total from this tax
+//                     taxes[taxname] = taxes[taxname] += calculated_tax;
+//                 }
+//             });
+//         }
+//     });
 
-    if (discount_percent != '' && discount_type == 'before_tax') {
-        // Calculate the discount total
-        total_discount_calculated = (subtotal * discount_percent) / 100;
-    }
+//     if (discount_percent != '' && discount_type == 'before_tax') {
+//         // Calculate the discount total
+//         total_discount_calculated = (subtotal * discount_percent) / 100;
+//     }
 
-    $.each(taxes, function(taxname, total_tax) {
-        if (discount_percent != '' && discount_type == 'before_tax') {
-            total_tax_calculated = (total_tax * discount_percent) / 100;
-            total_tax = (total_tax - total_tax_calculated);
-        }
+//     $.each(taxes, function(taxname, total_tax) {
+//         if (discount_percent != '' && discount_type == 'before_tax') {
+//             total_tax_calculated = (total_tax * discount_percent) / 100;
+//             total_tax = (total_tax - total_tax_calculated);
+//         }
 
-        total += total_tax;
-        total_tax = accounting.formatNumber(total_tax)
-        $('#tax_id_' + slugify(taxname)).html(total_tax);
+//         total += total_tax;
+//         total_tax = accounting.formatNumber(total_tax)
+//         $('#tax_id_' + slugify(taxname)).html(total_tax);
 
-    });
+//     });
 
-    total = (total + subtotal);
+//     total = (total + subtotal);
 
-    if (discount_percent != '' && discount_type == 'after_tax') {
-        // Calculate the discount total
-        total_discount_calculated = (total * discount_percent) / 100;
-    }
+//     if (discount_percent != '' && discount_type == 'after_tax') {
+//         // Calculate the discount total
+//         total_discount_calculated = (total * discount_percent) / 100;
+//     }
 
-    total = total - total_discount_calculated;
-    adjustment = parseFloat(adjustment);
+//     total = total - total_discount_calculated;
+//     adjustment = parseFloat(adjustment);
 
-    // Check if adjustment not empty
-    if (!isNaN(adjustment)) {
-        total = total + adjustment;
-    }
+//     // Check if adjustment not empty
+//     if (!isNaN(adjustment)) {
+//         total = total + adjustment;
+//     }
 
-    // Append, format to html and display
-    $('.discount_percent').html('-' + accounting.formatNumber(total_discount_calculated) + hidden_input('discount_percent', discount_percent) + hidden_input('discount_total', total_discount_calculated));
-    $('.adjustment').html(accounting.formatNumber(adjustment) + hidden_input('adjustment', adjustment.toFixed(decimal_places)))
-    $('.subtotal').html(subtotal = accounting.formatNumber(subtotal) + hidden_input('subtotal', subtotal.toFixed(decimal_places)));
-    $('.total').html(format_money(total) + hidden_input('total', total.toFixed(decimal_places)));
-}
+//     // Append, format to html and display
+//     $('.discount_percent').html('-' + accounting.formatNumber(total_discount_calculated) + hidden_input('discount_percent', discount_percent) + hidden_input('discount_total', total_discount_calculated));
+//     $('.adjustment').html(accounting.formatNumber(adjustment) + hidden_input('adjustment', adjustment.toFixed(decimal_places)))
+//     $('.subtotal').html(subtotal = accounting.formatNumber(subtotal) + hidden_input('subtotal', subtotal.toFixed(decimal_places)));
+//     $('.total').html(format_money(total) + hidden_input('total', total.toFixed(decimal_places)));
+// }
 // Deletes invoice items
 function delete_item(row, itemid) {
     $(row).parents('tr').addClass('animated fadeOut', function() {

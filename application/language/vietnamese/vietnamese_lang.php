@@ -3727,13 +3727,15 @@ $lang['purchase_cost_information'] = 'Thông tin phiếu chi phí mua hàng';
 $lang['sale_orders'] = "Đơn đặt hàng";
 $lang['add_sale_order_'] = "Thêm đơn hàng bán";
 $lang['add_sale_order_so'] = "Thêm đơn hàng bán(SO)";
-$lang['sales'] = "Đơn hàng bán";
+$lang['sales'] = "Đơn hàng bán(SO)";
 $lang['sales_po'] = "Đơn hàng bán(PO)";
 $lang['sale'] = "Đơn đặt hàng";
 $lang['sale_detail'] = "Chi tiết đơn hàng";
 $lang['sale_code'] = "Mã chứng từ";
+$lang['sale_code_PO'] = "Mã đơn đặt hàng(PO)";
 $lang['code_noo'] = "Số chứng từ";
 $lang['sale_name'] = "Phiếu Đặt Hàng";
+$lang['sale_name_SO'] = "Phiếu Bán Hàng";
 $lang['edit_sale_order'] = "Sửa đơn hàng";
 $lang['code_no'] = "Phiếu số: ";
 $lang['customer_name'] = "Tên khách hàng";
@@ -3986,6 +3988,7 @@ $lang['code_vouchers_report_haves'] = "Số phiếu thu";
 $lang['report_have'] = "Số phiếu thu";
 $lang['sales_buy'] = "Lịch sử mua hàng";
 $lang['code_sales_EO'] = "Mã đơn hàng";
+
 $lang['status'] = "Tình trạng";
 $lang['lead_contract'] = "Hợp đồng mua hàng";
 $lang['_quote'] = "Báo giá";
@@ -4300,6 +4303,8 @@ $lang['opportunity_edit']="Sửa cơ hội";
 $lang['opportunity_add']="Thêm cơ hội";
 
 $lang['item_price_orginal']     = 'Tiền vốn';
+$lang['tk_no_5212']="TK trả lại";
+$lang['tk_co_131']="TK công nợ";
 
 
 

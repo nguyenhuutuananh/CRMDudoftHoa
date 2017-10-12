@@ -225,8 +225,8 @@
                                     <tr>
                                         <th><input type="hidden" id="itemID" value="" /></th>
                                         <th style="min-width: 200px" class="text-left"><i class="fa fa-exclamation-circle" aria-hidden="true" data-toggle="tooltip" data-title="<?php echo _l('item_name'); ?>"></i> <?php echo _l('item_name'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_no'); ?></th>
-                                        <th width="" class="text-left"><?php echo _l('tk_co'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_no_5212'); ?></th>
+                                        <th width="" class="text-left"><?php echo _l('tk_co_131'); ?></th>
                                         <th width="10%" class="text-left"><?php echo _l('item_unit'); ?></th>
                                         <th width="15%" class="text-left"><?php echo _l('item_quantity'); ?></th>
                                         
@@ -753,7 +753,10 @@
 
     $('#rel_id').change(function(){
       var sale_id=($(this).val());
-      loadAllItemsBySaleID(sale_id);
+      // console.log(sale_id.length);
+      if(sale_id.length)
+        loadAllItemsBySaleID(sale_id);
+      
     });
 
     function loadAllItemsBySaleID(sale_id){
@@ -788,7 +791,7 @@
                     td4.append(selectTd4);
                     var maxQ=value.quantity-value.quantity_return;
                     var td5 = $('<td>'+value.unit_name+'</td>');
-                    var td6 = $('<td><input style="width: 100px" class="mainQuantity" min="0" max="'+maxQ+'" type="number" name="items[' + uniqueArray + '][quantity]" value="'+formatNumber(value.quantity)+'" /></td>');
+                    var td6 = $('<td><input style="width: 100px" class="mainQuantity" min="1" max="'+maxQ+'" type="number" name="items[' + uniqueArray + '][quantity]" value="'+formatNumber(value.quantity)+'" /></td>');
                     var td7 = $('<td>'+formatNumber(value.unit_cost)+'</td>');
                     var sub_total=value.unit_cost*maxQ;
                     var tax=sub_total*value.tax_rate/100;

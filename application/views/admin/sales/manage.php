@@ -12,19 +12,28 @@
                 <div class="panel_s">
                     <div class="panel-body">
                         <ul class="nav nav-tabs profile-tabs" role="tablist">
-                            <li role="presentation" <?=(empty($order_id)? 'class="active"' : '')?>>
+                            <?php
+                                $activePO=true;
+                                $activeSO=false;
+                                if(!empty($order_id) || $isSO)
+                                {
+                                    $activePO=false;
+                                    $activeSO=true;
+                                }
+                            ?>
+                            <li role="presentation" <?=($activePO? 'class="active"' : '')?>>
                                 <a href="#sale_PO" aria-controls="sale_PO" role="tab" data-toggle="tab">
                                     <?php echo _l( 'sale_PO'); ?>
                                 </a>
                             </li>
-                            <li role="presentation" <?=(!empty($order_id)? 'class="active"' : '')?>>
+                            <li role="presentation" <?=($activeSO? 'class="active"' : '')?>>
                                 <a href="#sale_SO" aria-controls="sale_SO" role="tab" data-toggle="tab">
                                     <?php echo _l( 'sale_SO'); ?>
                                 </a>
                             </li>                            
                         </ul>
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane <?=(empty($order_id)? 'active' : '')?>" id="sale_PO">
+                            <div role="tabpanel" class="tab-pane <?=($activePO? 'active' : '')?>" id="sale_PO">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <a href="<?=admin_url('sale_orders/sale_detail')?>" class="btn btn-info pull-left display-block mbot15"><?php echo _l('add_sale_porder'); ?></a>
@@ -58,7 +67,7 @@
                                 </div>
                             </div>
 
-                            <div role="tabpanel" class="tab-pane <?=(!empty($order_id)? 'active' : '')?>" id="sale_SO">
+                            <div role="tabpanel" class="tab-pane <?=($activeSO? 'active' : '')?>" id="sale_SO">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <a href="<?=admin_url('sales/sale_detail')?>" class="btn btn-info pull-left display-block mbot15"><?php echo _l('add_sale_order_'); ?></a>
@@ -133,7 +142,7 @@
         var filterList = {
             'filterStatus' : '[id="filterStatusSale"]',
         };
-        initDataTable('.table-sales', window.location.href, [1], [1], filterList);
+        initDataTable('.table-sales', window.location.href, [1], [1], filterList,[1,'DESC']);
         $.each(filterList, (filterIndex, filterItem) => {
             $('input' + filterItem).on('change', () => {
                 $('.table-sales').DataTable().ajax.reload();
@@ -174,7 +183,7 @@
         var filterList = {
             'filterStatus' : '[id="filterStatus"]',
         };
-        initDataTable('.table-sale_orders', admin_url+'sale_orders/list_sale_orders', [1], [1], filterList);
+        initDataTable('.table-sale_orders', admin_url+'sale_orders/list_sale_orders', [1], [1], filterList,[1,'DESC']);
         $.each(filterList, (filterIndex, filterItem) => {
             $('input' + filterItem).on('change', () => {
                 $('.table-sale_orders').DataTable().ajax.reload();

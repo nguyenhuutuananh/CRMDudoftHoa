@@ -478,6 +478,7 @@
             var discount_percent=response.success.discount_percent;
             if(discount_percent==null) discount_percent=0;
             $('#discount_percent').val(discount_percent);
+            refreshTotal();
         });
     });
 

@@ -111,7 +111,6 @@ class Warehouse_model extends CRM_Model
             $this->db->join('tblitems', 'tblitems.id='.$product_id, 'right');
             $result = $this->db->get('tblwarehouses')->row();
         }
-
         return $result;
     }
 

@@ -32,7 +32,6 @@ class Sale_orders extends Admin_controller
 
     public function sale_detail($id='') 
     {
-          
         if (!has_permission('sale_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('sale_items');
@@ -45,7 +44,7 @@ class Sale_orders extends Admin_controller
                 }
 
                 $data                 = $this->input->post();
-
+                
                 if(isset($data['items']) && count($data['items']) > 0)
                 {
                     $id = $this->sale_oders_model->add($data);
@@ -63,7 +62,7 @@ class Sale_orders extends Admin_controller
                 $success = $this->sale_oders_model->update($this->input->post(), $id);
                 if ($success == true) {
                     set_alert('success', _l('updated_successfuly', _l('sale')));
-                    redirect(admin_url('sales'));
+                    redirect(admin_url('sale_orders'));
                 }
                 else
                 {
@@ -86,7 +85,7 @@ class Sale_orders extends Admin_controller
             $data['item_returns'] = $this->sale_oders_model->getReturnSaleItems($id);
             $i=0;
             foreach ($data['item']->items as $key => $value) {       
-                $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);
+                $data['item']->items[$i]->warehouse_type=$this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id);                
                 $data['item']->items[$i]->exports=getAllSaleProductDetails($id,$value->product_id);
                 $i++;
             }
@@ -123,7 +122,7 @@ class Sale_orders extends Admin_controller
     public function sale_output($id)
     {
 
-         if (!has_permission('sale_items', '', 'view')) {
+        if (!has_permission('sale_items', '', 'view')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('sale_items');
             }
@@ -134,9 +133,9 @@ class Sale_orders extends Admin_controller
             $data['item'] = $this->sale_oders_model->getSaleByID($id);
             $i=0;
             foreach ($data['item']->items as $key => $value) {    
-                $warehouse=(is_array($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id))&& count($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id))==1)? ($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id)[0]) : ($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id));
+                $warehouse=(is_array($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id))&& count($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id))==1)? ($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id)[0]) : ($this->warehouse_model->getWarehouseProduct($value->warehouse_id,$value->product_id));                
                 $data['item']->items[$i]->warehouse_type=$warehouse;
-
+                $data['item']->items[$i]->exports=getAllSaleProductDetails($id,$value->product_id);
                 $i++;
             }
             if (!$data['item']) {
@@ -145,8 +144,6 @@ class Sale_orders extends Admin_controller
         }
 
         $data['warehouse_id'] = $data['item']->items[0]->warehouse_id;
-        $data['warehouse_type_id']=$data['item']->items[0]->warehouse_type->kindof_warehouse;
-        // var_dump($data['item']->items[0]);die;
         $where_clients = 'tblclients.active=1';
 
         if (!has_permission('customers', '', 'view')) {
@@ -154,8 +151,6 @@ class Sale_orders extends Admin_controller
         }
 
         
-
-        $data['warehouse_types']= $this->warehouse_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['receivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
         
@@ -277,6 +272,15 @@ class Sale_orders extends Admin_controller
             $type = 'I';
         }
         $pdf->Output(mb_strtoupper(slug_it($invoice_number)) . '.pdf', $type);
+    }
+
+    public function getSaleProductDetail($product_id=NULL,$warehouse_id=NULL,$quantity=NULL)
+    {
+        if($this->input->post('product_id')) $product_id=$this->input->post('product_id');
+        if($this->input->post('warehouse_id')) $warehouse_id=$this->input->post('warehouse_id');
+        if($this->input->post('quantity')) $quantity=$this->input->post('quantity');
+        $result=getSaleProductDetail($product_id,$warehouse_id,$quantity);
+        echo json_encode($result);
     }
     
 }
