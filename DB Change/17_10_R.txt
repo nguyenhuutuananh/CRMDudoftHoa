@@ -1,0 +1,3 @@
+ALTER TABLE `tblsale_orders` ADD `transport_fee` DECIMAL(25,0) NULL DEFAULT '0' AFTER `adjustment`, ADD `installation_fee` DECIMAL(25,0) NULL DEFAULT '0' AFTER `transport_fee`;
+
+ALTER TABLE `tblsale_orders` CHANGE `discount_percent` `discount_percent` DECIMAL(11,3) NULL DEFAULT '0';

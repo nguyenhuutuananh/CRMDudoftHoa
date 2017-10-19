@@ -285,6 +285,7 @@ class Imports_model extends CRM_Model
 
    public function add($data)
    {
+    
         $import=array(
             'supplier_id'=>$data['supplier_id'],
             'customer_id'=>$data['customer_id'],
@@ -359,7 +360,6 @@ class Imports_model extends CRM_Model
                     'discount_percent'=>$item['discount_percent'],
                     'discount'=>$discount
                     );
-                // var_dump($item_data);die;
                  $this->db->insert('tblimport_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {
@@ -375,109 +375,213 @@ class Imports_model extends CRM_Model
 
 
 
-    public function update_warehouse_product($id)
-    {
-        $this->db->where('import_id',$id);
-        $result=$this->db->get('tblimport_items')->result_array();
-        foreach($result as $item_kt)
-        {
-            $this->db->select('sum(entered_quantity) as sum');
-            $this->db->where('warehouse_id',$item_kt['warehouse_id']);
-            $this->db->where('product_id',$item_kt['product_id']);
-            $this->db->order_by('entered_date desc');
-            $view_warehouse_kt=$this->db->get('tblwarehouse_product_details')->row();
-            if($view_warehouse_kt->sum-$item_kt['quantity']<0)
-            {
-                return false;
-            }
-        }
-        foreach($result as $item)
-        {
-            $this->db->where('warehouse_id',$item['warehouse_id']);
-            $this->db->where('product_id',$item['product_id']);
-            $this->db->order_by('entered_date desc');
-            $view_warehouse=$this->db->get('tblwarehouse_product_details')->result_array();
+    // public function update_warehouse_product($id)
+    // {
+    //     $this->db->where('import_id',$id);
+    //     $result=$this->db->get('tblimport_items')->result_array();
+    //     foreach($result as $item_kt)
+    //     {
+    //         $this->db->select('sum(entered_quantity) as sum');
+    //         $this->db->where('warehouse_id',$item_kt['warehouse_id']);
+    //         $this->db->where('product_id',$item_kt['product_id']);
+    //         $this->db->order_by('entered_date desc');
+    //         $view_warehouse_kt=$this->db->get('tblwarehouse_product_details')->row();
+    //         if($view_warehouse_kt->sum-$item_kt['quantity']<0)
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     foreach($result as $item)
+    //     {
+    //         $this->db->where('warehouse_id',$item['warehouse_id']);
+    //         $this->db->where('product_id',$item['product_id']);
+    //         $this->db->order_by('entered_date desc');
+    //         $view_warehouse=$this->db->get('tblwarehouse_product_details')->result_array();
 
-            $this->db->where('warehouse_id',$item['warehouse_id_to']);
-            $this->db->where('entered_price',$item['entered_price']);
-            $this->db->order_by('entered_date asc');
-            $this->db->where('product_id',$item['product_id']);
-            $view_warehouse_to=$this->db->get('tblwarehouse_product_details')->row();
-            if($view_warehouse)
-            {
-                $sum_total=-$item['quantity'];
-                $array_delete=array();
-                $array_update="";
-                foreach($view_warehouse as $rom)
-                {
-                    if($sum_total>0)
-                    {
-                        $array_update=$rom['id'];
-                        break;
-                    }
-                    else
-                    {
-                        $sum_total=$rom['entered_quantity']+$sum_total;
-                        if($sum_total>0)
-                        {
-                            $array_update=$rom['id'];
-                            break;
-                        }
-                        else
-                        {
-                            $array_delete[]=$rom['id'];
-                        }
-                    }
-                }
+    //         $this->db->where('warehouse_id',$item['warehouse_id_to']);
+    //         $this->db->where('entered_price',$item['entered_price']);
+    //         $this->db->order_by('entered_date asc');
+    //         $this->db->where('product_id',$item['product_id']);
+    //         $view_warehouse_to=$this->db->get('tblwarehouse_product_details')->row();
+    //         if($view_warehouse)
+    //         {
+    //             $sum_total=-$item['quantity'];
+    //             $array_delete=array();
+    //             $array_update="";
+    //             foreach($view_warehouse as $rom)
+    //             {
+    //                 if($sum_total>0)
+    //                 {
+    //                     $array_update=$rom['id'];
+    //                     break;
+    //                 }
+    //                 else
+    //                 {
+    //                     $sum_total=$rom['entered_quantity']+$sum_total;
+    //                     if($sum_total>0)
+    //                     {
+    //                         $array_update=$rom['id'];
+    //                         break;
+    //                     }
+    //                     else
+    //                     {
+    //                         $array_delete[]=$rom['id'];
+    //                     }
+    //                 }
+    //             }
 
-                $data_warehouse_product_details=array('entered_quantity'=>$sum_total);
+    //             $data_warehouse_product_details=array('entered_quantity'=>$sum_total);
 
-                if($view_warehouse_to->entered_quantity)
-                {
-                    $sum_total_to=$view_warehouse_to->entered_quantity+$item['quantity'];
-                }
-                else
-                {
-                    $sum_total_to=$item['quantity'];
-                }
-                $data_warehouse_product_details_to=array('entered_quantity'=>$sum_total_to,
-                    'product_id'=>$item['id'],'import_id'=>$id
-                );
-                if($array_update!="")
-                {
-                    $this->db->where('id',$array_update);
-                    $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details);
-                }
-                if($view_warehouse_to)
-                {
-                    $this->db->where('id',$view_warehouse_to->id);
-                    $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details_to);
-                }
-                else
-                {
-                    $data_warehouse_product_details_to['product_id']=$item['product_id'];
-                    $data_warehouse_product_details_to['import_id']=$id;
-                    $data_warehouse_product_details_to['warehouse_id']=$item['warehouse_id_to'];
-                    $data_warehouse_product_details_to['entered_price']=$item['entered_price'];
-                    $data_warehouse_product_details_to['entered_date']=date('Y-m-d H:i:s');
-                    $this->db->insert('tblwarehouse_product_details',$data_warehouse_product_details_to);
-                }
-                if($array_delete!=array())
-                {
-                    foreach($array_delete as $r)
-                    {
-                        $this->db->where('id',$r);
-                        $this->db->update('tblwarehouse_product_details',array('entered_quantity'=>0));
-                    }
+    //             if($view_warehouse_to->entered_quantity)
+    //             {
+    //                 $sum_total_to=$view_warehouse_to->entered_quantity+$item['quantity'];
+    //             }
+    //             else
+    //             {
+    //                 $sum_total_to=$item['quantity'];
+    //             }
+    //             $data_warehouse_product_details_to=array('entered_quantity'=>$sum_total_to,
+    //                 'product_id'=>$item['id'],'import_id'=>$id
+    //             );
+    //             if($array_update!="")
+    //             {
+    //                 $this->db->where('id',$array_update);
+    //                 $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details);
+    //             }
+    //             if($view_warehouse_to)
+    //             {
+    //                 $this->db->where('id',$view_warehouse_to->id);
+    //                 $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details_to);
+    //             }
+    //             else
+    //             {
+    //                 $data_warehouse_product_details_to['product_id']=$item['product_id'];
+    //                 $data_warehouse_product_details_to['import_id']=$id;
+    //                 $data_warehouse_product_details_to['warehouse_id']=$item['warehouse_id_to'];
+    //                 $data_warehouse_product_details_to['entered_price']=$item['entered_price'];
+    //                 $data_warehouse_product_details_to['entered_date']=date('Y-m-d H:i:s');
+    //                 $this->db->insert('tblwarehouse_product_details',$data_warehouse_product_details_to);
+    //             }
+    //             if($array_delete!=array())
+    //             {
+    //                 foreach($array_delete as $r)
+    //                 {
+    //                     $this->db->where('id',$r);
+    //                     $this->db->update('tblwarehouse_product_details',array('entered_quantity'=>0));
+    //                 }
 
-                }
-            }
-        }
-        if($this->db->affected_rows()>0){
-            return true;
-        }
-        return false;
-    }
+    //             }
+    //         }
+    //     }
+    //     if($this->db->affected_rows()>0){
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    // public function update_warehouse_product($id)
+    // {
+    //     $this->db->where('import_id',$id);
+    //     $result=$this->db->get('tblimport_items')->result_array();
+    //     foreach($result as $item_kt)
+    //     {
+    //         $this->db->select('sum(entered_quantity) as sum');
+    //         $this->db->where('warehouse_id',$item_kt['warehouse_id']);
+    //         $this->db->where('product_id',$item_kt['product_id']);
+    //         $this->db->order_by('entered_date desc');
+    //         $view_warehouse_kt=$this->db->get('tblwarehouse_product_details')->row();
+    //         if($view_warehouse_kt->sum-$item_kt['quantity']<0)
+    //         {
+    //             return false;
+    //         }
+    //     }
+    //     foreach($result as $item)
+    //     {
+    //         $this->db->where('warehouse_id',$item['warehouse_id']);
+    //         $this->db->where('product_id',$item['product_id']);
+    //         $this->db->order_by('entered_date desc');
+    //         $view_warehouse=$this->db->get('tblwarehouse_product_details')->result_array();
+
+    //         $this->db->where('warehouse_id',$item['warehouse_id_to']);
+    //         $this->db->where('entered_price',$item['entered_price']);
+    //         $this->db->order_by('entered_date asc');
+    //         $this->db->where('product_id',$item['product_id']);
+    //         $view_warehouse_to=$this->db->get('tblwarehouse_product_details')->row();
+    //         if($view_warehouse)
+    //         {
+    //             $sum_total=-$item['quantity'];
+    //             $array_delete=array();
+    //             $array_update="";
+    //             foreach($view_warehouse as $rom)
+    //             {
+    //                 if($sum_total>0)
+    //                 {
+    //                     $array_update=$rom['id'];
+    //                     break;
+    //                 }
+    //                 else
+    //                 {
+    //                     $sum_total=$rom['entered_quantity']+$sum_total;
+    //                     if($sum_total>0)
+    //                     {
+    //                         $array_update=$rom['id'];
+    //                         break;
+    //                     }
+    //                     else
+    //                     {
+    //                         $array_delete[]=$rom['id'];
+    //                     }
+    //                 }
+    //             }
+
+    //             $data_warehouse_product_details=array('entered_quantity'=>$sum_total);
+
+    //             if($view_warehouse_to->entered_quantity)
+    //             {
+    //                 $sum_total_to=$view_warehouse_to->entered_quantity+$item['quantity'];
+    //             }
+    //             else
+    //             {
+    //                 $sum_total_to=$item['quantity'];
+    //             }
+    //             $data_warehouse_product_details_to=array('entered_quantity'=>$sum_total_to,
+    //                 'product_id'=>$item['id'],'import_id'=>$id
+    //             );
+    //             if($array_update!="")
+    //             {
+    //                 $this->db->where('id',$array_update);
+    //                 $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details);
+    //             }
+    //             if($view_warehouse_to)
+    //             {
+    //                 $this->db->where('id',$view_warehouse_to->id);
+    //                 $this->db->update('tblwarehouse_product_details',$data_warehouse_product_details_to);
+    //             }
+    //             else
+    //             {
+    //                 $data_warehouse_product_details_to['product_id']=$item['product_id'];
+    //                 $data_warehouse_product_details_to['import_id']=$id;
+    //                 $data_warehouse_product_details_to['warehouse_id']=$item['warehouse_id_to'];
+    //                 $data_warehouse_product_details_to['entered_price']=$item['entered_price'];
+    //                 $data_warehouse_product_details_to['entered_date']=date('Y-m-d H:i:s');
+    //                 $this->db->insert('tblwarehouse_product_details',$data_warehouse_product_details_to);
+    //             }
+    //             if($array_delete!=array())
+    //             {
+    //                 foreach($array_delete as $r)
+    //                 {
+    //                     $this->db->where('id',$r);
+    //                     $this->db->update('tblwarehouse_product_details',array('entered_quantity'=>0));
+    //                 }
+
+    //             }
+    //         }
+    //     }
+    //     if($this->db->affected_rows()>0){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public function getSaleItem($sale_id,$product_id)
     {

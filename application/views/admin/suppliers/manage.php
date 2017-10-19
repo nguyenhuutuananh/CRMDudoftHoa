@@ -204,6 +204,7 @@
 
                  <div class="clearfix"></div>
                  <?php
+                 
                  $table_data = array();
                  $_table_data = array(
                     _l('clients_list_company'),

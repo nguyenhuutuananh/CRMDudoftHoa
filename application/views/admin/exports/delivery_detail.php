@@ -22,20 +22,20 @@
         <?php
          if(isset($item))
             {
-                if($item->status==0)
+                if($item->delivery_status==0)
                 {
                     $type='warning';
-                    $status='Chưa duyệt';
+                    $status='Chưa giao';
                 }
-                elseif($item->status==1)
+                elseif($item->delivery_status==1)
                 {
                     $type='info';
-                    $status='Đã xác nhận';
+                    $status='Đang giao';
                 }
                 else
                 {
                     $type='success';
-                    $status='Đã duyệt';
+                    $status='Đã giao';
                 }
             }
             else
@@ -243,11 +243,14 @@
                                         <td><?php echo $value->unit_name; ?></td>
                                         <?php
                                         $err='';
+                                        if($item->delivery_status==0)
+                                        {
                                             if($value->quantity>$value->warehouse_type->product_quantity)
                                             {
                                                 $err='error';
                                                 $style='border: 1px solid red !important';
                                             }
+                                        }
                                         ?>
                                         <td>
                                         <input style="width: 100px; <?=$style?>" class="mainQuantity <?=$err?>" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>" disabled />

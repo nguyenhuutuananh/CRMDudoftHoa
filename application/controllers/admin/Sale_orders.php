@@ -52,7 +52,7 @@ class Sale_orders extends Admin_controller
                 
                 if ($id) {
                     set_alert('success', _l('added_successfuly', _l('sale')));
-                    redirect(admin_url('sales'));
+                    redirect(admin_url('sale_orders'));
                 }
             } else {
 

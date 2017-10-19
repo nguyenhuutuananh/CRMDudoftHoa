@@ -185,7 +185,6 @@ $pdf->ln(2);
 $pdf->SetFont($font_name, '', $font_size);
 $pdf->Cell(0, 0, _l('email').':'.$customer->emails , 0, 1, 'L', 0, '', 0);
 $pdf->ln(2);
-
 $pdf->Cell(0, 0, _l('shipping_address').': '.implode(', ', $shipping_address) , 0, 1, 'L', 0, '', 0);
 $pdf->ln(2);
 
@@ -279,21 +278,36 @@ $tblhtml .= '<tbody>';
 $grand_total=0;
 for ($i=0; $i < count($invoice->items) ; $i++) { 
     // var_dump($invoice->items[$i]);die();
-    $grand_total+=$invoice->items[$i]->sub_total;
+    $grand_total+=$invoice->items[$i]->amount;
+
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
     $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
-    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
+    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
+    $total_fees=$invoice->transport_fee+$invoice->installation_fee;
+    $grand_total_plus=$grand_total+$total_fees-$invoice->discount;
 
 
     $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="4" align="right">'._l('amount').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total,get_option('default_currency'));
+    $tblhtml.='<td colspan="4" align="right">'._l('discount').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($invoice->discount,get_option('default_currency'));
+    $tblhtml.='</td>';
+    $tblhtml.='</tr>';    
+
+    $tblhtml.='<tr>';
+    $tblhtml.='<td colspan="4" align="right">'._l('total_fees').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($total_fees,get_option('default_currency'));
+    $tblhtml.='</td>';
+    $tblhtml.='</tr>';
+
+    $tblhtml.='<tr>';
+    $tblhtml.='<td colspan="4" align="right">'._l('total_amount').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_plus,get_option('default_currency'));
     $tblhtml.='</td>';
     $tblhtml.='</tr>';
 
@@ -305,7 +319,7 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
 
     $tblhtml.='<tr>';
     $tblhtml.='<td colspan="4" align="right">'._l('left_amount').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total-$invoice->payment_amount,get_option('default_currency'));
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_plus-$invoice->payment_amount,get_option('default_currency'));
     $tblhtml.='</td>';
     $tblhtml.='</tr>';
     

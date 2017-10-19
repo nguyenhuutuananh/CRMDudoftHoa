@@ -74,7 +74,7 @@
                     <div class="col-md-12">
                     
 
-                    <div class="form-group">
+                    <div class="form-group" id="canSO">
                         <label for="warehouse_can_export"  class="control-label"><?php echo _l('Kho hàng có thể bán'); ?></label><br>
                         <div class="radio radio-primary radio-inline">
                             <input type="radio" name="warehouse_can_export" id="no" value="0"  />
@@ -159,6 +159,14 @@
                     $('#warehouse').val(json.warehouse);
                     $('#address').val(json.address);
                     $('#phone').val(json.phone);
+                    if(id!=12)
+                    {
+                        $('#canSO').removeClass('hide');
+                    }
+                    if(id==12)
+                    {
+                        $('#canSO').addClass('hide');
+                    }
                     if(json.warehouse_can_export==1) {
                         $('input[id="yes"]').prop('checked', 'checked');
                     }

@@ -117,6 +117,8 @@ class Staff extends Admin_controller
         $data['positions']       = $this->position_model->getPositions();
        // var_dump($data['maxid']);die();
         $data['permissions'] = $this->roles_model->get_permissions();
+        // echo "<pre>";
+        // var_dump($data['permissions']);die;
         $data['user_notes'] = $this->misc_model->get_notes($id, 'staff');
         $data['departments'] = $this->departments_model->get();
         $data['title']       = $title;

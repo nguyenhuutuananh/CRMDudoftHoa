@@ -26,6 +26,57 @@ class Pdf extends TCPDF
 		parent::Close();
 	}
 
+	public function WatermarkText() {
+		$this->setPage( 1 );
+		// Get the page width/height
+		$myPageWidth = $this->getPageWidth();
+		$myPageHeight = $this->getPageHeight();
+		// Find the middle of the page and adjust.
+		$myX = ( $myPageWidth / 2 ) - 75;
+		$myY = ( $myPageHeight / 2 ) + 25;
+		// Set the transparency of the text to really light
+		$this->SetAlpha(0.5);
+		// Rotate 45 degrees and write the watermarking text
+		$this->StartTransform();
+		// $this->Rotate(45, $myX, $myY);
+		// $this->SetFont("courier", "", 40);
+		$this->Text($myX, $myY,"DUDOFF<br/>London"); 
+		$this->writeHTML("DUDOFF<br/>London", true, false, true, false, '');
+		$this->StopTransform();
+		// Reset the transparency to default
+		$this->SetAlpha(1);
+	}
+
+	public function WatermarkImage() {
+		//Water Mark With Image:
+		$ImageW = 105; //WaterMark Size
+		$ImageH = 80;
+
+	    $this->setPage( 1 ); //WaterMark Page    
+
+	    $myPageWidth = $this->getPageWidth();
+	    $myPageHeight = $this->getPageHeight();
+	    $myX = ( $myPageWidth / 2 ) - 50;  //WaterMark Positioning
+	    $myY = ( $myPageHeight / 2 ) -40;
+
+	        $this->SetAlpha(0.09);
+	    $this->Image(K_PATH_IMAGES.'SACS.png', $myX, $myY, $ImageW, $ImageH, '', '', '', true, 150);
+
+	    $this->setPage( 2 );
+
+	    $myPageWidth = $this->getPageWidth();
+	    $myPageHeight = $this->getPageHeight();
+	    $myX = ( $myPageWidth / 2 ) - 50;
+	    $myY = ( $myPageHeight / 2 ) -40;
+
+        $this->SetAlpha(0.09);
+	    $this->Image(K_PATH_IMAGES.'SACS.png', $myX, $myY, $ImageW, $ImageH, '', '', '', true, 150);
+
+		//Likewise can be added for all pages after writing all pages.
+
+		$this->SetAlpha(1);
+	}
+
 	public function Header() {
 		$this->SetFont('helvetica', 'B', 20);
 		 if(get_option('prefix_header_pdf') !=""){

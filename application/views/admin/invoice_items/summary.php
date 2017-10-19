@@ -8,7 +8,7 @@
           <div class="panel-body _buttons">
             <!--<a href="#" class="btn btn-info pull-left" data-toggle="modal" data-target="#sales_item_modal"><?php echo _l('new_invoice_item'); ?></a>-->
             <a href="<?php echo admin_url() . "warehouses" ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Danh sách kho'); ?></a>
-            <a href="<?php echo admin_url() . "kind_of_warehouse" ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Loại kho'); ?></a>
+            <!-- <a href="<?php echo admin_url() . "kind_of_warehouse" ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Loại kho'); ?></a> -->
             <!-- <a href="#" class="btn btn-info pull-left mleft5" data-toggle="modal" data-target="#landtype">Loại nhà đất</a> -->
           </div>
 

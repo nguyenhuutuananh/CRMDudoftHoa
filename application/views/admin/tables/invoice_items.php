@@ -126,10 +126,10 @@ foreach ($rResult as $r=> $aRow) {
         if($aColumns[$i] == 'tblitems.avatar' && file_exists($_data)) {
             $_data='<div class="preview_image" style="width: auto;">
                             <div class="display-block contract-attachment-wrapper img-'.$aRow['id'].'">
-                                <div class="col-md-6 col-md-offset-3">
+                                <div class="col-md-12">
                                     <a href="'.(file_exists($_data) ? base_url($_data) : base_url('assets/images/preview_no_available.jpg')).'" data-lightbox="customer-profile" class="display-block mbot5">
                                         <div class="table-image">
-                                            <img src="'.(file_exists($_data) ? base_url($_data) : base_url('assets/images/preview_no_available.jpg')).'" style="width: auto;height: 100%;min-height: 300px;" />
+                                            <img src="'.(file_exists($_data) ? base_url($_data) : base_url('assets/images/preview_no_available.jpg')).'" style="width: auto;height: 100%;" />
                                         </div>
                                     </a>
                                 </div>

@@ -425,7 +425,7 @@
         $('table tr.sortable.item').remove();
         total=0;
         var warehouse_id=$(this).val();
-        loadProductsInWarehouse(warehouse_id)
+        loadProductsInWarehouse(warehouse_id);
         refreshAll();
         refreshTotal();
     });

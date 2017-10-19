@@ -21,7 +21,8 @@ $join             = array(
 $additionalSelect = array(
     );
 $where = array(
-    'AND tblwarehouses_products.warehouse_id='.$warehouse_id
+    'AND tblwarehouses_products.warehouse_id='.$warehouse_id,
+    'AND tblwarehouses_products.product_quantity > 0'
 );
 if($this->_instance->input->post()) {
     $filter_detail_categories = $this->_instance->input->post('detail_categories');

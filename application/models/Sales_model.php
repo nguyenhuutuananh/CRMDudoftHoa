@@ -101,8 +101,7 @@ class Sales_model extends CRM_Model
     }
 
     public function add($data)
-   {
-    
+   {    
         $import=array(
             'rel_type'=>$data['rel_type'],
             'rel_id'=>$data['rel_id'],
@@ -116,7 +115,9 @@ class Sales_model extends CRM_Model
             'account_date'=>to_sql_date($data['account_date']),
             'create_by'=>get_staff_user_id(),
             'discount_percent'=>$data['discount_percent'],
-            'adjustment'=>$data['adjustment']
+            'adjustment'=>$data['adjustment'],
+            'transport_fee'=>$data['transport_fee'],
+            'installation_fee'=>$data['installation_fee']
             );
         
         $this->db->insert('tblsales', $import);
@@ -130,9 +131,9 @@ class Sales_model extends CRM_Model
             foreach ($items as $key => $item) {
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $tax=$sub_total*$product->tax_rate/100;
+                $tax=$sub_total-$sub_total/($product->tax_rate*0.01+1);
                 $discount=$sub_total*$item['discount_percent']/100;
-                $amount=$sub_total+$tax-$discount;
+                $amount=$sub_total-$discount;
                 $total+=$amount;
                 $item_data=array(
                     'sale_id'=>$insert_id,
@@ -159,6 +160,19 @@ class Sales_model extends CRM_Model
                  $this->db->insert('tblsale_items', $item_data);
                  if($this->db->affected_rows()>0)
                  {
+                    if(empty($data['rel_code']))
+                    {
+                        // Chuyen qua kho cho ban
+                        $product_id=$item['id'];
+                        $quantity=$item['quantity'];
+                        $warehouse_id_from=$data['warehouse_name'];
+                        $warehouse_id_to=get_option('default_PSO_warehouse');
+                        //Start Tang kho cho
+                        increaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                        // Giam kho hang ban
+                        decreaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                        // Chuyen qua kho cho ban end
+                    }
                     $affect_product[]=$item['id'];
                     updateSaleProductDetail($insert_id,$item['id'],$item['exports'],'SO');  
                     logActivity('Insert Sale Item Added [ID:' . $insert_id . ', Product ID' . $item['id'] . ']');
@@ -172,7 +186,7 @@ class Sales_model extends CRM_Model
             }
             $this->checkExportOrder($data['rel_id']);
             $total_discount=$data['discount_percent']*$total/100;
-            $total=$total-$total_discount+$data['adjustment'];
+            $total=$total-$total_discount+$data['adjustment']+$data['transport_fee']+$data['installation_fee'];
             $this->db->update('tblsales',array('total'=>$total,'discount'=>$total_discount),array('id'=>$insert_id));
             return $insert_id;
         }
@@ -249,7 +263,9 @@ class Sales_model extends CRM_Model
             'date'=>to_sql_date($data['date']),
             'account_date'=>to_sql_date($data['account_date']),            
             'discount_percent'=>$data['discount_percent'],
-            'adjustment'=>$data['adjustment']
+            'adjustment'=>$data['adjustment'],
+            'transport_fee'=>$data['transport_fee'],
+            'installation_fee'=>$data['installation_fee']
             );
         
         if($this->db->update('tblsales',$import,array('id'=>$id)) && $this->db->affected_rows()>0)
@@ -267,9 +283,9 @@ class Sales_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $tax=$sub_total*$product->tax_rate/100;
+                $tax=$sub_total-$sub_total/($product->tax_rate*0.01+1);
                 $discount=$sub_total*$item['discount_percent']/100;
-                $amount=$sub_total+$tax-$discount;
+                $amount=$sub_total-$discount;
                 $total+=$amount;
                 $itm=$this->getSaleItem($id,$item['id']);
                 $item_data=array(
@@ -294,11 +310,37 @@ class Sales_model extends CRM_Model
                     'discount'=>$item['discount'],
                     'discount_percent'=>$item['discount_percent']
                     );
+
                 if($itm)
                 {
                     $this->db->update('tblsale_items', $item_data,array('id'=>$itm->id));
                     if($this->db->affected_rows()>0)
                      {
+                        if(empty($data['rel_code']))
+                        {
+                            // Chuyen qua kho cho ban
+                            $product_id=$item['id'];
+                            $quantity=$item['quantity']-$itm->quantity;
+                            $warehouse_id_from=$data['warehouse_name'];
+                            $warehouse_id_to=get_option('default_PSO_warehouse');
+                            if($quantity>0)
+                            {
+                                //Start Tang kho cho
+                                increaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                                // Giam kho hang ban
+                                decreaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                                // Chuyen qua kho cho ban end
+                            }
+                            else
+                            {
+                                $quantity=abs($quantity);
+                                //Start Giam kho cho
+                                decreaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                                // Tang kho hang ban
+                                increaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                                // Chuyen qua kho cho ban end                            
+                            }
+                        }
                         logActivity('Edit Sale Item Updated [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
@@ -306,7 +348,20 @@ class Sales_model extends CRM_Model
                 {
                     $this->db->insert('tblsale_items', $item_data);
                     if($this->db->affected_rows()>0)
-                     {
+                     {  
+                        if(empty($data['rel_code']))
+                        {
+                            // Chuyen qua kho cho ban
+                            $product_id=$item['id'];
+                            $quantity=$item['quantity'];
+                            $warehouse_id_from=$data['warehouse_name'];
+                            $warehouse_id_to=get_option('default_PSO_warehouse');
+                            //Start Tang kho cho
+                            increaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                            // Giam kho hang ban
+                            decreaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                            // Chuyen qua kho cho ban end
+                        }
                         logActivity('Insert Sale Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
@@ -314,13 +369,35 @@ class Sales_model extends CRM_Model
             }
                 if(!empty($affected_id))
                 {
+                    $this->db->select('tblsale_items.*,tblsales.rel_code');
+                    $this->db->where('sale_id', $id);
+                    $this->db->where_not_in('product_id', $affected_id);
+                    $this->db->join('tblsales','tblsales.id=tblsale_items.sale_id','left');
+                    $del_items=$this->db->get('tblsale_items')->result();
+                    $rel_id=$del_items[0]->rel_id;
+                    if(empty($rel_id))
+                    {    
+                        foreach ($del_items as $key => $item) {
+                            // Chuyen qua kho ban
+                            $product_id=$item->product_id;
+                            $quantity=$item->quantity;
+                            $warehouse_id_from=$item->warehouse_id;
+                            $warehouse_id_to=get_option('default_PSO_warehouse');
+                            //Start Tang kho ban
+                            increaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                            // Giam kho cho ban
+                            decreaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                            // Chuyen qua kho cho ban end
+                        }
+                    }
+
                     $this->db->where('sale_id', $id);
                     $this->db->where_not_in('product_id', $affected_id);
                     $this->db->delete('tblsale_items');
                 }
 
             $total_discount=$data['discount_percent']*$total/100;
-            $total=$total-$total_discount+$data['adjustment'];
+            $total=$total-$total_discount+$data['adjustment']+$data['transport_fee']+$data['installation_fee'];
             $this->db->update('tblsales',array('total'=>$total,'discount'=>$total_discount),array('id'=>$id));
 
             return $id;
@@ -383,7 +460,8 @@ class Sales_model extends CRM_Model
 
     public function delete($id)
     {
-        if($this->db->delete('tblsales',array('id'=>$id)) && $this->db->delete('tblsale_items',array('sale_id'=>$id)));
+
+        if(deleteSalePSOToWWH($id,'SO') && $this->db->delete('tblsales',array('id'=>$id)) && $this->db->delete('tblsale_items',array('sale_id'=>$id)));
         if ($this->db->affected_rows() > 0) {
             deleteSaleProductDetails($id,'SO');
             return true;

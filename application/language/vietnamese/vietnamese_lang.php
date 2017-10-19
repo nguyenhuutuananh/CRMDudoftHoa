@@ -4305,6 +4305,29 @@ $lang['opportunity_add']="Thêm cơ hội";
 $lang['item_price_orginal']     = 'Tiền vốn';
 $lang['tk_no_5212']="TK trả lại";
 $lang['tk_co_131']="TK công nợ";
+$lang['transport_fee']="Phí vận chuyển";
+$lang['installation_fee']="Phí lắp đặt";
+$lang['total_fees']="Chi phí vận chuyển/Lắp đặt";
+$lang['delivery_fee']="Phí giao hàng";
+$lang['adjustment_total']="Điều chỉnh";
+$lang['internal_code']="Mã phiếu nhập kho";
+$lang['adjustment_total']="Điều chỉnh";
+
+$lang['adjustment_total']="Điều chỉnh";
+
+$lang['adjustment_total']="Điều chỉnh";
+
+$lang['adjustment_total']="Điều chỉnh";
+
+$lang['adjustment_total']="Điều chỉnh";
+
+$lang['adjustment_total']="Điều chỉnh";
+
+
+$lang['adjustment_total']="Điều chỉnh";
+
+
+
 
 
 

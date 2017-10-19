@@ -44,6 +44,10 @@ class Exports extends Admin_controller
                     set_alert('success', _l('added_successfuly', _l('exports')));
                     redirect(admin_url('exports'));
                 }
+                else
+                {
+                    redirect($_SERVER['HTTP_REFERER']);
+                }
             } else {
 
                 if (!has_permission('export_items', '', 'edit')) {
@@ -93,6 +97,7 @@ class Exports extends Admin_controller
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['items']= $this->invoice_items_model->get_full(); 
         $data['title'] = $title;
+        $data['id'] = $id;
         $this->load->view('admin/exports/detail', $data);
     }
 
@@ -153,7 +158,7 @@ class Exports extends Admin_controller
             $success = $this->exports_model->update_delivery($data, $id);
             if ($success == true) {
                 set_alert('success', _l('updated_successfuly', _l('deliveries')));
-                redirect(admin_url('exports'));
+                redirect(admin_url('deliveries'));
             }
             else
             {
@@ -201,7 +206,7 @@ class Exports extends Admin_controller
             die('Không tìm thấy mục nào');
         }
 
-        $success    = $this->exports_model->calcel($id);
+        $success    = $this->exports_model->cancel($id);
         $alert_type = 'warning';
         $message    = _l('unsuccessfull_cancel');
         if ($success) {
@@ -233,6 +238,12 @@ class Exports extends Admin_controller
             'message' => $message
         ));
 
+    }
+
+    public function test($id=NULL)
+    {
+        // $this->exports_model->restore($id);die;
+        $this->exports_model->cancel($id);die;
     }
 
     public function update_status()

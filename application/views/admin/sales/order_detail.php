@@ -98,7 +98,7 @@
                                     $number=sprintf('%06d',getMaxID('id','tblsale_orders')+1);
                                 }
                             ?>
-                            <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
+                            <input type="text" name="code" class="form-control" id="code" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" >
                           </div>
                     </div>
                     <?php if(isset($item->rel_id)){ ?>
@@ -368,13 +368,16 @@
                                                     }
                                                     $discount=$item->discount;
                                                     $adjustment=$item->adjustment;
+                                                    $transport_fee=$item->transport_fee;
+                                                    $installation_fee=$item->installation_fee;
+                                                    $adjustment=$item->adjustment;
                                                     $grand_total=$item->total;
                                                 }
                                                 ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                     <div class="col-md-10 col-md-offset-2">
+                                     <div class="col-md-8 col-md-offset-4">
                                         <table class="table text-right">
                                             <tbody>
                                                 <tr>
@@ -389,32 +392,44 @@
                                                     </td>
                                                     <td>
                                                         <div class="input-group">
-                                                          <input type="text" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm giảm giá" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                                          <input type="number" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm chiết khấu" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
                                                           <span class="input-group-addon" id="basic-addon2">%</span>
                                                         </div>
                                                     </td>
-                                                    <td class="discount_percent_total">
-                                                        <?=format_money($discount?$discount:0)?>
+                                                    <td class="discount_total">
+                                                        <input type="number" min="0" name="discount" id="discount" class="form-control" placeholder="Giá trị chiết khấu" aria-describedby="basic-addon2" value="<?=($discount?$discount:0)?>">
+                                                        <!-- <?=format_money($discount?$discount:0)?> -->
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="bold"><?php echo _l('adjustment_total'); ?> :</span>
+                                                    <td><span class="bold"><?php echo _l('transport_fee'); ?> :</span>
                                                     </td>
                                                     <td>
-                                                        <div class="form-group">
-                                                          <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($adjustment?$adjustment:0)?>">
-                                                          <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
+                                                        <div class="form-group no-mbot">
+                                                          <input type="number" min="0" name="transport_fee" id="transport_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($transport_fee?$transport_fee:0)?>">
                                                         </div>
                                                     </td>
-                                                    <td class="adjustment_total">
-                                                        <?=format_money($adjustment?$adjustment:0)?>
+                                                    <td class="transport_fee">
+                                                        <?=format_money($transport_fee?$transport_fee:0)?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('installation_fee'); ?> :</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group no-mbot">
+                                                          <input type="number" min="0" name="installation_fee" id="installation_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($installation_fee?$installation_fee:0)?>">
+                                                        </div>
+                                                    </td>
+                                                    <td class="installation_fee">
+                                                        <?=format_money($installation_fee?$installation_fee:0)?>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
                                                     </td>
                                                     <td colspan="2" class="totalPrice">
-                                                        <?php echo number_format($grand_total) ?><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?>
+                                                        <?php echo number_format($grand_total) ?> <!-- <?=($currency->symbol)?$currency->symbol:_l('VNĐ')?> -->
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -729,7 +744,8 @@
         }
     }
     //format currency
-    function formatNumber(nStr, decSeperate=".", groupSeperate=",") {
+    function formatNumber(nStr, decSeperate=".", groupSeperate=",",scale=0) {
+        nStr=roundNumber(nStr,scale)
         nStr += '';
         x = nStr.split(decSeperate);
         x1 = x[0];
@@ -898,18 +914,22 @@
 
         var discount=discount_percent*totalPrice/100;
         
-        var adjustment=parseFloat($('#adjustment').val());
-        if(isNaN(adjustment)) adjustment=0;
-        var grand_total=totalPrice-discount+adjustment;
-        $('.discount_percent_total').text(formatNumber(discount));
+        var transport_fee=parseFloat($('#transport_fee').val());
+        if(isNaN(transport_fee)) transport_fee=0;
+
+        var installation_fee=parseFloat($('#installation_fee').val());
+        if(isNaN(installation_fee)) installation_fee=0;
+
+        var grand_total=totalPrice-discount+transport_fee+installation_fee;
+        
+        $('#discount').val(discount);
         $('.totalPrice').text(formatNumber(grand_total));
     };
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
         var itemFound = findItem(id);
         if(typeof(itemFound) != 'undefined') {
-            var trBar = $('tr.main');
-            
+            var trBar = $('tr.main');            
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name+' ('+itemFound.prefix+itemFound.code+')');
             trBar.find('td:nth-child(3) select').val('6').selectpicker('refresh');
@@ -920,14 +940,15 @@
             trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
             trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price*1));
             trBar.find('td:nth-child(9) select').val('92').selectpicker('refresh');            
-            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
+            var taxValue = parseFloat(itemFound.price)-(parseFloat(itemFound.price)/(parseFloat(itemFound.tax_rate)*0.01+1));
+
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
             trBar.find('td:nth-child(10)').text(formatNumber(taxValue));
             trBar.find('td:nth-child(10)').append(inputTax);
             trBar.find('td:nth-child(11) select').val('193').selectpicker('refresh');    
             trBar.find('td:nth-child(12) > input').val(0);
             trBar.find('td:nth-child(13) > input').val(0);
-            trBar.find('td:nth-child(14)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(14)').text(formatNumber(parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }
@@ -1104,7 +1125,7 @@
 
         let taxTd=amountTd.find('+ td + td');
         var inputTax=taxTd.find('input')
-        var tax=parseFloat(inputTax.data('taxrate'))/100*parseFloat(amount);
+        var tax = parseFloat(amount)-(parseFloat(amount)/(parseFloat(inputTax.data('taxrate'))*0.01+1));
         taxTd.text(formatNumber(tax));
         taxTd.append(inputTax);
 
@@ -1116,7 +1137,7 @@
         discount.val(discountValue);
 
         let subTotalTd=discountTd.find('+ td');
-        subTotalTd.text(formatNumber(amount+tax-discountValue));
+        subTotalTd.text(formatNumber(amount-discountValue));
 
         refreshTotal();
     };
@@ -1200,14 +1221,34 @@
         $('.adjustment_total').text(formatNumber(adjustment));
         calculateTotal(e.currentTarget);
     });
+    $(document).on('change', '#transport_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var transport_fee=parseFloat(currentInput.val());
+        if(isNaN(transport_fee)) transport_fee=0;
+        $('.transport_fee').text(formatNumber(transport_fee));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#installation_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var installation_fee=parseFloat(currentInput.val());
+        if(isNaN(installation_fee)) installation_fee=0;
+        $('.installation_fee').text(formatNumber(installation_fee));
+        calculateTotal(e.currentTarget);
+    });
     $(document).on('change', '#discount_percent', (e)=>{
         var currentInput = $(e.currentTarget);
         calculateTotal(e.currentTarget);
     });
-    // $(document).ready(function(){
-    //     var str='items[0][exports][0][quantity]';
-    //     console.log(str.split('][')[0].split('[')[1]);
-    // });
+    $(document).on('change', '#discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=$('#discount_percent');
+        var transport_fee=$('#transport_fee');
+        var installation_fee=$('#installation_fee');
+        var grand_total=parseFloat($('.totalPrice').text().replace(/\,/g, ''))-transport_fee.val()-installation_fee.val();
+        discount_percent.val(roundNumber(currentDiscountInput.val()*100/(grand_total),3))
+        var pc=currentDiscountInput.val()*100/grand_total;
+        calculateTotal(e.currentTarget);
+    });
 
     $(document).on('change', '.mainQuantity', (e)=>{
         var currentInput = $(e.currentTarget);

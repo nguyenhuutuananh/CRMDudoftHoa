@@ -69,9 +69,9 @@ foreach ($rResult as $aRow) {
     if ($aRow['creator'] == get_staff_user_id() || is_admin()) {
         $_data = '<a href="#" class="btn btn-default btn-icon" onclick="view_init_department(' . $aRow['warehouseid'] . '); return false;"><i class="fa fa-pencil"></i></a>';
         $_data.= '<a href="#" class="btn btn-success btn-icon" onclick="view_detail(' . $aRow['warehouseid'] . '); return false;"><i class="fa fa-eye"></i></a>';
-
-        $_data.= icon_btn('warehouses/delete_warehouse/'. $aRow['warehouseid'] , 'remove', 'btn-danger delete-reminder');
-        
+        if($aRow['warehouseid']!=12){
+            $_data.= icon_btn('warehouses/delete_warehouse/'. $aRow['warehouseid'] , 'remove', 'btn-danger delete-reminder');
+        }
         
         $row[] = $_data;
 

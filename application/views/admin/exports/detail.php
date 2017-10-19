@@ -202,7 +202,8 @@
                                         <th width="" class="text-left"><?php echo _l('item_price'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('amount'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('tax'); ?></th>
-
+                                        <th style="min-width: 80px" class="text-left"><?php echo _l('discount').'(%)'; ?></th>
+                                        <th style="min-width: 100px" class="text-left"><?php echo _l('discount_money'); ?></th>
                                         <th width="" class="text-left"><?php echo _l('sub_amount'); ?></th>
                                         <th></th>
                                     </tr>
@@ -235,6 +236,12 @@
                                             <input type="hidden" id="tax" data-taxid="" data-taxrate="" value="" />
                                         </td>
                                         <td>
+                                            <input style="width: 100px" class="discount_percent" type="number" min="0" value="0" placeholder="" aria-invalid="false">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px" class="discount" type="number" min="0" value="0" placeholder="" aria-invalid="false">
+                                        </td>
+                                        <td>
                                             0
                                         </td>
                                         <td>
@@ -261,15 +268,30 @@
                                                 $err='error';
                                                 $style='border: 1px solid red !important';
                                             }
+                                            $data_store=$value->warehouse_type->product_quantity;
                                         ?>
                                         <td>
-                                        <input style="width: 100px;" class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
+                                            <?php 
+                                            $maxQ=getMaxQuanitySOExport($id,$value->product_id)+$value->quantity;
+                                            $strminmax='min="1" max="'.$maxQ.'"';
+                                            if($maxQ==0)
+                                            {
+                                                $strminmax='readonly';
+                                            }
+                                            ?>
+                                        <input style="width: 100px;" <?=$strminmax?>  class="mainQuantity" type="number" name="items[<?php echo $i; ?>][quantity]" value="<?php echo $value->quantity; ?>">
                                         </td>
                                             
                                         <td><?php echo number_format($value->unit_cost); ?></td>
                                         <td><?php echo number_format($value->sub_total); ?></td>
                                         <td><?php echo number_format($value->tax) ?>
                                             <input type="hidden" id="tax" data-taxrate="<?=$value->tax_rate?>" value="<?=$value->tax_id?>">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?php echo $i; ?>][discount_percent]" min="0" class="discount_percent" type="number" value="<?=$value->discount_percent?>">
+                                        </td>
+                                        <td>
+                                            <input style="width: 100px;" name="items[<?php echo $i; ?>][discount]" min="0" class="discount" type="number" value="<?=$value->discount?>">
                                         </td>
                                         <td><?php echo number_format($value->amount) ?></td>
                                         <td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td>
@@ -279,6 +301,12 @@
                                             $i++;
                                         }
                                     }
+                                    $discount=$item->discount;
+                                    $adjustment=$item->adjustment;
+                                    $transport_fee=$item->transport_fee;
+                                    $installation_fee=$item->installation_fee;
+                                    $delivery_fee=$item->delivery_fee;
+                                    $grand_total=$item->total;
                                     ?>
                                 </tbody>
                             </table>
@@ -289,15 +317,65 @@
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_items'); ?> :</span>
                                         </td>
-                                        <td class="total">
+                                        <td colspan="2" class="total">
                                             <?php echo $i ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('discount_percent_total'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                              <input type="number" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm chiết khấu" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                              <span class="input-group-addon" id="basic-addon2">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="discount_total">
+                                            <input type="number" min="0" name="discount" id="discount" class="form-control" placeholder="Giá trị chiết khấu" aria-describedby="basic-addon2" value="<?=($discount?$discount:0)?>">
+                                            <!-- <?=format_money($discount?$discount:0)?> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('transport_fee'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group no-mbot">
+                                              <input type="number" min="0" name="transport_fee" id="transport_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($transport_fee?$transport_fee:0)?>">
+                                            </div>
+                                        </td>
+                                        <td class="transport_fee">
+                                            <?=format_money($transport_fee?$transport_fee:0)?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('installation_fee'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group no-mbot">
+                                              <input type="number" min="0" name="installation_fee" id="installation_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($installation_fee?$installation_fee:0)?>">
+                                            </div>
+                                        </td>
+                                        <td class="installation_fee">
+                                            <?=format_money($installation_fee?$installation_fee:0)?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="bold"><?php echo _l('delivery_fee'); ?> :</span>
+                                        </td>
+                                        <td>
+                                            <div class="form-group no-mbot">
+                                              <input type="number" min="0" name="delivery_fee" id="delivery_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($delivery_fee?$delivery_fee:0)?>">
+                                            </div>
+                                        </td>
+                                        <td class="delivery_fee">
+                                            <?=format_money($delivery_fee?$delivery_fee:0)?>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
                                         </td>
-                                        <td class="totalPrice">
-                                            <?php echo number_format($totalPrice) ?> VND
+                                        <td colspan="2" class="totalPrice">
+                                            <?php echo number_format($grand_total) ?> <!-- <?=($currency->symbol)?$currency->symbol:_l('VNĐ')?> -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -378,7 +456,7 @@
                 dataType : 'json',
             })
             .done(function(data){  
-                console.log(data)
+                
                 $.each(data, function(key,value){
                     warehouse_id.append('<option value="' + value.warehouseid +'">' + value.warehouse + '</option>');
                 });
@@ -426,8 +504,9 @@
             alert_float('danger', "Sản phẩm này đã được thêm, vui lòng lòng kiểm tra lại!");
             return;
         }
-        if($('tr.main').find('td:nth-child(4) > input').val() > $('tr.main #select_warehouse option:selected').data('store')) {
-            alert_float('danger', 'Kho ' + $('tr.main #select_warehouse option:selected').text() + '. Bạn đã nhập ' + $('tr.main').find('td:nth-child(4) > input').val() + ' là quá số lượng cho phép.');
+        if(parseFloat($('tr.main').find('input.mainQuantity').val())>parseFloat($('tr.main').find('input.mainQuantity').attr('data-store')))
+        {
+            alert_float('danger','Sản phẩm bạn nhập là ['+$('tr.main').find('input.mainQuantity').val()+'] lớn hơn số lượng trong kho ['+$('tr.main').find('input.mainQuantity').attr('data-store')+'], vui lòng lòng kiểm tra lại!');
             return;
         }
         var newTr = $('<tr class="sortable item"></tr>');
@@ -435,23 +514,27 @@
         var td1 = $('<td><input type="hidden" name="items[' + uniqueArray + '][id]" value="" /></td>');
         var td2 = $('<td class="dragger"></td>');
         var td3 = $('<td></td>');
-        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');
+        var td4 = $('<td><input style="width: 100px" class="mainQuantity" type="number" name="items[' + uniqueArray + '][quantity]" value="" /></td>');        
         var td5 = $('<td></td>');
         var td6 = $('<td></td>');
         var td7 = $('<td></td>');
-        var td8 = $('<td></td>');
+        var td8 = $('<td><input style="width: 100px" class="discount_percent" type="number" name="items[' + uniqueArray + '][discount_percent]" value="" /></td>');
+        var td9 = $('<td><input style="width: 100px" class="discount" type="number" name="items[' + uniqueArray + '][discount]" value="" /></td>');
+        var td10 = $('<td></td>');
 
         td1.find('input').val($('tr.main').find('td:nth-child(1) > input').val());
         td2.text($('tr.main').find('td:nth-child(2)').text());
         td3.text($('tr.main').find('td:nth-child(3)').text());
         td4.find('input').val($('tr.main').find('td:nth-child(4) > input').val());
-        
+        td4.find('input').attr('data-store',$('tr.main').find('td:nth-child(4) > input').attr('data-store'));
         td5.text( $('tr.main').find('td:nth-child(5)').text());
         td6.text( $('tr.main').find('td:nth-child(6)').text());
         var inputTax=$('tr.main').find('td:nth-child(7) > input');
         td7.text( $('tr.main').find('td:nth-child(7)').text());
         td7.append(inputTax);
-        td8.text($('tr.main').find('td:nth-child(8)').text());
+        td8.find('input').val($('tr.main').find('td:nth-child(8) > input').val());
+        td9.find('input').val($('tr.main').find('td:nth-child(9) > input').val());
+        td10.text($('tr.main').find('td:nth-child(10)').text());
         newTr.append(td1);
         newTr.append(td2);
         newTr.append(td3);
@@ -460,11 +543,12 @@
         newTr.append(td6);
         newTr.append(td7);
         newTr.append(td8);
+        newTr.append(td9);
+        newTr.append(td10);
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-export tbody').append(newTr);
         total++;
-        totalPrice += $('tr.main').find('td:nth-child(4) > input').val() * $('tr.main').find('td:nth-child(5)').text().replace(/\+/g, ' ');
         uniqueArray++;
         refreshTotal();
         // refreshAll();
@@ -496,10 +580,25 @@
         var items = $('table.item-export tbody tr:gt(0)');
         totalPrice = 0;
         $.each(items, (index,value)=>{
-            totalPrice += parseFloat($(value).find('td:nth-child(6)').text().replace(/\,/g, ''))+parseFloat($(value).find('td:nth-child(7)').text().replace(/\,/g, ''));
-            // * 
+            totalPrice += parseFloat($(value).find('td:nth-child(10)').text().replace(/\,/g, ''));
         });
-        $('.totalPrice').text(formatNumber(totalPrice));
+        var discount_percent=$('#discount_percent').val();
+
+        var discount=discount_percent*totalPrice/100;
+        
+        var transport_fee=parseFloat($('#transport_fee').val());
+        if(isNaN(transport_fee)) transport_fee=0;
+
+        var installation_fee=parseFloat($('#installation_fee').val());
+        if(isNaN(installation_fee)) installation_fee=0;
+
+        var delivery_fee=parseFloat($('#delivery_fee').val());
+        if(isNaN(delivery_fee)) delivery_fee=0;
+
+        var grand_total=totalPrice-discount+transport_fee+installation_fee+delivery_fee;
+        
+        $('#discount').val(discount);
+        $('.totalPrice').text(formatNumber(grand_total));
     };
     $('#custom_item_select').change((e)=>{
         var id = $(e.currentTarget).val();
@@ -522,11 +621,13 @@
             
             trBar.find('td:nth-child(5)').text(formatNumber(itemFound.price));
             trBar.find('td:nth-child(6)').text(formatNumber(itemFound.price * 1) );
-            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
+            var taxValue = parseFloat(itemFound.price)-(parseFloat(itemFound.price)/(parseFloat(itemFound.tax_rate)*0.01+1));
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
-            trBar.find('td:nth-child(7)').text(formatNumber(taxValue));
+            trBar.find('td:nth-child(7)').text(formatNumberDec(taxValue));
             trBar.find('td:nth-child(7)').append(inputTax);
-            trBar.find('td:nth-child(8)').text(formatNumber(parseFloat(taxValue)+parseFloat(itemFound.price)));
+            trBar.find('td:nth-child(8) > input').val(0);
+            trBar.find('td:nth-child(9) > input').val(0);
+            trBar.find('td:nth-child(10)').text(formatNumber(parseFloat(itemFound.price)));
             isNew = true;
             $('#btnAdd').show();
         }
@@ -567,16 +668,99 @@
             currentQuantityInput.focus();
         }
         
-        var Gia = currentQuantityInput.parent().find(' + td');
-        var GiaTri = Gia.find(' + td');
-        var Thue = GiaTri.find(' + td');
-        var Tong = Thue.find(' + td');
-        var inputTax=Thue.find('input');        
-        GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
-        Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
-        Thue.append(inputTax);
-        Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
+        // var Gia = currentQuantityInput.parent().find(' + td');
+        // var GiaTri = Gia.find(' + td');
+        // var Thue = GiaTri.find(' + td');
+        // var Tong = Thue.find(' + td');
+        // var inputTax=Thue.find('input');        
+        // GiaTri.text(formatNumber(Gia.text().replace(/\,/g, '') * currentQuantityInput.val()) );
+        // Thue.text(formatNumber(parseFloat(inputTax.data('taxrate'))/100*parseFloat(GiaTri.text().replace(/\,/g,''))));
+        // Thue.append(inputTax);
+        // Tong.text(formatNumber(parseFloat(Thue.text().replace(/\,/g,''))+parseFloat(GiaTri.text().replace(/\,/g,''))));
+        calculateTotal(e.currentTarget);
         refreshTotal();
+    });
+    var calculateTotal = (currentInput) => {
+        currentInput = $(currentInput);   
+        let quantity = currentInput.parents('tr').find('.mainQuantity');
+        let quantityTd = quantity.parent();
+
+        let priceTd = quantityTd.find('+ td');
+
+        let amountTd = priceTd.find('+ td');
+        var amount=priceTd.text().replace(/\,/g, '') * quantity.val();
+        amountTd.text(formatNumber(amount));
+
+        let taxTd=amountTd.find('+ td');
+        var inputTax=taxTd.find('input')
+        var tax = parseFloat(amount)-(parseFloat(amount)/(parseFloat(inputTax.data('taxrate'))*0.01+1));
+        taxTd.text(formatNumber(tax));
+        taxTd.append(inputTax);
+
+        let discountPercent=currentInput.parents('tr').find('.discount_percent');
+
+        let discount=currentInput.parents('tr').find('.discount');
+        var discountTd=discount.parent();
+        var discountValue=amount*discountPercent.val()/100;
+        discount.val(discountValue);
+
+        let subTotalTd=discountTd.find('+ td');
+        subTotalTd.text(formatNumber(amount-discountValue));
+
+        refreshTotal();
+    };
+    $(document).on('keyup', '.discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=currentDiscountInput.parents('td').prev().find('input');
+        var tong=currentDiscountInput.parents('tr').find('.mainQuantity').parents().find('+ td + td').text().trim().replace(/\,|%/g, '');
+        discount_percent.val(currentDiscountInput.val()*100/tong);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('keyup', '.discount_percent', (e)=>{
+        var currentDiscountPercentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#adjustment', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var adjustment=parseFloat(currentInput.val());
+        if(isNaN(adjustment)) adjustment=0;
+        $('.adjustment_total').text(formatNumber(adjustment));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#transport_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var transport_fee=parseFloat(currentInput.val());
+        if(isNaN(transport_fee)) transport_fee=0;
+        $('.transport_fee').text(formatNumber(transport_fee));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#installation_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var installation_fee=parseFloat(currentInput.val());
+        if(isNaN(installation_fee)) installation_fee=0;
+        $('.installation_fee').text(formatNumber(installation_fee));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#delivery_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var delivery_fee=parseFloat(currentInput.val());
+        if(isNaN(delivery_fee)) delivery_fee=0;
+        $('.delivery_fee').text(formatNumber(delivery_fee));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#discount_percent', (e)=>{
+        var currentInput = $(e.currentTarget);
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=$('#discount_percent');
+        var transport_fee=$('#transport_fee');
+        var installation_fee=$('#installation_fee');
+        var grand_total=parseFloat($('.totalPrice').text().replace(/\,/g, ''))-transport_fee.val()-installation_fee.val();
+        discount_percent.val(roundNumber(currentDiscountInput.val()*100/(grand_total),3))
+        var pc=currentDiscountInput.val()*100/grand_total;
+        calculateTotal(e.currentTarget);
     });
     $('#select_kindof_warehouse').change(function(e){
         
@@ -633,15 +817,37 @@
             e.preventDefault();
             alert_float('warning','Giá trị không hợp lệ!');    
         }
-        // alert($('select[id^="select_warehouse"]').selectpicker('val'));
-        // $.each($('select[id^="select_warehouse"]'), function(key,value){
-        //     // alert($(value).selectpicker('val'))
-        //     if($(value).selectpicker('val')=='')
-        //     {
-        //         e.preventDefault();
-        //         alert_float('warning','Vui lòng chọn kho sản phẩm');  
-        //     }
-        // });
+    });
+
+    $(document).on('change', '#warehouse_name,#custom_item_select',function(e){
+        var warehouse_id=$('#warehouse_name').val();
+        var product_id=$('#custom_item_select').val();
+        if(warehouse_id.length && product_id.length) {
+            $.ajax({
+                url : admin_url + 'warehouses/getProductQuantity/' + warehouse_id + '/' + product_id,
+                dataType : 'json',
+            })
+            .done(function(data){
+            var quantityMax=data.product_quantity;
+            if(isNaN(parseFloat(quantityMax))) quantityMax=0;          
+               $('#warehouse_name option:selected').attr('data-store',quantityMax);
+               $('tr.main').find('input.mainQuantity').attr('data-store',quantityMax);
+            });
+        }
+    });
+
+    $('#customer_id').change(function(e){
+        var customer_id=$(this).val();
+        var data={};
+        data.customer_id=customer_id;
+        var url=admin_url + 'clients/getClientByID';
+        $.post(url, data).done(function(response) {
+            response = JSON.parse(response);
+            var discount_percent=response.success.discount_percent;
+            if(discount_percent==null) discount_percent=0;
+            $('#discount_percent').val(discount_percent);
+            refreshTotal();
+        });
     });
     
 </script>

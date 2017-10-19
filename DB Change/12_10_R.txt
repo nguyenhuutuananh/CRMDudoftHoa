@@ -1,0 +1,1 @@
+ALTER TABLE `tblimports` ADD `discount_percent` DECIMAL(11,2) NULL DEFAULT '0' , ADD `discount` DECIMAL(25,0) NULL DEFAULT '0' , ADD `adjustment` DECIMAL(25,0) NULL DEFAULT '0' ;

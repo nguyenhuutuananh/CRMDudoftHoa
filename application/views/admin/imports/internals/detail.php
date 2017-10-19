@@ -50,7 +50,7 @@
         <ul class="nav nav-tabs profile-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#item_detail" aria-controls="item_detail" role="tab" data-toggle="tab">
-                    <?php echo _l('Chi tiết phiếu nhập kho nội địa'); ?>
+                    <?php echo _l('Chi tiết phiếu nhập kho'); ?>
                 </a>
             </li>
         </ul>
@@ -79,7 +79,7 @@
                     $attrs_not_select = array('data-none-selected-text' => _l('system_default_string'));
                     ?>
                     <div class="form-group">
-                         <label for="number"><?php echo _l('adjustment_code'); ?></label>
+                         <label for="code"><?php echo _l('internal_code'); ?></label>
                          <div class="input-group">
                           <span class="input-group-addon">
                           <?php $prefix =($item) ? $item->prefix : get_option('prefix_internal'); ?>
@@ -145,7 +145,7 @@
                             <div class="col-md-4">
                                 <div class="form-group mbot25">
                                     <label for="custom_item_select"><?=_l('item_name')?></label>
-                                    <select class="selectpicker no-margin" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
+                                    <select class="selectpicker no-margin" data-size="10" data-width="100%" id="custom_item_select" data-none-selected-text="<?php echo _l('add_item'); ?>" data-live-search="true">
                                         <option value=""></option>
 
                                         <?php foreach ($items as $product) { ?>
@@ -239,14 +239,14 @@
                                         <!-- TK NO -->
                                         <td>
                                             <?php
-                                            $selected=(isset($value) ? $value->tk_no : '');
+                                            $selected=(isset($value) ? $value->tk_no : '107');
                                             echo render_select('items['.$i.'][tk_no]',$accounts_no,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
                                         <!-- TK CO -->
                                         <td>
                                             <?php
-                                            $selected=(isset($value) ? $value->tk_co : '');
+                                            $selected=(isset($value) ? $value->tk_co : '34');
                                             echo render_select('items['.$i.'][tk_co]',$accounts_co,array('idAccount','accountCode','accountName'),'',$selected); 
                                             ?>
                                         </td>
@@ -311,14 +311,14 @@
 </div>
 <?php init_tail(); ?>
 <script>
-    _validate_form($('.client-form'),{code:'required',warehouse_type:'required',warehouse_id:'required'});
+    _validate_form($('.client-form'),{code:'required',warehouse_id:'required',code:'required',date:'required'});
     
     var itemList = <?php echo json_encode($items);?>;
     $('#warehouse_id').change(function(e){
         $('table tr.sortable.item').remove();
         total=0;
         var warehouse_id=$(this).val();
-        loadProductsInWarehouse(warehouse_id)
+        // loadProductsInWarehouse(warehouse_id);
         refreshAll();
         refreshTotal();
     });
@@ -425,11 +425,12 @@
 
         newTr.append('<td><a href="#" class="btn btn-danger pull-right" onclick="deleteTrItem(this); return false;"><i class="fa fa-times"></i></a></td');
         $('table.item-purchase tbody').append(newTr);
+        $('#custom_item_select').selectpicker('toggle');
         total++;
-        totalPrice += $('tr.main').find('td:nth-child(4) > input').val() * $('tr.main').find('td:nth-child(5)').text().replace(/\+/g, ' ');
+        
         uniqueArray++;
         refreshTotal();
-        // refreshAll();
+        refreshAll();
     };
     var refreshAll = () => {
         isNew = false;
@@ -440,12 +441,13 @@
         //console.log(trBar.find('td:nth-child(2) > input'));
         
         trBar.find('td:first > input').val("");
-        trBar.find('td:nth-child(2) > input').val('');
-        trBar.find('td:nth-child(3) > input').val(1);
-        trBar.find('td:nth-child(4) > input').val('');
-        trBar.find('td:nth-child(5) > textarea').text('');
-
-
+        trBar.find('td:nth-child(2)').text("Tên hàng hóa");
+        trBar.find('td:nth-child(3) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(4) select').val('').selectpicker('refresh');
+        trBar.find('td:nth-child(5)').text('Đơn vị tính');
+        trBar.find('td:nth-child(6) > input').val("1");
+        trBar.find('td:nth-child(7)').text("Giá nhập");
+        trBar.find('td:nth-child(8)').text("0");
     };
     var deleteTrItem = (trItem) => {
         var current = $(trItem).parent().parent();
@@ -473,6 +475,8 @@
             
             trBar.find('td:first > input').val(itemFound.id);
             trBar.find('td:nth-child(2)').text(itemFound.name);
+            trBar.find('td:nth-child(3) select').val(107).selectpicker('refresh');
+            trBar.find('td:nth-child(4) select').val(34).selectpicker('refresh');
 
             trBar.find('td:nth-child(5)').text(itemFound.unit_name);
             trBar.find('td:nth-child(5) > input').val(itemFound.unit);

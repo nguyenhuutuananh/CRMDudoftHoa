@@ -1938,6 +1938,7 @@ function increaseWarehouseProductDetail($import_id,$product_id,$warehouse_id,$en
     {
         $entered_price=getOrginalPrice($import_id,$product_id)->original_price_buy;
     }
+
     
     $data=array(
         'import_id'=>$import_id,
@@ -1947,10 +1948,8 @@ function increaseWarehouseProductDetail($import_id,$product_id,$warehouse_id,$en
         'entered_price'=>$entered_price,
         'entered_date'=>$entered_date
     );
-
     if (isset($import_id) && isset($product_id) && isset($warehouse_id) && is_numeric($entered_quantity)) {
-        $product=$CI->db->get_where('tblwarehouse_product_details',array('import_id'=>$import_id,'product_id'=>$product_id,'warehouse_id'=>$warehouse_id,'entered_date'=>$entered_date,))->row();
-
+        $product=$CI->db->get_where('tblwarehouse_product_details',array('import_id'=>$import_id,'product_id'=>$product_id,'warehouse_id'=>$warehouse_id,'entered_date'=>$entered_date))->row();
         if($product)
         {
             $total_quantity=$entered_quantity+$product->entered_quantity;
@@ -1984,7 +1983,7 @@ function decreaseWarehouseProductDetail($import_id,$product_id,$warehouse_id,$en
         'entered_date'=>$entered_date
     );
     if (isset($product_id) && isset($product_id) && isset($warehouse_id) && is_numeric($entered_quantity)) {
-        $product=$CI->db->get_where('tblwarehouse_product_details',array('import_id'=>$import_id,'product_id'=>$product_id,'warehouse_id'=>$warehouse_id,'entered_date'=>$entered_date,))->row();
+        $product=$CI->db->get_where('tblwarehouse_product_details',array('import_id'=>$import_id,'product_id'=>$product_id,'warehouse_id'=>$warehouse_id,'entered_date'=>$entered_date))->row();
         if($product)
         {
             $total_quantity=$product->entered_quantity-$entered_quantity;
@@ -2155,3 +2154,376 @@ function deleteSaleProductDetails($rel_id=NULL,$type='PO')
     }
     return false;
 }
+
+
+
+function updateOriginalPriceBuyFIFO($id=NULL,$contract_id=NULL,$current=false) 
+    {
+
+        $CI =& get_instance();
+        $cost=$CI->db->get_where('tblpurchase_costs',array('id'=>$id))->row();
+        $CI->db->select('tblpurchase_costs_detail.*');
+        if(is_numeric($id))
+        {
+            if($current)
+            {
+                // Current
+                $CI->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
+                $cost_items=$CI->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_costs_id'=>$cost->id))->result();
+            }
+            else
+            {
+                //All
+                $CI->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
+                $cost_items=$CI->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$cost->purchase_contract_id))->result();
+
+            }
+        }
+        else
+        {
+            //All
+            $CI->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
+            $cost_items=$CI->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$contract_id))->result();
+        }
+
+
+        
+        $CI->db->select('tblorders_detail.*,tblpurchase_contracts.id as contract_id');
+        $CI->db->join('tblpurchase_contracts','tblpurchase_contracts.id_order=tblorders_detail.order_id','left');
+        if(is_numeric($id))
+        {
+            $CI->db->where('tblpurchase_contracts.id',$cost->purchase_contract_id);
+        }
+        else
+        {
+            $CI->db->where('tblpurchase_contracts.id',$contract_id);
+        }
+        $items=$CI->db->get('tblorders_detail')->result();
+
+        //So du CP
+        // 1 Gia Tri
+        // 2 So Luong
+        $arrProduct=array();
+        $arrProductPercent=array();
+        $total=0;
+        foreach ($items as $key => $product) {
+                    $pricebuy=$product->exchange_rate*$product->product_price_buy;
+                    $amount=$pricebuy*$product->product_quantity;
+                    $total+=$amount;
+                    $arrProduct[$product->product_id]['price']=$pricebuy;
+                    $arrProduct[$product->product_id]['amount']=$amount;
+                    $arrProduct[$product->product_id]['quanity']=$product->product_quantity;
+                 }
+
+        foreach ($cost_items as $key => $item) {
+            if($item->type==1)
+            {
+                // Update Orginal Price
+                foreach ($arrProduct as $key => $product) {
+                    $percent=number_format(($product['amount']/($total)),2,'.','');
+                    $amount=($item->cost*$percent)/4;
+                    $arrProduct[$key][]=$amount;
+                 } 
+            }
+            elseif($item->type==2)
+            {
+                // Update Orginal Price
+                $contract_id=$contract_id;
+                if(isset($cost->purchase_contract_id)) $contract_id=$cost->purchase_contract_id;
+                $quanity=getTotalQuantityProducts($contract_id);
+
+                $Xcost=$item->cost/$quanity;
+                foreach ($arrProduct as $key => $product) {
+
+                    $arrProduct[$key][]=$Xcost;
+                 }
+            }
+        }
+        
+        foreach ($items as $key => $item) {
+            if($current)
+            {
+                $original_price_buy=sumArrayByKey($arrProduct[$item->product_id])+$item->original_price_buy;
+            }
+            else
+            {
+                $original_price_buy=sumArrayByKey($arrProduct[$item->product_id],true);
+            } 
+            $CI->db->update('tblorders_detail',array('original_price_buy'=>$original_price_buy),array('id'=>$item->id));
+            if($CI->db->affected_rows()>0)
+                $affected=true;
+        }
+        if($affected)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    function sumArrayByKey($arr=array(),$include=false)
+    {
+        $result=0;
+        foreach ($arr as $key => $value) {
+            if(is_numeric($key))
+            {
+                $result+=$value;
+            }
+        }
+        if($include)
+        {
+            $result+=$arr['price'];            
+        }
+        return $result;
+    }
+
+    function getTotalQuantityProducts($contract_id)
+    {
+        $CI =& get_instance();
+        $CI->db->select_sum('tblorders_detail.product_quantity');
+        $CI->db->join('tblpurchase_contracts','tblpurchase_contracts.id_order=tblorders_detail.order_id','left');
+        $result=$CI->db->get_where('tblorders_detail',array('tblpurchase_contracts.id'=>$contract_id))->row();
+        if($result)
+            return $result->product_quantity;
+        return 0;
+    }
+
+    function setAllOrginalPriceContractsFIFO()
+    {
+        $CI =& get_instance();
+        $CI->db->select('id,code,id_order');
+        $contracts=$CI->db->get('tblpurchase_contracts')->result();
+        foreach ($contracts as $key => $contract) {
+            $affected=$CI->updateOriginalPriceBuyFIFO(NULL,$contract->id);
+        }
+        if($affected)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
+    function updateOriginalPriceBuyAVG($id=NULL,$contract_id=NULL)
+    {
+        echo "<pre>";
+        $CI =& get_instance();
+        $cost=$CI->db->get_where('tblpurchase_costs',array('id'=>$id))->row();
+
+        $CI->db->select('tblpurchase_costs_detail.*');
+        if(is_numeric($id))
+        {   
+            $CI->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
+            $cost_items=$CI->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$cost->purchase_contract_id))->result();
+        }
+        else
+        {
+            //All
+            $CI->db->join('tblpurchase_costs','tblpurchase_costs.id=tblpurchase_costs_detail.purchase_costs_id','left');
+            $cost_items=$CI->db->get_where('tblpurchase_costs_detail',array('status'=>1,'purchase_contract_id'=>$contract_id))->result();
+        }
+        
+        $CI->db->select('tblorders_detail.*,tblpurchase_contracts.id as contract_id');
+        $CI->db->join('tblpurchase_contracts','tblpurchase_contracts.id_order=tblorders_detail.order_id','left');
+        if(is_numeric($id))
+        {
+            $CI->db->where('tblpurchase_contracts.id',$cost->purchase_contract_id);
+        }
+        else
+        {
+            $CI->db->where('tblpurchase_contracts.id',$contract_id);
+        }
+        $items=$CI->db->get('tblorders_detail')->result();
+        //So du CP
+        // 1 Gia Tri
+        // 2 So Luong
+        $arrProduct=array();
+        $arrProductPercent=array();
+        $total=0;
+        foreach ($items as $key => $product) {
+                    $pricebuy=$product->exchange_rate*$product->product_price_buy;
+                    $amount=$pricebuy*$product->product_quantity;
+                    $total+=$amount;
+                    $arrProduct[$product->product_id]['price']=$pricebuy;
+                    $arrProduct[$product->product_id]['amount']=$amount;
+                    $arrProduct[$product->product_id]['quanity']=$product->product_quantity;
+                 }
+
+        foreach ($cost_items as $key => $item) {
+            if($item->type==1)
+            {
+                // Update Orginal Price
+                foreach ($arrProduct as $key => $product) {
+                    $percent=number_format(($product['amount']/($total)),2,'.','');
+                    $amount=($item->cost*$percent)/4;
+                    $arrProduct[$key][]=$amount;
+                 } 
+            }
+            elseif($item->type==2)
+            {
+                // Update Orginal Price
+                $contract_id=$contract_id;
+                if(isset($cost->purchase_contract_id)) $contract_id=$cost->purchase_contract_id;
+                $quanity=getTotalQuantityProducts($contract_id);
+
+                $Xcost=$item->cost/$quanity;
+                foreach ($arrProduct as $key => $product) {
+
+                    $arrProduct[$key][]=$Xcost;
+                 }
+            }
+        }
+        
+        foreach ($items as $key => $item) {
+                var_dump(getTotalPriceBuyProductNotTax($item));die;
+            $original_price_buy=sumArrayByKey($arrProduct[$item->product_id],true);
+            var_dump($original_price_buy);die;
+            $CI->db->update('tblorders_detail',array('original_price_buy'=>$original_price_buy),array('id'=>$item->id));
+            if($CI->db->affected_rows()>0)
+                $affected=true;
+        }
+        if($affected)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
+    function getTotalPriceBuyProductNotTax($item=object,$includeTax=false)
+    {
+        if(is_array($item)) $item=(object)$item;
+        $exchange_rate=1;
+        $tax=0;
+        $total=0;
+        if($item->exchange_rate) $exchange_rate=$item->exchange_rate;
+        $total=$item->product_quantity*$item->product_price_buy;
+        if($includeTax)
+        {
+            $tax=$total-$total/(1+$item->taxrate*0.01);
+        }
+        $discount=$total*$item->discount_percent/100;
+        $total=$total/(1+$item->taxrate*0.01)-$discount+$tax;
+        if($total) return $total;
+        return $total;
+    }
+
+    // function getTotalPriceBuyProductInWarehouse($product_id=NULL, $warehouse_id=NULL)
+    // {
+    //     if(is_numeric($product_id))
+    // }
+
+    function updateSaleToWWH($id=NULL,$type='PO')
+    {
+        $CI =& get_instance();
+        if(is_numeric($id))
+        {
+            if($type=='PO')
+            {
+                $table='tblsale_order_items';
+                $tablePSO='tblsale_orders';
+            }
+            else
+            {
+                $table='tblsale_items';
+                $tablePSO='tblsales';
+            }
+            $CI->db->select($table.".*,".$tablePSO.".status");
+            $CI->db->join($tablePSO,$tablePSO.".id=".$table.".sale_id");
+            $items=$CI->db->get_where($table,array('sale_id'=>$id))->result();
+            $status=$items[0]->status;
+            $warehouse_id_from=$items[0]->warehouse_id;
+            $warehouse_id_to=get_option('default_PSO_warehouse');
+            foreach ($items as $key => $item) {
+                // Chuyen qua kho cho ban
+                $product_id=$item->product_id;
+                $quantity=$item->quantity;
+                // Tang kho cho
+                $affected=increaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+                // Giam kho hang ban
+                $affected=decreaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+            }
+            if($affected) return true;
+        }
+        return false;
+    }
+
+    function updateALLSalesToWWH($type='PO')
+    {
+
+        $CI =& get_instance();
+        if($type=='PO')
+        {
+            $tablePSO='tblsale_orders';
+        }
+        else
+        {
+            $tablePSO='tblsales';
+        }
+        $sales=$CI->db->get($tablePSO)->result();
+
+        if($sales)
+        {
+            $warehouse_id_from=$items[0]->warehouse_id;
+            foreach ($sales as $key => $item) {
+                $affected=updateSaleToWWH($item->id,$type);
+            }
+            if($affected) return true;
+        }
+        return false;
+    }
+function deleteSalePSOToWWH($id=NULL,$type='PO')
+{
+    $CI =& get_instance();
+    if(is_numeric($id))
+    {
+        if($type=='PO')
+        {
+            $table='tblsale_order_items';
+            $tablePSO='tblsale_orders';
+        }
+        else
+        {
+            $table='tblsale_items';
+            $tablePSO='tblsales';
+        }
+        $CI->db->select($table.".*,".$tablePSO.".rel_code");
+        $CI->db->join($tablePSO,$tablePSO.".id=".$table.".sale_id");
+        $items=$CI->db->get_where($table,array('sale_id'=>$id))->result();
+        $warehouse_id_from=$items[0]->warehouse_id;
+        $warehouse_id_to=get_option('default_PSO_warehouse');
+        $rel_code=$items[0]->rel_code;
+        if(!(isset($rel_code) && $type='SO') || $type='PO')
+        {
+            foreach ($items as $key => $item) {
+                // Chuyen qua kho ban
+                $product_id=$item->product_id;
+                $quantity=$item->quantity;
+                // Tang kho ban
+                $affected=increaseProductQuantity($warehouse_id_from,$product_id,$quantity);
+                // Giam kho cho
+                $affected=decreaseProductQuantity($warehouse_id_to,$product_id,$quantity);
+            }
+        }
+        
+        if ($affected) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getMaxQuanitySOExport($export_id=NULL,$product_id=NULL)
+{
+    $maxQ=0;
+    $CI =& get_instance();
+    $export=$CI->db->get_where('tblexports',array('id'=>$export_id))->row();
+    $sale_id=$export->rel_id;
+    $item=$CI->db->get_where('tblsale_items',array('sale_id'=>$sale_id))->row();
+    if($item)
+    {
+        $maxQ=$item->quantity-$item->export_quantity;
+    }
+    return $maxQ;
+
+}
+

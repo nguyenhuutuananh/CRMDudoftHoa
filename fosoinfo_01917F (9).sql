@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Sep 22, 2017 at 03:09 AM
+-- Generation Time: Oct 12, 2017 at 01:06 AM
 -- Server version: 5.6.33-log
 -- PHP Version: 5.4.31
 
@@ -866,6 +866,7 @@ CREATE TABLE IF NOT EXISTS `tblaccounts` (
   `generalAccount` int(11) NOT NULL,
   `idAccountAttribute` int(11) NOT NULL,
   `accountExplain` text COLLATE utf8_unicode_ci NOT NULL,
+  `amount` float DEFAULT '0',
   PRIMARY KEY (`idAccount`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT AUTO_INCREMENT=236 ;
 
@@ -873,242 +874,242 @@ CREATE TABLE IF NOT EXISTS `tblaccounts` (
 -- Dumping data for table `tblaccounts`
 --
 
-INSERT INTO `tblaccounts` (`idAccount`, `accountCode`, `accountName`, `accountEnglishName`, `generalAccount`, `idAccountAttribute`, `accountExplain`) VALUES
-(1, 111, 'Tiền mặt', 'Cash in hand', 0, 1, ''),
-(2, 112, 'Tiền gửi Ngân hàng', 'Cash in bank', 0, 1, ''),
-(3, 113, 'Tiền đang chuyển', 'Cash in transit', 0, 1, ''),
-(4, 121, 'Chứng khoán kinh doanh', 'Securities trading', 0, 1, ''),
-(5, 128, 'Đầu tư nắm giữ đến ngày đáo hạn', 'Other short - term investment', 0, 1, ''),
-(6, 131, 'Phải thu của khách hàng', 'Accounts receivable - trade', 0, 3, ''),
-(7, 133, 'Thuế GTGT được khấu trừ', 'VAT deducted', 0, 1, ''),
-(8, 136, 'Phải thu nội bộ', 'Intercompany receivable', 0, 1, ''),
-(9, 138, 'Phải thu khác', 'Other receivable', 0, 3, ''),
-(10, 141, 'Tạm ứng', 'Advances', 0, 1, ''),
-(11, 151, 'Hàng mua đang đi đường', 'Goods in transit', 0, 1, ''),
-(12, 152, 'Nguyên liệu, vật liệu', 'Raw materials', 0, 1, ''),
-(13, 153, 'Công cụ, dụng cụ', 'Tools and supplies', 0, 1, ''),
-(14, 154, 'Chi phí sản xuất, kinh doanh dở dang', 'Work in progress', 0, 1, ''),
-(15, 155, 'Thành phẩm', 'Finished goods', 0, 1, ''),
-(16, 156, 'Hàng hóa', 'Merchandise inventory', 0, 1, ''),
-(17, 157, 'Hàng gửi đi bán', 'Goods on consignment', 0, 1, ''),
-(18, 158, 'Hàng hóa kho bảo thuế', 'Goods of bonded warehouse', 0, 1, ''),
-(19, 161, 'Chi sự nghiệp', 'Expenditures from subsidies of state budget', 0, 1, ''),
-(20, 171, 'Giao dịch mua bán lại trái phiếu chính phủ', 'Traded purchase and resell government bonds', 0, 3, ''),
-(21, 211, 'Tài sản cố định hữu hình', 'Tangible fixed assets', 0, 1, ''),
-(22, 212, 'Tài sản cố định thuê tài chính', 'Financial leasing fixed assets', 0, 1, ''),
-(23, 213, 'Tài sản cố định vô hình', 'Intangible fixed assets', 0, 1, ''),
-(24, 214, 'Hao mòn tài sản cố định', 'Depreciation of fixed assets', 0, 2, ''),
-(25, 217, 'Bất động sản đầu tư', 'Investment real estate', 0, 1, ''),
-(26, 221, 'Đầu tư vào công ty con', 'Investment in equity of subsidiaries', 0, 1, ''),
-(27, 222, 'Đầu tư vào công ty liên doanh, liên kết', 'Joint venture capital contribution', 0, 1, ''),
-(28, 228, 'Đầu tư khác ', 'Other long term investments', 0, 1, ''),
-(29, 229, 'Dự phòng tổn thất tài sản', 'Provision for assets', 0, 2, ''),
-(30, 241, 'Xây dựng cơ bản dở dang', 'Construction in process', 0, 1, ''),
-(31, 242, 'Chi phí trả trước', 'Prepaid expenses', 0, 1, ''),
-(32, 243, 'Tài sản thuế thu nhập hoãn lại', 'Deffered income tax assets', 0, 1, ''),
-(33, 244, 'Cầm cố, thế chấp, ký quỹ, ký cược', 'Long term collateral & deposit', 0, 1, ''),
-(34, 331, 'Phải trả cho người bán', 'Payable to seller', 0, 3, ''),
-(35, 333, 'Thuế và các khoản phải nộp Nhà nước', 'Taxes and payable to state budget', 0, 3, ''),
-(36, 334, 'Phải trả người lao động', 'Payable to employees', 0, 2, ''),
-(37, 335, 'Chi phí phải trả', 'Accruals', 0, 2, ''),
-(38, 336, 'Phải trả nội bộ', 'Intercompany payable', 0, 2, ''),
-(39, 337, 'Thanh toán theo tiến độ kế hoạch hợp đồng xây dựng', 'Construction contract progress payment due to customers', 0, 3, ''),
-(40, 338, 'Phải trả, phải nộp khác', 'Other payable', 0, 3, ''),
-(41, 341, 'Vay và nợ thuê tài chính', 'Borrowing and fincance lease liabilities', 0, 2, ''),
-(42, 343, 'Trái phiếu phát hành', 'Issued bond', 0, 2, ''),
-(43, 344, 'Nhận ký quỹ, ký cược', 'Long-term deposits received', 0, 2, ''),
-(44, 347, 'Thuế thu nhập hoãn lại phải trả', 'Deferred income tax', 0, 2, ''),
-(45, 352, 'Dự phòng phải trả', 'Provisions for payables', 0, 2, ''),
-(46, 353, 'Quỹ khen thưởng, phúc lợi', 'Bonus & welfare funds', 0, 2, ''),
-(47, 356, 'Quỹ phát triển khoa học và công nghệ', 'Development of science and technology fund', 0, 2, ''),
-(48, 357, 'Quỹ bình ổn giá', 'Stabilitization fund', 0, 2, ''),
-(49, 411, 'Vốn đầu tư của chủ sở hữu', 'Working capital', 0, 2, ''),
-(50, 412, 'Chênh lệch đánh giá lại tài sản', 'Differences upon asset revaluation', 0, 3, ''),
-(51, 413, 'Chênh lệch tỷ giá hối đoái', 'Foreign exchange differences', 0, 3, ''),
-(52, 414, 'Quỹ đầu tư phát triển', 'Investment & development funds', 0, 2, ''),
-(53, 417, 'Quỹ hỗ trợ sắp xếp doanh nghiệp', 'Business arrangements support fund', 0, 2, ''),
-(54, 418, 'Các quỹ khác thuộc vốn chủ sở hữu', 'Other funds', 0, 2, ''),
-(55, 419, 'Cổ phiếu quỹ', 'Treasury stock', 0, 1, ''),
-(56, 421, 'Lợi nhuận sau thuế chưa phân phối', 'Undistributed earnings', 0, 3, ''),
-(57, 441, 'Nguồn vốn đầu tư xây dựng cơ bản', 'Construction investment fund', 0, 2, ''),
-(58, 461, 'Nguồn kinh phí sự nghiệp', 'Budget resources', 0, 2, ''),
-(59, 466, 'Nguồn kinh phí đã hình thành TSCĐ', 'Budget resources used to acquire fixed assets', 0, 2, ''),
-(60, 511, 'Doanh thu bán hàng và cung cấp dịch vụ', 'Sales', 0, 3, ''),
-(61, 515, 'Doanh thu hoạt động tài chính', 'Turnover from financial operations', 0, 3, ''),
-(62, 521, 'Các khoản giảm trừ doanh thu', 'Deduction from income', 0, 3, ''),
-(63, 611, 'Mua hàng', 'Purchase', 0, 3, ''),
-(64, 621, 'Chi phí nguyên liệu, vật liệu trực tiếp', 'Direct raw materials cost', 0, 3, ''),
-(65, 622, 'Chi phí nhân công trực tiếp', 'Direct labor cost', 0, 3, ''),
-(66, 623, 'Chi phí sử dụng máy thi công', 'Executing machine using cost', 0, 3, ''),
-(67, 627, 'Chi phí sản xuất chung', 'General operation cost', 0, 3, ''),
-(68, 631, 'Giá thành sản xuất', 'Production cost', 0, 3, ''),
-(69, 632, 'Giá vốn hàng bán', 'Cost of goods sold', 0, 3, ''),
-(70, 635, 'Chi phí tài chính', 'Financial activities expenses', 0, 3, ''),
-(71, 641, 'Chi phí bán hàng', 'Selling expenses', 0, 3, ''),
-(72, 642, 'Chi phí quản lý doanh nghiệp', 'General & administration expenses', 0, 3, ''),
-(73, 711, 'Thu nhập khác', 'Other income', 0, 3, ''),
-(74, 811, 'Chi phí khác', 'Other expenses', 0, 3, ''),
-(75, 821, 'Chi phí thuế thu nhập doanh nghiệp', 'Business Income tax charge', 0, 3, ''),
-(76, 911, 'Xác định kết quả kinh doanh', 'Evaluation of business results', 0, 3, ''),
-(77, 1111, 'Tiền Việt Nam', 'Vietnam dong', 1, 1, ''),
-(78, 1112, 'Ngoại tệ', 'Foreign currency', 1, 1, ''),
-(79, 1113, 'Vàng tiền tệ', 'Monetary gold', 1, 1, ''),
-(80, 1121, 'Tiền Việt Nam', 'Vietnam dong', 2, 1, ''),
-(81, 1122, 'Ngoại tệ', 'Foreign currency', 2, 1, ''),
-(82, 1123, 'Vàng tiền tệ', 'Monetary gold', 2, 1, ''),
-(83, 1131, 'Tiền Việt Nam', 'Vietnam dong', 3, 1, ''),
-(84, 1132, 'Ngoại tệ', 'Foreign currency', 3, 1, ''),
-(85, 1211, 'Cổ phiếu', 'Stocks', 4, 1, ''),
-(86, 1212, 'Trái phiếu ', 'Bonds', 4, 1, ''),
-(87, 1218, 'Chứng khoán và công cụ tài chính khác', 'Securities and other financial instruments', 4, 1, ''),
-(88, 1281, 'Tiền gửi có kỳ hạn', 'Term deposits', 5, 1, ''),
-(89, 1282, 'Trái phiếu ', 'Bonds', 5, 1, ''),
-(90, 1283, 'Cho vay', 'Loan', 5, 1, ''),
-(91, 1288, 'Các khoản đầu tư khác nắm giữ đến ngày đáo hạn', 'Other short - term investment', 5, 1, ''),
-(92, 1331, 'Thuế GTGT được khấu trừ của hàng hóa, dịch vụ', 'VAT deduction of goods, services', 7, 1, ''),
-(93, 1332, 'Thuế GTGT được khấu trừ của TSCĐ', 'VAT deduction of fixed assets', 7, 1, ''),
-(94, 1361, 'Vốn kinh doanh ở các đơn vị trực thuộc', 'Investment in equity of subsidiaries', 8, 1, ''),
-(95, 1362, 'Phải thu nội bộ về chênh lệch tỷ giá', 'Internal receivable on rate differences', 8, 1, ''),
-(96, 1363, 'Phải thu nội bộ về chi phí đi vay đủ điều kiện được vốn hóa', 'Internal receivable the borrowing costs eligible for capitalization', 8, 1, ''),
-(97, 1368, 'Phải thu nội bộ khác', 'Other receivable from subsidiaries', 8, 1, ''),
-(98, 1381, 'Tài sản thiếu chờ xử lý', 'Shortage of assets awaiting resolution', 9, 3, ''),
-(99, 1385, 'Phải thu về cổ phần hóa', 'Equitization receivable', 9, 3, ''),
-(100, 1388, 'Phải thu khác', 'Other receivable', 9, 3, ''),
-(101, 1531, 'Công cụ, dụng cụ', 'Tools and supplies', 13, 1, ''),
-(102, 1532, 'Bao bì luân chuyển', 'Packaging rotation', 13, 1, ''),
-(103, 1533, 'Đồ dùng cho thuê', 'Tools for rent', 13, 1, ''),
-(104, 1534, 'Thiết bị, phụ tùng thay thế', 'Equipment spare parts', 13, 1, ''),
-(105, 1551, 'Thành phẩm nhập kho', 'Finished goods', 15, 1, ''),
-(106, 1557, 'Thành phẩm bất động sản', 'Finished real Estate', 15, 1, ''),
-(107, 1561, 'Giá mua hàng hóa', 'Price of goods', 16, 1, ''),
-(108, 1562, 'Chi phí thu mua hàng hóa', 'Purchasing expense', 16, 1, ''),
-(109, 1567, 'Hàng hóa bất động sản', 'Real Estate', 16, 1, ''),
-(110, 1611, 'Chi sự nghiệp năm trước', 'Last year', 19, 1, ''),
-(111, 1612, 'Chi sự nghiệp năm nay', 'This year', 19, 1, ''),
-(112, 2111, 'Nhà cửa, vật kiến trúc', 'Houses and architectural', 21, 1, ''),
-(113, 2112, 'Máy móc, thiết bị', 'Equipment & machines', 21, 1, ''),
-(114, 2113, 'Phương tiện vận tải, truyền dẫn', 'Means of transport, conveyance equipment', 21, 1, ''),
-(115, 2114, 'Thiết bị, dụng cụ quản lý', 'Managerial equipment and instruments', 21, 1, ''),
-(116, 2115, 'Cây lâu năm, súc vật làm việc và cho sản phẩm', 'Long term trees, working & killed animals', 21, 1, ''),
-(117, 2118, 'TSCĐ khác', 'Other tangible fixed assets', 21, 1, ''),
-(118, 2121, 'TSCĐ hữu hình thuê tài chính', 'Tangible financial leasing fixed assets', 22, 1, ''),
-(119, 2122, 'TSCĐ vô hình thuê tài chính', 'Intangible financial leasing fixed assets', 22, 1, ''),
-(120, 2131, 'Quyền sử dụng đất', 'Land using right', 23, 1, ''),
-(121, 2132, 'Quyền phát hành', 'Distribution rights', 23, 1, ''),
-(122, 2133, 'Bản quyền, bằng sáng chế', 'Copyright, patents', 23, 1, ''),
-(123, 2134, 'Nhãn hiệu, tên thương mại', 'Trademark', 23, 1, ''),
-(124, 2135, 'Chương trình phần mềm', 'Software', 23, 1, ''),
-(125, 2136, 'Giấy phép và giấy phép nhượng quyền', 'License and right concession permits', 23, 1, ''),
-(126, 2138, 'TSCĐ vô hình khác', 'Other intangible fixed assets', 23, 1, ''),
-(127, 2141, 'Hao mòn TSCĐ hữu hình', 'Tangible fixed assets depreciation', 24, 2, ''),
-(128, 2142, 'Hao mòn TSCĐ thuê tài chính', 'Financial leasing fixed assets depreciation', 24, 2, ''),
-(129, 2143, 'Hao mòn TSCĐ vô hình', 'Intangible fixed assets depreciation', 24, 2, ''),
-(130, 2147, 'Hao mòn bất động sản đầu tư', 'Investment real estate depreciation', 24, 2, ''),
-(131, 2281, 'Cổ phiếu', 'Stocks', 28, 1, ''),
-(132, 2288, 'Đầu tư khác ', 'Other long-term investment', 28, 1, ''),
-(133, 2291, 'Dự phòng giảm giá chứng khoán kinh doanh', 'Provision for the diminution in value of short-term investments', 29, 2, ''),
-(134, 2292, 'Dự phòng tổn thất đầu tư vào đơn vị khác', 'Provision for decline in long term investments', 29, 2, ''),
-(135, 2293, 'Dự phòng phải thu khó đòi', 'Provision for bad debts', 29, 2, ''),
-(136, 2294, 'Dự phòng giảm giá hàng tồn kho', 'Provision for decline in inventory', 29, 2, ''),
-(137, 2411, 'Mua sắm TSCĐ', 'Fixed assets purchases', 30, 1, ''),
-(138, 2412, 'Xây dựng cơ bản', 'Construction in process', 30, 1, ''),
-(139, 2413, 'Sửa chữa lớn TSCĐ', 'Major repair of fixed assets', 30, 1, ''),
-(140, 3331, 'Thuế giá trị gia tăng phải nộp', 'Value Added Tax', 35, 3, ''),
-(141, 3332, 'Thuế tiêu thụ đặc biệt', 'Special consumption tax', 35, 3, ''),
-(142, 3333, 'Thuế xuất, nhập khẩu', 'Import & export duties', 35, 3, ''),
-(143, 3334, 'Thuế thu nhập doanh nghiệp', 'Profit tax', 35, 3, ''),
-(144, 3335, 'Thuế thu nhập cá nhân', 'Personal income tax', 35, 3, ''),
-(145, 3336, 'Thuế tài nguyên', 'Natural resource tax', 35, 3, ''),
-(146, 3337, 'Thuế nhà đất, tiền thuê đất', 'Land & housing tax, land rental charges', 35, 3, ''),
-(147, 3338, 'Thuế bảo vệ môi trường và các loại thuế khác', 'Other taxes', 35, 3, ''),
-(148, 3339, 'Phí, lệ phí và các khoản phải nộp khác', 'Fee & charge & other payables', 35, 3, ''),
-(149, 3341, 'Phải trả công nhân viên', 'Payable to employees', 36, 2, ''),
-(150, 3348, 'Phải trả người lao động khác', 'Payable to other employees', 36, 2, ''),
-(151, 3361, 'Phải trả nội bộ về vốn kinh doanh', 'Internal payable on capital ', 38, 2, ''),
-(152, 3362, 'Phải trả nội bộ về chênh lệch tỷ giá', 'Internal payable on rate differences', 38, 2, ''),
-(153, 3363, 'Phải trả nội bộ về chi phí đi vay đủ điều kiện được vốn hóa', 'Internal pay the borrowing costs eligible for capitalization', 38, 2, ''),
-(154, 3368, 'Phải trả nội bộ khác', 'Other internal payable', 38, 2, ''),
-(155, 3381, 'Tài sản thừa chờ giải quyết', 'Surplus assets awaiting for resolution', 40, 3, ''),
-(156, 3382, 'Kinh phí công đoàn', 'Trade Union fees', 40, 3, ''),
-(157, 3383, 'Bảo hiểm xã hội', 'Social insurance', 40, 3, ''),
-(158, 3384, 'Bảo hiểm y tế', 'Health insurance', 40, 3, ''),
-(159, 3385, 'Phải trả về cổ phần hóa', 'Privatization payable', 40, 3, ''),
-(160, 3386, 'Bảo hiểm thất nghiệp ', 'Unemployment insurance', 40, 3, ''),
-(161, 3387, 'Doanh thu chưa thực hiện', 'Unrealized turnover', 40, 3, ''),
-(162, 3388, 'Phải trả, phải nộp khác', 'Other payable', 40, 3, ''),
-(163, 3411, 'Các khoản đi vay', 'Borrowing', 41, 2, ''),
-(164, 3412, 'Nợ thuê tài chính', 'Finance lease liabilities', 41, 2, ''),
-(165, 3431, 'Trái phiếu thường', 'Bond face value', 42, 2, ''),
-(166, 3432, 'Trái phiếu chuyển đổi', 'Bond discount', 42, 1, ''),
-(167, 3521, 'Dự phòng bảo hành sản phẩm hàng hóa', 'Product warranty provision', 45, 2, ''),
-(168, 3522, 'Dự phòng bảo hành công trình xây dựng', 'Construction warranty provision', 45, 2, ''),
-(169, 3523, 'Dự phòng tái cơ cấu doanh nghiệp', 'Corporate restructuring provision', 45, 2, ''),
-(170, 3524, 'Dự phòng phải trả khác', 'Other payables provision', 45, 2, ''),
-(171, 3531, 'Quỹ khen thưởng ', 'Bonus fund', 46, 2, ''),
-(172, 3532, 'Quỹ phúc lợi', 'Welfare fund', 46, 2, ''),
-(173, 3533, 'Quỹ phúc lợi đã hình thành TSCĐ', 'Welfare fund used to acquire fixed assets', 46, 2, ''),
-(174, 3534, 'Quỹ thưởng ban quản lý điều hành công ty', 'Reward fund for management and operating company', 46, 2, ''),
-(175, 3561, 'Quỹ phát triển khoa học và công nghệ', 'Development of science and technology fund', 47, 2, ''),
-(176, 3562, 'Quỹ phát triển khoa học và công nghệ đã hình thành TSCĐ', 'Development of science and technology fund used to fixed assets', 47, 2, ''),
-(177, 4111, 'Vốn góp của chủ sở hữu', 'Contributed legal capital', 49, 2, ''),
-(178, 4112, 'Thặng dư vốn cổ phần', 'Share premium', 49, 2, ''),
-(179, 4113, 'Quyền chọn chuyển đổi trái phiếu', 'Conversion option bonds', 49, 2, ''),
-(180, 4118, 'Vốn khác', 'Other capital', 49, 2, ''),
-(181, 4131, 'Chênh lệch tỷ giá do đánh giá lại các khoản mục tiền tệ có gốc ngoại tệ', 'Foreign exchange differences revaluation at the end fiscal year', 51, 3, ''),
-(182, 4132, 'Chênh lệch tỷ giá hối đoái trong giai đoạn trước hoạt động', 'Foreign exchange differences in period capital construction investment', 51, 3, ''),
-(183, 4211, 'Lợi nhuận sau thuế chưa phân phối năm trước', 'Previous year undistributed earnings', 56, 3, ''),
-(184, 4212, 'Lợi nhuận sau thuế chưa phân phối năm nay', 'This year undistributed earnings', 56, 3, ''),
-(185, 4611, 'Nguồn kinh phí sự nghiệp năm trước', 'Precious year budget resources', 58, 2, ''),
-(186, 4612, 'Nguồn kinh phí sự nghiệp năm nay', 'This year budget resources', 58, 2, ''),
-(187, 5111, 'Doanh thu bán hàng hóa', 'Goods sale', 60, 3, ''),
-(188, 5112, 'Doanh thu bán các thành phẩm', 'Finished product sale', 60, 3, ''),
-(189, 5113, 'Doanh thu cung cấp dịch vụ', 'Turnover from service provision', 60, 3, ''),
-(190, 5114, 'Doanh thu trợ cấp, trợ giá', 'Subsidization sale', 60, 3, ''),
-(191, 5117, 'Doanh thu kinh doanh bất động sản đầu tư', 'Investment real estate sale', 60, 3, ''),
-(192, 5118, 'Doanh thu khác', 'Other sales', 60, 3, ''),
-(193, 5211, 'Chiết khấu thương mại', 'Sale discount', 62, 3, ''),
-(194, 5212, 'Hàng bán bị trả lại', 'Sale returns', 62, 3, ''),
-(195, 5213, 'Giảm giá hàng bán', 'Devaluation of sale price', 62, 3, ''),
-(196, 6111, 'Mua nguyên liệu, vật liệu', 'Raw materials purchase', 63, 3, ''),
-(197, 6112, 'Mua hàng hóa', 'Goods purchase', 63, 3, ''),
-(198, 6231, 'Chi phí nhân công', 'Labor cost', 66, 3, ''),
-(199, 6232, 'Chi phí vật liệu', 'Material cost', 66, 3, ''),
-(200, 6233, 'Chi phí dụng cụ sản xuất', 'Production tool cost', 66, 3, ''),
-(201, 6234, 'Chi phí khấu hao máy thi công', 'Executing machine depreciation', 66, 3, ''),
-(202, 6237, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 66, 3, ''),
-(203, 6238, 'Chi phí bằng tiền khác', 'Other cost of cash', 66, 3, ''),
-(204, 6271, 'Chi phí nhân viên phân xưởng', 'Employees cost', 67, 3, ''),
-(205, 6272, 'Chi phí vật liệu', 'Material cost', 67, 3, ''),
-(206, 6273, 'Chi phí dụng cụ sản xuất', 'Production tool cost', 67, 3, ''),
-(207, 6274, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 67, 3, ''),
-(208, 6277, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 67, 3, ''),
-(209, 6278, 'Chi phí bằng tiền khác', 'Other cost of cash', 67, 3, ''),
-(210, 6411, 'Chi phí nhân viên', 'Employees cost', 71, 3, ''),
-(211, 6412, 'Chi phí vật liệu, bao bì', 'Material, packing cost', 71, 3, ''),
-(212, 6413, 'Chi phí dụng cụ, đồ dùng', 'Tool cost', 71, 3, ''),
-(213, 6414, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 71, 3, ''),
-(214, 6415, 'Chi phí bảo hành', 'Warranty cost', 71, 3, ''),
-(215, 6417, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 71, 3, ''),
-(216, 6418, 'Chi phí bằng tiền khác', 'Other cost of cash', 71, 3, ''),
-(217, 6421, 'Chi phí nhân viên quản lý', 'Employees cost', 72, 3, ''),
-(218, 6422, 'Chi phí vật liệu quản lý', 'Tools cost', 72, 3, ''),
-(219, 6423, 'Chi phí đồ dùng văn phòng', 'Stationery cost', 72, 3, ''),
-(220, 6424, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 72, 3, ''),
-(221, 6425, 'Thuế, phí và lệ phí', 'Taxes, fees, charges', 72, 3, ''),
-(222, 6426, 'Chi phí dự phòng', 'Provision cost', 72, 3, ''),
-(223, 6427, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 72, 3, ''),
-(224, 6428, 'Chi phí bằng tiền khác', 'Other cost of cash', 72, 3, ''),
-(225, 8211, 'Chi phí thuế TNDN hiện hành', 'Current business income tax charge', 75, 3, ''),
-(226, 8212, 'Chi phí thuế TNDN hoãn lại', 'Deffered business income tax charge', 75, 3, ''),
-(227, 33311, 'Thuế GTGT đầu ra', 'VAT output', 140, 3, ''),
-(228, 33312, 'Thuế GTGT hàng nhập khẩu', 'VAT for imported goods', 140, 3, ''),
-(229, 33381, 'Thuế bảo vệ môi trường', 'Invironmental protection tax', 147, 3, ''),
-(230, 33382, 'Các loại thuế khác', 'Other taxes', 147, 3, ''),
-(231, 34311, 'Mệnh giá trái phiếu', 'Bond face value', 165, 2, ''),
-(232, 34312, 'Chiết khấu trái phiếu', 'Bond discount', 165, 2, ''),
-(233, 34313, 'Phụ trội trái phiếu', 'Additional bond', 165, 2, ''),
-(234, 41111, 'Cổ phiếu phổ thông có quyền biểu quyết', 'Ordinary shares with voting rights', 177, 2, ''),
-(235, 41112, 'Cổ phiếu ưu đãi', 'Preference shares', 177, 2, '');
+INSERT INTO `tblaccounts` (`idAccount`, `accountCode`, `accountName`, `accountEnglishName`, `generalAccount`, `idAccountAttribute`, `accountExplain`, `amount`) VALUES
+(1, 111, 'Tiền mặt', 'Cash in hand', 0, 1, '', 0),
+(2, 112, 'Tiền gửi Ngân hàng', 'Cash in bank', 0, 1, '', 0),
+(3, 113, 'Tiền đang chuyển', 'Cash in transit', 0, 1, '', 0),
+(4, 121, 'Chứng khoán kinh doanh', 'Securities trading', 0, 1, '', 0),
+(5, 128, 'Đầu tư nắm giữ đến ngày đáo hạn', 'Other short - term investment', 0, 1, '', 0),
+(6, 131, 'Phải thu của khách hàng', 'Accounts receivable - trade', 0, 3, '', 0),
+(7, 133, 'Thuế GTGT được khấu trừ', 'VAT deducted', 0, 1, '', 0),
+(8, 136, 'Phải thu nội bộ', 'Intercompany receivable', 0, 1, '', 0),
+(9, 138, 'Phải thu khác', 'Other receivable', 0, 3, '', 0),
+(10, 141, 'Tạm ứng', 'Advances', 0, 1, '', 0),
+(11, 151, 'Hàng mua đang đi đường', 'Goods in transit', 0, 1, '', 0),
+(12, 152, 'Nguyên liệu, vật liệu', 'Raw materials', 0, 1, '', 0),
+(13, 153, 'Công cụ, dụng cụ', 'Tools and supplies', 0, 1, '', 0),
+(14, 154, 'Chi phí sản xuất, kinh doanh dở dang', 'Work in progress', 0, 1, '', 0),
+(15, 155, 'Thành phẩm', 'Finished goods', 0, 1, '', 0),
+(16, 156, 'Hàng hóa', 'Merchandise inventory', 0, 1, '', 0),
+(17, 157, 'Hàng gửi đi bán', 'Goods on consignment', 0, 1, '', 0),
+(18, 158, 'Hàng hóa kho bảo thuế', 'Goods of bonded warehouse', 0, 1, '', 0),
+(19, 161, 'Chi sự nghiệp', 'Expenditures from subsidies of state budget', 0, 1, '', 0),
+(20, 171, 'Giao dịch mua bán lại trái phiếu chính phủ', 'Traded purchase and resell government bonds', 0, 3, '', 0),
+(21, 211, 'Tài sản cố định hữu hình', 'Tangible fixed assets', 0, 1, '', 0),
+(22, 212, 'Tài sản cố định thuê tài chính', 'Financial leasing fixed assets', 0, 1, '', 0),
+(23, 213, 'Tài sản cố định vô hình', 'Intangible fixed assets', 0, 1, '', 0),
+(24, 214, 'Hao mòn tài sản cố định', 'Depreciation of fixed assets', 0, 2, '', 0),
+(25, 217, 'Bất động sản đầu tư', 'Investment real estate', 0, 1, '', 0),
+(26, 221, 'Đầu tư vào công ty con', 'Investment in equity of subsidiaries', 0, 1, '', 0),
+(27, 222, 'Đầu tư vào công ty liên doanh, liên kết', 'Joint venture capital contribution', 0, 1, '', 0),
+(28, 228, 'Đầu tư khác ', 'Other long term investments', 0, 1, '', 0),
+(29, 229, 'Dự phòng tổn thất tài sản', 'Provision for assets', 0, 2, '', 0),
+(30, 241, 'Xây dựng cơ bản dở dang', 'Construction in process', 0, 1, '', 0),
+(31, 242, 'Chi phí trả trước', 'Prepaid expenses', 0, 1, '', 0),
+(32, 243, 'Tài sản thuế thu nhập hoãn lại', 'Deffered income tax assets', 0, 1, '', 0),
+(33, 244, 'Cầm cố, thế chấp, ký quỹ, ký cược', 'Long term collateral & deposit', 0, 1, '', 0),
+(34, 331, 'Phải trả cho người bán', 'Payable to seller', 0, 3, '', 0),
+(35, 333, 'Thuế và các khoản phải nộp Nhà nước', 'Taxes and payable to state budget', 0, 3, '', 0),
+(36, 334, 'Phải trả người lao động', 'Payable to employees', 0, 2, '', 0),
+(37, 335, 'Chi phí phải trả', 'Accruals', 0, 2, '', 0),
+(38, 336, 'Phải trả nội bộ', 'Intercompany payable', 0, 2, '', 0),
+(39, 337, 'Thanh toán theo tiến độ kế hoạch hợp đồng xây dựng', 'Construction contract progress payment due to customers', 0, 3, '', 0),
+(40, 338, 'Phải trả, phải nộp khác', 'Other payable', 0, 3, '', 0),
+(41, 341, 'Vay và nợ thuê tài chính', 'Borrowing and fincance lease liabilities', 0, 2, '', 0),
+(42, 343, 'Trái phiếu phát hành', 'Issued bond', 0, 2, '', 0),
+(43, 344, 'Nhận ký quỹ, ký cược', 'Long-term deposits received', 0, 2, '', 0),
+(44, 347, 'Thuế thu nhập hoãn lại phải trả', 'Deferred income tax', 0, 2, '', 0),
+(45, 352, 'Dự phòng phải trả', 'Provisions for payables', 0, 2, '', 0),
+(46, 353, 'Quỹ khen thưởng, phúc lợi', 'Bonus & welfare funds', 0, 2, '', 0),
+(47, 356, 'Quỹ phát triển khoa học và công nghệ', 'Development of science and technology fund', 0, 2, '', 0),
+(48, 357, 'Quỹ bình ổn giá', 'Stabilitization fund', 0, 2, '', 0),
+(49, 411, 'Vốn đầu tư của chủ sở hữu', 'Working capital', 0, 2, '', 0),
+(50, 412, 'Chênh lệch đánh giá lại tài sản', 'Differences upon asset revaluation', 0, 3, '', 0),
+(51, 413, 'Chênh lệch tỷ giá hối đoái', 'Foreign exchange differences', 0, 3, '', 0),
+(52, 414, 'Quỹ đầu tư phát triển', 'Investment & development funds', 0, 2, '', 0),
+(53, 417, 'Quỹ hỗ trợ sắp xếp doanh nghiệp', 'Business arrangements support fund', 0, 2, '', 0),
+(54, 418, 'Các quỹ khác thuộc vốn chủ sở hữu', 'Other funds', 0, 2, '', 0),
+(55, 419, 'Cổ phiếu quỹ', 'Treasury stock', 0, 1, '', 0),
+(56, 421, 'Lợi nhuận sau thuế chưa phân phối', 'Undistributed earnings', 0, 3, '', 0),
+(57, 441, 'Nguồn vốn đầu tư xây dựng cơ bản', 'Construction investment fund', 0, 2, '', 0),
+(58, 461, 'Nguồn kinh phí sự nghiệp', 'Budget resources', 0, 2, '', 0),
+(59, 466, 'Nguồn kinh phí đã hình thành TSCĐ', 'Budget resources used to acquire fixed assets', 0, 2, '', 0),
+(60, 511, 'Doanh thu bán hàng và cung cấp dịch vụ', 'Sales', 0, 3, '', 0),
+(61, 515, 'Doanh thu hoạt động tài chính', 'Turnover from financial operations', 0, 3, '', 0),
+(62, 521, 'Các khoản giảm trừ doanh thu', 'Deduction from income', 0, 3, '', 0),
+(63, 611, 'Mua hàng', 'Purchase', 0, 3, '', 0),
+(64, 621, 'Chi phí nguyên liệu, vật liệu trực tiếp', 'Direct raw materials cost', 0, 3, '', 0),
+(65, 622, 'Chi phí nhân công trực tiếp', 'Direct labor cost', 0, 3, '', 0),
+(66, 623, 'Chi phí sử dụng máy thi công', 'Executing machine using cost', 0, 3, '', 0),
+(67, 627, 'Chi phí sản xuất chung', 'General operation cost', 0, 3, '', 0),
+(68, 631, 'Giá thành sản xuất', 'Production cost', 0, 3, '', 0),
+(69, 632, 'Giá vốn hàng bán', 'Cost of goods sold', 0, 3, '', 0),
+(70, 635, 'Chi phí tài chính', 'Financial activities expenses', 0, 3, '', 0),
+(71, 641, 'Chi phí bán hàng', 'Selling expenses', 0, 3, '', 0),
+(72, 642, 'Chi phí quản lý doanh nghiệp', 'General & administration expenses', 0, 3, '', 0),
+(73, 711, 'Thu nhập khác', 'Other income', 0, 3, '', 0),
+(74, 811, 'Chi phí khác', 'Other expenses', 0, 3, '', 0),
+(75, 821, 'Chi phí thuế thu nhập doanh nghiệp', 'Business Income tax charge', 0, 3, '', 0),
+(76, 911, 'Xác định kết quả kinh doanh', 'Evaluation of business results', 0, 3, '', 0),
+(77, 1111, 'Tiền Việt Nam', 'Vietnam dong', 1, 1, '', 0),
+(78, 1112, 'Ngoại tệ', 'Foreign currency', 1, 1, '', 0),
+(79, 1113, 'Vàng tiền tệ', 'Monetary gold', 1, 1, '', 0),
+(80, 1121, 'Tiền Việt Nam', 'Vietnam dong', 2, 1, '', 0),
+(81, 1122, 'Ngoại tệ', 'Foreign currency', 2, 1, '', 0),
+(82, 1123, 'Vàng tiền tệ', 'Monetary gold', 2, 1, '', 0),
+(83, 1131, 'Tiền Việt Nam', 'Vietnam dong', 3, 1, '', 0),
+(84, 1132, 'Ngoại tệ', 'Foreign currency', 3, 1, '', 0),
+(85, 1211, 'Cổ phiếu', 'Stocks', 4, 1, '', 0),
+(86, 1212, 'Trái phiếu ', 'Bonds', 4, 1, '', 0),
+(87, 1218, 'Chứng khoán và công cụ tài chính khác', 'Securities and other financial instruments', 4, 1, '', 0),
+(88, 1281, 'Tiền gửi có kỳ hạn', 'Term deposits', 5, 1, '', 0),
+(89, 1282, 'Trái phiếu ', 'Bonds', 5, 1, '', 0),
+(90, 1283, 'Cho vay', 'Loan', 5, 1, '', 0),
+(91, 1288, 'Các khoản đầu tư khác nắm giữ đến ngày đáo hạn', 'Other short - term investment', 5, 1, '', 0),
+(92, 1331, 'Thuế GTGT được khấu trừ của hàng hóa, dịch vụ', 'VAT deduction of goods, services', 7, 1, '', 0),
+(93, 1332, 'Thuế GTGT được khấu trừ của TSCĐ', 'VAT deduction of fixed assets', 7, 1, '', 0),
+(94, 1361, 'Vốn kinh doanh ở các đơn vị trực thuộc', 'Investment in equity of subsidiaries', 8, 1, '', 0),
+(95, 1362, 'Phải thu nội bộ về chênh lệch tỷ giá', 'Internal receivable on rate differences', 8, 1, '', 0),
+(96, 1363, 'Phải thu nội bộ về chi phí đi vay đủ điều kiện được vốn hóa', 'Internal receivable the borrowing costs eligible for capitalization', 8, 1, '', 0),
+(97, 1368, 'Phải thu nội bộ khác', 'Other receivable from subsidiaries', 8, 1, '', 0),
+(98, 1381, 'Tài sản thiếu chờ xử lý', 'Shortage of assets awaiting resolution', 9, 3, '', 0),
+(99, 1385, 'Phải thu về cổ phần hóa', 'Equitization receivable', 9, 3, '', 0),
+(100, 1388, 'Phải thu khác', 'Other receivable', 9, 3, '', 0),
+(101, 1531, 'Công cụ, dụng cụ', 'Tools and supplies', 13, 1, '', 0),
+(102, 1532, 'Bao bì luân chuyển', 'Packaging rotation', 13, 1, '', 0),
+(103, 1533, 'Đồ dùng cho thuê', 'Tools for rent', 13, 1, '', 0),
+(104, 1534, 'Thiết bị, phụ tùng thay thế', 'Equipment spare parts', 13, 1, '', 0),
+(105, 1551, 'Thành phẩm nhập kho', 'Finished goods', 15, 1, '', 0),
+(106, 1557, 'Thành phẩm bất động sản', 'Finished real Estate', 15, 1, '', 0),
+(107, 1561, 'Giá mua hàng hóa', 'Price of goods', 16, 1, '', 0),
+(108, 1562, 'Chi phí thu mua hàng hóa', 'Purchasing expense', 16, 1, '', 0),
+(109, 1567, 'Hàng hóa bất động sản', 'Real Estate', 16, 1, '', 0),
+(110, 1611, 'Chi sự nghiệp năm trước', 'Last year', 19, 1, '', 0),
+(111, 1612, 'Chi sự nghiệp năm nay', 'This year', 19, 1, '', 0),
+(112, 2111, 'Nhà cửa, vật kiến trúc', 'Houses and architectural', 21, 1, '', 0),
+(113, 2112, 'Máy móc, thiết bị', 'Equipment & machines', 21, 1, '', 0),
+(114, 2113, 'Phương tiện vận tải, truyền dẫn', 'Means of transport, conveyance equipment', 21, 1, '', 0),
+(115, 2114, 'Thiết bị, dụng cụ quản lý', 'Managerial equipment and instruments', 21, 1, '', 0),
+(116, 2115, 'Cây lâu năm, súc vật làm việc và cho sản phẩm', 'Long term trees, working & killed animals', 21, 1, '', 0),
+(117, 2118, 'TSCĐ khác', 'Other tangible fixed assets', 21, 1, '', 0),
+(118, 2121, 'TSCĐ hữu hình thuê tài chính', 'Tangible financial leasing fixed assets', 22, 1, '', 0),
+(119, 2122, 'TSCĐ vô hình thuê tài chính', 'Intangible financial leasing fixed assets', 22, 1, '', 0),
+(120, 2131, 'Quyền sử dụng đất', 'Land using right', 23, 1, '', 0),
+(121, 2132, 'Quyền phát hành', 'Distribution rights', 23, 1, '', 0),
+(122, 2133, 'Bản quyền, bằng sáng chế', 'Copyright, patents', 23, 1, '', 0),
+(123, 2134, 'Nhãn hiệu, tên thương mại', 'Trademark', 23, 1, '', 0),
+(124, 2135, 'Chương trình phần mềm', 'Software', 23, 1, '', 0),
+(125, 2136, 'Giấy phép và giấy phép nhượng quyền', 'License and right concession permits', 23, 1, '', 0),
+(126, 2138, 'TSCĐ vô hình khác', 'Other intangible fixed assets', 23, 1, '', 0),
+(127, 2141, 'Hao mòn TSCĐ hữu hình', 'Tangible fixed assets depreciation', 24, 2, '', 0),
+(128, 2142, 'Hao mòn TSCĐ thuê tài chính', 'Financial leasing fixed assets depreciation', 24, 2, '', 0),
+(129, 2143, 'Hao mòn TSCĐ vô hình', 'Intangible fixed assets depreciation', 24, 2, '', 0),
+(130, 2147, 'Hao mòn bất động sản đầu tư', 'Investment real estate depreciation', 24, 2, '', 0),
+(131, 2281, 'Cổ phiếu', 'Stocks', 28, 1, '', 0),
+(132, 2288, 'Đầu tư khác ', 'Other long-term investment', 28, 1, '', 0),
+(133, 2291, 'Dự phòng giảm giá chứng khoán kinh doanh', 'Provision for the diminution in value of short-term investments', 29, 2, '', 0),
+(134, 2292, 'Dự phòng tổn thất đầu tư vào đơn vị khác', 'Provision for decline in long term investments', 29, 2, '', 0),
+(135, 2293, 'Dự phòng phải thu khó đòi', 'Provision for bad debts', 29, 2, '', 0),
+(136, 2294, 'Dự phòng giảm giá hàng tồn kho', 'Provision for decline in inventory', 29, 2, '', 0),
+(137, 2411, 'Mua sắm TSCĐ', 'Fixed assets purchases', 30, 1, '', 0),
+(138, 2412, 'Xây dựng cơ bản', 'Construction in process', 30, 1, '', 0),
+(139, 2413, 'Sửa chữa lớn TSCĐ', 'Major repair of fixed assets', 30, 1, '', 0),
+(140, 3331, 'Thuế giá trị gia tăng phải nộp', 'Value Added Tax', 35, 3, '', 0),
+(141, 3332, 'Thuế tiêu thụ đặc biệt', 'Special consumption tax', 35, 3, '', 0),
+(142, 3333, 'Thuế xuất, nhập khẩu', 'Import & export duties', 35, 3, '', 0),
+(143, 3334, 'Thuế thu nhập doanh nghiệp', 'Profit tax', 35, 3, '', 0),
+(144, 3335, 'Thuế thu nhập cá nhân', 'Personal income tax', 35, 3, '', 0),
+(145, 3336, 'Thuế tài nguyên', 'Natural resource tax', 35, 3, '', 0),
+(146, 3337, 'Thuế nhà đất, tiền thuê đất', 'Land & housing tax, land rental charges', 35, 3, '', 0),
+(147, 3338, 'Thuế bảo vệ môi trường và các loại thuế khác', 'Other taxes', 35, 3, '', 0),
+(148, 3339, 'Phí, lệ phí và các khoản phải nộp khác', 'Fee & charge & other payables', 35, 3, '', 0),
+(149, 3341, 'Phải trả công nhân viên', 'Payable to employees', 36, 2, '', 0),
+(150, 3348, 'Phải trả người lao động khác', 'Payable to other employees', 36, 2, '', 0),
+(151, 3361, 'Phải trả nội bộ về vốn kinh doanh', 'Internal payable on capital ', 38, 2, '', 0),
+(152, 3362, 'Phải trả nội bộ về chênh lệch tỷ giá', 'Internal payable on rate differences', 38, 2, '', 0),
+(153, 3363, 'Phải trả nội bộ về chi phí đi vay đủ điều kiện được vốn hóa', 'Internal pay the borrowing costs eligible for capitalization', 38, 2, '', 0),
+(154, 3368, 'Phải trả nội bộ khác', 'Other internal payable', 38, 2, '', 0),
+(155, 3381, 'Tài sản thừa chờ giải quyết', 'Surplus assets awaiting for resolution', 40, 3, '', 0),
+(156, 3382, 'Kinh phí công đoàn', 'Trade Union fees', 40, 3, '', 0),
+(157, 3383, 'Bảo hiểm xã hội', 'Social insurance', 40, 3, '', 0),
+(158, 3384, 'Bảo hiểm y tế', 'Health insurance', 40, 3, '', 0),
+(159, 3385, 'Phải trả về cổ phần hóa', 'Privatization payable', 40, 3, '', 0),
+(160, 3386, 'Bảo hiểm thất nghiệp ', 'Unemployment insurance', 40, 3, '', 0),
+(161, 3387, 'Doanh thu chưa thực hiện', 'Unrealized turnover', 40, 3, '', 0),
+(162, 3388, 'Phải trả, phải nộp khác', 'Other payable', 40, 3, '', 0),
+(163, 3411, 'Các khoản đi vay', 'Borrowing', 41, 2, '', 0),
+(164, 3412, 'Nợ thuê tài chính', 'Finance lease liabilities', 41, 2, '', 0),
+(165, 3431, 'Trái phiếu thường', 'Bond face value', 42, 2, '', 0),
+(166, 3432, 'Trái phiếu chuyển đổi', 'Bond discount', 42, 1, '', 0),
+(167, 3521, 'Dự phòng bảo hành sản phẩm hàng hóa', 'Product warranty provision', 45, 2, '', 0),
+(168, 3522, 'Dự phòng bảo hành công trình xây dựng', 'Construction warranty provision', 45, 2, '', 0),
+(169, 3523, 'Dự phòng tái cơ cấu doanh nghiệp', 'Corporate restructuring provision', 45, 2, '', 0),
+(170, 3524, 'Dự phòng phải trả khác', 'Other payables provision', 45, 2, '', 0),
+(171, 3531, 'Quỹ khen thưởng ', 'Bonus fund', 46, 2, '', 0),
+(172, 3532, 'Quỹ phúc lợi', 'Welfare fund', 46, 2, '', 0),
+(173, 3533, 'Quỹ phúc lợi đã hình thành TSCĐ', 'Welfare fund used to acquire fixed assets', 46, 2, '', 0),
+(174, 3534, 'Quỹ thưởng ban quản lý điều hành công ty', 'Reward fund for management and operating company', 46, 2, '', 0),
+(175, 3561, 'Quỹ phát triển khoa học và công nghệ', 'Development of science and technology fund', 47, 2, '', 0),
+(176, 3562, 'Quỹ phát triển khoa học và công nghệ đã hình thành TSCĐ', 'Development of science and technology fund used to fixed assets', 47, 2, '', 0),
+(177, 4111, 'Vốn góp của chủ sở hữu', 'Contributed legal capital', 49, 2, '', 0),
+(178, 4112, 'Thặng dư vốn cổ phần', 'Share premium', 49, 2, '', 0),
+(179, 4113, 'Quyền chọn chuyển đổi trái phiếu', 'Conversion option bonds', 49, 2, '', 0),
+(180, 4118, 'Vốn khác', 'Other capital', 49, 2, '', 0),
+(181, 4131, 'Chênh lệch tỷ giá do đánh giá lại các khoản mục tiền tệ có gốc ngoại tệ', 'Foreign exchange differences revaluation at the end fiscal year', 51, 3, '', 0),
+(182, 4132, 'Chênh lệch tỷ giá hối đoái trong giai đoạn trước hoạt động', 'Foreign exchange differences in period capital construction investment', 51, 3, '', 0),
+(183, 4211, 'Lợi nhuận sau thuế chưa phân phối năm trước', 'Previous year undistributed earnings', 56, 3, '', 0),
+(184, 4212, 'Lợi nhuận sau thuế chưa phân phối năm nay', 'This year undistributed earnings', 56, 3, '', 0),
+(185, 4611, 'Nguồn kinh phí sự nghiệp năm trước', 'Precious year budget resources', 58, 2, '', 0),
+(186, 4612, 'Nguồn kinh phí sự nghiệp năm nay', 'This year budget resources', 58, 2, '', 0),
+(187, 5111, 'Doanh thu bán hàng hóa', 'Goods sale', 60, 3, '', 0),
+(188, 5112, 'Doanh thu bán các thành phẩm', 'Finished product sale', 60, 3, '', 0),
+(189, 5113, 'Doanh thu cung cấp dịch vụ', 'Turnover from service provision', 60, 3, '', 0),
+(190, 5114, 'Doanh thu trợ cấp, trợ giá', 'Subsidization sale', 60, 3, '', 0),
+(191, 5117, 'Doanh thu kinh doanh bất động sản đầu tư', 'Investment real estate sale', 60, 3, '', 0),
+(192, 5118, 'Doanh thu khác', 'Other sales', 60, 3, '', 0),
+(193, 5211, 'Chiết khấu thương mại', 'Sale discount', 62, 3, '', 0),
+(194, 5212, 'Hàng bán bị trả lại', 'Sale returns', 62, 3, '', 0),
+(195, 5213, 'Giảm giá hàng bán', 'Devaluation of sale price', 62, 3, '', 0),
+(196, 6111, 'Mua nguyên liệu, vật liệu', 'Raw materials purchase', 63, 3, '', 0),
+(197, 6112, 'Mua hàng hóa', 'Goods purchase', 63, 3, '', 0),
+(198, 6231, 'Chi phí nhân công', 'Labor cost', 66, 3, '', 0),
+(199, 6232, 'Chi phí vật liệu', 'Material cost', 66, 3, '', 0),
+(200, 6233, 'Chi phí dụng cụ sản xuất', 'Production tool cost', 66, 3, '', 0),
+(201, 6234, 'Chi phí khấu hao máy thi công', 'Executing machine depreciation', 66, 3, '', 0),
+(202, 6237, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 66, 3, '', 0),
+(203, 6238, 'Chi phí bằng tiền khác', 'Other cost of cash', 66, 3, '', 0),
+(204, 6271, 'Chi phí nhân viên phân xưởng', 'Employees cost', 67, 3, '', 0),
+(205, 6272, 'Chi phí vật liệu', 'Material cost', 67, 3, '', 0),
+(206, 6273, 'Chi phí dụng cụ sản xuất', 'Production tool cost', 67, 3, '', 0),
+(207, 6274, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 67, 3, '', 0),
+(208, 6277, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 67, 3, '', 0),
+(209, 6278, 'Chi phí bằng tiền khác', 'Other cost of cash', 67, 3, '', 0),
+(210, 6411, 'Chi phí nhân viên', 'Employees cost', 71, 3, '', 0),
+(211, 6412, 'Chi phí vật liệu, bao bì', 'Material, packing cost', 71, 3, '', 0),
+(212, 6413, 'Chi phí dụng cụ, đồ dùng', 'Tool cost', 71, 3, '', 0),
+(213, 6414, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 71, 3, '', 0),
+(214, 6415, 'Chi phí bảo hành', 'Warranty cost', 71, 3, '', 0),
+(215, 6417, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 71, 3, '', 0),
+(216, 6418, 'Chi phí bằng tiền khác', 'Other cost of cash', 71, 3, '', 0),
+(217, 6421, 'Chi phí nhân viên quản lý', 'Employees cost', 72, 3, '', 0),
+(218, 6422, 'Chi phí vật liệu quản lý', 'Tools cost', 72, 3, '', 0),
+(219, 6423, 'Chi phí đồ dùng văn phòng', 'Stationery cost', 72, 3, '', 0),
+(220, 6424, 'Chi phí khấu hao TSCĐ', 'Fixed asset depreciation', 72, 3, '', 0),
+(221, 6425, 'Thuế, phí và lệ phí', 'Taxes, fees, charges', 72, 3, '', 0),
+(222, 6426, 'Chi phí dự phòng', 'Provision cost', 72, 3, '', 0),
+(223, 6427, 'Chi phí dịch vụ mua ngoài', 'Outside purchasing services cost', 72, 3, '', 0),
+(224, 6428, 'Chi phí bằng tiền khác', 'Other cost of cash', 72, 3, '', 0),
+(225, 8211, 'Chi phí thuế TNDN hiện hành', 'Current business income tax charge', 75, 3, '', 0),
+(226, 8212, 'Chi phí thuế TNDN hoãn lại', 'Deffered business income tax charge', 75, 3, '', 0),
+(227, 33311, 'Thuế GTGT đầu ra', 'VAT output', 140, 3, '', 0),
+(228, 33312, 'Thuế GTGT hàng nhập khẩu', 'VAT for imported goods', 140, 3, '', 0),
+(229, 33381, 'Thuế bảo vệ môi trường', 'Invironmental protection tax', 147, 3, '', 0),
+(230, 33382, 'Các loại thuế khác', 'Other taxes', 147, 3, '', 0),
+(231, 34311, 'Mệnh giá trái phiếu', 'Bond face value', 165, 2, '', 0),
+(232, 34312, 'Chiết khấu trái phiếu', 'Bond discount', 165, 2, '', 0),
+(233, 34313, 'Phụ trội trái phiếu', 'Additional bond', 165, 2, '', 0),
+(234, 41111, 'Cổ phiếu phổ thông có quyền biểu quyết', 'Ordinary shares with voting rights', 177, 2, '', 0),
+(235, 41112, 'Cổ phiếu ưu đãi', 'Preference shares', 177, 2, '', 0);
 
 -- --------------------------------------------------------
 
@@ -1134,6 +1135,38 @@ INSERT INTO `tblaccount_attributes` (`idAttribute`, `attributeName`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tblaccount_person`
+--
+
+CREATE TABLE IF NOT EXISTS `tblaccount_person` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account` varchar(250) COLLATE utf8_unicode_ci NOT NULL COMMENT 'tài khoản',
+  `name_bank` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'tên ngân hàng',
+  `branch` text COLLATE utf8_unicode_ci COMMENT 'chi nhánh',
+  `account_holder` varchar(250) COLLATE utf8_unicode_ci NOT NULL COMMENT 'chủ tài khoản',
+  `electrolyte` text COLLATE utf8_unicode_ci COMMENT 'diển giải',
+  `id_staff` int(11) NOT NULL,
+  `date_create` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `tblaccount_person`
+--
+
+INSERT INTO `tblaccount_person` (`id`, `account`, `name_bank`, `branch`, `account_holder`, `electrolyte`, `id_staff`, `date_create`) VALUES
+(1, '0124581151', 'Ngân hàng đông Á', 'Chi nhánh quận 1', 'Trần Văn A', 'tài khoản mua bán', 1, '2017-09-21'),
+(2, '123213', '', '', '', '', 1, '2017-09-21'),
+(4, '12312312', '3123123', '', '12312321', '', 1, '2017-09-21'),
+(5, '2131', '23', '213', '12312', '', 1, '2017-09-21'),
+(6, '123', '12312', '', '123', '', 1, '2017-09-21'),
+(7, '123', '123', '12312', '312', '12312', 1, '2017-09-21'),
+(8, '21312', '312312', '312', '12312', '', 1, '2017-09-21'),
+(9, '0451324156456', 'Ngân Hàng A', 'chi nhánh', 'trần văn B', '', 1, '2017-09-21');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblactivitylog`
 --
 
@@ -1144,7 +1177,7 @@ CREATE TABLE IF NOT EXISTS `tblactivitylog` (
   `staffid` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `staffid` (`staffid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1722 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1812 ;
 
 --
 -- Dumping data for table `tblactivitylog`
@@ -2874,7 +2907,97 @@ INSERT INTO `tblactivitylog` (`id`, `description`, `date`, `staffid`) VALUES
 (1718, 'Insert Sale Item Added [ID:99, Product ID55]', '2017-09-22 09:11:40', 'admin'),
 (1719, 'New Sale Added [ID:100, 2017-09-19]', '2017-09-22 09:19:18', 'admin'),
 (1720, 'Insert Sale Item Added [ID:100, Product ID55]', '2017-09-22 09:19:18', 'admin'),
-(1721, 'Insert Sale Item Added [ID:100, Product ID56]', '2017-09-22 09:19:18', 'admin');
+(1721, 'Insert Sale Item Added [ID:100, Product ID56]', '2017-09-22 09:19:18', 'admin'),
+(1722, 'New Client Created [ From Staff: 1]', '2017-09-22 15:35:21', 'admin'),
+(1723, 'New Client Created [An From Staff: 1]', '2017-09-22 15:37:05', 'admin'),
+(1724, 'Client Deleted [14]', '2017-09-22 15:38:33', 'admin'),
+(1725, 'New Staff Member Added [ID: 17, SR  Nhung]', '2017-09-22 16:30:56', 'admin'),
+(1726, 'New Staff Member Added [ID: 18, SR  Vân]', '2017-09-22 16:47:52', 'admin'),
+(1727, 'New Staff Member Added [ID: 19, SR Bảo  Vy]', '2017-09-22 16:49:56', 'admin'),
+(1728, 'New Staff Member Added [ID: 20, SR Tường  Vy]', '2017-09-22 16:51:38', 'admin'),
+(1729, 'New Staff Member Added [ID: 21, HR  Như]', '2017-09-22 16:53:30', 'admin'),
+(1730, 'New Staff Member Added [ID: 22, Sale  Quốc]', '2017-09-22 17:09:52', 'admin'),
+(1731, 'New Staff Member Added [ID: 23, Sale  Đình]', '2017-09-22 17:11:18', 'admin'),
+(1732, 'New Staff Member Added [ID: 24, Sale  Thông]', '2017-09-22 17:12:41', 'admin'),
+(1733, 'New Staff Member Added [ID: 25, Sale  Toản]', '2017-09-22 17:14:35', 'admin'),
+(1734, 'New Staff Member Added [ID: 26,  CEO]', '2017-09-22 17:15:57', 'admin'),
+(1735, 'New Staff Member Added [ID: 27, PC  Hoà]', '2017-09-22 17:18:04', 'admin'),
+(1736, 'New Staff Member Added [ID: 28, AC  Hường]', '2017-09-22 17:20:09', 'admin'),
+(1737, 'New Staff Member Added [ID: 29, SM  Thuận]', '2017-09-22 17:21:43', 'admin'),
+(1738, 'New Staff Member Added [ID: 30, TL  Hoa]', '2017-09-22 17:22:54', 'admin'),
+(1739, 'New Staff Member Added [ID: 31, TK  Giang]', '2017-09-22 17:26:03', 'admin'),
+(1740, 'New Staff Member Added [ID: 32, TK  Quốc]', '2017-09-22 17:27:59', 'admin'),
+(1741, 'New Staff Member Added [ID: 33, MA  Oanh]', '2017-09-22 17:31:25', 'admin'),
+(1742, 'Invoice Item Updated [ID: 73, - H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút]', '2017-09-23 16:36:39', 'admin'),
+(1743, 'Invoice Item Updated [ID: 72, <span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span>]', '2017-09-23 16:42:52', 'admin'),
+(1744, 'Invoice Item Updated [ID: 74, - H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút]', '2017-09-23 16:53:29', 'admin'),
+(1745, 'Invoice Item Updated [ID: 74, - H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút]', '2017-09-23 16:53:42', 'admin'),
+(1746, 'Invoice Item Updated [ID: 75, - H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon v&agrave; ống tho&aacute;t<br>- Chức năng hẹn giờ tắt máy]', '2017-09-23 17:00:30', 'admin'),
+(1747, 'Failed Login Attempt [Email:lechicong.fososoft@gmail.com, Is Staff Member:Yes, IP:183.81.14.142]', '2017-09-23 19:07:25', NULL),
+(1748, 'New Invoice Item Added [ID:132, <ol>\r\n<li>sdvdfvb</li>\r\n<li>dfgbdfhg</li>\r\n<li>dfgdfhfrg</li>\r\n<li>fgvdfghf</li>\r\n</ol>]', '2017-09-25 08:10:21', 'admin'),
+(1749, 'Invoice Item Deleted [ID: 132]', '2017-09-25 08:15:17', 'admin'),
+(1750, 'New Invoice Item Added [ID:133, <ul>\r\n<li>Note</li>\r\n<li>note</li>\r\n<li>note</li>\r\n</ul>]', '2017-09-25 12:02:00', 'admin'),
+(1751, 'Invoice Item Updated [ID: 131, <span>- Hút lọc khử mùi tuần hoàn bằng than Carbon và kết hợp ống thoát</span>]', '2017-09-26 14:57:11', 'admin'),
+(1752, 'Invoice Item Updated [ID: 130, <span>- Hút lọc khử mùi tuần hoàn bằng than Carbon và kết hợp ống thoát<!--57db--></span>]', '2017-09-26 14:57:39', 'admin'),
+(1753, 'Invoice Item Updated [ID: 129, <span>- Hút lọc khử mùi tuần hoàn bằng than Carbon hoặc kết hợp ống thoát</span>]', '2017-09-26 14:57:59', 'admin'),
+(1754, 'Failed Login Attempt [Email:amin@amdin.com, Is Staff Member:Yes, IP:171.233.158.66]', '2017-09-30 13:59:30', NULL),
+(1755, 'Failed Login Attempt [Email:amin@amdin.com, Is Staff Member:Yes, IP:171.233.158.66]', '2017-09-30 13:59:56', NULL),
+(1756, 'Invoice Item Updated [ID: 133, <ul>\r\n<li>10 chức năng nướng cơ bản và các chức năng an toàn sử dụng</li>\r\n<li>Chọn và cài đặt đa ngôn ngữ</li>\r\n<li>5 cấp độ điều chỉnh ánh sáng màn hình</li>\r\n<li>3 cấp độ cài đặt chuông báo \r\n<div class="product-short-description"></div>\r\n</li>\r\n</ul>]', '2017-09-30 15:10:28', 'admin'),
+(1757, 'New Invoice Item Added [ID:134, ]', '2017-09-30 15:25:35', 'admin'),
+(1758, 'New Invoice Item Added [ID:135, ]', '2017-09-30 15:37:22', 'admin'),
+(1759, 'New Invoice Item Added [ID:136, ]', '2017-09-30 15:57:47', 'admin'),
+(1760, 'Invoice Item Updated [ID: 136, ]', '2017-09-30 15:59:55', 'admin'),
+(1761, 'New Invoice Item Added [ID:137, ]', '2017-09-30 16:04:56', 'admin'),
+(1762, 'New Invoice Item Added [ID:138, ]', '2017-09-30 16:06:37', 'admin'),
+(1763, 'New Invoice Item Added [ID:139, ]', '2017-09-30 16:09:45', 'admin'),
+(1764, 'Invoice Item Updated [ID: 139, ]', '2017-09-30 16:31:45', 'admin'),
+(1765, 'New Invoice Item Added [ID:140, ]', '2017-09-30 16:36:44', 'admin'),
+(1766, 'New Invoice Item Added [ID:141, ]', '2017-09-30 17:19:56', 'admin'),
+(1767, 'New Invoice Item Added [ID:142, ]', '2017-09-30 17:23:06', 'admin'),
+(1768, 'New Invoice Item Added [ID:143, ]', '2017-09-30 17:28:28', 'admin'),
+(1769, 'New Invoice Item Added [ID:144, ]', '2017-09-30 17:32:05', 'admin'),
+(1770, 'New Invoice Item Added [ID:145, ]', '2017-09-30 17:33:28', 'admin'),
+(1771, 'New Invoice Item Added [ID:146, ]', '2017-09-30 17:40:18', 'admin'),
+(1772, 'New Invoice Item Added [ID:147, ]', '2017-09-30 17:43:07', 'admin'),
+(1773, 'Invoice Item Updated [ID: 146, ]', '2017-09-30 17:44:11', 'admin'),
+(1774, 'New Invoice Item Added [ID:148, ]', '2017-09-30 17:48:03', 'admin'),
+(1775, 'New Invoice Item Added [ID:149, ]', '2017-09-30 17:50:22', 'admin'),
+(1776, 'New Invoice Item Added [ID:150, ]', '2017-09-30 17:53:25', 'admin'),
+(1777, 'New Invoice Item Added [ID:151, ]', '2017-09-30 17:55:40', 'admin'),
+(1778, 'New Invoice Item Added [ID:152, ]', '2017-09-30 17:57:55', 'admin'),
+(1779, 'Invoice Item Updated [ID: 152, ]', '2017-09-30 17:58:43', 'admin'),
+(1780, 'Invoice Item Updated [ID: 149, ]', '2017-09-30 17:59:29', 'admin'),
+(1781, 'New Invoice Item Added [ID:153, ]', '2017-09-30 18:03:30', 'admin'),
+(1782, 'New Invoice Item Added [ID:154, ]', '2017-09-30 18:05:20', 'admin'),
+(1783, 'New Invoice Item Added [ID:155, ]', '2017-09-30 18:07:03', 'admin'),
+(1784, 'New Invoice Item Added [ID:156, ]', '2017-09-30 18:09:22', 'admin'),
+(1785, 'New Invoice Item Added [ID:157, ]', '2017-09-30 18:11:19', 'admin'),
+(1786, 'New Invoice Item Added [ID:158, ]', '2017-09-30 18:13:23', 'admin'),
+(1787, 'New Invoice Item Added [ID:159, ]', '2017-09-30 18:15:23', 'admin'),
+(1788, 'Failed Login Attempt [Email:admin@admin.com, Is Staff Member:Yes, IP:58.186.244.6]', '2017-10-01 17:19:00', NULL),
+(1789, 'Failed Login Attempt [Email:admin@admin.com, Is Staff Member:Yes, IP:58.186.244.6]', '2017-10-01 17:19:14', NULL),
+(1790, 'New Invoice Item Added [ID:160, -&nbsp;H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br><span>- Chức năng hẹn giờ tắt máy</span>]', '2017-10-10 23:03:11', 'admin'),
+(1791, 'New Invoice Item Added [ID:161, <span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span>]', '2017-10-10 23:33:45', 'admin'),
+(1792, 'New Invoice Item Added [ID:162, ]', '2017-10-10 23:59:10', 'admin'),
+(1793, 'New Invoice Item Added [ID:163, ]', '2017-10-11 00:09:44', 'admin'),
+(1794, 'New Invoice Item Added [ID:164, ]', '2017-10-11 00:13:15', 'admin'),
+(1795, 'New Invoice Item Added [ID:165, ]', '2017-10-11 00:15:30', 'admin'),
+(1796, 'New Invoice Item Added [ID:166, ]', '2017-10-11 00:17:46', 'admin'),
+(1797, 'New Invoice Item Added [ID:167, ]', '2017-10-11 00:20:25', 'admin'),
+(1798, 'New Invoice Item Added [ID:168, ]', '2017-10-11 00:22:54', 'admin'),
+(1799, 'New Invoice Item Added [ID:169, ]', '2017-10-11 10:26:25', 'admin'),
+(1800, 'New Invoice Item Added [ID:170, ]', '2017-10-11 21:47:29', 'admin'),
+(1801, 'New Invoice Item Added [ID:171, ]', '2017-10-11 22:00:10', 'admin'),
+(1802, 'New Invoice Item Added [ID:172, ]', '2017-10-11 22:03:10', 'admin'),
+(1803, 'New Invoice Item Added [ID:173, ]', '2017-10-11 22:07:15', 'admin'),
+(1804, 'New Invoice Item Added [ID:174, ]', '2017-10-11 22:14:29', 'admin'),
+(1805, 'New Invoice Item Added [ID:175, ]', '2017-10-11 22:29:43', 'admin'),
+(1806, 'New Invoice Item Added [ID:176, ]', '2017-10-11 22:32:56', 'admin'),
+(1807, 'New Invoice Item Added [ID:177, ]', '2017-10-11 22:36:26', 'admin'),
+(1808, 'New Invoice Item Added [ID:178, ]', '2017-10-11 22:41:42', 'admin'),
+(1809, 'New Invoice Item Added [ID:179, ]', '2017-10-11 22:46:04', 'admin'),
+(1810, 'New Invoice Item Added [ID:180, ]', '2017-10-11 22:48:37', 'admin'),
+(1811, 'New Invoice Item Added [ID:181, ]', '2017-10-11 22:55:19', 'admin');
 
 -- --------------------------------------------------------
 
@@ -2979,6 +3102,32 @@ INSERT INTO `tblcampaign` (`id`, `name`, `staff_manage`, `expense`, `create_by`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tblcampaign_items`
+--
+
+CREATE TABLE IF NOT EXISTS `tblcampaign_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_campaign` int(11) DEFAULT NULL,
+  `id_item` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT '0',
+  `price_single` decimal(20,3) DEFAULT '0.000',
+  `total` decimal(20,3) DEFAULT '0.000',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `tblcampaign_items`
+--
+
+INSERT INTO `tblcampaign_items` (`id`, `id_campaign`, `id_item`, `quantity`, `price_single`, `total`) VALUES
+(3, 2, 130, 2, '47800000.000', '95600000.000'),
+(4, 2, 129, 1, '48050000.000', '48050000.000'),
+(5, 2, 131, 3, '47800000.000', '143400000.000'),
+(7, 4, 131, 2, '47800000.000', '95600000.000');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblcampaign_staff`
 --
 
@@ -2987,16 +3136,6 @@ CREATE TABLE IF NOT EXISTS `tblcampaign_staff` (
   `id_staff` int(11) NOT NULL,
   PRIMARY KEY (`id_campaign`,`id_staff`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `tblcampaign_staff`
---
-
-INSERT INTO `tblcampaign_staff` (`id_campaign`, `id_staff`) VALUES
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 13);
 
 -- --------------------------------------------------------
 
@@ -3057,7 +3196,7 @@ CREATE TABLE IF NOT EXISTS `tblcategories` (
   `category_parent` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=462 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=463 ;
 
 --
 -- Dumping data for table `tblcategories`
@@ -3133,7 +3272,8 @@ INSERT INTO `tblcategories` (`id`, `code`, `category`, `image`, `category_parent
 (458, NULL, 'Phụ kiện lò vi sóng', NULL, 448),
 (459, NULL, 'Phụ kiện tủ bảo quản rượu', NULL, 448),
 (460, NULL, 'Phụ kiện máy pha cà phê', NULL, 448),
-(461, NULL, 'Phụ kiện vòi chậu', NULL, 448);
+(461, NULL, 'Phụ kiện vòi chậu', NULL, 448),
+(462, NULL, 'Phụ kiện kèm thiết bị', NULL, 388);
 
 -- --------------------------------------------------------
 
@@ -3240,22 +3380,25 @@ CREATE TABLE IF NOT EXISTS `tblclients` (
   `fax` text NOT NULL,
   `business` text NOT NULL,
   `street` text NOT NULL,
+  `debt` decimal(20,2) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   PRIMARY KEY (`userid`),
   KEY `country` (`country`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `tblclients`
 --
 
-INSERT INTO `tblclients` (`userid`, `code`, `title`, `company`, `vat`, `phonenumber`, `country`, `city`, `zip`, `state`, `address`, `website`, `datecreated`, `active`, `leadid`, `billing_street`, `billing_city`, `billing_state`, `billing_zip`, `billing_country`, `shipping_street`, `shipping_city`, `shipping_state`, `shipping_zip`, `shipping_country`, `longitude`, `latitude`, `default_language`, `default_currency`, `show_primary_contact`, `short_name`, `name_title`, `type_of_organization`, `mobilephone_number`, `birthday`, `id_card`, `bussiness_registration_number`, `legal_representative`, `email`, `source_approach`, `cooperative_day`, `client_type`, `address_room_number`, `address_building`, `address_area`, `address_town`, `address_ward`, `address_home_number`, `dkkd_city`, `dkkd_state`, `dkkd_ward`, `dkkd_area`, `dkkd_room_number`, `dkkd_building`, `dkkd_home_number`, `dkkd_street`, `dkkd_town`, `dkkd_address`, `dkkd_zip`, `dkkd_country`, `dkkd_client_address_town`, `billing_room_number`, `billing_building`, `billing_home_number`, `billing_town`, `billing_ward`, `billing_area`, `shipping_room_number`, `shipping_building`, `shipping_home_number`, `shipping_town`, `shipping_ward`, `shipping_area`, `user_referrer`, `fax`, `business`, `street`) VALUES
-(1, NULL, '', 'FOSO', '123456789', '0126479974', 243, 'TP.HCM', '', '', 'Cao thắng', '', '2017-03-30 14:30:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 1, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', ''),
-(2, NULL, '', 'Viettel', '123456789', '1216479974', 243, 'ee', '', '', 'adssadada', '', '2017-03-30 20:53:19', 1, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', ''),
-(3, NULL, '', 'Cty TNHH MTV Tân Phong', '12345678', '0974497157', 243, 'Bến Tre', '', '', 'Chợ Lách Bến Tre', '', '2017-05-26 16:38:24', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', ''),
-(4, NULL, '', 'Cty TNHH MTV A', NULL, '0869019421', 0, 'HCM', 'HCM', 'NCT', 'Q1', '', '2017-06-14 11:28:10', 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', ''),
-(5, NULL, '', 'Cty TNHH TT', '12345678', '0974497157', 0, 'HCM', '', 'HCM', 'HCM', '', '2017-06-27 16:51:00', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', ''),
-(9, NULL, 'Anh', 'CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM FOSO', '', '01216479974', 243, '64', '', '622', '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '', '2017-07-15 10:54:42', 1, 15, '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '64', '622', '7000000', 243, 'dsadasda', '79', '767', '', 243, NULL, NULL, '', 1, 0, 0, '', 'Doanh nghiệp tư nhân', '12312312,12312312123123,12312', '2017-08-08', '', '', '', '', 5, '0000-00-00', 2, '10', '2', '1', '4', '23557', '3', '64', '622', '', '', '1', '2', '3', '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '4', '', '7000000', '243', '', '10', '2', '3', '4', '23557', '1', '', '', '', '', '', '', 9, '', '', ''),
-(10, NULL, '', 'Nguyễn Hoàng Minh Thư', '', '0909876576', 243, '79', '', '777', '', '', '2017-07-29 12:27:29', 1, NULL, '', '', '', '', 243, '', '', '', '', 243, NULL, NULL, 'vietnamese', 3, 0, 0, '', '', '', '2017-07-29', '', '', '', 'nguyenthu@gmail.com', 2, '2017-07-29', 1, '', '', '1', '', '27445', '251', '', '', '', '1', '', '', '', '', '', '', '', '243', '', '', '', '', '', '', '1', '', '', '', '', '', '1', 0, '', '', '');
+INSERT INTO `tblclients` (`userid`, `code`, `title`, `company`, `vat`, `phonenumber`, `country`, `city`, `zip`, `state`, `address`, `website`, `datecreated`, `active`, `leadid`, `billing_street`, `billing_city`, `billing_state`, `billing_zip`, `billing_country`, `shipping_street`, `shipping_city`, `shipping_state`, `shipping_zip`, `shipping_country`, `longitude`, `latitude`, `default_language`, `default_currency`, `show_primary_contact`, `short_name`, `name_title`, `type_of_organization`, `mobilephone_number`, `birthday`, `id_card`, `bussiness_registration_number`, `legal_representative`, `email`, `source_approach`, `cooperative_day`, `client_type`, `address_room_number`, `address_building`, `address_area`, `address_town`, `address_ward`, `address_home_number`, `dkkd_city`, `dkkd_state`, `dkkd_ward`, `dkkd_area`, `dkkd_room_number`, `dkkd_building`, `dkkd_home_number`, `dkkd_street`, `dkkd_town`, `dkkd_address`, `dkkd_zip`, `dkkd_country`, `dkkd_client_address_town`, `billing_room_number`, `billing_building`, `billing_home_number`, `billing_town`, `billing_ward`, `billing_area`, `shipping_room_number`, `shipping_building`, `shipping_home_number`, `shipping_town`, `shipping_ward`, `shipping_area`, `user_referrer`, `fax`, `business`, `street`, `debt`, `discount_percent`) VALUES
+(1, 'KH-000001', '', 'FOSO', '123456789', '0126479974', 243, 'TP.HCM', '', '', 'Cao thắng', '', '2017-03-30 14:30:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 1, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', NULL, NULL),
+(2, 'KH-000002', '', 'Viettel', '123456789', '1216479974', 243, 'ee', '', '', 'adssadada', '', '2017-03-30 20:53:19', 1, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', NULL, NULL),
+(3, 'KH-000003', '', 'Cty TNHH MTV Tân Phong', '12345678', '0974497157', 243, 'Bến Tre', '', '', 'Chợ Lách Bến Tre', '', '2017-05-26 16:38:24', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', NULL, NULL),
+(4, 'KH-000004', '', 'Cty TNHH MTV A', NULL, '0869019421', 0, 'HCM', 'HCM', 'NCT', 'Q1', '', '2017-06-14 11:28:10', 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', NULL, NULL),
+(5, 'KH-000005', '', 'Cty TNHH TT', '12345678', '0974497157', 0, 'HCM', '', 'HCM', 'HCM', '', '2017-06-27 16:51:00', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '', NULL, NULL),
+(9, 'KH-000009', 'Anh', 'CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM FOSO', '', '01216479974', 243, '64', '', '622', '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '', '2017-07-15 10:54:42', 1, 15, '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '64', '622', '7000000', 243, 'dsadasda', '79', '767', '', 243, NULL, NULL, '', 1, 0, 0, '', 'Doanh nghiệp tư nhân', '12312312,12312312123123,12312', '2017-08-08', '', '', '', '', 5, '0000-00-00', 2, '10', '2', '1', '4', '23557', '3', '64', '622', '', '', '1', '2', '3', '68 Nguyễn Huệ, Phường Bến Nghé, Quận 1, TP.HCM', '4', '', '7000000', '243', '', '10', '2', '3', '4', '23557', '1', '', '', '', '', '', '', 9, '', '', '', NULL, NULL),
+(10, 'KH-000010', '', 'Nguyễn Hoàng Minh Thư', '', '0909876576', 243, '79', '', '777', '', '', '2017-07-29 12:27:29', 1, NULL, '', '', '', '', 243, '', '', '', '', 243, NULL, NULL, 'vietnamese', 3, 0, 0, '', '', '', '2017-07-29', '', '', '', 'nguyenthu@gmail.com', 2, '2017-07-29', 1, '', '', '1', '', '27445', '251', '', '', '', '1', '', '', '', '', '', '', '', '243', '', '', '', '', '', '', '1', '', '', '', '', '', '1', 0, '', '', '', NULL, NULL),
+(15, 'KH-0000015', 'Anh', 'An', '', '0909090909', 243, '79', NULL, '768', 'Nguyễn Văn Trỗi', '', '2017-09-22 15:37:05', 1, NULL, 'Nguyễn Văn Trỗi', '79', '768', '', 243, 'Nguyễn Văn Trỗi', '79', '768', '', 243, NULL, NULL, NULL, 0, 0, 0, '', '', '0909090909', '2017-09-22', '', '', '', '', 1, '2017-09-22', 1, '11', '11', '1', '', '27070', '11', '79', '768', '27070', '1', '11', '11', '11', 'Nguyễn Văn Trỗi', '', '', '', '243', '', '11', '11', '11', '', '27070', '1', '11', '11', '11', '', '27070', '1', 0, '', '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3347,6 +3490,7 @@ CREATE TABLE IF NOT EXISTS `tblcontacts` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `profile_image` varchar(300) DEFAULT NULL,
   `direction` varchar(3) DEFAULT NULL,
+  `last_active_time` int(11) NOT NULL,
   `address` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userid` (`userid`),
@@ -3357,12 +3501,12 @@ CREATE TABLE IF NOT EXISTS `tblcontacts` (
 -- Dumping data for table `tblcontacts`
 --
 
-INSERT INTO `tblcontacts` (`id`, `contact_title`, `userid`, `is_primary`, `firstname`, `lastname`, `email`, `phonenumber`, `title`, `datecreated`, `password`, `new_pass_key`, `new_pass_key_requested`, `last_ip`, `last_login`, `last_password_change`, `active`, `profile_image`, `direction`, `address`) VALUES
-(1, 'Anh', 2, 1, 'Khách', 'hàng 1', 'client@gmail.com', '01216479974', '', '2017-03-30 20:53:19', '$2a$08$ho9aMTdu36ETSzWVoKeZfOmX7y8iTa3fUHjir/LwQ/zsrWWJUYplS', NULL, NULL, '::1', '2017-06-29 13:53:14', NULL, 1, NULL, NULL, ''),
-(2, 'Anh', 1, 1, 'FO', 'SO', 'companyfoso@gmail.com', '01216479974', '', '2017-03-30 20:57:05', '$2a$08$HMHxLD0HtHJbz6kmzXU8COB5UpCSq0CI63PXtYRTDpWd.j2c94cIK', NULL, NULL, '::1', '2017-03-30 20:57:33', NULL, 1, NULL, 'ltr', ''),
-(3, 'Anh', 4, 1, 'Nguyen', 'Van A', 'nva@gmail.com', '0869019421', 'NV', '2017-06-14 11:28:10', '$2a$08$zq/Ehj42x5QGupL3gNevt.vrQIi9qIwRVYu0uMTxy0UkcCw5XejYS', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, ''),
-(4, 'Anh', 9, 1, 'Anh', 'nghĩa', 'amin@admin.com', '01216479974', '1123', '2017-07-15 10:54:42', '$2a$08$bEetdLR49ORcUaWiRW0YCuuemLIo61qyXGBDQr9DNdCyuVJGkU6RO', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, ''),
-(5, 'Anh', 10, 1, 'Nguyễn', 'Thư', 'nguyenthu@gmail.com', '092736374', '', '2017-07-29 12:28:12', '$2a$08$t1he4Zve8NSt9xTIsAoBv.tlWu0xfzmplpnUFoYRMipFUrmJtUONG', NULL, NULL, NULL, NULL, NULL, 1, NULL, '', '');
+INSERT INTO `tblcontacts` (`id`, `contact_title`, `userid`, `is_primary`, `firstname`, `lastname`, `email`, `phonenumber`, `title`, `datecreated`, `password`, `new_pass_key`, `new_pass_key_requested`, `last_ip`, `last_login`, `last_password_change`, `active`, `profile_image`, `direction`, `last_active_time`, `address`) VALUES
+(1, 'Anh', 2, 1, 'Khách', 'hàng 1', 'client@gmail.com', '01216479974', '', '2017-03-30 20:53:19', '$2a$08$ho9aMTdu36ETSzWVoKeZfOmX7y8iTa3fUHjir/LwQ/zsrWWJUYplS', NULL, NULL, '::1', '2017-06-29 13:53:14', NULL, 1, NULL, NULL, 0, ''),
+(2, 'Anh', 1, 1, 'FO', 'SO', 'companyfoso@gmail.com', '01216479974', '', '2017-03-30 20:57:05', '$2a$08$HMHxLD0HtHJbz6kmzXU8COB5UpCSq0CI63PXtYRTDpWd.j2c94cIK', NULL, NULL, '::1', '2017-03-30 20:57:33', NULL, 1, NULL, 'ltr', 0, ''),
+(3, 'Anh', 4, 1, 'Nguyen', 'Van A', 'nva@gmail.com', '0869019421', 'NV', '2017-06-14 11:28:10', '$2a$08$zq/Ehj42x5QGupL3gNevt.vrQIi9qIwRVYu0uMTxy0UkcCw5XejYS', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 0, ''),
+(4, 'Anh', 9, 1, 'Anh', 'nghĩa', 'amin@admin.com', '01216479974', '1123', '2017-07-15 10:54:42', '$2a$08$bEetdLR49ORcUaWiRW0YCuuemLIo61qyXGBDQr9DNdCyuVJGkU6RO', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, 0, ''),
+(5, 'Anh', 10, 1, 'Nguyễn', 'Thư', 'nguyenthu@gmail.com', '092736374', '', '2017-07-29 12:28:12', '$2a$08$t1he4Zve8NSt9xTIsAoBv.tlWu0xfzmplpnUFoYRMipFUrmJtUONG', NULL, NULL, NULL, NULL, NULL, 1, NULL, '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -3417,6 +3561,9 @@ CREATE TABLE IF NOT EXISTS `tblcontracts` (
   `dateadded` datetime NOT NULL,
   `isexpirynotified` int(11) NOT NULL DEFAULT '0',
   `contract_value` decimal(25,0) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
+  `discount` decimal(25,0) DEFAULT '0',
+  `adjustment` decimal(25,0) DEFAULT '0',
   `trash` tinyint(1) DEFAULT '0',
   `not_visible_to_client` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(4) DEFAULT '0',
@@ -3430,9 +3577,9 @@ CREATE TABLE IF NOT EXISTS `tblcontracts` (
 -- Dumping data for table `tblcontracts`
 --
 
-INSERT INTO `tblcontracts` (`id`, `prefix`, `code`, `rel_id`, `rel_code`, `rel`, `content`, `description`, `subject`, `client`, `datestart`, `dateend`, `contract_type`, `addedfrom`, `dateadded`, `isexpirynotified`, `contract_value`, `trash`, `not_visible_to_client`, `status`, `export_status`) VALUES
-(22, 'HĐ-', '00001', 45, 'QU-00001', NULL, '<p style="text-align: center;"><span style="font-size: 14pt;"><strong>HỢP ĐỒNG MUA B&Aacute;N THIẾT BỊ NH&Agrave; BẾP</strong></span></p><p style="text-align: center;">Số : {contract_code}</p><ul><li><em>Căn cứ Bộ luật d&acirc;n sự số 33/2005/QH11 ng&agrave;y 14/06/2005 của Quốc hội nước Cộng h&ograve;a x&atilde; hội chủ nghĩa Việt Nam.</em></li><li><em>Căn cứ Nghị định số 163/2006/NĐ-CP ng&agrave;y 29/12/2006 của Ch&iacute;nh phủ về giao dịch bảo đảm.</em></li></ul><p><strong><em>&nbsp;</em></strong></p><p style="text-align: right;"><strong><em>{invoice_company_city} ,{contract_date}</em></strong></p><p>&nbsp;</p><p><strong><u>B&Ecirc;N B&Aacute;N:</u></strong><strong> &nbsp;&nbsp;&nbsp; (B&Ecirc;N A)</strong></p><p>Đơn vị &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {invoice_company_name}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_vat}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_deputation}</p><p>Chức vụ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {company_contract_role}</p><p>Địa chỉ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_address}</p><p>Điện thoại &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_phonenumber}</p><p>T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {company_contract_bank_account}</p><p>&nbsp;</p><p><strong><u>B&Ecirc;N MUA:</u></strong> &nbsp;&nbsp; <strong>(B&Ecirc;N B)</strong></p><p>Đơn vị&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_company}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{client_vat_number}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{contact_firstname} {contact_lastname}</p><p>Chức vụ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;<span>{contact_position}</span></p><p>Địa chỉ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_address}</p><p>Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_phonenumber}</p><p>&nbsp;</p><p><em><strong>Hai b&ecirc;n thống nhất k&yacute; kết Hợp đồng với c&aacute;c điều khoản sau:</strong></em></p><ol style="list-style-type: upper-roman;"><li><strong>Nội dung giao dịch, mua b&aacute;n:</strong><p style="text-align: center;">{contract_item_list}</p><p><strong>Tổng gi&aacute; trị h&agrave;ng h&oacute;a: {contract_contract_value}&nbsp;đồng</strong></p><p>Số tiền thanh to&aacute;n: {contract_value_vat} ( đ&atilde; bao gồm VAT 10%). ( {contract_value_words}<em>&nbsp;đồng). </em></p></li><li><strong> </strong><strong>H&igrave;nh thức, thời hạn thanh to&aacute;n:</strong><ul style="list-style-type: disc;"><li><strong> </strong><strong>H&igrave;nh thức thanh to&aacute;n: Mọi khoản thanh to&aacute;n giữa B&ecirc;n A v&agrave; B&ecirc;n B đều được thực hiện bằng h&igrave;nh thức chuyển khoản qua t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A.</strong></li><li><strong> </strong><strong>Thời hạn thanh to&aacute;n: </strong></li><li><strong> </strong><strong>Lần 1: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip; đồng (<em>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. đồng</em>) v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trong v&ograve;ng 24 giờ sau khi hợp đồng được k&yacute; kết.</strong></li><li><strong> </strong><strong>Lần 2: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng <em>(&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng)</em> v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trước khi giao h&agrave;ng.</strong></li><li><strong> </strong><strong>Chất lượng v&agrave; suất xứ h&agrave;ng h&oacute;a:</strong></li><li><strong> </strong><strong>Chất lượng h&agrave;ng h&oacute;a B&ecirc;n A cung cấp l&agrave; h&agrave;ng mới 100%, đ&uacute;ng chủng loại, chất lượng ti&ecirc;u chuẩn của nh&agrave; sản xuất.</strong></li><li><strong> </strong><strong>Nguồn gốc xuất xứ h&agrave;ng h&oacute;a: Sản xuất v&agrave; lắp r&aacute;p tại &Yacute; ( Italy). </strong></li></ul></li><li><strong> </strong><strong>Phương thức giao nhận v&agrave; lắp đặt:</strong><ul style="list-style-type: disc;"><li>Địa chỉ giao h&agrave;ng: {client_address} Hồ Ch&iacute; Minh</li><li>B&ecirc;n A thực hiện thi c&ocirc;ng lắp đặt tất cả h&agrave;ng h&oacute;a cho b&ecirc;n B tại vị tr&iacute; sử dụng theo chỉ định của b&ecirc;n B.</li><li>Cung cấp miễn ph&iacute; tất cả vật tư phụ cần thiết cho việc lắp đặt. Thời gian giao h&agrave;ng v&agrave; lắp đặt theo y&ecirc;u cầu của b&ecirc;n B.</li></ul></li><li><strong> </strong><strong>Bảo h&agrave;nh v&agrave; dịch vụ:</strong><ul style="list-style-type: disc;"><li>B&ecirc;n A c&oacute; tr&aacute;ch nhiệm bảo h&agrave;nh to&agrave;n bộ h&agrave;ng h&oacute;a v&agrave; c&aacute;c c&ocirc;ng việc thực hiện trong thời gian 05 năm kể từ ng&agrave;y nghiệm thu b&agrave;n giao đưa v&agrave;o sử dụng.</li><li>B&ecirc;n A sẽ thực hiện việc chăm s&oacute;c sản phẩm định kỳ miễn ph&iacute; h&agrave;ng năm.</li><li>Kh&ocirc;ng bảo h&agrave;nh khi cố t&igrave;nh l&agrave;m hư hỏng v&agrave; c&aacute;c yếu tố kh&aacute;ch quan như b&atilde;o lũ, thi&ecirc;n tai&hellip;</li></ul></li><li><strong> </strong><strong>Điều khoản chung:</strong><ul style="list-style-type: disc;"><li>Hai b&ecirc;n cam kết thực hiện đ&uacute;ng c&aacute;c điều khoản đ&atilde; ghi trong hợp đồng.</li><li>Hợp đồng n&agrave;y được x&aacute;c lập bằng sự thỏa thuận ho&agrave;n to&agrave;n về c&aacute;c điều khoản tr&ecirc;n giữa hai b&ecirc;n. Tất cả mọi sự thay đổi, điều chỉnh hợp đồng phải được thống nhất bằng văn bản v&agrave; c&oacute; chữ k&yacute; x&aacute;c nhận của hai b&ecirc;n.</li><li>Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y k&yacute; v&agrave; được lập th&agrave;nh 02 bản, mỗi b&ecirc;n giữ 01 bản c&oacute; gi&aacute; trị ph&aacute;p l&yacute; như nhau.</li></ul></li></ol><table width="100%" class="table" height="80" style="height: 80px; margin-left: auto; margin-right: auto;"><tbody><tr><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N A</strong></p></td><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N B</strong></p></td></tr><tr><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td><p style="text-align: center;"><strong></strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td></td></tr></tbody></table><p>&nbsp;</p><p>&nbsp;</p>', '', 'Hợp đồng bán hàng - CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM FOSO', 9, '2017-09-06', NULL, 2, 1, '2017-09-06 15:48:21', 0, '14406850000', 0, 0, 0, 1),
-(23, 'HĐ-', '000023', 46, 'QU-000046', NULL, '<p style="text-align: center;"><span style="font-size: 14pt;"><strong>HỢP ĐỒNG MUA B&Aacute;N THIẾT BỊ NH&Agrave; BẾP</strong></span></p><p style="text-align: center;">Số : {contract_code}</p><ul><li><em>Căn cứ Bộ luật d&acirc;n sự số 33/2005/QH11 ng&agrave;y 14/06/2005 của Quốc hội nước Cộng h&ograve;a x&atilde; hội chủ nghĩa Việt Nam.</em></li><li><em>Căn cứ Nghị định số 163/2006/NĐ-CP ng&agrave;y 29/12/2006 của Ch&iacute;nh phủ về giao dịch bảo đảm.</em></li></ul><p><strong><em>&nbsp;</em></strong></p><p style="text-align: right;"><strong><em>{invoice_company_city} ,{contract_date}</em></strong></p><p>&nbsp;</p><p><strong><u>B&Ecirc;N B&Aacute;N:</u></strong><strong> &nbsp;&nbsp;&nbsp; (B&Ecirc;N A)</strong></p><p>Đơn vị &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {invoice_company_name}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_vat}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_deputation}</p><p>Chức vụ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {company_contract_role}</p><p>Địa chỉ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_address}</p><p>Điện thoại &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_phonenumber}</p><p>T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {company_contract_bank_account}</p><p>&nbsp;</p><p><strong><u>B&Ecirc;N MUA:</u></strong> &nbsp;&nbsp; <strong>(B&Ecirc;N B)</strong></p><p>Đơn vị&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_company}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{client_vat_number}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{contact_firstname} {contact_lastname}</p><p>Chức vụ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;<span>{contact_position}</span></p><p>Địa chỉ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_address}</p><p>Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_phonenumber}</p><p>&nbsp;</p><p><em><strong>Hai b&ecirc;n thống nhất k&yacute; kết Hợp đồng với c&aacute;c điều khoản sau:</strong></em></p><ol style="list-style-type: upper-roman;"><li><strong>Nội dung giao dịch, mua b&aacute;n:</strong><p style="text-align: center;">{contract_item_list}</p><p><strong>Tổng gi&aacute; trị h&agrave;ng h&oacute;a: {contract_contract_value}&nbsp;đồng</strong></p><p>Số tiền thanh to&aacute;n: {contract_value_vat} ( đ&atilde; bao gồm VAT 10%). ( {contract_value_words}<em>&nbsp;đồng). </em></p></li><li><strong> </strong><strong>H&igrave;nh thức, thời hạn thanh to&aacute;n:</strong><ul style="list-style-type: disc;"><li><strong> </strong><strong>H&igrave;nh thức thanh to&aacute;n: Mọi khoản thanh to&aacute;n giữa B&ecirc;n A v&agrave; B&ecirc;n B đều được thực hiện bằng h&igrave;nh thức chuyển khoản qua t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A.</strong></li><li><strong> </strong><strong>Thời hạn thanh to&aacute;n: </strong></li><li><strong> </strong><strong>Lần 1: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip; đồng (<em>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. đồng</em>) v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trong v&ograve;ng 24 giờ sau khi hợp đồng được k&yacute; kết.</strong></li><li><strong> </strong><strong>Lần 2: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng <em>(&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng)</em> v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trước khi giao h&agrave;ng.</strong></li><li><strong> </strong><strong>Chất lượng v&agrave; suất xứ h&agrave;ng h&oacute;a:</strong></li><li><strong> </strong><strong>Chất lượng h&agrave;ng h&oacute;a B&ecirc;n A cung cấp l&agrave; h&agrave;ng mới 100%, đ&uacute;ng chủng loại, chất lượng ti&ecirc;u chuẩn của nh&agrave; sản xuất.</strong></li><li><strong> </strong><strong>Nguồn gốc xuất xứ h&agrave;ng h&oacute;a: Sản xuất v&agrave; lắp r&aacute;p tại &Yacute; ( Italy). </strong></li></ul></li><li><strong> </strong><strong>Phương thức giao nhận v&agrave; lắp đặt:</strong><ul style="list-style-type: disc;"><li>Địa chỉ giao h&agrave;ng: {client_address} Hồ Ch&iacute; Minh</li><li>B&ecirc;n A thực hiện thi c&ocirc;ng lắp đặt tất cả h&agrave;ng h&oacute;a cho b&ecirc;n B tại vị tr&iacute; sử dụng theo chỉ định của b&ecirc;n B.</li><li>Cung cấp miễn ph&iacute; tất cả vật tư phụ cần thiết cho việc lắp đặt. Thời gian giao h&agrave;ng v&agrave; lắp đặt theo y&ecirc;u cầu của b&ecirc;n B.</li></ul></li><li><strong> </strong><strong>Bảo h&agrave;nh v&agrave; dịch vụ:</strong><ul style="list-style-type: disc;"><li>B&ecirc;n A c&oacute; tr&aacute;ch nhiệm bảo h&agrave;nh to&agrave;n bộ h&agrave;ng h&oacute;a v&agrave; c&aacute;c c&ocirc;ng việc thực hiện trong thời gian 05 năm kể từ ng&agrave;y nghiệm thu b&agrave;n giao đưa v&agrave;o sử dụng.</li><li>B&ecirc;n A sẽ thực hiện việc chăm s&oacute;c sản phẩm định kỳ miễn ph&iacute; h&agrave;ng năm.</li><li>Kh&ocirc;ng bảo h&agrave;nh khi cố t&igrave;nh l&agrave;m hư hỏng v&agrave; c&aacute;c yếu tố kh&aacute;ch quan như b&atilde;o lũ, thi&ecirc;n tai&hellip;</li></ul></li><li><strong> </strong><strong>Điều khoản chung:</strong><ul style="list-style-type: disc;"><li>Hai b&ecirc;n cam kết thực hiện đ&uacute;ng c&aacute;c điều khoản đ&atilde; ghi trong hợp đồng.</li><li>Hợp đồng n&agrave;y được x&aacute;c lập bằng sự thỏa thuận ho&agrave;n to&agrave;n về c&aacute;c điều khoản tr&ecirc;n giữa hai b&ecirc;n. Tất cả mọi sự thay đổi, điều chỉnh hợp đồng phải được thống nhất bằng văn bản v&agrave; c&oacute; chữ k&yacute; x&aacute;c nhận của hai b&ecirc;n.</li><li>Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y k&yacute; v&agrave; được lập th&agrave;nh 02 bản, mỗi b&ecirc;n giữ 01 bản c&oacute; gi&aacute; trị ph&aacute;p l&yacute; như nhau.</li></ul></li></ol><table width="100%" class="table" height="80" style="height: 80px; margin-left: auto; margin-right: auto;"><tbody><tr><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N A</strong></p></td><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N B</strong></p></td></tr><tr><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td><p style="text-align: center;"><strong></strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td></td></tr></tbody></table><p>&nbsp;</p><p>&nbsp;</p>', '', 'Hợp đồng bán hàng - Cty TNHH MTV Tân Phong', 3, '2017-09-19', '2017-09-30', 2, 1, '2017-09-19 09:41:42', 0, '308385000', 0, 0, 0, 1);
+INSERT INTO `tblcontracts` (`id`, `prefix`, `code`, `rel_id`, `rel_code`, `rel`, `content`, `description`, `subject`, `client`, `datestart`, `dateend`, `contract_type`, `addedfrom`, `dateadded`, `isexpirynotified`, `contract_value`, `discount_percent`, `discount`, `adjustment`, `trash`, `not_visible_to_client`, `status`, `export_status`) VALUES
+(22, 'HĐ-', '00001', 45, 'QU-00001', NULL, '<p style="text-align: center;"><span style="font-size: 14pt;"><strong>HỢP ĐỒNG MUA B&Aacute;N THIẾT BỊ NH&Agrave; BẾP</strong></span></p><p style="text-align: center;">Số : {contract_code}</p><ul><li><em>Căn cứ Bộ luật d&acirc;n sự số 33/2005/QH11 ng&agrave;y 14/06/2005 của Quốc hội nước Cộng h&ograve;a x&atilde; hội chủ nghĩa Việt Nam.</em></li><li><em>Căn cứ Nghị định số 163/2006/NĐ-CP ng&agrave;y 29/12/2006 của Ch&iacute;nh phủ về giao dịch bảo đảm.</em></li></ul><p><strong><em>&nbsp;</em></strong></p><p style="text-align: right;"><strong><em>{invoice_company_city} ,{contract_date}</em></strong></p><p>&nbsp;</p><p><strong><u>B&Ecirc;N B&Aacute;N:</u></strong><strong> &nbsp;&nbsp;&nbsp; (B&Ecirc;N A)</strong></p><p>Đơn vị &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {invoice_company_name}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_vat}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_deputation}</p><p>Chức vụ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {company_contract_role}</p><p>Địa chỉ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_address}</p><p>Điện thoại &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_phonenumber}</p><p>T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {company_contract_bank_account}</p><p>&nbsp;</p><p><strong><u>B&Ecirc;N MUA:</u></strong> &nbsp;&nbsp; <strong>(B&Ecirc;N B)</strong></p><p>Đơn vị&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_company}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{client_vat_number}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{contact_firstname} {contact_lastname}</p><p>Chức vụ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;<span>{contact_position}</span></p><p>Địa chỉ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_address}</p><p>Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_phonenumber}</p><p>&nbsp;</p><p><em><strong>Hai b&ecirc;n thống nhất k&yacute; kết Hợp đồng với c&aacute;c điều khoản sau:</strong></em></p><ol style="list-style-type: upper-roman;"><li><strong>Nội dung giao dịch, mua b&aacute;n:</strong><p style="text-align: center;">{contract_item_list}</p><p><strong>Tổng gi&aacute; trị h&agrave;ng h&oacute;a: {contract_contract_value}&nbsp;đồng</strong></p><p>Số tiền thanh to&aacute;n: {contract_value_vat} ( đ&atilde; bao gồm VAT 10%). ( {contract_value_words}<em>&nbsp;đồng). </em></p></li><li><strong> </strong><strong>H&igrave;nh thức, thời hạn thanh to&aacute;n:</strong><ul style="list-style-type: disc;"><li><strong> </strong><strong>H&igrave;nh thức thanh to&aacute;n: Mọi khoản thanh to&aacute;n giữa B&ecirc;n A v&agrave; B&ecirc;n B đều được thực hiện bằng h&igrave;nh thức chuyển khoản qua t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A.</strong></li><li><strong> </strong><strong>Thời hạn thanh to&aacute;n: </strong></li><li><strong> </strong><strong>Lần 1: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip; đồng (<em>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. đồng</em>) v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trong v&ograve;ng 24 giờ sau khi hợp đồng được k&yacute; kết.</strong></li><li><strong> </strong><strong>Lần 2: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng <em>(&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng)</em> v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trước khi giao h&agrave;ng.</strong></li><li><strong> </strong><strong>Chất lượng v&agrave; suất xứ h&agrave;ng h&oacute;a:</strong></li><li><strong> </strong><strong>Chất lượng h&agrave;ng h&oacute;a B&ecirc;n A cung cấp l&agrave; h&agrave;ng mới 100%, đ&uacute;ng chủng loại, chất lượng ti&ecirc;u chuẩn của nh&agrave; sản xuất.</strong></li><li><strong> </strong><strong>Nguồn gốc xuất xứ h&agrave;ng h&oacute;a: Sản xuất v&agrave; lắp r&aacute;p tại &Yacute; ( Italy). </strong></li></ul></li><li><strong> </strong><strong>Phương thức giao nhận v&agrave; lắp đặt:</strong><ul style="list-style-type: disc;"><li>Địa chỉ giao h&agrave;ng: {client_address} Hồ Ch&iacute; Minh</li><li>B&ecirc;n A thực hiện thi c&ocirc;ng lắp đặt tất cả h&agrave;ng h&oacute;a cho b&ecirc;n B tại vị tr&iacute; sử dụng theo chỉ định của b&ecirc;n B.</li><li>Cung cấp miễn ph&iacute; tất cả vật tư phụ cần thiết cho việc lắp đặt. Thời gian giao h&agrave;ng v&agrave; lắp đặt theo y&ecirc;u cầu của b&ecirc;n B.</li></ul></li><li><strong> </strong><strong>Bảo h&agrave;nh v&agrave; dịch vụ:</strong><ul style="list-style-type: disc;"><li>B&ecirc;n A c&oacute; tr&aacute;ch nhiệm bảo h&agrave;nh to&agrave;n bộ h&agrave;ng h&oacute;a v&agrave; c&aacute;c c&ocirc;ng việc thực hiện trong thời gian 05 năm kể từ ng&agrave;y nghiệm thu b&agrave;n giao đưa v&agrave;o sử dụng.</li><li>B&ecirc;n A sẽ thực hiện việc chăm s&oacute;c sản phẩm định kỳ miễn ph&iacute; h&agrave;ng năm.</li><li>Kh&ocirc;ng bảo h&agrave;nh khi cố t&igrave;nh l&agrave;m hư hỏng v&agrave; c&aacute;c yếu tố kh&aacute;ch quan như b&atilde;o lũ, thi&ecirc;n tai&hellip;</li></ul></li><li><strong> </strong><strong>Điều khoản chung:</strong><ul style="list-style-type: disc;"><li>Hai b&ecirc;n cam kết thực hiện đ&uacute;ng c&aacute;c điều khoản đ&atilde; ghi trong hợp đồng.</li><li>Hợp đồng n&agrave;y được x&aacute;c lập bằng sự thỏa thuận ho&agrave;n to&agrave;n về c&aacute;c điều khoản tr&ecirc;n giữa hai b&ecirc;n. Tất cả mọi sự thay đổi, điều chỉnh hợp đồng phải được thống nhất bằng văn bản v&agrave; c&oacute; chữ k&yacute; x&aacute;c nhận của hai b&ecirc;n.</li><li>Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y k&yacute; v&agrave; được lập th&agrave;nh 02 bản, mỗi b&ecirc;n giữ 01 bản c&oacute; gi&aacute; trị ph&aacute;p l&yacute; như nhau.</li></ul></li></ol><table width="100%" class="table" height="80" style="height: 80px; margin-left: auto; margin-right: auto;"><tbody><tr><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N A</strong></p></td><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N B</strong></p></td></tr><tr><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td><p style="text-align: center;"><strong></strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td></td></tr></tbody></table><p>&nbsp;</p><p>&nbsp;</p>', '', 'Hợp đồng bán hàng - CÔNG TY TNHH GIẢI PHÁP PHẦN MỀM FOSO', 9, '2017-09-06', NULL, 2, 1, '2017-09-06 15:48:21', 0, '14406850000', '0.00', '0', '0', 0, 0, 0, 1),
+(23, 'HĐ-', '000023', 46, 'QU-000046', NULL, '<p style="text-align: center;"><span style="font-size: 14pt;"><strong>HỢP ĐỒNG MUA B&Aacute;N THIẾT BỊ NH&Agrave; BẾP</strong></span></p><p style="text-align: center;">Số : {contract_code}</p><ul><li><em>Căn cứ Bộ luật d&acirc;n sự số 33/2005/QH11 ng&agrave;y 14/06/2005 của Quốc hội nước Cộng h&ograve;a x&atilde; hội chủ nghĩa Việt Nam.</em></li><li><em>Căn cứ Nghị định số 163/2006/NĐ-CP ng&agrave;y 29/12/2006 của Ch&iacute;nh phủ về giao dịch bảo đảm.</em></li></ul><p><strong><em>&nbsp;</em></strong></p><p style="text-align: right;"><strong><em>{invoice_company_city} ,{contract_date}</em></strong></p><p>&nbsp;</p><p><strong><u>B&Ecirc;N B&Aacute;N:</u></strong><strong> &nbsp;&nbsp;&nbsp; (B&Ecirc;N A)</strong></p><p>Đơn vị &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {invoice_company_name}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_vat}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_deputation}</p><p>Chức vụ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {company_contract_role}</p><p>Địa chỉ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_address}</p><p>Điện thoại &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_phonenumber}</p><p>T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {company_contract_bank_account}</p><p>&nbsp;</p><p><strong><u>B&Ecirc;N MUA:</u></strong> &nbsp;&nbsp; <strong>(B&Ecirc;N B)</strong></p><p>Đơn vị&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_company}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{client_vat_number}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{contact_firstname} {contact_lastname}</p><p>Chức vụ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;<span>{contact_position}</span></p><p>Địa chỉ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_address}</p><p>Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_phonenumber}</p><p>&nbsp;</p><p><em><strong>Hai b&ecirc;n thống nhất k&yacute; kết Hợp đồng với c&aacute;c điều khoản sau:</strong></em></p><ol style="list-style-type: upper-roman;"><li><strong>Nội dung giao dịch, mua b&aacute;n:</strong><p style="text-align: center;">{contract_item_list}</p><p><strong>Tổng gi&aacute; trị h&agrave;ng h&oacute;a: {contract_contract_value}&nbsp;đồng</strong></p><p>Số tiền thanh to&aacute;n: {contract_value_vat} ( đ&atilde; bao gồm VAT 10%). ( {contract_value_words}<em>&nbsp;đồng). </em></p></li><li><strong> </strong><strong>H&igrave;nh thức, thời hạn thanh to&aacute;n:</strong><ul style="list-style-type: disc;"><li><strong> </strong><strong>H&igrave;nh thức thanh to&aacute;n: Mọi khoản thanh to&aacute;n giữa B&ecirc;n A v&agrave; B&ecirc;n B đều được thực hiện bằng h&igrave;nh thức chuyển khoản qua t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A.</strong></li><li><strong> </strong><strong>Thời hạn thanh to&aacute;n: </strong></li><li><strong> </strong><strong>Lần 1: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip; đồng (<em>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. đồng</em>) v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trong v&ograve;ng 24 giờ sau khi hợp đồng được k&yacute; kết.</strong></li><li><strong> </strong><strong>Lần 2: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng <em>(&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng)</em> v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trước khi giao h&agrave;ng.</strong></li><li><strong> </strong><strong>Chất lượng v&agrave; suất xứ h&agrave;ng h&oacute;a:</strong></li><li><strong> </strong><strong>Chất lượng h&agrave;ng h&oacute;a B&ecirc;n A cung cấp l&agrave; h&agrave;ng mới 100%, đ&uacute;ng chủng loại, chất lượng ti&ecirc;u chuẩn của nh&agrave; sản xuất.</strong></li><li><strong> </strong><strong>Nguồn gốc xuất xứ h&agrave;ng h&oacute;a: Sản xuất v&agrave; lắp r&aacute;p tại &Yacute; ( Italy). </strong></li></ul></li><li><strong> </strong><strong>Phương thức giao nhận v&agrave; lắp đặt:</strong><ul style="list-style-type: disc;"><li>Địa chỉ giao h&agrave;ng: {client_address} Hồ Ch&iacute; Minh</li><li>B&ecirc;n A thực hiện thi c&ocirc;ng lắp đặt tất cả h&agrave;ng h&oacute;a cho b&ecirc;n B tại vị tr&iacute; sử dụng theo chỉ định của b&ecirc;n B.</li><li>Cung cấp miễn ph&iacute; tất cả vật tư phụ cần thiết cho việc lắp đặt. Thời gian giao h&agrave;ng v&agrave; lắp đặt theo y&ecirc;u cầu của b&ecirc;n B.</li></ul></li><li><strong> </strong><strong>Bảo h&agrave;nh v&agrave; dịch vụ:</strong><ul style="list-style-type: disc;"><li>B&ecirc;n A c&oacute; tr&aacute;ch nhiệm bảo h&agrave;nh to&agrave;n bộ h&agrave;ng h&oacute;a v&agrave; c&aacute;c c&ocirc;ng việc thực hiện trong thời gian 05 năm kể từ ng&agrave;y nghiệm thu b&agrave;n giao đưa v&agrave;o sử dụng.</li><li>B&ecirc;n A sẽ thực hiện việc chăm s&oacute;c sản phẩm định kỳ miễn ph&iacute; h&agrave;ng năm.</li><li>Kh&ocirc;ng bảo h&agrave;nh khi cố t&igrave;nh l&agrave;m hư hỏng v&agrave; c&aacute;c yếu tố kh&aacute;ch quan như b&atilde;o lũ, thi&ecirc;n tai&hellip;</li></ul></li><li><strong> </strong><strong>Điều khoản chung:</strong><ul style="list-style-type: disc;"><li>Hai b&ecirc;n cam kết thực hiện đ&uacute;ng c&aacute;c điều khoản đ&atilde; ghi trong hợp đồng.</li><li>Hợp đồng n&agrave;y được x&aacute;c lập bằng sự thỏa thuận ho&agrave;n to&agrave;n về c&aacute;c điều khoản tr&ecirc;n giữa hai b&ecirc;n. Tất cả mọi sự thay đổi, điều chỉnh hợp đồng phải được thống nhất bằng văn bản v&agrave; c&oacute; chữ k&yacute; x&aacute;c nhận của hai b&ecirc;n.</li><li>Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y k&yacute; v&agrave; được lập th&agrave;nh 02 bản, mỗi b&ecirc;n giữ 01 bản c&oacute; gi&aacute; trị ph&aacute;p l&yacute; như nhau.</li></ul></li></ol><table width="100%" class="table" height="80" style="height: 80px; margin-left: auto; margin-right: auto;"><tbody><tr><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N A</strong></p></td><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N B</strong></p></td></tr><tr><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td><p style="text-align: center;"><strong></strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td></td></tr></tbody></table><p>&nbsp;</p><p>&nbsp;</p>', '', 'Hợp đồng bán hàng - Cty TNHH MTV Tân Phong', 3, '2017-09-19', '2017-09-30', 2, 1, '2017-09-19 09:41:42', 0, '308385000', '0.00', '0', '0', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -3469,8 +3616,9 @@ CREATE TABLE IF NOT EXISTS `tblcontract_items` (
   `quantity` int(11) DEFAULT NULL,
   `tax_id` tinyint(4) DEFAULT NULL,
   `tax_rate` decimal(15,0) DEFAULT NULL,
-  `tax` decimal(15,0) DEFAULT '0',
-  `discount` decimal(15,0) DEFAULT '0',
+  `tax` decimal(25,0) DEFAULT '0',
+  `discount` decimal(25,2) DEFAULT '0.00',
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   `unit_cost` decimal(15,0) DEFAULT NULL,
   `sub_total` decimal(15,0) DEFAULT NULL,
   `amount` decimal(25,0) DEFAULT NULL,
@@ -3482,11 +3630,11 @@ CREATE TABLE IF NOT EXISTS `tblcontract_items` (
 -- Dumping data for table `tblcontract_items`
 --
 
-INSERT INTO `tblcontract_items` (`id`, `contract_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `tax_id`, `tax_rate`, `tax`, `discount`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`) VALUES
-(61, 22, 55, NULL, 4, 100, 1, '5', '287500000', '0', '57500000', '5750000000', '6037500000', 1),
-(62, 22, 57, NULL, 4, 100, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1),
-(63, 22, 56, NULL, 4, 100, 3, '10', '480500000', '0', '48050000', '4805000000', '5285500000', 1),
-(64, 23, 57, NULL, 4, 10, 1, '5', '14685000', '0', '29370000', '293700000', '308385000', 1);
+INSERT INTO `tblcontract_items` (`id`, `contract_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `tax_id`, `tax_rate`, `tax`, `discount`, `discount_percent`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`) VALUES
+(61, 22, 55, NULL, 4, 100, 1, '5', '287500000', '0.00', '0.00', '57500000', '5750000000', '6037500000', 1),
+(62, 22, 57, NULL, 4, 100, 1, '5', '146850000', '0.00', '0.00', '29370000', '2937000000', '3083850000', 1),
+(63, 22, 56, NULL, 4, 100, 3, '10', '480500000', '0.00', '0.00', '48050000', '4805000000', '5285500000', 1),
+(64, 23, 57, NULL, 4, 10, 1, '5', '14685000', '0.00', '0.00', '29370000', '293700000', '308385000', 1);
 
 -- --------------------------------------------------------
 
@@ -3511,6 +3659,377 @@ CREATE TABLE IF NOT EXISTS `tblcontract_templates` (
 INSERT INTO `tblcontract_templates` (`id`, `name`, `content`, `type`, `create_by`, `date`) VALUES
 (1, 'Hợp đồng bán hàng', '<p style="text-align: center;"><span style="font-size: 14pt;"><strong>HỢP ĐỒNG MUA B&Aacute;N THIẾT BỊ NH&Agrave; BẾP</strong></span></p><p style="text-align: center;">Số : {contract_code}</p><ul><li><em>Căn cứ Bộ luật d&acirc;n sự số 33/2005/QH11 ng&agrave;y 14/06/2005 của Quốc hội nước Cộng h&ograve;a x&atilde; hội chủ nghĩa Việt Nam.</em></li><li><em>Căn cứ Nghị định số 163/2006/NĐ-CP ng&agrave;y 29/12/2006 của Ch&iacute;nh phủ về giao dịch bảo đảm.</em></li></ul><p><strong><em>&nbsp;</em></strong></p><p style="text-align: right;"><strong><em>{invoice_company_city} ,{contract_date}</em></strong></p><p>&nbsp;</p><p><strong><u>B&Ecirc;N B&Aacute;N:</u></strong><strong> &nbsp;&nbsp;&nbsp; (B&Ecirc;N A)</strong></p><p>Đơn vị &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {invoice_company_name}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_vat}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {company_deputation}</p><p>Chức vụ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: {company_contract_role}</p><p>Địa chỉ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_address}</p><p>Điện thoại &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : {invoice_company_phonenumber}</p><p>T&agrave;i khoản&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {company_contract_bank_account}</p><p>&nbsp;</p><p><strong><u>B&Ecirc;N MUA:</u></strong> &nbsp;&nbsp; <strong>(B&Ecirc;N B)</strong></p><p>Đơn vị&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_company}</p><p>M&atilde; số thuế &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{client_vat_number}</p><p>Người đại diện &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; :&nbsp;{contact_firstname} {contact_lastname}</p><p>Chức vụ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;<span>{contact_position}</span></p><p>Địa chỉ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_address}</p><p>Điện thoại&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;{client_phonenumber}</p><p>&nbsp;</p><p><em><strong>Hai b&ecirc;n thống nhất k&yacute; kết Hợp đồng với c&aacute;c điều khoản sau:</strong></em></p><ol style="list-style-type: upper-roman;"><li><strong>Nội dung giao dịch, mua b&aacute;n:</strong><p style="text-align: center;">{contract_item_list}</p><p><strong>Tổng gi&aacute; trị h&agrave;ng h&oacute;a: {contract_contract_value}&nbsp;đồng</strong></p><p>Số tiền thanh to&aacute;n: {contract_value_vat} ( đ&atilde; bao gồm VAT 10%). ( {contract_value_words}<em>&nbsp;đồng). </em></p></li><li><strong> </strong><strong>H&igrave;nh thức, thời hạn thanh to&aacute;n:</strong><ul style="list-style-type: disc;"><li><strong> </strong><strong>H&igrave;nh thức thanh to&aacute;n: Mọi khoản thanh to&aacute;n giữa B&ecirc;n A v&agrave; B&ecirc;n B đều được thực hiện bằng h&igrave;nh thức chuyển khoản qua t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A.</strong></li><li><strong> </strong><strong>Thời hạn thanh to&aacute;n: </strong></li><li><strong> </strong><strong>Lần 1: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip; đồng (<em>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. đồng</em>) v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trong v&ograve;ng 24 giờ sau khi hợp đồng được k&yacute; kết.</strong></li><li><strong> </strong><strong>Lần 2: B&ecirc;n B thanh to&aacute;n số tiền &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng <em>(&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. đồng)</em> v&agrave;o t&agrave;i khoản ng&acirc;n h&agrave;ng của B&ecirc;n A trước khi giao h&agrave;ng.</strong></li><li><strong> </strong><strong>Chất lượng v&agrave; suất xứ h&agrave;ng h&oacute;a:</strong></li><li><strong> </strong><strong>Chất lượng h&agrave;ng h&oacute;a B&ecirc;n A cung cấp l&agrave; h&agrave;ng mới 100%, đ&uacute;ng chủng loại, chất lượng ti&ecirc;u chuẩn của nh&agrave; sản xuất.</strong></li><li><strong> </strong><strong>Nguồn gốc xuất xứ h&agrave;ng h&oacute;a: Sản xuất v&agrave; lắp r&aacute;p tại &Yacute; ( Italy). </strong></li></ul></li><li><strong> </strong><strong>Phương thức giao nhận v&agrave; lắp đặt:</strong><ul style="list-style-type: disc;"><li>Địa chỉ giao h&agrave;ng: {client_address} Hồ Ch&iacute; Minh</li><li>B&ecirc;n A thực hiện thi c&ocirc;ng lắp đặt tất cả h&agrave;ng h&oacute;a cho b&ecirc;n B tại vị tr&iacute; sử dụng theo chỉ định của b&ecirc;n B.</li><li>Cung cấp miễn ph&iacute; tất cả vật tư phụ cần thiết cho việc lắp đặt. Thời gian giao h&agrave;ng v&agrave; lắp đặt theo y&ecirc;u cầu của b&ecirc;n B.</li></ul></li><li><strong> </strong><strong>Bảo h&agrave;nh v&agrave; dịch vụ:</strong><ul style="list-style-type: disc;"><li>B&ecirc;n A c&oacute; tr&aacute;ch nhiệm bảo h&agrave;nh to&agrave;n bộ h&agrave;ng h&oacute;a v&agrave; c&aacute;c c&ocirc;ng việc thực hiện trong thời gian 05 năm kể từ ng&agrave;y nghiệm thu b&agrave;n giao đưa v&agrave;o sử dụng.</li><li>B&ecirc;n A sẽ thực hiện việc chăm s&oacute;c sản phẩm định kỳ miễn ph&iacute; h&agrave;ng năm.</li><li>Kh&ocirc;ng bảo h&agrave;nh khi cố t&igrave;nh l&agrave;m hư hỏng v&agrave; c&aacute;c yếu tố kh&aacute;ch quan như b&atilde;o lũ, thi&ecirc;n tai&hellip;</li></ul></li><li><strong> </strong><strong>Điều khoản chung:</strong><ul style="list-style-type: disc;"><li>Hai b&ecirc;n cam kết thực hiện đ&uacute;ng c&aacute;c điều khoản đ&atilde; ghi trong hợp đồng.</li><li>Hợp đồng n&agrave;y được x&aacute;c lập bằng sự thỏa thuận ho&agrave;n to&agrave;n về c&aacute;c điều khoản tr&ecirc;n giữa hai b&ecirc;n. Tất cả mọi sự thay đổi, điều chỉnh hợp đồng phải được thống nhất bằng văn bản v&agrave; c&oacute; chữ k&yacute; x&aacute;c nhận của hai b&ecirc;n.</li><li>Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y k&yacute; v&agrave; được lập th&agrave;nh 02 bản, mỗi b&ecirc;n giữ 01 bản c&oacute; gi&aacute; trị ph&aacute;p l&yacute; như nhau.</li></ul></li></ol><table width="100%" class="table" height="80" style="height: 80px; margin-left: auto; margin-right: auto;"><tbody><tr><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N A</strong></p></td><td><p style="text-align: center;"><strong>ĐẠI DIỆN B&Ecirc;N B</strong></p></td></tr><tr><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td><td><p style="text-align: center;"><strong>&nbsp;</strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td><p style="text-align: center;"><strong></strong></p></td></tr><tr><td><p style="text-align: center;"></p></td><td></td></tr></tbody></table><p>&nbsp;</p><p>&nbsp;</p>', 1, 1, '2017-08-15 04:36:28'),
 (2, 'Hợp đồng mua hàng', '<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 18pt;"><strong>{companyname}</strong></span></td>\r\n<td style="width: 50%; text-align: right;"><span style="font-family: arial, helvetica, sans-serif; font-size: 24pt;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="color: #800000;"><span style="color: #800000;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #ff0000;"><strong>PRO FORMA INVOICE</strong></span></span></span></span></span></span></span></span></span></span></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%; vertical-align: top;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_address}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_city}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Phone: {invoice_company_phonenumber}</span><br /><br /></td>\r\n<td style="width: 50%; text-align: right;">\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Expiration Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Invoice #</strong></span></td>\r\n<td style="width: 50%; text-align: center;">{contract_id}</td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Customer ID</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%; border-spacing: 10px 0;">\r\n<tbody>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px; background-color: #800000;"><span color="#ffffff" face="trebuchet ms, geneva, sans-serif" style="color: #ffffff; font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 16px;"><b>SUPPLIER</b></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIP TO</span></strong></span></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIPPING DETAILS</span></strong></span></span></span></span></td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;"></td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_name}</td>\r\n<td style="height: 12px; width: 33.33%;">Freight Type</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_name}</td>\r\n<td style="height: 12px; width: 33.33%;">{companyname}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Ship Date</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_address}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_address}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Gross Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_city}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_city}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Cubic Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_phone}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_phonenumber}</td>\r\n<td style="height: 12px; width: 33.33%;">Total Packages</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 14pt;"><strong><br /></strong></span>{contract_item_list}<br /><br /></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 100%; background-color: #800000;"><span style="font-size: 12pt;"><strong><span style="font-family: arial, helvetica, sans-serif; color: #ffffff;"><span style="font-family: arial, helvetica, sans-serif;">TERMS OF SALE AND OTHER COMMENTS</span></span></strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 100%;">{terms_of_sale}<br /><br />{terms_of_payment}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"></span><br /><br /></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td colspan="2" style="background-color: #800000;"><span style="color: #ffffff; font-family: arial, helvetica, sans-serif; font-size: 12pt;"><strong>ADDITIONAL DETAILS</strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Country of Origin</span></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Embarkation</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Discharge</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Reason for Export:</td>\r\n<td style="width: 70%; border: 1px solid #000000; border-color: #000000;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br />I certify the above to be true and correct to the best of my knowledge.<br /><br /></p>\r\n<table width="100%">\r\n<tbody>\r\n<tr>\r\n<td width="80">x&nbsp;</td>\r\n<td width="83"></td>\r\n<td width="89"></td>\r\n<td width="47"></td>\r\n<td width="80"></td>\r\n<td colspan="2" width="169">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Typed Name]</td>\r\n<td>&nbsp;</td>\r\n<td>&nbsp;</td>\r\n<td></td>\r\n<td>Date</td>\r\n<td>&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Company Name]</td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br /><span style="font-size: 14pt;"><strong></strong></span></p>', 2, 1, '2017-08-17 04:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblconversations`
+--
+
+CREATE TABLE IF NOT EXISTS `tblconversations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user1` int(11) NOT NULL,
+  `user2` int(11) NOT NULL,
+  `is_contact` int(11) NOT NULL DEFAULT '0',
+  `last_updated` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `tblconversations`
+--
+
+INSERT INTO `tblconversations` (`id`, `type`, `title`, `user1`, `user2`, `is_contact`, `last_updated`) VALUES
+(6, 'single', '', 2, 1, 0, 1507100848),
+(7, 'single', '', 4, 1, 0, 1507276263),
+(8, 'group', 'foso', 2, 0, 0, 1507100936);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblconversations_members`
+--
+
+CREATE TABLE IF NOT EXISTS `tblconversations_members` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Dumping data for table `tblconversations_members`
+--
+
+INSERT INTO `tblconversations_members` (`id`, `cid`, `member_id`, `contact_id`) VALUES
+(9, 6, 2, 0),
+(10, 6, 1, 0),
+(11, 7, 4, 0),
+(12, 7, 1, 0),
+(13, 8, 4, 0),
+(14, 8, 1, 0),
+(15, 8, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblconversation_messages`
+--
+
+CREATE TABLE IF NOT EXISTS `tblconversation_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL,
+  `file_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sticker_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `gif_path` int(11) NOT NULL,
+  `send_like` int(11) NOT NULL DEFAULT '0',
+  `time_created` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=38 ;
+
+--
+-- Dumping data for table `tblconversation_messages`
+--
+
+INSERT INTO `tblconversation_messages` (`id`, `cid`, `member_id`, `contact_id`, `message`, `file_path`, `image_path`, `sticker_path`, `gif_path`, `send_like`, `time_created`) VALUES
+(23, 6, 1, 0, 'hi', '', '', '', 0, 0, 1507100736),
+(24, 6, 2, 0, 'ýe', '', '', '', 0, 0, 1507100750),
+(25, 6, 1, 0, 'hi hi', '', '', '', 0, 0, 1507100757),
+(26, 6, 1, 0, 'hi', '', '', '', 0, 0, 1507100848),
+(27, 7, 1, 0, 'hi', '', '', '', 0, 0, 1507100853),
+(28, 7, 4, 0, 'alo', '', '', '', 0, 0, 1507100883),
+(29, 8, 2, 0, 'alooooo', '', '', '', 0, 0, 1507100936),
+(30, 7, 1, 0, 'hi hi', '', '', '', 0, 0, 1507101282),
+(31, 7, 1, 0, 'ê', '', '', '', 0, 0, 1507101436),
+(32, 7, 1, 0, 'có nghe ko', '', '', '', 0, 0, 1507101439),
+(33, 7, 1, 0, ' :‑)  :‑)  :‑) ', '', '', '', 0, 0, 1507101452),
+(34, 7, 1, 0, '', '', '', '', 0, 1, 1507101724),
+(35, 7, 1, 0, ' :‑P  ', '', '', '', 0, 0, 1507109273),
+(36, 7, 1, 0, 'cffvedfv', '', '', '', 0, 0, 1507276244),
+(37, 7, 1, 0, 'fbvfgb', '', '', '', 0, 0, 1507276263);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblconversation_message_read`
+--
+
+CREATE TABLE IF NOT EXISTS `tblconversation_message_read` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message_id` int(11) NOT NULL,
+  `staff_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1106 ;
+
+--
+-- Dumping data for table `tblconversation_message_read`
+--
+
+INSERT INTO `tblconversation_message_read` (`id`, `message_id`, `staff_id`, `contact_id`) VALUES
+(850, 23, 1, 0),
+(851, 23, 2, 0),
+(852, 24, 2, 0),
+(853, 24, 1, 0),
+(854, 25, 1, 0),
+(855, 25, 2, 0),
+(856, 23, 1, 0),
+(857, 24, 1, 0),
+(858, 25, 1, 0),
+(859, 23, 2, 0),
+(860, 24, 2, 0),
+(861, 25, 2, 0),
+(862, 26, 1, 0),
+(863, 26, 2, 0),
+(864, 27, 1, 0),
+(865, 27, 4, 0),
+(866, 28, 4, 0),
+(867, 28, 1, 0),
+(868, 29, 2, 0),
+(869, 27, 4, 0),
+(870, 28, 4, 0),
+(871, 29, 4, 0),
+(872, 29, 1, 0),
+(873, 27, 1, 0),
+(874, 28, 1, 0),
+(875, 30, 1, 0),
+(876, 27, 1, 0),
+(877, 28, 1, 0),
+(878, 30, 1, 0),
+(879, 29, 1, 0),
+(880, 29, 1, 0),
+(881, 23, 1, 0),
+(882, 24, 1, 0),
+(883, 25, 1, 0),
+(884, 26, 1, 0),
+(885, 29, 1, 0),
+(886, 27, 1, 0),
+(887, 28, 1, 0),
+(888, 30, 1, 0),
+(889, 27, 1, 0),
+(890, 28, 1, 0),
+(891, 30, 1, 0),
+(892, 31, 1, 0),
+(893, 32, 1, 0),
+(894, 33, 1, 0),
+(895, 27, 1, 0),
+(896, 28, 1, 0),
+(897, 30, 1, 0),
+(898, 31, 1, 0),
+(899, 32, 1, 0),
+(900, 33, 1, 0),
+(901, 23, 1, 0),
+(902, 24, 1, 0),
+(903, 25, 1, 0),
+(904, 26, 1, 0),
+(905, 29, 1, 0),
+(906, 27, 1, 0),
+(907, 28, 1, 0),
+(908, 30, 1, 0),
+(909, 31, 1, 0),
+(910, 32, 1, 0),
+(911, 33, 1, 0),
+(912, 29, 1, 0),
+(913, 27, 1, 0),
+(914, 28, 1, 0),
+(915, 30, 1, 0),
+(916, 31, 1, 0),
+(917, 32, 1, 0),
+(918, 33, 1, 0),
+(919, 29, 1, 0),
+(920, 23, 1, 0),
+(921, 24, 1, 0),
+(922, 25, 1, 0),
+(923, 26, 1, 0),
+(924, 27, 1, 0),
+(925, 28, 1, 0),
+(926, 30, 1, 0),
+(927, 31, 1, 0),
+(928, 32, 1, 0),
+(929, 33, 1, 0),
+(930, 23, 1, 0),
+(931, 24, 1, 0),
+(932, 25, 1, 0),
+(933, 26, 1, 0),
+(934, 29, 1, 0),
+(935, 27, 1, 0),
+(936, 28, 1, 0),
+(937, 30, 1, 0),
+(938, 31, 1, 0),
+(939, 32, 1, 0),
+(940, 33, 1, 0),
+(941, 34, 1, 0),
+(942, 29, 1, 0),
+(943, 29, 1, 0),
+(944, 29, 1, 0),
+(945, 29, 1, 0),
+(946, 29, 1, 0),
+(947, 29, 1, 0),
+(948, 29, 1, 0),
+(949, 29, 4, 0),
+(950, 27, 4, 0),
+(951, 28, 4, 0),
+(952, 30, 4, 0),
+(953, 31, 4, 0),
+(954, 32, 4, 0),
+(955, 33, 4, 0),
+(956, 34, 4, 0),
+(957, 29, 4, 0),
+(958, 29, 1, 0),
+(959, 29, 1, 0),
+(960, 29, 1, 0),
+(961, 29, 1, 0),
+(962, 29, 1, 0),
+(963, 29, 1, 0),
+(964, 29, 1, 0),
+(965, 29, 1, 0),
+(966, 29, 1, 0),
+(967, 29, 1, 0),
+(968, 29, 1, 0),
+(969, 29, 1, 0),
+(970, 29, 1, 0),
+(971, 29, 1, 0),
+(972, 29, 1, 0),
+(973, 27, 1, 0),
+(974, 28, 1, 0),
+(975, 30, 1, 0),
+(976, 31, 1, 0),
+(977, 32, 1, 0),
+(978, 33, 1, 0),
+(979, 34, 1, 0),
+(980, 29, 1, 0),
+(981, 29, 1, 0),
+(982, 29, 4, 0),
+(983, 27, 4, 0),
+(984, 28, 4, 0),
+(985, 30, 4, 0),
+(986, 31, 4, 0),
+(987, 32, 4, 0),
+(988, 33, 4, 0),
+(989, 34, 4, 0),
+(990, 29, 4, 0),
+(991, 27, 4, 0),
+(992, 28, 4, 0),
+(993, 30, 4, 0),
+(994, 31, 4, 0),
+(995, 32, 4, 0),
+(996, 33, 4, 0),
+(997, 34, 4, 0),
+(998, 29, 4, 0),
+(999, 29, 4, 0),
+(1000, 29, 4, 0),
+(1001, 29, 4, 0),
+(1002, 29, 4, 0),
+(1003, 29, 4, 0),
+(1004, 27, 4, 0),
+(1005, 28, 4, 0),
+(1006, 30, 4, 0),
+(1007, 31, 4, 0),
+(1008, 32, 4, 0),
+(1009, 33, 4, 0),
+(1010, 34, 4, 0),
+(1011, 29, 4, 0),
+(1012, 27, 4, 0),
+(1013, 28, 4, 0),
+(1014, 30, 4, 0),
+(1015, 31, 4, 0),
+(1016, 32, 4, 0),
+(1017, 33, 4, 0),
+(1018, 34, 4, 0),
+(1019, 27, 4, 0),
+(1020, 28, 4, 0),
+(1021, 30, 4, 0),
+(1022, 31, 4, 0),
+(1023, 32, 4, 0),
+(1024, 33, 4, 0),
+(1025, 34, 4, 0),
+(1026, 27, 1, 0),
+(1027, 28, 1, 0),
+(1028, 30, 1, 0),
+(1029, 31, 1, 0),
+(1030, 32, 1, 0),
+(1031, 33, 1, 0),
+(1032, 34, 1, 0),
+(1033, 29, 1, 0),
+(1034, 29, 1, 0),
+(1035, 27, 1, 0),
+(1036, 28, 1, 0),
+(1037, 30, 1, 0),
+(1038, 31, 1, 0),
+(1039, 32, 1, 0),
+(1040, 33, 1, 0),
+(1041, 34, 1, 0),
+(1042, 35, 1, 0),
+(1043, 23, 1, 0),
+(1044, 24, 1, 0),
+(1045, 25, 1, 0),
+(1046, 26, 1, 0),
+(1047, 27, 1, 0),
+(1048, 28, 1, 0),
+(1049, 30, 1, 0),
+(1050, 31, 1, 0),
+(1051, 32, 1, 0),
+(1052, 33, 1, 0),
+(1053, 34, 1, 0),
+(1054, 35, 1, 0),
+(1055, 23, 1, 0),
+(1056, 24, 1, 0),
+(1057, 25, 1, 0),
+(1058, 26, 1, 0),
+(1059, 27, 1, 0),
+(1060, 28, 1, 0),
+(1061, 30, 1, 0),
+(1062, 31, 1, 0),
+(1063, 32, 1, 0),
+(1064, 33, 1, 0),
+(1065, 34, 1, 0),
+(1066, 35, 1, 0),
+(1067, 27, 1, 0),
+(1068, 28, 1, 0),
+(1069, 30, 1, 0),
+(1070, 31, 1, 0),
+(1071, 32, 1, 0),
+(1072, 33, 1, 0),
+(1073, 34, 1, 0),
+(1074, 35, 1, 0),
+(1075, 36, 1, 0),
+(1076, 27, 1, 0),
+(1077, 28, 1, 0),
+(1078, 30, 1, 0),
+(1079, 31, 1, 0),
+(1080, 32, 1, 0),
+(1081, 33, 1, 0),
+(1082, 34, 1, 0),
+(1083, 35, 1, 0),
+(1084, 36, 1, 0),
+(1085, 37, 1, 0),
+(1086, 27, 1, 0),
+(1087, 28, 1, 0),
+(1088, 30, 1, 0),
+(1089, 31, 1, 0),
+(1090, 32, 1, 0),
+(1091, 33, 1, 0),
+(1092, 34, 1, 0),
+(1093, 35, 1, 0),
+(1094, 36, 1, 0),
+(1095, 37, 1, 0),
+(1096, 27, 1, 0),
+(1097, 28, 1, 0),
+(1098, 30, 1, 0),
+(1099, 31, 1, 0),
+(1100, 32, 1, 0),
+(1101, 33, 1, 0),
+(1102, 34, 1, 0),
+(1103, 35, 1, 0),
+(1104, 36, 1, 0),
+(1105, 37, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -4930,6 +5449,82 @@ INSERT INTO `tblemailtemplates` (`emailtemplateid`, `type`, `slug`, `language`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tblemail_makerting`
+--
+
+CREATE TABLE IF NOT EXISTS `tblemail_makerting` (
+  `id` int(11) NOT NULL,
+  `name` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `subject` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `status` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblemail_makerting`
+--
+
+INSERT INTO `tblemail_makerting` (`id`, `name`, `subject`, `content`, `status`) VALUES
+(0, 'test mẫu email', 'chu de gui mail', 'noi,&nbsp;{tblclients.company}', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblemail_send`
+--
+
+CREATE TABLE IF NOT EXISTS `tblemail_send` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL COMMENT '0=to,1=cc,2=bc',
+  `id_log` int(11) NOT NULL,
+  `view` int(11) NOT NULL DEFAULT '0',
+  `read` int(11) NOT NULL DEFAULT '0',
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=37 ;
+
+--
+-- Dumping data for table `tblemail_send`
+--
+
+INSERT INTO `tblemail_send` (`id`, `email`, `type`, `id_log`, `view`, `read`, `time`) VALUES
+(1, 'lechiconglechicong@gmail.com', 0, 97, 2, 0, '2017-10-18 05:00:00'),
+(2, 'lechicong.fososoft@gmail.com', 0, 97, 0, 0, NULL),
+(6, '', 1, 102, 0, 0, NULL),
+(7, '', 2, 102, 0, 0, NULL),
+(8, 'lechiconglechicong@gmail.com', 0, 104, 0, 0, NULL),
+(9, '', 1, 104, 0, 0, NULL),
+(10, '', 2, 104, 0, 0, NULL),
+(11, 'lechiconglechicong@gmail.com', 0, 106, 0, 0, NULL),
+(12, '', 1, 106, 0, 0, NULL),
+(13, '', 2, 106, 0, 0, NULL),
+(15, 'lechiconglechicong@gmail.com', 0, 109, 0, 0, NULL),
+(16, 'lechiconglechicong@gmail.com', 0, 110, 0, 0, NULL),
+(17, 'lechiconglechicong@gmail.com', 0, 111, 0, 0, NULL),
+(18, 'lechiconglechicong@gmail.com', 0, 112, 0, 0, NULL),
+(19, 'lechiconglechicong@gmail.com', 0, 113, 0, 0, NULL),
+(20, 'lechicong.fososoft@gmail.com', 1, 113, 0, 0, NULL),
+(21, '', 2, 113, 0, 0, NULL),
+(22, 'lechiconglechicong@gmail.com', 0, 115, 0, 0, NULL),
+(23, 'lechiconglechicong@gmail.com', 0, 116, 0, 0, NULL),
+(24, 'lechiconglechicong@gmail.com', 0, 117, 0, 0, NULL),
+(25, 'lechiconglechicong@gmail.com', 0, 118, 0, 0, NULL),
+(26, 'lechiconglechicong@gmail.com', 0, 119, 1, 0, '2017-10-11 00:00:00'),
+(27, 'lechiconglechicong@gmail.com', 0, 120, 0, 0, NULL),
+(28, 'lechiconglechicong@gmail.com', 2, 127, 0, 0, NULL),
+(29, 'lechiconglechicong@gmail.com', 2, 128, 0, 0, NULL),
+(30, 'lechiconglechicong@gmail.com', 2, 129, 0, 0, NULL),
+(31, 'lechiconglechicong@gmail.com', 2, 130, 0, 0, NULL),
+(32, 'lechiconglechicong@gmail.com', 2, 133, 0, 0, NULL),
+(33, 'lechiconglechicong@gmail.com', 2, 134, 0, 0, NULL),
+(34, 'lechiconglechicong@gmail.com', 2, 135, 0, 0, NULL),
+(35, 'lechiconglechicong@gmail.com', 2, 136, 0, 0, NULL),
+(36, 'lechiconglechicong@gmail.com', 2, 137, 0, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblestimates`
 --
 
@@ -5001,7 +5596,14 @@ CREATE TABLE IF NOT EXISTS `tblevents` (
   `color` varchar(10) DEFAULT NULL,
   `isstartnotified` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`eventid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `tblevents`
+--
+
+INSERT INTO `tblevents` (`eventid`, `title`, `description`, `userid`, `start`, `end`, `public`, `color`, `isstartnotified`) VALUES
+(1, 'gg', 'gg', 1, '2017-10-11 00:00:00', NULL, 0, '#28B8DA', 0);
 
 -- --------------------------------------------------------
 
@@ -5294,6 +5896,7 @@ CREATE TABLE IF NOT EXISTS `tblimports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
+  `deliver_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `account_date` timestamp NULL DEFAULT NULL,
   `invoice_status` tinyint(4) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -5313,6 +5916,9 @@ CREATE TABLE IF NOT EXISTS `tblimports` (
   `user_admin_date` datetime DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   `total` decimal(15,0) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
+  `discount` decimal(25,0) DEFAULT '0',
+  `adjustment` decimal(25,0) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=80 ;
 
@@ -5320,10 +5926,10 @@ CREATE TABLE IF NOT EXISTS `tblimports` (
 -- Dumping data for table `tblimports`
 --
 
-INSERT INTO `tblimports` (`id`, `supplier_id`, `customer_id`, `account_date`, `invoice_status`, `deleted_at`, `canceled_at`, `rel_type`, `rel_id`, `prefix`, `code`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `status`, `total`) VALUES
-(75, NULL, NULL, NULL, NULL, NULL, NULL, 'internal', NULL, 'NK-', '00075', 'New ND', 'Ghi chu', NULL, '2017-07-25 17:00:00', 1, 1, '2017-07-26 17:26:09', 1, '2017-07-26 17:26:09', 2, '26625'),
-(78, NULL, NULL, NULL, NULL, NULL, NULL, 'adjustment', NULL, 'ÐC-', '00078', 'Test', '', NULL, '2017-07-28 17:00:00', 1, 1, '2017-07-29 11:34:47', 1, '2017-07-29 11:34:47', 2, '1548400000'),
-(79, NULL, NULL, '2017-09-19 04:00:00', NULL, NULL, NULL, 'transfer', NULL, 'CK-', '000079', 'Phiếu chuyển kho', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 13:41:14', 1, '2017-09-19 13:41:14', 2, '575000000');
+INSERT INTO `tblimports` (`id`, `supplier_id`, `customer_id`, `deliver_name`, `account_date`, `invoice_status`, `deleted_at`, `canceled_at`, `rel_type`, `rel_id`, `prefix`, `code`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `status`, `total`, `discount_percent`, `discount`, `adjustment`) VALUES
+(75, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'internal', NULL, 'NK-', '00075', 'New ND', 'Ghi chu', NULL, '2017-07-25 17:00:00', 1, 1, '2017-07-26 17:26:09', 1, '2017-07-26 17:26:09', 2, '26625', '0.00', '0', '0'),
+(78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'adjustment', NULL, 'ÐC-', '00078', 'Test', '', NULL, '2017-07-28 17:00:00', 1, 1, '2017-07-29 11:34:47', 1, '2017-07-29 11:34:47', 2, '1548400000', '0.00', '0', '0'),
+(79, NULL, NULL, NULL, '2017-09-19 04:00:00', NULL, NULL, NULL, 'transfer', NULL, 'CK-', '000079', 'Phiếu chuyển kho', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 13:41:14', 1, '2017-09-19 13:41:14', 2, '575000000', '0.00', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -5347,8 +5953,15 @@ CREATE TABLE IF NOT EXISTS `tblimport_items` (
   `tax_id` tinyint(4) DEFAULT NULL,
   `tax_rate` decimal(15,2) DEFAULT NULL,
   `tax` decimal(25,2) DEFAULT NULL,
+  `discount_percent` decimal(25,0) DEFAULT '0',
+  `discount` decimal(25,0) DEFAULT '0',
   `exchange_rate` decimal(11,2) DEFAULT NULL,
   `warehouse_id_to` int(11) DEFAULT NULL,
+  `entered_price` decimal(20,3) DEFAULT NULL,
+  `tk_thue` int(11) DEFAULT NULL,
+  `tk_ck` int(11) DEFAULT NULL,
+  `tk_gv` int(11) DEFAULT NULL,
+  `tk_kho` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=88 ;
 
@@ -5356,27 +5969,27 @@ CREATE TABLE IF NOT EXISTS `tblimport_items` (
 -- Dumping data for table `tblimport_items`
 --
 
-INSERT INTO `tblimport_items` (`id`, `import_id`, `product_id`, `specifications`, `unit_id`, `quantity`, `quantity_net`, `unit_cost`, `sub_total`, `warehouse_id`, `tk_no`, `tk_co`, `tax_id`, `tax_rate`, `tax`, `exchange_rate`, `warehouse_id_to`) VALUES
-(68, 69, 55, '', 1, 5, 0, '125000', '625000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 69, 54, '', 1, 10, 0, '21312', '213120', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 69, 53, '', 1, 15, 0, '15000', '225000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 70, 49, '312', 312, 150, 0, '213', '31950', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(72, 70, 35, '2', 1, 100, 0, '300', '30000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(73, 71, 34, '1', 1, 10, 0, '10000', '100000', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(74, 71, 36, 'dsa', 1, 15, 0, '2147483647', '32212254705', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(75, 71, 37, '213213', 1, 20, 0, '80000', '1600000', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(76, 73, 52, '312', 312, 100, 0, '213', '21300', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(77, 73, 51, '312', 312, 150, 0, '213', '31950', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(78, 74, 55, '', 1, 100, 0, '125000', '12500000', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 74, 37, '213213', 1, 150, 0, '80000', '12000000', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 75, 52, '312', 312, 50, 0, '213', '10650', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(81, 75, 51, '312', 312, 75, 0, '213', '15975', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(82, 76, 55, '', 1, 15, 0, '125000', '1875000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(83, 76, 54, '', 1, 19, 0, '21312', '404928', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(84, 77, 55, '<span>- Chức năng hẹn giờ tắt máy.</span>', 4, 100, 0, '57500000', '5750000000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(85, 78, 57, '- 150 c&ocirc;ng thức nấu lập tr&igrave;nh sẵn.&nbsp;<br>- Cài đặt ưu tiên 10 công thức nấu yêu thích.<br>- Chọn và cài đặt đa ngôn ngữ. <br>- Xếp hạng hiệu quả năng lượng: A++.', 4, 20, 0, '29370000', '587400000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(86, 78, 56, '- Xếp hạng năng lượng si&ecirc;u tiết kiệm.', 4, 20, 0, '48050000', '961000000', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(87, 79, 55, '<span>- Chức năng hẹn giờ tắt máy.</span>', 4, 10, NULL, '57500000', '575000000', 1, 8, 35, 1, '5.00', NULL, NULL, 2);
+INSERT INTO `tblimport_items` (`id`, `import_id`, `product_id`, `specifications`, `unit_id`, `quantity`, `quantity_net`, `unit_cost`, `sub_total`, `warehouse_id`, `tk_no`, `tk_co`, `tax_id`, `tax_rate`, `tax`, `discount_percent`, `discount`, `exchange_rate`, `warehouse_id_to`, `entered_price`, `tk_thue`, `tk_ck`, `tk_gv`, `tk_kho`) VALUES
+(68, 69, 55, '', 1, 5, 0, '125000', '625000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 69, 54, '', 1, 10, 0, '21312', '213120', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 69, 53, '', 1, 15, 0, '15000', '225000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 70, 49, '312', 312, 150, 0, '213', '31950', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, 70, 35, '2', 1, 100, 0, '300', '30000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(73, 71, 34, '1', 1, 10, 0, '10000', '100000', 4, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(74, 71, 36, 'dsa', 1, 15, 0, '2147483647', '32212254705', 4, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(75, 71, 37, '213213', 1, 20, 0, '80000', '1600000', 4, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 73, 52, '312', 312, 100, 0, '213', '21300', 3, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(77, 73, 51, '312', 312, 150, 0, '213', '31950', 3, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(78, 74, 55, '', 1, 100, 0, '125000', '12500000', 2, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 74, 37, '213213', 1, 150, 0, '80000', '12000000', 2, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(80, 75, 52, '312', 312, 50, 0, '213', '10650', 5, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(81, 75, 51, '312', 312, 75, 0, '213', '15975', 5, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(82, 76, 55, '', 1, 15, 0, '125000', '1875000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(83, 76, 54, '', 1, 19, 0, '21312', '404928', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(84, 77, 55, '<span>- Chức năng hẹn giờ tắt máy.</span>', 4, 100, 0, '57500000', '5750000000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(85, 78, 57, '- 150 c&ocirc;ng thức nấu lập tr&igrave;nh sẵn.&nbsp;<br>- Cài đặt ưu tiên 10 công thức nấu yêu thích.<br>- Chọn và cài đặt đa ngôn ngữ. <br>- Xếp hạng hiệu quả năng lượng: A++.', 4, 20, 0, '29370000', '587400000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(86, 78, 56, '- Xếp hạng năng lượng si&ecirc;u tiết kiệm.', 4, 20, 0, '48050000', '961000000', 1, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87, 79, 55, '<span>- Chức năng hẹn giờ tắt máy.</span>', 4, 10, NULL, '57500000', '575000000', 1, 8, 35, 1, '5.00', NULL, '0', '0', NULL, 2, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5555,7 +6168,7 @@ CREATE TABLE IF NOT EXISTS `tblitems` (
   `code` varchar(50) NOT NULL,
   `name` text NOT NULL,
   `short_name` varchar(100) NOT NULL,
-  `description` mediumtext NOT NULL,
+  `description` text,
   `long_description` text,
   `landtypeid` tinyint(4) DEFAULT NULL,
   `district_id` varchar(5) DEFAULT NULL,
@@ -5570,7 +6183,7 @@ CREATE TABLE IF NOT EXISTS `tblitems` (
   `specification` varchar(200) NOT NULL,
   `size` varchar(100) NOT NULL,
   `weight` varchar(100) NOT NULL,
-  `product_features` varchar(500) NOT NULL,
+  `product_features` text,
   `price` int(11) NOT NULL,
   `price_buy` int(11) NOT NULL,
   `avatar` varchar(500) NOT NULL,
@@ -5583,7 +6196,7 @@ CREATE TABLE IF NOT EXISTS `tblitems` (
   `discount` decimal(11,2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=132 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=182 ;
 
 --
 -- Dumping data for table `tblitems`
@@ -5603,10 +6216,10 @@ INSERT INTO `tblitems` (`id`, `prefix`, `code`, `name`, `short_name`, `descripti
 (69, '', 'P00069', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số NIMA 90B', 'NIMA 90B', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D450 x H900mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí vòng tròn 2 lớp quanh mặt máy 2x3W<br>- Điều khiển bằng cảm ứng 3 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 57dB<br>- Màu sắc: Kính đen kết hợp Inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 46095000, 46095000, 'uploads/client_profile_images/69/Nima-90B.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
 (70, '', 'P00070', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số NIMA 90W', 'NIMA 90W', '<span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span><br><span>- Chức năng hút nhanh cấp tốc 5 phút</span>', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D450 x H900mm', '', '<div class="product-short-description"><span>- Công suất 275W</span><br><span>- Đèn Led trang trí vòng tròn 2 lớp quanh mặt máy 2x3W</span><br><span>- Điều khiển bằng cảm ứng 3 cấp độ</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi</span><br><span>- Lưu lượng 900m3/h, độ ồn 57dB</span><br><span>- Màu sắc: Kính trắng kết hợp Inox</span></div>', 46095000, 46095000, 'uploads/client_profile_images/70/Nima-90W_297x297.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
 (71, '', 'P00071', 'Máy hút khử mùi áp tường hiệu DuDoff London dạng hình tròn, mã số IRIS BC (HDW-S01BC)', 'IRIS BC', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '0.00', 3, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'Φ800 x H550mm', '', '<div class="product-short-description">- Máy hút mùi hình tròn, chế tạo bán thủ công kết hợp gốm Ceramic và Inox 304<br>- Công suất 275W<br>- Đèn Led trang trí dạng thanh 1x7W<br>- Điều khiển bằng cảm ứng 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 58dB<br>- Màu sắc: Vòng ngoài màu đen, vòng trong màu đồng đỏ<br>\r\n<div class="product-short-description">- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>\r\n</div>', 32280000, 32280000, 'uploads/client_profile_images/71/IRIS-BC.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
-(72, '', 'P00072', 'Máy hút khử mùi áp tường hiệu DuDoff London dạng hình tròn, mã số IRIS BW (HDW-S01BW)', 'IRIS BW', '<span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'Φ800 x H550mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình tròn, chế tạo bán thủ công kết hợp gốm Ceramic và Inox 304</span><br><span>- Công suất 275W</span><br><span>- Đèn Led trang trí dạng thanh 1x7W</span><br><span>- Điều khiển bằng cảm ứng 4 cấp độ</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi</span><br><span>- Lưu lượng 900m3/h, độ ồn 58dB</span><br><span>- Màu sắc: Vòng ngoài màu đen, vòng trong màu trắng</span><br>\r\n<div class="product-short-description"><span>- Bảo hành 5', 32280000, 32280000, 'uploads/client_profile_images/72/IRIS-BW8.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
-(73, '', 'P00073', 'Máy hút mùi áp tường thẳng Inox 304 viền kính trắng', 'Lumina 90SS', '', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', '900x480x1100mm', '', '<div class="product-short-description">Máy hút mùi áp tường thẳng Inox 304 viền kính trắng.<br>- Đèn Led trang trí 1x7W.<span> </span><br>- Điều khiển bằng cảm ứng 3 cấp độ.<br>- Chức năng hút nhanh cấp tốc 5 phút.<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi.<br>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150.<br>- Công suất 275W.<br>- Lưu lượng 900m⊃3;/h, độ ồn 57dB.<br>- Chức năng hẹn giờ tắt máy.<br>- Kích thước: W900 x D480 x H1100mm.<br>- Màu sắc: Inox kết hợp kính trắng.<br>- Bảo hành ', 31000000, 31000000, 'uploads/client_profile_images/73/Lumina-90SS-1.jpg', 20, 20, 0, '60', 396, '60', '0.00'),
-(74, '', 'P00074', 'Máy hút mùi đảo trang trí dạng ống khói, kết hợp Inox 304 và kính đen trang trí. - Đèn Led trang trí dạng thanh 2x7W. ', 'Lumina Isola 90B', '', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', '900x600x1200', '', '<div class="product-short-description">Máy hút mùi đảo trang trí dạng ống khói, kết hợp Inox 304 và kính đen trang trí.<br>- Đèn Led trang trí dạng thanh 2x7W.<span> </span><br>- Điều khiển bằng cảm ứng 3 cấp độ.<br>- Chức năng hút nhanh cấp tốc 5 phút.<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi.<br>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150.<br>- Công suất 275W.<br>- Lưu lượng 900m⊃3;/h, độ ồn 57dB.<br>- Chức năng hẹn giờ tắt máy.<br>- Kích thước W900 x D600 x H1200mm.<span> </span><b', 48900000, 48900000, 'uploads/client_profile_images/74/Lumina-Isola-90B-2.jpg', 20, 20, 0, '60', 396, '60', '0.00'),
-(75, '', 'P00075', 'Máy hút mùi lắp âm tủ bếp trên, Inox 304.', 'Vista S70', '', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', '700x290x325', '', '<div class="product-short-description">Máy hút mùi lắp âm tủ bếp trên, Inox 304.<br>- Đèn Led trang trí 4x2.1W.<br>- Điều khiển bằng điện tử 4 cấp độ.<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi.<br>- Hút lọc khử mùi tuần hoàn bằng than Carbon và ống thoát.<br>- Công suất 275W.<br>- Lưu lượng 900m⊃3;/h, độ ồn 58dB.<br>- Chức năng hẹn giờ tắt máy.<br>- Kích thước: W700 x D290 x H325mm.<br>- Màu sắc: Inox mờ.<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu.</div>\r\n<div class="manufac', 17800000, 17800000, 'uploads/client_profile_images/75/VistaS70.jpg', 20, 20, 0, '60', 398, '60', '0.00'),
+(72, '', 'P00072', 'Máy hút khử mùi áp tường hiệu DuDoff London dạng hình tròn, mã số IRIS BW (HDW-S01BW)', 'IRIS BW', '<span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'Φ800 x H550mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình tròn, chế tạo bán thủ công kết hợp gốm Ceramic và Inox 304</span><br><span>- Công suất 275W</span><br><span>- Đèn Led trang trí dạng thanh 1x7W</span><br><span>- Điều khiển bằng cảm ứng 4 cấp độ</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi</span><br><span>- Lưu lượng 900m3/h, độ ồn 58dB</span><br><span>- Màu sắc: Vòng ngoài màu đen, vòng trong màu trắng</span><br>\r\n<div class="product-short-description"></div>\r\n</div>', 32280000, 32280000, 'uploads/client_profile_images/72/IRIS-BW8.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
+(73, '', 'P00073', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số LUMINA 90SS', 'LUMINA 90SS', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D480 x H1100mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí 1x7W<br>- Điều khiển bằng cảm ứng 3 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 57dB<br>- Màu sắc: Inox kết hợp kính trắng.<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 31000000, 31000000, 'uploads/client_profile_images/73/Lumina-90SS-1.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
+(74, '', 'P00074', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu ống khói, mã số LUMINA ISOLA 90B', 'LUMINA ISOLA 90B', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D600 x H1200mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí dạng thanh 2x7W<br>- Điều khiển bằng cảm ứng 3 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 57dB<br>- Màu sắc: Inox phối kính đen<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 48900000, 48900000, 'uploads/client_profile_images/74/Lumina-Isola-90B-2.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
+(75, '', 'P00075', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số VISTA S70 (HB-S01S70)', 'VISTA S70', '- H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon v&agrave; ống tho&aacute;t<br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W700 x D290 x H325mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí 4x2.1W<br>- Điều khiển bằng điện tử 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 58dB<br>- Màu sắc: Inox mờ<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br><span>- Sản xuất tại Ý</span></div>', 17800000, 17800000, 'uploads/client_profile_images/75/VistaS70.jpg', 10, 50, 0, '12', 398, '60', '0.00'),
 (76, '', 'P00076', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số VISTA S90 (HB-S01S90)', 'VISTA S90', '- H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon v&agrave; ống tho&aacute;t<br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D290 x H325mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí 4x2.1W<br>- Điều khiển bằng điện tử 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 58dB<br>- Màu sắc: Inox mờ.<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 18900000, 18900000, 'uploads/client_profile_images/76/VistaS90.jpg', 10, 50, 0, '12', 398, '60', '0.00'),
 (77, '', 'P00077', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số VELA (HW-S02B)', 'VELA', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D450 x H1100mm', '', '<div class="product-short-description">- Công suất 275W<br>- Tự động trượt hút theo từng cấp độ công suất<br>- Điều khiển bằng núm xoay đa chiều, 4 cấp độ hút<br>- Đèn Led trang trí 10.5W<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 58dB.<br>- Màu sắc: Inox phối màu đen mặt trước<br>\r\n<div class="product-short-description">- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>\r\n</div>', 48200000, 48200000, 'uploads/client_profile_images/77/may-hut-mui-trang-tri-VELA.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
 (78, '', 'P00078', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số QUEEN 90B', 'QUEEN 90B', '- H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br>- Chức năng hẹn giờ tắt máy<br>- Chức năng hút nhanh cấp tốc 5 phút', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-07', '2017-09-07', 109, '', 'W900 x D445 x H910mm', '', '<div class="product-short-description">- Công suất 275W<br>- Đèn Led trang trí 2x3W<br>- Điều khiển bằng cảm ứng 3 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 57dB<br>- Màu sắc: Màu đen<br>- Xếp hạng năng lượng siêu tiết<br>\r\n<div class="product-short-description">- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>\r\n</div>', 48900000, 48900000, 'uploads/client_profile_images/78/Queen-90B.jpg', 10, 50, 0, '12', 396, '60', '0.00'),
@@ -5640,9 +6253,9 @@ INSERT INTO `tblitems` (`id`, `prefix`, `code`, `name`, `short_name`, `descripti
 (108, '', 'P00108', 'Máy hút khử mùi đảo hiệu DuDoff London dạng hình cầu tròn, mã số EARTH B (HDI-S02B)', 'EARTH B', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><span> </span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-08', '2017-09-08', 109, '', 'Ф 480 x H1250mm', '', '<div class="product-short-description"><span>- Máy hút mùi đảo hình cầu tròn, kết hợp kính đen bóng và mạ Chrome bóng</span><br><span>- Công suất 140W</span><span> </span><br><span>- Đèn led trang trí hội tụ</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB<br><span>- Màu sắc: Kính đen bóng và mạ Chrome</span></span></div>', 58600000, 58600000, 'uploads/client_profile_images/108/EARTH-B.jpg', 10, 50, 0, '12', 393, '60', '0.00'),
 (109, '', 'P00109', 'Máy hút khử mùi đảo hiệu DuDoff London dạng hình cầu tròn, mã số EARTH W (HDI-S02W)', 'EARTH W', '- H&uacute;t lọc tuần ho&agrave;n, khử m&ugrave;i bằng than Carbon<span> </span><br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-08', '2017-09-08', 109, '', ' Ф 480 x H1250mm', '', '<div class="product-short-description">- Máy hút mùi đảo hình cầu tròn, kết hợp kính trắng và mạ Chrome bóng<br>- Công suất 140W<span> </span><br>- Đèn led trang trí hội tụ<br>- Điều khiển bằng Remote 4 cấp độ hút<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn <50dB>- Màu sắc: Kính trắng và mạ Chrome</div>', 58600000, 58600000, 'uploads/client_profile_images/109/EARTH-W6.jpg', 10, 50, 0, '12', 393, '60', '0.00'),
 (111, '', 'P00111', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình Elip, mã số ELIX 90SG', 'ELIX 90SG', '- H&uacute;t lọc tuần ho&agrave;n, khử m&ugrave;i bằng than Carbon', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-08', '2017-09-08', 109, '', ' W900 x H1716mm.', '', '<div class="product-short-description">- Máy hút treo cáp, hình Elip, kết hợp Inox 304 và kính trắng trong<br>- Công suất động cơ 140W<br>- Đèn trang trí Led hội tụ 2x1W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 650m3/h, độ ồn 57dB<br>- Màu sắc: Inox và kính trắng trong<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span><br><br></div>', 48800000, 48800000, 'uploads/client_profile_images/111/Elix-90SG.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
-(116, '', 'P00116', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình cầu, mã số MOON C (HDI-S01C)', 'MOON C', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '0.00', 2, '4', 0, '2017-09-09', '2017-09-09', 109, '', 'Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Đồng đỏ<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý<br></s', 65650000, 65650000, 'uploads/client_profile_images/116/MOON-C-1.jpg', 10, 50, 0, '12', 390, '60', '0.00');
+(116, '', 'P00116', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình cầu, mã số MOON C (HDI-S01C)', 'MOON C', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '0.00', 2, '4', 0, '2017-09-09', '2017-09-09', 109, '', 'Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Đồng đỏ<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý<br></s', 65650000, 65650000, 'uploads/client_profile_images/116/MOON-C-1.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
+(115, '', 'P00115', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình cầu, mã số MOON B (HDI-S01B)', 'MOON B', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-09-09', '2017-09-09', 109, '', 'Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Đen mờ</span></div>', 65650000, 65650000, 'uploads/client_profile_images/115/MOON-B.jpg', 10, 50, 0, '12', 390, '60', '0.00');
 INSERT INTO `tblitems` (`id`, `prefix`, `code`, `name`, `short_name`, `description`, `long_description`, `landtypeid`, `district_id`, `provinceid`, `rate`, `tax`, `unit`, `group_id`, `release_date`, `date_of_removal_of_sample`, `country_id`, `specification`, `size`, `weight`, `product_features`, `price`, `price_buy`, `avatar`, `minimum_quantity`, `maximum_quantity`, `quantity`, `date`, `category_id`, `warranty`, `discount`) VALUES
-(115, '', 'P00115', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình cầu, mã số MOON B (HDI-S01B)', 'MOON B', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-09-09', '2017-09-09', 109, '', 'Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Đen mờ</span></div>', 65650000, 65650000, 'uploads/client_profile_images/115/MOON-B.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
 (113, '', 'P00113', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình hộp chữ nhật, mã số METROPOLIS 90SG', 'METROPOLIS 90SG', '- H&uacute;t lọc tuần ho&agrave;n, khử m&ugrave;i bằng than Carbon<span> </span><br>- Chức năng hẹn giờ tắt máy', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-09', '2017-09-09', 109, '', 'W900 x D350 x H1800mm', '', '<div class="product-short-description">- Máy hút treo cáp, hình hộp chữ nhật, kết hợp Inox 304 và kính trắng, kính đen.<span> </span><br>- Công suất động cơ 275W<br>- Đèn trang trí Led hội tụ 4x6W<br>- Điều khiển bằng cảm ứng 3 cấp độ<br>- Chức năng hút nhanh cấp tốc 5 phút<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 57dB<br>- Màu sắc: Kính trắng, đen phối inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span', 52180000, 52180000, 'uploads/client_profile_images/113/Metropolis-90SG.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
 (118, '', 'P00117', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp, mã số MOON G (Silt 26 copper)', 'MOON G', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '<img src="http://foso.info/01917F/media/NewFolder/MOON.jpg" alt="" width="517" height="618">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-09', '2017-09-09', 109, '', 'Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Vàng đồng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý<br><', 65650000, 65650000, 'uploads/client_profile_images/118/MOON-G.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
 (119, '', 'P00119', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu treo cáp dạng hình cầu, mã số MOON S (HDI-S01S)', 'MOON S', '<span>- Hút lọc tuần hoàn, khử mùi bằng than Carbon</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '<img src="http://foso.info/01917F/media/NewFolder/MOON.jpg" alt="" width="506" height="604">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' Ф 690 x H1200mm', '', '<div class="product-short-description"><span>- Máy hút mùi hình cầu, chế tạo bán thủ công từ gốm Ceramic kết hợp Inox 304.</span><span> </span><br><span>- Công suất động cơ 110W</span><br><span>- Đèn Led tròn trang trí 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ hút</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 600m3/h, độ ồn 50dB</span><br><span>- Màu sắc: Xám bạc<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý<br></s', 65650000, 65650000, 'uploads/client_profile_images/119/MOON-S.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
@@ -5654,9 +6267,58 @@ INSERT INTO `tblitems` (`id`, `prefix`, `code`, `name`, `short_name`, `descripti
 (125, '', 'P00125', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số CARINA C (HC-S01C)', 'CARINA C', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon hoặc kết hợp ống thoát</span><span>- - Chức năng hẹn giờ tắt máy</span>', '<img src="http://foso.info/01917F/media/NewFolder/CARINA  .jpg" alt="" width="619" height="767">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' Ф900 x H230mm', '', '<div class="product-short-description"><span>- Chế tạo bán thủ công kết hợp hợp kim nhôm, Inox và gốm Ceramic</span><br><span>- Công suất 275W</span><br><span>- Đèn Led trang trí Led tròn 20W</span><br><span>- Điều khiển bằng Remote 4 cấp độ</span><br><span>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 60dB</span><br><span>- Màu sắc: Màu đồng đỏ<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý<br></span></div>', 54900000, 54900000, 'uploads/client_profile_images/125/Carina-C.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
 (127, '', 'P00126', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số CARINA W (HC-S01W)', 'CARINA W', '- H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon hoặc kết hợp ống tho&aacute;t- - Chức năng hẹn giờ tắt m&aacute;y', '<img src="http://foso.info/01917F/media/NewFolder/CARINA  .jpg" alt="" width="531" height="657">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2017-09-09', 109, '', 'Ф 900 x H230 mm', '', '<div class="product-short-description">- Chế tạo bán thủ công kết hợp hợp kim nhôm, Inox và gốm Creamic<br>- Công suất 275W<br>- Đèn Led trang trí Led tròn 20W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn 60dB<br>- Màu sắc: Màu trắng<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 54900000, 54900000, 'uploads/client_profile_images/127/Carina-W.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
 (128, '', 'P00128', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số COMET FREE 90 B', 'COMET FREE 90B', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon hoặc kết hợp ống thoát</span>', '<img src="http://foso.info/01917F/media/NewFolder/COMET-FREE5.jpg" alt="" width="513" height="513">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-09', '2017-09-09', 109, '', ' Ф 900 x H170mm.', '', '<div class="product-short-description"><span>- Công suất 300W</span><br><span>- Đèn Led phân kỳ trang trí 4x1W</span><br><span>- Điều khiển bằng Remote 4 cấp độ</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 1300m3/h, độ ồn 57dB</span><br><span>- Màu sắc: Kính đen và Inox</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 48050000, 48050000, 'uploads/client_profile_images/128/Comet-free-90B.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
-(129, '', 'P00129', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số COMET FREE 90 W', 'COMET FREE 90W', '- H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon hoặc kết hợp ống tho&aacute;t', '<img src="http://foso.info/01917F/media/NewFolder/COMET-FREE5.jpg" alt="" width="513" height="513">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' Ф 900 x H170mm', '', '<div class="product-short-description">- Công suất 300W<br>- Đèn Led phân kỳ trang trí 4x1W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 1300m3/h, độ ồn 57dB<br>- Màu sắc: Kính trắng và Inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 48050000, 48050000, 'uploads/client_profile_images/129/Comet-free-90W.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
-(130, '', 'P00130', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số JET 125 B', 'JET 125B', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon và kết hợp ống thoát&lt;!--57db--&gt;</span>', '<img src="http://foso.info/01917F/media/NewFolder/JET 25B.jpg" alt="" width="514" height="393">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' W1250 x D1050 x H202mm', '', '<div class="product-short-description"><span>- Công suất 305W</span><br><span>- Điều khiển bằng Remote 4 cấp độ</span><br><span></span><span>- Đèn Led trang trí dạng Led thanh 4x7.5W</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn <57dB><br><span>- Màu sắc: Kính đen và Inox</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 47800000, 47800000, 'uploads/client_profile_images/130/Jet-125B-2.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
-(131, '', 'P00131', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số JET 125 W', 'JET 125W', '- H&uacute;t lọc khử m&ugrave;i tuần ho&agrave;n bằng than Carbon v&agrave; kết hợp ống tho&aacute;t', '<img src="http://foso.info/01917F/media/NewFolder/JET 25B.jpg" alt="" width="507" height="386">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' W1250 x D1050 x H202mm', '', '<div class="product-short-description">- Công suất 305W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Đèn Led trang trí dạng Led thanh 4x7.5W<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn <57db>- Màu sắc: Kính trắng và Inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span><br><br></div>', 47800000, 47800000, 'uploads/client_profile_images/131/Jet-125W.jpg', 10, 50, 0, '12', 397, '60', '0.00');
+(129, '', 'P00129', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số COMET FREE 90 W', 'COMET FREE 90W', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon hoặc kết hợp ống thoát</span>', '<img src="http://foso.info/01917F/media/NewFolder/COMET-FREE5.jpg" alt="" width="513" height="513">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' Ф 900 x H170mm', '', '<div class="product-short-description">- Công suất 300W<br>- Đèn Led phân kỳ trang trí 4x1W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 1300m3/h, độ ồn 57dB<br>- Màu sắc: Kính trắng và Inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span></div>', 48050000, 48050000, 'uploads/client_profile_images/129/Comet-free-90W.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
+(130, '', 'P00130', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số JET 125 B', 'JET 125B', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon và kết hợp ống thoát<!--57db--></span>', '<img src="http://foso.info/01917F/media/NewFolder/JET 25B.jpg" alt="" width="514" height="393">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' W1250 x D1050 x H202mm', '', '<div class="product-short-description"><span>- Công suất 305W</span><br><span>- Điều khiển bằng Remote 4 cấp độ</span><br><span></span><span>- Đèn Led trang trí dạng Led thanh 4x7.5W</span><br><span>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn <57db><br><span>- Màu sắc: Kính đen và Inox</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span><!--57db--></span></div>', 47800000, 47800000, 'uploads/client_profile_images/130/Jet-125B-2.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
+(131, '', 'P00131', 'Máy hút khử mùi áp trần hiệu DuDoff London, mã số JET 125 W', 'JET 125W', '<span>- Hút lọc khử mùi tuần hoàn bằng than Carbon và kết hợp ống thoát</span>', '<img src="http://foso.info/01917F/media/NewFolder/JET 25B.jpg" alt="" width="507" height="386">', NULL, NULL, NULL, '0.00', 2, '4', 3, '2017-09-09', '2020-09-09', 109, '', ' W1250 x D1050 x H202mm', '', '<div class="product-short-description">- Công suất 305W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Đèn Led trang trí dạng Led thanh 4x7.5W<br>- Lưới lọc dầu mỡ bằng hợp kim nhôm sợi<br>- Lưu lượng 900m3/h, độ ồn <57db>- Màu sắc: Kính trắng và Inox<br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Ý</span><br><br><!--57db--></div>', 47800000, 47800000, 'uploads/client_profile_images/131/Jet-125W.jpg', 10, 50, 0, '12', 397, '60', '0.00'),
+(133, '', 'P00132', 'Lò nướng đa chức năng hiệu DuDoff London, mã số PEARL (OE-V02RC)', 'PEARL', '<ul>\r\n<li>10 chức năng nướng cơ bản và các chức năng an toàn sử dụng</li>\r\n<li>Chọn và cài đặt đa ngôn ngữ</li>\r\n<li>5 cấp độ điều chỉnh ánh sáng màn hình</li>\r\n<li>3 cấp độ cài đặt chuông báo \r\n<div class="product-short-description"></div>\r\n</li>\r\n</ul>', '<img src="http://foso.info/01917F/media/PEARL.jpg" alt="" width="637" height="488">', NULL, NULL, NULL, '5.00', 1, '4', 4, '2017-09-25', '2017-09-25', 1, '12*12', '(Dài x rộng x sâu) 595 x 595 x 575mm', '0.5', '<ul>\r\n<li>\r\n<div class="product-short-description">Dung tích: 65 lít </div>\r\n</li>\r\n<li>Tổng công suất 3,1KW, điện áp 220V – 50Hz</li>\r\n<li>Điều khiển núm xoay đa chiều, với màn hình hiển thị màu đa điểm TFT 4.3 inch</li>\r\n<li>\r\n<div class="product-short-description"><span></span>150 công thức nấu lập trình sẵn</div>\r\n</li>\r\n<li>\r\n<div class="product-short-description">Cài đặt ưu tiên 10 công thức nấu yêu thích</div>\r\n</li>\r\n<li>\r\n<div class="product-short-description">Kích thước lắp đặt: ( Dài ', 29900000, 29900000, 'uploads/client_profile_images/133/PEARL.jpg', 50, 100, 0, '6', 393, '12', '0.00'),
+(134, '', 'P00134', 'Lò nướng kết hợp nấu hiệu DuDoff London, mã số SUNDAY 45S', 'SUNDAY 45S', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '', 41900000, 41900000, 'uploads/client_profile_images/134/SUNDAY-45S.jpg', 10, 50, 0, '12', 433, '60', '0.00'),
+(135, '', 'P00135', 'Lò vi sóng kết hợp nướng hiệu DuDoff London, mã số VICTORIA 45S', 'VICTORIA 45S', '', '<img src="http://foso.info/01917F/media/VICTORIA 45S.jpg" alt="" width="649" height="646">', NULL, NULL, NULL, '5.00', 1, '4', 4, '2017-09-30', '2017-09-30', 228, '', '', '', '', 46770000, 46770000, 'uploads/client_profile_images/135/VICTORIA-45S.jpg', 10, 50, 0, '12', 438, '60', '0.00'),
+(136, '', 'P00136', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm trên tủ bếp, mã số CETO (HDR-S03S)', 'CETO', '', '<img src="http://foso.info/01917F/media/CETO.jpg" alt="" width="635" height="635">', NULL, NULL, NULL, '10.00', 3, '4', 4, '2017-09-30', '2017-09-30', 109, '', '', '', '', 39250000, 39250000, 'uploads/client_profile_images/136/CETO.jpg', 10, 60, 0, '12', 395, '60', '0.00'),
+(137, '', 'P00137', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu ống khói, mã số ELEA ISOLA 176SSL', 'ELEA ISOLA 176SSL', '', '<img src="http://foso.info/01917F/media/ELEA ISOLA 176SSL.jpg" alt="" width="661" height="661">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 49950000, 49950000, 'uploads/client_profile_images/137/Elea-Isola-146SS6.jpg', 10, 50, 0, '12', 390, '60', '0.00'),
+(138, '', 'P00138', 'Máy hút khử mùi đảo hiệu DuDoff London kiểu ống khói, mã số ELEA ISOLA 176SSR', 'ELEA ISOLA 176SSR', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 49950000, 49950000, '', 10, 50, 0, '12', 390, '60', '0.00'),
+(139, '', 'P00139', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm bàn bếp, mã số HELI (HDR-S01BG)', 'HELI', '', '<img src="http://foso.info/01917F/media/HELI.jpg" alt="" width="652" height="759">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 1, '', '', '', '', 70080000, 70080000, 'uploads/client_profile_images/139/HELI.jpg', 10, 50, 0, '12', 395, '60', '0.00'),
+(140, '', 'P00140', 'Máy hút khử mùi áp tường hiệu DuDoff London dạng hình tròn, mã số IRIS WB (HDW-S01WB)', 'IRIS WB', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 32280000, 32280000, '', 10, 50, 0, '12', 396, '60', '0.00'),
+(141, '', 'P00141', 'Máy hút khử mùi áp tường hiệu DuDoff London, mã số PEAK S70', 'PEAK S70', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 17400000, 17400000, '', 10, 50, 0, '12', 396, '60', '0.00'),
+(142, '', 'P00142', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm bàn bếp, mã số TITAN (HDR-S02S)', 'TITAN', '', '<img src="http://foso.info/01917F/media/TITAN.jpg" alt="" width="653" height="780">', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 43000000, 43000000, 'uploads/client_profile_images/142/TITAN.jpg', 10, 50, 0, '12', 395, '60', '0.00'),
+(143, '', 'P00143', 'Máy pha cà phê hiệu DuDoff London, mã số KOPI 45S', 'KOPI 45S', '', '<img src="http://foso.info/01917F/media/KOPI 45S.jpg" alt="" width="655" height="654">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 48870000, 48870000, 'uploads/client_profile_images/143/KOPI-45S.jpg', 10, 50, 0, '12', 440, '60', '0.00'),
+(144, '', 'P00144', 'Máy rửa chén hiệu DuDoff London đứng độc lập, mã số VENUS-DV01 (DW-V01FT)', 'VENUS-DV01', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '', 35850000, 35850000, 'uploads/client_profile_images/144/VENUS-DV01.jpg', 10, 50, 0, '12', 422, '60', '0.00'),
+(145, '', 'P00145', 'Máy rửa chén hiệu DuDoff London kiểu âm tủ, mã số SOFIA-DV02 (DW-V02)', 'SOFIA-DV02', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '', 29897000, 29897000, 'uploads/client_profile_images/145/SOFIA-DV02.jpg', 10, 50, 0, '12', 422, '60', '0.00'),
+(146, '', 'P00146', 'Ngăn giữ nóng hiệu DuDoff London, mã số CALDO SS', 'CALDO SS', '', '', NULL, NULL, NULL, '10.00', 3, '4', 4, '2017-09-30', '2017-09-30', 228, '', '', '', '', 14700000, 14700000, 'uploads/client_profile_images/146/CALDO.jpg', 10, 50, 0, '12', 462, '60', '0.00'),
+(147, '', 'P00147', 'Ngăn chứa dụng cụ chuyên dùng hiệu DuDoff London, mã số SETTO SS', 'SETTO SS', '', '', NULL, NULL, NULL, '10.00', 3, '4', 4, '2017-09-30', '2017-09-30', 228, '', '', '', '', 14700000, 14700000, 'uploads/client_profile_images/147/SETTO.jpg', 10, 50, 0, '12', 462, '60', '0.00'),
+(148, '', 'P00148', 'Tủ bảo quản rượu hiệu DuDoff London, mã số SHIP 45S', 'SHIP 45S', '', '<img src="http://foso.info/01917F/media/SHIP 45S.jpg" alt="" width="652" height="649">', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 45760000, 45760000, 'uploads/client_profile_images/148/SHIP-45S.jpg', 10, 50, 0, '12', 439, '60', '0.00'),
+(149, '', 'P00149', 'Vòi chậu hiệu DuDoff London, mã số BORA FC-A02 (FC-A02)', 'BORA FC-A02', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<span>- Vòi chậu rửa chén 2 nguồn nước nóng lạnh</span><br><span>- Vật liệu: Inox 304</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Châu Âu</span>', 2900000, 2900000, 'uploads/client_profile_images/149/BORA-FC-A02-FC-A02.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(150, '', 'P00150', 'Vòi chậu hiệu DuDoff London, mã số FORTE FS-A01 (FS-A01)', 'FORTE FS-A01', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén 2 nguồn nước nóng lạnh chế tạo bán thủ công<br>- Vật liệu: Inox 304<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 5400000, 5400000, 'uploads/client_profile_images/150/FORTE-FS-A01.jpg', 10, 50, 0, '12', 442, '60', '0.00'),
+(151, '', 'P00151', 'Vòi chậu hiệu DuDoff London, mã số FORTE FS-A02 (FS-A02)', 'FORTE FS-A02', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<span>- Vòi chậu rửa chén 2 nguồn nước nóng lạnh chế tạo bán thủ công</span><br><span>- Vật liệu: Inox 304</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Châu Âu</span>', 6250000, 6250000, 'uploads/client_profile_images/151/FORTE-FS-A02.jpg', 10, 50, 0, '12', 442, '60', '0.00'),
+(152, '', 'P00152', 'Vòi chậu hiệu DuDoff London, mã số LENTO FC-A04 (FC-A04)', 'LENTO FC-A04', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<span>- Vòi chậu rửa chén 2 nguồn nước nóng lạnh </span><br><span>- Vật liệu: Inox 304</span><br><span>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu</span><br><span>- Sản xuất tại Châu Âu</span>', 1900000, 1900000, 'uploads/client_profile_images/152/LENTO-FC-A04.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(153, '', 'P00153', 'Vòi chậu hiệu DuDoff London, mã số LENTO GOLD FG-A01 (FG-A01)', 'LENTO GOLD FG-A01', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London, 2 nguồn nước nóng lạnh. Chế tạo bán thủ công<br>- Vật liệu: Đồng kết hợp mạ Chrome màu vàng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 4960000, 4960000, 'uploads/client_profile_images/153/LENTO-GOLD-FG-A01.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(154, '', 'P00154', 'Vòi chậu hiệu DuDoff London, mã số LUCO B  FC-A03 (FC-A03)', 'LUCO B  FC-A03', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London, 2 nguồn nước nóng lạnh<br>- Vật liệu: Đồng kết hợp mạ Chrome màu trắng bóng<br>- 2 chế độ nước<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 5850000, 5850000, 'uploads/client_profile_images/154/LUCO-B-FC-A03.jpg', 10, 50, 0, '12', 442, '60', '0.00'),
+(155, '', 'P00155', 'Vòi chậu hiệu DuDoff London, mã số RONDO FC-A06 (FC-A06)', 'RONDO FC-A06', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London, 2 nguồn nước nóng lạnh<br>- Vật liệu: Đồng kết hợp mạ Chrome màu trắng bóng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 2500000, 2500000, 'uploads/client_profile_images/155/RONDO-FC-A06.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(156, '', 'P00156', 'Vòi chậu hiệu DuDoff London, mã số SLIM FC-A01 (FC-A01)', 'SLIM FC-A01', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London 2 nguồn nước nóng lạnh<br>- Vật liệu: Đồng kết hợp mạ Chrome màu trắng bóng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 2370000, 2370000, 'uploads/client_profile_images/156/SLIM-FC-A01.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(157, '', 'P00157', 'Vòi chậu hiệu DuDoff London, mã số SLIM FC-A05 (FC-A05)', 'SLIM FC-A05', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London<br>- Vật liệu: Đồng kết hợp mạ Chrome màu trắng bóng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 1900000, 1900000, 'uploads/client_profile_images/157/SLIM-FC-A05.jpg', 10, 50, 0, '12', 443, '60', '0.00'),
+(158, '', 'P00158', 'Vòi chậu hiệu DuDoff London, mã số SLIM FS-A03 (FS-A03)', 'SLIM FS-A03', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 228, '', '', '', '<div class="product-short-description">- Vòi chậu rửa chén Dudoff London, 2 nguồn nước nóng lạnh chế tạo bán thủ công<br>- Kết hợp dây rút, 2 chế độ nước<br>- Vật liệu: Inox 304<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Châu Âu</div>', 6250000, 6250000, 'uploads/client_profile_images/158/SLIM-FS-A03.jpg', 10, 50, 0, '12', 442, '60', '0.00'),
+(159, '', 'P00159', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm bàn bếp, mã số SUNRISE COPPER', 'SUNRISE COPPER', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-09-30', '2017-09-30', 109, '', '', '', '', 135000000, 135000000, 'uploads/client_profile_images/159/SUNRISE-COPPER.jpg', 10, 50, 0, '12', 395, '60', '0.00'),
+(160, '', 'SP-00160', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm bàn bếp, mã số SUNRISE GOLD', 'SUNRISE GOLD', '-&nbsp;H&uacute;t lọc khử m&ugrave;i bằng than Carbon v&agrave; ống tho&aacute;t Ф150<br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '10.00', 3, '4', 4, '2017-10-10', '2017-10-10', 109, '', 'W880 x D130 x H370 mm', '', '<div class="product-price" id="productPrice194">\r\n<div class="PricesalesPrice vm-display vm-price-value">Máy hút Downdraft âm bàn bếp hình bán nguyệt, chế tạo bán thủ công từ gốm Ceramic, kính đen và Inox 304<br>- Công suất 240W</div>\r\n</div>\r\n<div class="product-short-description">- Đèn Led trang trí bán nguyệt 1x9.5W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 700m⊃3;/h, độ ồn < 55dB>- Màu sắc: Vàng đồng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu.<br>- Hàng đặt<br>- Sản xuất tại Ý</div>', 135000000, 135000000, '', 5, 50, 0, '12', 395, '60', '0.00'),
+(161, '', 'SP-00161', 'Máy hút khử mùi Downdraft hiệu DuDoff London kiểu âm bàn bếp, mã số SUNRISE WHITE', 'SUNRISE WHITE', '<span>- Hút lọc khử mùi bằng than Carbon và ống thoát Ф150</span><br><span>- Chức năng hẹn giờ tắt máy</span>', '', NULL, NULL, NULL, '10.00', 3, '4', 4, '2017-10-10', '2017-10-10', 109, '', 'W880 x D130 x H370 mm', '', '<div class="product-price" id="productPrice194">\r\n<div class="PricesalesPrice vm-display vm-price-value">Máy hút Downdraft âm bàn bếp hình bán nguyệt, chế tạo bán thủ công từ gốm Ceramic, kính đen và Inox 304<br>- Công suất 240W</div>\r\n</div>\r\n<div class="product-short-description">- Đèn Led trang trí bán nguyệt 1x9.5W<br>- Điều khiển bằng Remote 4 cấp độ<br>- Lưới lọc dầu mỡ bằng Inox và hợp kim nhôm sợi<br>- Lưu lượng 700m3/h, độ ồn < 55dB>- Màu sắc: trắng<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Hàng đặt<br>- Sản xuất tại Ý</div>', 135000000, 135000000, '', 5, 50, 0, '12', 395, '60', '0.00'),
+(162, '', 'SP-00162', 'Bếp điện hiệu DuDoff London loại 2 bếp, mã số CELADON F2B (CH-F2B)', 'CELADON F2B', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-10', '2017-10-10', 109, '', '700 x 400mm', '', '<div class="product-short-description">- Kính Ceramic Eurokera màu đen<br>- Tổng công suất 3.500W<br>+ Bếp trái: 1.800W<br>+ Bếp phải: 700/1.700W<br>- Kích thước bếp: 700 x 400mm<br>- Kích thước cắt mặt đá: 660 x 325mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 18900000, 18900000, 'uploads/client_profile_images/162/CELADON-F2B.png', 10, 50, 0, '12', 405, '60', '0.00'),
+(163, '', 'SP-00163', 'Bếp điện hiệu DuDoff London loại 3 bếp, mã số CELADON F3B (CH-F3B)', 'CELADON F3B', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-10-10', '2017-10-10', 109, '', '770 x 320mm', '', '<div class="product-short-description">- Kính Ceramic Eurokera màu đen<br>- Tổng công suất 5.300W<br>+ Bếp trái: 2.300W<br>+ Bếp giữa: 1.800W<br>+ Bếp phải: 1.200W<br>- Kích thước bếp: 770 x 320mm<br>- Kích thước cắt mặt đá: 755 x 305mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 22385000, 22385000, 'uploads/client_profile_images/163/CELADON-F3B.png', 10, 50, 0, '12', 405, '60', '0.00'),
+(164, '', 'SP-00164', 'Bếp điện hiệu DuDoff London loại 3 bếp, mã số CELADON F3BR (CH-F3BR)', 'CELADON F3BR', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '510mm', '', '<div class="product-short-description">- Kính Ceramic Eurokera màu đen<br>- Tổng công suất 4.100W<br>+ Bếp trái: 1.200W<br>+ Bếp giữa: 1.200W<br>+ Bếp phải: 700/1.700W<br>- Kích thước bếp: 510mm<br>- Kích thước cắt mặt đá: 495mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 19850000, 19850000, 'uploads/client_profile_images/164/CELADON-F3BR.png', 10, 50, 0, '12', 405, '60', '0.00'),
+(165, '', 'SP-00165', 'Bếp điện hiệu DuDoff London loại 4 bếp, mã số CELADON F4B (CH-F4B)', 'CELADON F4B', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', ' 900 x 350mm', '', '<div class="product-short-description">- Kính Ceramic Eurokera màu đen<br>- Tổng công suất 6.400W<br>+ Bếp trái: 2.300W<br>+ Bếp giữa trái: 700/1.700W<br>+ Bếp giữa phải: 1.200W<br>+ Bếp phải: 1.200W<br>- Kích thước bếp: 900 x 350mm<br>- Kích thước cắt mặt đá: 880 x 330mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>Sản xuất tại Ý</div>', 24800000, 24800000, 'uploads/client_profile_images/165/CELADON-F4B.png', 10, 50, 0, '12', 405, '60', '0.00'),
+(166, '', 'SP-00166', 'Bếp điện hiệu DuDoff London loại 4 bếp, mã số CELADON M4B (C04-M1)', 'CELADON M4B', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '950 x 520mm', '', '<div class="product-short-description">- Kính Ceramic Eurokera màu đen<br>- Tổng công suất 7.400W<br>+ Bếp trái: 750/2.200W<br>+ Bếp giữa trái: 1.800W<br>+ Bếp giữa phải: 750/2.200W<br>+ Bếp phải: 1.200W<br>- Kích thước bếp: 950 x 520mm<br>- Kích thước cắt mặt đá: 790/450 x 160/175mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu <br>- Sản xuất tại Ý</div>', 39780000, 39780000, 'uploads/client_profile_images/166/CELADON-M4B.png', 10, 50, 0, '12', 405, '60', '0.00'),
+(167, '', 'SP-00167', 'Bếp ga hiệu DuDoff London loại 2 bếp, mã số GAIA 02M1 (G02-M1)', 'GAIA 02M1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 1, '', '800 x 400mm', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 4.0KW<br>- Kích thước bếp: 800 x 400mm<br>- Kích thước cắt mặt đá: 770 x 370mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 13890000, 13890000, 'uploads/client_profile_images/167/GAIA-02M1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(168, '', 'SP-00168', 'Bếp ga hiệu DuDoff London loại 2 bếp, mã số GAIA 02Z1 (G02-Z1)', 'GAIA 02Z1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 4.0KW<br>- Kích thước bếp: 780 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 16500000, 16500000, 'uploads/client_profile_images/168/GAIA-02Z1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(169, '', 'SP-00169', 'Bếp ga hiệu DuDoff London loại 2 bếp, mã số GAIA 02Z3 (G02-Z3)', 'GAIA 02Z3', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 1, '', '', '', '<div class="product-short-description">- Kính chịu lực, chịu nhiệt màu đen<br>- Điều khiển bằng cảm ứng<br>- Công suất: 2 x 4.2KW<br>- Kích thước bếp: 860 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 27159000, 27159000, 'uploads/client_profile_images/169/GAIA-02Z3.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(170, '', 'SP-00170', 'Bếp ga hiệu DuDoff London loại 2 bếp, mã số GAIA02Z2 (G02-Z2)', 'GAIA 02Z2', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '860 x 450mm', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 5.0 KW<br>- Kích thước bếp: 860 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 17700000, 17700000, 'uploads/client_profile_images/170/GAIA-02Z2.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(171, '', 'SP-00171', 'Bếp ga hiệu DuDoff London loại 3 bếp, mã số GAIA 03M1 (G03-M1)', 'GAIA 03M1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '800 x 400mm', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 4.0KW +1 x 1.75KW<br>- Kích thước bếp: 800 x 400mm<br>- Kích thước cắt mặt đá: 770 x 370mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>\r\n<div class="addtocart-area"><form method="post" class="product js-recalculate" action="http://dudoff.vn/san-pham/bep/bep-gas/gaia-03m1-detail#">\r\n<div class="product-fields jqtransformdone">\r\n<div class="product-field product-field-type-E"></div>\r\n</div>\r\n</form></div>', 14950000, 14950000, 'uploads/client_profile_images/171/GAIA-03M1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(172, '', 'SP-00172', 'Bếp ga hiệu DuDoff London loại 3 bếp, mã số GAIA 03Z1 (G03-Z1)', 'GAIA 03Z1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '780 x 450mm', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 4.0KW + 1 x 1.0KW<br>- Kích thước bếp: 780 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 17500000, 17500000, 'uploads/client_profile_images/172/GAIA-03Z1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(173, '', 'SP-00173', 'Bếp ga hiệu DuDoff London loại 3 bếp, mã số GAIA 03Z2 (G03-Z2)', 'GAIA 03Z2', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-10-11', '2017-10-11', 109, '', '', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 2 x 5.0KW + 1 x 1.0KW<br>- Kích thước bếp: 860 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 18900000, 18900000, '', 10, 60, 0, '12', 409, '60', '0.00'),
+(174, '', 'SP-00174', 'Bếp ga hiệu DuDoff London loại 3 bếp, mã số GAIA 03Z3 (G03-Z3)', 'GAIA 03Z3', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '860 x 450mm', '', '<div class="product-short-description">- Kính chịu lực, chịu nhiệt màu đen<br>- Điều khiển bằng cảm ứng<br>- Công suất: 2 x 4.2KW + 1 x 1.0KW<br>- Kích thước bếp: 860 x 450mm<br>- Kích thước cắt mặt đá: 705 x 405mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 32175000, 32175000, '', 10, 50, 0, '12', 409, '60', '0.00'),
+(175, '', 'SP-00175', 'Bếp ga hiệu DuDoff London loại 4 bếp, mã số GAIA 04M1 (G04-M1)', 'GAIA 04M1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '1000 x 400mm', '', '<div class="product-short-description">- Kính cường lực màu đen<br>- Công suất: 4.0KW + 3.0KW + 1.75KW + 1.0KW<br>- Kích thước bếp: 1000 x 400mm<br>- Kích thước cắt mặt đá: 955 x 375mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 17955000, 17955000, 'uploads/client_profile_images/175/GAIA-04M1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(176, '', 'SP-00176', 'Bếp ga hiệu DuDoff London loại 4 bếp, mã số GAIA 04M2 (G04-M2)', 'GAIA 04M2', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '900 x 510mm', '', '<div class="product-short-description">- Kính cường lực màu đen hình Oval<br>- Công suất: 4.0KW + 3.0KW + 1.75KW + 1.0KW<br>- Kích thước bếp: 900 x 510mm<br>- Kích thước cắt mặt đá: 790 x 160 + 175mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 20385000, 20385000, 'uploads/client_profile_images/176/GAIA-04M2.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(177, '', 'SP-00177', 'Bếp ga hiệu DuDoff London loại 4 bếp, mã số GAIA S04M1 (GS04-M1)', 'GAIA S04M1', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '1100 x 400mm', '', '<div class="product-short-description">- Bề mặt bếp bằng Inox<br>- Công suất: 4.0KW + 3.0KW + 1.75KW + 1.0KW<br>- Kích thước bếp: 1100 x 400mm<br>- Kích thước cắt mặt đá: 1055 x 375mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 19250000, 19250000, 'uploads/client_profile_images/177/GAIA-S04M1.jpg', 10, 50, 0, '12', 409, '60', '0.00'),
+(178, '', 'SP-00178', 'Bếp kết hợp hiệu DuDoff London, mã số GRANI Z0102 (GI-Z0102)', 'GRANI Z0102', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-10-11', '2017-10-11', 109, '', '600 x 505mm', '', '<div class="product-short-description">- Bếp kết hợp, 2 bếp từ và 1 bếp gas.<br>- Kính Ceramic Eurokera Pháp màu đen<br>- Bếp từ: Tổng công suất: 3600W<br>+ Bếp từ trên : 1.500W - Booster: 2.000W<br>+ Bếp từ dưới: 1.200W - Booster: 1.600W<br>- Bếp gas: 3 vòng lửa 4KW<br>- Kích thước bếp: 600 x 505mm<br>- Kích thước cắt mặt đá: 560 x 490mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 26159000, 26159000, 'uploads/client_profile_images/178/GRANI-Z0102.png', 10, 50, 0, '12', 413, '60', '0.00'),
+(179, '', 'SP-00179', 'Bếp kết hợp hiệu DuDoff London, mã số GRANI Z0104 (GI-Z0104)', 'GRANI Z0104', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '880 x 505mm', '', '<div class="product-short-description">- Bếp kết hợp, 4 bếp từ và 1 bếp gas<br>- Kính Ceramic Eurokera Pháp màu đen<br>- Bếp từ: Tổng công suất 7200W<br>+ Bếp từ trên trái: 1.200W - Booster: 1.600W<br>+ Bếp từ dưới trái: 1.500W - Booster: 2.000W<br>+ Bếp từ trên phải: 1.500W - Booster: 2.000W <br>+ Bếp từ dưới phải: 1.200W – Booster: 1.600W<br>- Bếp gas: 3 vòng lửa 4kw<br>- Kích thước bếp: 880 x 505mm<br>- Kích thước cắt mặt đá: 860 x 490mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 36250000, 36250000, 'uploads/client_profile_images/179/GRANI-Z0104.png', 10, 50, 0, '12', 413, '60', '0.00'),
+(180, '', 'SP-00180', 'Bếp kết hợp hiệu DuDoff London, mã số GRANI Z0202 (GI-Z0202)', 'GRANI Z0202', '', '', NULL, NULL, NULL, '10.00', 3, '4', 3, '2017-10-11', '2017-10-11', 109, '', '600 x 505mm', '', '<div class="product-short-description">- Bếp kết hợp, 2 bếp từ và 2 bếp gas<br>- Kính Ceramic Eurokera Pháp màu đen<br>- Bếp từ: Tổng công suất: 3600W<br>+ Bếp từ trên : 1.500W - Booster: 2.000W<br>+ Bếp từ dưới: 1.200W - Booster: 1.600W<br>- Bếp Gas: Tổng công suất: 3800W<br>+ Bếp gas trên: 2.800W<br>+ Bếp gas dưới: 1.000W<br>- Kích thước bếp: 600 x 505mm<br>- Kích thước cắt mặt đá: 560 x 490mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 27189000, 27189000, 'uploads/client_profile_images/180/GRANI-Z0202.png', 10, 50, 0, '12', 413, '60', '0.00'),
+(181, '', 'SP-00181', 'Bếp kết hợp hiệu DuDoff London, mã số MIA F2B (MH-F2B)', 'MIA F2B', '', '', NULL, NULL, NULL, '5.00', 1, '4', 3, '2017-10-11', '2017-10-11', 109, '', '700 x 400mm', '', '<div class="product-short-description">- Bếp kết hợp, 1 bếp từ và 1 bếp điện<br>- Kính Ceramic Eurokera màu đen<span> </span><br>- Tổng công suất 5.200W<br>+ Bếp điện trái: 1.000 - 2.200W<br>+ Bếp từ phải: 2.300W, Booster: 3.000W<br>- Kích thước bếp: 700 x 400mm<br>- Kích thước cắt mặt đá: 680 x 380mm<br>- Bảo hành 5 năm theo tiêu chuẩn của Dudoff London toàn cầu<br>- Sản xuất tại Ý</div>', 29780000, 29780000, 'uploads/client_profile_images/181/MIA-F2B.png', 10, 50, 0, '12', 413, '60', '0.00');
 
 -- --------------------------------------------------------
 
@@ -5761,7 +6423,7 @@ CREATE TABLE IF NOT EXISTS `tblitem_price_buy_history` (
   PRIMARY KEY (`id`),
   KEY `id_item` (`item_id`),
   KEY `id_item_2` (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=50 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=51 ;
 
 --
 -- Dumping data for table `tblitem_price_buy_history`
@@ -5803,7 +6465,8 @@ INSERT INTO `tblitem_price_buy_history` (`id`, `item_id`, `price`, `new_price`, 
 (46, 55, 30000000, 30000000, '2017-09-19 09:36:17'),
 (47, 57, 10000000, 10000000, '2017-09-19 09:48:04'),
 (48, 62, 97600000, 25560000, '2017-09-19 09:55:12'),
-(49, 61, 30000000, 25560000, '2017-09-19 10:02:50');
+(49, 61, 30000000, 25560000, '2017-09-19 10:02:50'),
+(50, 133, 50, 29900000, '2017-09-30 08:10:28');
 
 -- --------------------------------------------------------
 
@@ -5820,7 +6483,7 @@ CREATE TABLE IF NOT EXISTS `tblitem_price_history` (
   PRIMARY KEY (`id`),
   KEY `id_item` (`item_id`),
   KEY `id_item_2` (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
 
 --
 -- Dumping data for table `tblitem_price_history`
@@ -5835,7 +6498,8 @@ INSERT INTO `tblitem_price_history` (`id`, `item_id`, `price`, `new_price`, `dat
 (14, 55, 47500000, 57500000, '2017-07-29 03:38:58'),
 (15, 56, 48050000, 33500000, '2017-09-19 09:26:37'),
 (16, 62, 97600000, 25560000, '2017-09-19 09:55:12'),
-(17, 61, 48950000, 25560000, '2017-09-19 10:02:50');
+(17, 61, 48950000, 25560000, '2017-09-19 10:02:50'),
+(18, 133, 100, 29900000, '2017-09-30 08:10:28');
 
 -- --------------------------------------------------------
 
@@ -6110,6 +6774,29 @@ CREATE TABLE IF NOT EXISTS `tbllistemails` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbllog_email_send`
+--
+
+CREATE TABLE IF NOT EXISTS `tbllog_email_send` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template` int(11) DEFAULT NULL,
+  `file` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `addedfrom` int(11) NOT NULL,
+  `date_send` datetime NOT NULL,
+  `date_read` datetime DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '0',
+  `subject` varchar(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `message` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `email_to` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `email_cc` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `email_bc` text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  `campaign` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblmaillistscustomfields`
 --
 
@@ -6262,7 +6949,7 @@ CREATE TABLE IF NOT EXISTS `tblopportunity` (
 --
 
 INSERT INTO `tblopportunity` (`id`, `client`, `contact`, `campaign`, `step`, `email`, `phone`, `content`, `performance`, `expected`, `staff_in`, `status`, `end_date`, `source`, `source_details`, `date_create`, `create_by`) VALUES
-(1, 9, 4, 1, 2, 'amin@admin.com', '01216479974', 'Nội dung', 20, '1000000', 4, 1, '2017-09-13', 6, '123', '2017-09-16', 1);
+(1, 9, 4, 1, 4, 'amin@admin.com', '01216479974', 'Nội dung', 20, '1000000', 4, 1, '2017-09-13', 6, '123', '2017-09-16', 1);
 
 -- --------------------------------------------------------
 
@@ -6275,7 +6962,7 @@ CREATE TABLE IF NOT EXISTS `tbloptions` (
   `name` varchar(60) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=282 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=292 ;
 
 --
 -- Dumping data for table `tbloptions`
@@ -6318,7 +7005,7 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (34, 'invoice_company_phonenumber', '(028) 38 453 052'),
 (35, 'view_invoice_only_logged_in', '0'),
 (36, 'invoice_number_format', '1'),
-(37, 'next_invoice_number', '43'),
+(37, 'next_invoice_number', '45'),
 (38, 'cron_send_invoice_overdue_reminder', '1'),
 (39, 'active_language', 'vietnamese'),
 (40, 'invoice_number_decrement_on_delete', '1'),
@@ -6340,7 +7027,7 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (56, 'estimate_auto_convert_to_invoice_on_client_accept', '1'),
 (57, 'exclude_estimate_from_client_area_with_draft_status', '1'),
 (58, 'rtl_support_admin', '0'),
-(59, 'last_cron_run', '1503044540'),
+(59, 'last_cron_run', '1507110446'),
 (60, 'show_sale_agent_on_estimates', '1'),
 (61, 'show_sale_agent_on_invoices', '1'),
 (62, 'predefined_terms_invoice', ''),
@@ -6367,7 +7054,7 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (83, 'last_auto_backup', ''),
 (84, 'output_client_pdfs_from_admin_area_in_client_language', '0'),
 (85, 'show_lead_reminders_on_calendar', '1'),
-(86, 'aside_menu_active', '{"aside_menu_active":[{"name":"als_dashboard","url":"\\/","permission":"","icon":"fa fa-tachometer","id":"dashboard"},{"name":"als_clients","url":"clients","permission":"customers","icon":"fa fa-users","id":"customers"},{"name":"als_suppliers","url":"suppliers","permission":"","icon":"fa fa-users","id":"suppliers"},{"name":"als_staff","url":"staff","permission":"staff","icon":"fa fa-user-circle-o","id":"staff"},{"name":"als_products","url":"invoice_items","permission":"items","icon":"fa fa-product-hunt","id":"products"},{"name":"als_purchase","url":"#","permission":"is_admin","icon":"fa fa-money","id":"tickets","children":[{"name":"als_purchase_plan","url":"purchases","permission":"is_admin","icon":"","id":"als_purchase_plan"},{"name":"als_suggested_purchase","url":"purchase_suggested","permission":"is_admin","icon":"","id":"als_suggested_purchase"},{"name":"als_orders_ordered","url":"purchase_orders","permission":"is_admin","icon":"","id":"als_orders_ordered"},{"name":"als_purchase_contract","url":"purchase_contracts","permission":"is_admin","icon":"","id":"als_purchase_contract"},{"name":"als_purchase_costs_slip","url":"purchase_cost","permission":"is_admin","icon":"","id":"als_purchase_costs_slip"},{"name":"als_votes","url":"votes","permission":"is_admin","icon":"","id":"als_votes"},{"name":"als_debit","url":"debit","permission":"is_admin","icon":"","id":"als_debit"}]},{"name":"als_import_goods","url":"imports","permission":"","icon":"fa fa-building-o","id":"import_goods","children":[{"name":"als_imp_contracts","url":"imports\\/imp_contract","permission":"is_admin","icon":"","id":"imp_contracts"},{"name":"als_imp_returns","url":"imports\\/imp_return","permission":"is_admin","icon":"","id":"imp_returns"},{"name":"als_imp_transfers","url":"imports\\/imp_transfer","permission":"is_admin","icon":"","id":"imp_transfers"},{"name":"als_imp_adjustments","url":"imports\\/imp_adjustment","permission":"is_admin","icon":"","id":"imp_adjustments"},{"name":"als_imp_internals","url":"imports\\/imp_internal","permission":"is_admin","icon":"","id":"imp_internals"}]},{"name":"als_sales","url":"sales","permission":"","icon":"fa fa-balance-scale","id":"sales","children":[{"name":"als_quotations","url":"quotes","permission":"is_admin","icon":"","id":"als_quotations"},{"name":"als_sale_contracts","url":"contracts","permission":"is_admin","icon":"","id":"als_sale_contracts"},{"name":"als_orders","url":"sales","permission":"is_admin","icon":"","id":"als_orders_sales"},{"name":"als_deliveries","url":"deliveries","permission":"is_admin","icon":"","id":"als_deliveries"},{"name":"als_receipts","url":"receipts","permission":"is_admin","icon":"","id":"als_receipts"},{"name":"als_report_have","url":"report_have","permission":"is_admin","icon":"","id":"als_report_have"},{"name":"invoices","url":"invoices\\/list_invoices","permission":"invoices","icon":"","id":"child-invoices"}]},{"name":"als_export_warehouses","url":"#","permission":"","icon":"fa fa-building-o","id":"export_warehouses","children":[{"name":"sale_export_warehouses","url":"exports","permission":"","icon":"","id":"sale_export_warehouses"}]},{"name":"als_leads","url":"leads","permission":"is_staff_member","icon":"fa fa-tty","id":"leads"},{"name":"als_tasks","url":"tasks\\/list_tasks","permission":"","icon":"fa fa-tasks","id":"tasks"},{"name":"als_reports","url":"#","permission":"reports","icon":"fa fa-area-chart","id":"reports","children":[{"name":"als_reports_sales_submenu","url":"reports\\/sales","permission":"","icon":"","id":"child-sales"},{"name":"als_reports_expenses","url":"reports\\/expenses","permission":"","icon":"","id":"child-expenses"},{"name":"als_expenses_vs_income","url":"reports\\/expenses_vs_income","permission":"","icon":"","id":"child-expenses-vs-income"},{"name":"als_reports_leads_submenu","url":"reports\\/leads","permission":"","icon":"","id":"child-leads"},{"name":"als_kb_articles_submenu","url":"reports\\/knowledge_base_articles","permission":"","icon":"","id":"child-kb-articles"}]},{"name":"als_Marketing","url":"#","permission":"","icon":"glyphicon glyphicon-screenshot","id":"marketing ","children":[{"name":"als_campaign","url":"campaign","permission":"","icon":"","id":"campaign"},{"name":"als_opportunity","url":"opportunity","permission":"","icon":"","id":"opportunity"}]},{"name":"als_utilities","url":"#","permission":"","icon":"fa fa-cogs","id":"utilities","children":[{"name":"als_media","url":"utilities\\/media","permission":"","icon":"","id":"child-media"},{"name":"bulk_pdf_exporter","url":"utilities\\/bulk_pdf_exporter","permission":"bulk_pdf_exporter","icon":"","id":"child-bulk-pdf-exporter"},{"name":"als_calendar_submenu","url":"utilities\\/calendar","permission":"","icon":"","id":"child-calendar"},{"name":"als_goals_tracking","url":"goals","permission":"goals","icon":"","id":"child-goals-tracking"},{"name":"als_surveys","url":"surveys","permission":"surveys","icon":"","id":"child-surveys"},{"name":"als_announcements_submenu","url":"announcements","permission":"is_admin","icon":"","id":"child-announcements"},{"name":"utility_backup","url":"utilities\\/backup","permission":"is_admin","icon":"","id":"child-database-backup"},{"name":"als_activity_log_submenu","url":"utilities\\/activity_log","permission":"is_admin","icon":"","id":"child-activity-log"},{"name":"ticket_pipe_log","url":"utilities\\/pipe_log","permission":"is_admin","icon":"","id":"ticket-pipe-log"}]}]}'),
+(86, 'aside_menu_active', '{"aside_menu_active":[{"name":"als_dashboard","url":"\\/","permission":"","icon":"fa fa-tachometer","type":"","id":"dashboard"},{"name":"als_clients","url":"clients","permission":"customers","icon":"fa fa-users","type":"1","id":"customers"},{"name":"als_suppliers","url":"suppliers","permission":"","icon":"fa fa-users","type":"1","id":"suppliers"},{"name":"als_staff","url":"staff","permission":"staff","icon":"fa fa-user-circle-o","type":"1","id":"staff"},{"name":"als_products","url":"invoice_items","permission":"items","icon":"fa fa-product-hunt","type":"1","id":"products"},{"name":"als_purchase","url":"#","permission":"is_admin","icon":"fa fa-money","type":"1","id":"tickets","children":[{"name":"als_purchase_plan","url":"purchases","permission":"is_admin","icon":"","id":"als_purchase_plan"},{"name":"als_suggested_purchase","url":"purchase_suggested","permission":"is_admin","icon":"","id":"als_suggested_purchase"},{"name":"als_orders_ordered","url":"purchase_orders","permission":"is_admin","icon":"","id":"als_orders_ordered"},{"name":"als_purchase_contract","url":"purchase_contracts","permission":"is_admin","icon":"","id":"als_purchase_contract"},{"name":"als_purchase_costs_slip","url":"purchase_cost","permission":"is_admin","icon":"","id":"als_purchase_costs_slip"},{"name":"als_votes","url":"votes","permission":"is_admin","icon":"","id":"als_votes"},{"name":"als_debit","url":"debit","permission":"is_admin","icon":"","id":"als_debit"}]},{"name":"als_import_goods","url":"imports","permission":"","icon":"fa fa-building-o","type":"2","id":"import_goods","children":[{"name":"als_imp_contracts","url":"imports\\/imp_contract","permission":"is_admin","icon":"","id":"imp_contracts"},{"name":"als_imp_returns","url":"imports\\/imp_return","permission":"is_admin","icon":"","id":"imp_returns"},{"name":"als_imp_transfers","url":"imports\\/imp_transfer","permission":"is_admin","icon":"","id":"imp_transfers"},{"name":"als_imp_adjustments","url":"imports\\/imp_adjustment","permission":"is_admin","icon":"","id":"imp_adjustments"},{"name":"als_imp_internals","url":"imports\\/imp_internal","permission":"is_admin","icon":"","id":"imp_internals"}]},{"name":"als_sales","url":"sales","permission":"","icon":"fa fa-balance-scale","type":"2","id":"sales","children":[{"name":"als_quotations","url":"quotes","permission":"is_admin","icon":"","id":"als_quotations"},{"name":"als_sale_contracts","url":"contracts","permission":"is_admin","icon":"","id":"als_sale_contracts"},{"name":"als_orders","url":"sales","permission":"is_admin","icon":"","id":"als_orders_sales"},{"name":"als_deliveries","url":"deliveries","permission":"is_admin","icon":"","id":"als_deliveries"},{"name":"als_receipts","url":"receipts","permission":"is_admin","icon":"","id":"als_receipts"},{"name":"als_report_have","url":"report_have","permission":"is_admin","icon":"","id":"als_report_have"},{"name":"invoices","url":"invoices\\/list_invoices","permission":"invoices","icon":"","id":"child-invoices"}]},{"name":"als_export_warehouses","url":"#","permission":"","icon":"fa fa-building-o","type":"2","id":"export_warehouses","children":[{"name":"sale_export_warehouses","url":"exports","permission":"","icon":"","id":"sale_export_warehouses"}]},{"id":"marketing","name":"als_Marketing","url":"#","permission":"","icon":"glyphicon glyphicon-screenshot","type":"4","children":[{"name":"als_campaign","url":"campaign","permission":"","icon":"","id":"campaign"},{"name":"als_opportunity","url":"opportunity","permission":"","icon":"","id":"opportunity"}]},{"name":"als_email_marketing","url":"#","permission":"","icon":"glyphicon glyphicon-envelope","type":"4","id":"_email_marketing","children":[{"name":"___email_marketing","url":"email_marketing","permission":"","icon":"","id":"email_marketing"},{"name":"been_send_email","url":"email_marketing\\/been_send_email","permission":"","icon":"","id":"been_send_email"},{"name":"template_mail","url":"email_marketing\\/template_emails","permission":"","icon":"","id":"template_mail"}]},{"name":"als_reports","url":"#","permission":"reports","icon":"fa fa-area-chart","type":"2","id":"reports","children":[{"name":"als_reports_sales_submenu","url":"reports\\/sales","permission":"","icon":"","id":"child-sales"},{"name":"als_reports_debt","url":"reports\\/debts","permission":"is_admin","icon":"","id":"als_reports_debt"}]},{"name":"als_utilities","url":"#","permission":"","icon":"fa fa-cogs","type":"4","id":"utilities","children":[{"name":"als_media","url":"utilities\\/media","permission":"","icon":"","id":"child-media"},{"name":"bulk_pdf_exporter","url":"utilities\\/bulk_pdf_exporter","permission":"bulk_pdf_exporter","icon":"","id":"child-bulk-pdf-exporter"},{"name":"als_calendar_submenu","url":"utilities\\/calendar","permission":"","icon":"","id":"child-calendar"},{"name":"als_goals_tracking","url":"goals","permission":"goals","icon":"","id":"child-goals-tracking"},{"name":"als_surveys","url":"surveys","permission":"surveys","icon":"","id":"child-surveys"},{"name":"als_announcements_submenu","url":"announcements","permission":"is_admin","icon":"","id":"child-announcements"},{"name":"utility_backup","url":"utilities\\/backup","permission":"is_admin","icon":"","id":"child-database-backup"},{"name":"als_activity_log_submenu","url":"utilities\\/activity_log","permission":"is_admin","icon":"","id":"child-activity-log"},{"name":"ticket_pipe_log","url":"utilities\\/pipe_log","permission":"is_admin","icon":"","id":"ticket-pipe-log"}]}]}'),
 (87, 'estimate_expiry_reminder_enabled', '1'),
 (88, 'send_estimate_expiry_reminder_before', '4'),
 (89, 'leads_default_source', ''),
@@ -6375,8 +7062,8 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (91, 'proposal_expiry_reminder_enabled', '1'),
 (92, 'send_proposal_expiry_reminder_before', '4'),
 (93, 'default_contact_permissions', 'a:6:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"3";i:3;s:1:"4";i:4;s:1:"5";i:5;s:1:"6";}'),
-(94, 'pdf_logo_width', '150'),
-(95, 'aside_menu_inactive', '{"aside_menu_inactive":[{"name":"payments","url":"payments","permission":"payments","icon":"","id":"child-payments"},{"name":"als_purchase_sale_slip","url":"#","permission":"is_admin","icon":"","id":"als_purchase_sale_slip"},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects"},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects"},{"name":"als_contracts","url":"contracts","permission":"contracts","icon":"fa fa-file","id":"contracts"},{"name":"als_expenses","url":"expenses\\/list_expenses","permission":"expenses","icon":"fa fa-heartbeat","id":"expenses"},{"name":"support","url":"tickets","permission":"","icon":"fa fa-ticket","id":"tickets"},{"name":"transfer_export_warehouses","url":"#","permission":"","icon":"","id":"sale_export_warehouses"},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects"},{"name":"als_kb","url":"#","permission":"knowledge_base","icon":"fa fa-folder-open-o","id":"knowledge-base","children":[{"name":"als_all_articles","url":"knowledge_base","permission":"","icon":"","id":"child-all-articles"},{"name":"als_kb_groups","url":"knowledge_base\\/manage_groups","permission":"","icon":"","id":"child-groups"}]}]}'),
+(94, 'pdf_logo_width', ''),
+(95, 'aside_menu_inactive', '{"aside_menu_inactive":[{"name":"payments","url":"payments","permission":"payments","icon":"","id":"child-payments"},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects"},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects"},{"name":"als_contracts","url":"contracts","permission":"contracts","icon":"fa fa-file","id":"contracts"},{"name":"als_expenses","url":"expenses\\/list_expenses","permission":"expenses","icon":"fa fa-heartbeat","id":"expenses"},{"name":"support","url":"tickets","permission":"","icon":"fa fa-ticket","id":"tickets"},{"name":"transfer_export_warehouses","url":"#","permission":"","icon":"","id":"sale_export_warehouses"},{"name":"als_kb_articles_submenu","url":"reports\\/knowledge_base_articles","permission":"","icon":"","id":"child-kb-articles"},{"name":"als_reports_leads_submenu","url":"reports\\/leads","permission":"","icon":"","id":"child-leads"},{"name":"als_expenses_vs_income","url":"reports\\/expenses_vs_income","permission":"","icon":"","id":"child-expenses-vs-income"},{"name":"als_reports_expenses","url":"reports\\/expenses","permission":"","icon":"","id":"child-expenses"},{"name":"als_kb","url":"#","permission":"knowledge_base","icon":"fa fa-folder-open-o","id":"knowledge-base","children":[{"name":"als_all_articles","url":"knowledge_base","permission":"","icon":"","id":"child-all-articles"},{"name":"als_kb_groups","url":"knowledge_base\\/manage_groups","permission":"","icon":"","id":"child-groups"},{"name":"als_reports_buys_submenu","url":"reports\\/purchases","permission":"is_admin","icon":"","id":"als_purchase_sale_slip"}]},{"name":"projects","url":"projects","permission":"","icon":"fa fa-bars","id":"projects","children":[{"name":"als_reports_warehouses","url":"reports\\/warehouses","permission":"is_admin","icon":"","id":"als_reports_warehouses"},{"name":"als_leads","url":"leads","permission":"is_staff_member","icon":"fa fa-tty","id":"leads"}]},{"name":"als_tasks","url":"tasks\\/list_tasks","permission":"","icon":"fa fa-tasks","id":"tasks"}]}'),
 (96, 'setup_menu_active', '{     "setup_menu_active": [{         "name": "clients",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "customers",         "children": [{             "name": "customer_groups",             "url": "clients\\/groups",             "permission": "",             "icon": "",             "id": "groups"         }]     }, {         "name": "als_list",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "list",         "children": [{             "name": "als_positions",             "url": "positions",             "permission": "",             "icon": "",             "id": "positions"         }, {             "name": "als_workplaces",             "url": "workplaces",             "permission": "",             "icon": "",             "id": "workplaces"         }, {             "name": "als_workforms",             "url": "workforms",             "permission": "",             "icon": "",             "id": "workforms"         }, {             "name": "als_units",             "url": "units",             "permission": "",             "icon": "",             "id": "units"         }, {             "name": "als_racks",             "url": "racks",             "permission": "",             "icon": "",             "id": "racks"         }, {             "name": "als_warehouses",             "url": "warehouses",             "permission": "",             "icon": "",             "id": "warehouses"         }, {             "name": "als_categories",             "url": "categories",             "permission": "",             "icon": "",             "id": "categories"         }, {             "name": "als_accounts",             "url": "accounts",             "permission": "",             "icon": "",             "id": "accounts"         }]     }, {         "name": "support",         "url": "#",         "permission": "",         "icon": "",         "id": "tickets",         "children": [{             "name": "acs_departments",             "url": "departments",             "permission": "is_admin",             "icon": "",             "id": "departments"         }, {             "name": "acs_ticket_predefined_replies_submenu",             "url": "tickets\\/predifined_replies",             "permission": "is_admin",             "icon": "",             "id": "predifined-replies"         }, {             "name": "acs_ticket_priority_submenu",             "url": "tickets\\/priorities",             "permission": "is_admin",             "icon": "",             "id": "ticket-priority"         }, {             "name": "acs_ticket_statuses_submenu",             "url": "tickets\\/statuses",             "permission": "is_admin",             "icon": "",             "id": "ticket-statuses"         }, {             "name": "acs_ticket_services_submenu",             "url": "tickets\\/services",             "permission": "is_admin",             "icon": "",             "id": "services"         }, {             "name": "spam_filters",             "url": "tickets\\/spam_filters",             "permission": "is_admin",             "icon": "",             "id": "spam-filters"         }]     }, {         "name": "acs_leads",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "leads",         "children": [{             "name": "acs_leads_sources_submenu",             "url": "leads\\/sources",             "permission": "",             "icon": "",             "id": "sources"         }, {             "name": "acs_leads_statuses_submenu",             "url": "leads\\/statuses",             "permission": "",             "icon": "",             "id": "statuses"         }, {             "name": "leads_email_integration",             "url": "leads\\/email_integration",             "permission": "",             "icon": "",             "id": "email-integration"         }, {             "name": "web_to_lead",             "url": "leads\\/forms",             "permission": "is_admin",             "icon": "",             "id": "web-to-lead"         }]     }, {         "name": "acs_finance",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "finance",         "children": [{             "name": "acs_sales_taxes_submenu",             "url": "taxes",             "permission": "",             "icon": "",             "id": "taxes"         }, {             "name": "acs_sales_currencies_submenu",             "url": "currencies",             "permission": "",             "icon": "",             "id": "currencies"         }, {             "name": "acs_sales_payment_modes_submenu",             "url": "paymentmodes",             "permission": "",             "icon": "",             "id": "payment-modes"         }, {             "name": "acs_expense_categories",             "url": "expenses\\/categories",             "permission": "",             "icon": "",             "id": "expenses-categories"         }]     }, {         "name": "acs_contracts",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "contracts",         "children": [{             "name": "acs_contract_types",             "url": "contracts\\/types",             "permission": "",             "icon": "",             "id": "contract-types"         }, {             "id": "products",             "name": "als_contract_templates",             "url": "contract_templates",             "permission": "",             "icon": ""         }]     }, {         "name": "acs_email_templates",         "url": "emails",         "permission": "email_templates",         "icon": "",         "id": "email-templates"     }, {         "name": "asc_custom_fields",         "url": "custom_fields",         "permission": "is_admin",         "icon": "",         "id": "custom-fields"     }, {         "name": "acs_roles",         "url": "roles",         "permission": "roles",         "icon": "",         "id": "roles"     }, {         "name": "menu_builder",         "url": "#",         "permission": "is_admin",         "icon": "",         "id": "menu-builder",         "children": [{             "name": "main_menu",             "url": "utilities\\/main_menu",             "permission": "",             "icon": "",             "id": "organize-sidebar"         }, {             "name": "setup_menu",             "url": "utilities\\/setup_menu",             "permission": "is_admin",             "icon": "",             "id": "setup-menu"         }]     }, {         "name": "theme_style",         "url": "utilities\\/theme_style",         "permission": "is_admin",         "icon": "",         "id": "theme-style"     }, {         "name": "acs_settings",         "url": "settings",         "permission": "settings",         "icon": "",         "id": "settings"     }, {         "name": "setting_rule",         "url": "rule",         "permission": "setting_rule",         "icon": "",         "id": "setting_rule"     }] }'),
 (246, 'prefix_staff', 'NV-'),
 (97, 'access_tickets_to_none_staff_members', '0'),
@@ -6390,7 +7077,7 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (105, 'email_piping_default_priority', '2'),
 (106, 'total_to_words_lowercase', '1'),
 (107, 'show_tax_per_item', '1'),
-(108, 'last_survey_send_cron', '1503044540'),
+(108, 'last_survey_send_cron', '1507110446'),
 (109, 'total_to_words_enabled', '1'),
 (110, 'receive_notification_on_new_ticket', '1'),
 (111, 'autoclose_tickets_after', '0'),
@@ -6532,7 +7219,7 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (248, 'prefix_purchase_plan', 'KHM-'),
 (249, 'prefix_purchase_suggested', 'ĐXM-'),
 (250, 'prefix_purchase_order', 'ĐH-'),
-(251, 'prefix_product', 'P'),
+(251, 'prefix_product', 'SP-'),
 (252, 'prefix_supplier', 'NCC-'),
 (271, 'pdf_header', 'header.png'),
 (253, 'prefix_internal', 'NÐ-'),
@@ -6561,7 +7248,17 @@ INSERT INTO `tbloptions` (`id`, `name`, `value`) VALUES
 (278, 'prefix_vouchers_votes', 'PC-'),
 (279, 'prefix_vouchers_report_have', 'PT-'),
 (280, 'prefix_vouchers_debit', 'UNC-'),
-(281, 'prefix_clients', 'KH-');
+(281, 'prefix_clients', 'KH-'),
+(282, 'prefix_add_continuous', '1'),
+(284, 'prefix_logo_date_pdf_true_false', '0'),
+(283, 'prefix_header_pdf', 'uploads/company/logo_header.png'),
+(285, 'messaging_can_create_group', '1'),
+(286, 'messaging_chat_opener_color', '#4B5158'),
+(287, 'messaging_chat_head_color', '#57B5DF'),
+(288, 'messaging_chat_message_own_color', '#57B5DF'),
+(289, 'messaging_chat_message_own_font_color', '#FFFFFF'),
+(290, 'messaging_chat_message_from_color', '#EDEDED'),
+(291, 'messaging_chat_message_from_font_color', '#5B5B5B');
 
 -- --------------------------------------------------------
 
@@ -6606,10 +7303,13 @@ CREATE TABLE IF NOT EXISTS `tblorders_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tk_no` int(11) DEFAULT NULL,
   `tk_co` int(11) DEFAULT NULL,
+  `discount_percent` float DEFAULT '0',
+  `original_price_buy` decimal(25,2) DEFAULT '0.00',
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `taxrate` decimal(11,2) NOT NULL,
   `product_quantity` int(11) NOT NULL,
+  `entered_quantity` int(11) DEFAULT '0',
   `product_price_buy` decimal(11,2) NOT NULL,
   `currency_id` int(11) NOT NULL,
   `exchange_rate` decimal(11,2) NOT NULL,
@@ -6622,10 +7322,10 @@ CREATE TABLE IF NOT EXISTS `tblorders_detail` (
 -- Dumping data for table `tblorders_detail`
 --
 
-INSERT INTO `tblorders_detail` (`id`, `tk_no`, `tk_co`, `order_id`, `product_id`, `taxrate`, `product_quantity`, `product_price_buy`, `currency_id`, `exchange_rate`, `warehouse_id`, `purchase_suggested_detail_id`) VALUES
-(1, NULL, NULL, 20, 61, '5.00', 1, '11111.00', 1, '4.00', 1, 13),
-(2, NULL, NULL, 21, 61, '5.00', 1, '22222.00', 1, '22729.00', 1, 16),
-(3, NULL, NULL, 22, 57, '5.00', 1, '111111.00', 2, '27112.00', 1, 17);
+INSERT INTO `tblorders_detail` (`id`, `tk_no`, `tk_co`, `discount_percent`, `original_price_buy`, `order_id`, `product_id`, `taxrate`, `product_quantity`, `entered_quantity`, `product_price_buy`, `currency_id`, `exchange_rate`, `warehouse_id`, `purchase_suggested_detail_id`) VALUES
+(1, NULL, NULL, 0, '0.00', 20, 61, '5.00', 1, 0, '11111.00', 1, '4.00', 1, 13),
+(2, NULL, NULL, 0, '0.00', 21, 61, '5.00', 1, 0, '22222.00', 1, '22729.00', 1, 16),
+(3, NULL, NULL, 0, '0.00', 22, 57, '5.00', 1, 0, '111111.00', 2, '27112.00', 1, 17);
 
 -- --------------------------------------------------------
 
@@ -7096,6 +7796,7 @@ CREATE TABLE IF NOT EXISTS `tblpurchase_contracts` (
   `terms_of_sale` longtext COLLATE utf8_unicode_ci NOT NULL,
   `shipping_terms` longtext COLLATE utf8_unicode_ci NOT NULL,
   `template` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
 
@@ -7103,9 +7804,9 @@ CREATE TABLE IF NOT EXISTS `tblpurchase_contracts` (
 -- Dumping data for table `tblpurchase_contracts`
 --
 
-INSERT INTO `tblpurchase_contracts` (`id`, `code`, `id_order`, `currency_id`, `id_supplier`, `id_user_create`, `converted`, `date_create`, `terms_of_sale`, `shipping_terms`, `template`) VALUES
-(17, 'HĐ-00001', 21, 1, 1, 1, 0, '2017-08-25 00:00:00', '<small class="req text-danger"><span> </span></small><span>Điều khoản thanh toán</span>', '<span>Điều khoản vận chuyển</span>', '<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 18pt;"><strong>{companyname}</strong></span></td>\n<td style="width: 50%; text-align: right;"><span style="font-family: arial, helvetica, sans-serif; font-size: 24pt;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="color: #800000;"><span style="color: #800000;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #ff0000;"><strong>PRO FORMA INVOICE</strong></span></span></span></span></span></span></span></span></span></span></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 50%; vertical-align: top;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_address}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_city}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Phone: {invoice_company_phonenumber}</span><br /><br /></td>\n<td style="width: 50%; text-align: right;">\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Date</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Expiration Date</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Invoice #</strong></span></td>\n<td style="width: 50%; text-align: center;">{contract_id}</td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Customer ID</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\n<table style="width: 100%; border-spacing: 10px 0;">\n<tbody>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="background-color: #800000; color: #ffffff;">SUPPLIER</span></strong></span></span></span></span></span></span></span></td>\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIP TO</span></strong></span></span></span></td>\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIPPING DETAILS</span></strong></span></span></span></span></td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_name}</td>\n<td style="height: 12px; width: 33.33%;">Freight Type</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{companyname}</td>\n<td style="height: 12px; width: 33.33%;">Est Ship Date</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_address}</td>\n<td style="height: 12px; width: 33.33%;">Est Gross Weight</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_city}</td>\n<td style="height: 12px; width: 33.33%;">Est Cubic Weight</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_phonenumber}</td>\n<td style="height: 12px; width: 33.33%;">Total Packages</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 14pt;"><strong><br /></strong></span>{contract_item_list}<br /><br /></span></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 100%; background-color: #800000;"><span style="font-size: 12pt;"><strong><span style="font-family: arial, helvetica, sans-serif; color: #ffffff;"><span style="font-family: arial, helvetica, sans-serif;">TERMS OF SALE AND OTHER COMMENTS</span></span></strong></span></td>\n</tr>\n<tr>\n<td style="width: 100%;">{terms_of_sale}<br /><br />{terms_of_payment}</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"></span><br /><br /></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="background-color: #800000;" colspan="2"><span style="color: #ffffff; font-family: arial, helvetica, sans-serif; font-size: 12pt;"><strong>ADDITIONAL DETAILS</strong></span></td>\n</tr>\n<tr>\n<td style="width: 30%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Country of Origin</span></td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Port of Embarkation</td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Port of Discharge</td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;"></td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Reason for Export:</td>\n<td style="width: 70%; border: 1px solid #000000; border-color: #000000;"></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: left;"><br />I certify the above to be true and correct to the best of my knowledge.<br /><br /></p>\n<table width="100%">\n<tbody>\n<tr>\n<td width="80">x&nbsp;</td>\n<td width="83"></td>\n<td width="89"></td>\n<td width="47"></td>\n<td width="80"></td>\n<td width="169" colspan="2">&nbsp;</td>\n</tr>\n<tr>\n<td colspan="2">[Typed Name]</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td></td>\n<td>Date</td>\n<td>&nbsp;</td>\n</tr>\n<tr>\n<td colspan="2">[Company Name]</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: left;"><br /><span style="font-size: 14pt;"><strong></strong></span></p>'),
-(18, 'HĐ-00018', 22, 2, 1, 1, 0, '2017-09-06 00:00:00', '<span>Điều khoản thanh toán</span>', '<span>Điều khoản vận chuyển</span>', '<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 18pt;"><strong>{companyname}</strong></span></td>\r\n<td style="width: 50%; text-align: right;"><span style="font-family: arial, helvetica, sans-serif; font-size: 24pt;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="color: #800000;"><span style="color: #800000;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #ff0000;"><strong>PRO FORMA INVOICE</strong></span></span></span></span></span></span></span></span></span></span></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%; vertical-align: top;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_address}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_city}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Phone: {invoice_company_phonenumber}</span><br /><br /></td>\r\n<td style="width: 50%; text-align: right;">\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Expiration Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Invoice #</strong></span></td>\r\n<td style="width: 50%; text-align: center;">{contract_id}</td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Customer ID</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%; border-spacing: 10px 0;">\r\n<tbody>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px; background-color: #800000;"><span color="#ffffff" face="trebuchet ms, geneva, sans-serif" style="color: #ffffff; font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 16px;"><b>SUPPLIER</b></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIP TO</span></strong></span></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIPPING DETAILS</span></strong></span></span></span></span></td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;"></td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_name}</td>\r\n<td style="height: 12px; width: 33.33%;">Freight Type</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_name}</td>\r\n<td style="height: 12px; width: 33.33%;">{companyname}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Ship Date</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_address}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_address}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Gross Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_city}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_city}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Cubic Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_phone}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_phonenumber}</td>\r\n<td style="height: 12px; width: 33.33%;">Total Packages</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 14pt;"><strong><br /></strong></span>{contract_item_list}<br /><br /></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 100%; background-color: #800000;"><span style="font-size: 12pt;"><strong><span style="font-family: arial, helvetica, sans-serif; color: #ffffff;"><span style="font-family: arial, helvetica, sans-serif;">TERMS OF SALE AND OTHER COMMENTS</span></span></strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 100%;">{terms_of_sale}<br /><br />{terms_of_payment}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"></span><br /><br /></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td colspan="2" style="background-color: #800000;"><span style="color: #ffffff; font-family: arial, helvetica, sans-serif; font-size: 12pt;"><strong>ADDITIONAL DETAILS</strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Country of Origin</span></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Embarkation</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Discharge</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Reason for Export:</td>\r\n<td style="width: 70%; border: 1px solid #000000; border-color: #000000;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br />I certify the above to be true and correct to the best of my knowledge.<br /><br /></p>\r\n<table width="100%">\r\n<tbody>\r\n<tr>\r\n<td width="80">x&nbsp;</td>\r\n<td width="83"></td>\r\n<td width="89"></td>\r\n<td width="47"></td>\r\n<td width="80"></td>\r\n<td colspan="2" width="169">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Typed Name]</td>\r\n<td>&nbsp;</td>\r\n<td>&nbsp;</td>\r\n<td></td>\r\n<td>Date</td>\r\n<td>&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Company Name]</td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br /><span style="font-size: 14pt;"><strong></strong></span></p>');
+INSERT INTO `tblpurchase_contracts` (`id`, `code`, `id_order`, `currency_id`, `id_supplier`, `id_user_create`, `converted`, `date_create`, `terms_of_sale`, `shipping_terms`, `template`, `warehouse_id`) VALUES
+(17, 'HĐ-00001', 21, 1, 1, 1, 0, '2017-08-25 00:00:00', '<small class="req text-danger"><span> </span></small><span>Điều khoản thanh toán</span>', '<span>Điều khoản vận chuyển</span>', '<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 18pt;"><strong>{companyname}</strong></span></td>\n<td style="width: 50%; text-align: right;"><span style="font-family: arial, helvetica, sans-serif; font-size: 24pt;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="color: #800000;"><span style="color: #800000;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #ff0000;"><strong>PRO FORMA INVOICE</strong></span></span></span></span></span></span></span></span></span></span></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 50%; vertical-align: top;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_address}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_city}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Phone: {invoice_company_phonenumber}</span><br /><br /></td>\n<td style="width: 50%; text-align: right;">\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Date</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Expiration Date</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Invoice #</strong></span></td>\n<td style="width: 50%; text-align: center;">{contract_id}</td>\n</tr>\n<tr>\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Customer ID</strong></span></td>\n<td style="width: 50%; text-align: center;"></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\n<table style="width: 100%; border-spacing: 10px 0;">\n<tbody>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="background-color: #800000; color: #ffffff;">SUPPLIER</span></strong></span></span></span></span></span></span></span></td>\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIP TO</span></strong></span></span></span></td>\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIPPING DETAILS</span></strong></span></span></span></span></td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_name}</td>\n<td style="height: 12px; width: 33.33%;">Freight Type</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{companyname}</td>\n<td style="height: 12px; width: 33.33%;">Est Ship Date</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_address}</td>\n<td style="height: 12px; width: 33.33%;">Est Gross Weight</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_city}</td>\n<td style="height: 12px; width: 33.33%;">Est Cubic Weight</td>\n</tr>\n<tr style="height: 12px;">\n<td style="width: 33.33%; height: 12px;"></td>\n<td style="height: 12px; width: 33.33%;">{invoice_company_phonenumber}</td>\n<td style="height: 12px; width: 33.33%;">Total Packages</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 14pt;"><strong><br /></strong></span>{contract_item_list}<br /><br /></span></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="width: 100%; background-color: #800000;"><span style="font-size: 12pt;"><strong><span style="font-family: arial, helvetica, sans-serif; color: #ffffff;"><span style="font-family: arial, helvetica, sans-serif;">TERMS OF SALE AND OTHER COMMENTS</span></span></strong></span></td>\n</tr>\n<tr>\n<td style="width: 100%;">{terms_of_sale}<br /><br />{terms_of_payment}</td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"></span><br /><br /></p>\n<table style="width: 100%;">\n<tbody>\n<tr>\n<td style="background-color: #800000;" colspan="2"><span style="color: #ffffff; font-family: arial, helvetica, sans-serif; font-size: 12pt;"><strong>ADDITIONAL DETAILS</strong></span></td>\n</tr>\n<tr>\n<td style="width: 30%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Country of Origin</span></td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Port of Embarkation</td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Port of Discharge</td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;"></td>\n<td style="width: 70%;"></td>\n</tr>\n<tr>\n<td style="width: 30%;">Reason for Export:</td>\n<td style="width: 70%; border: 1px solid #000000; border-color: #000000;"></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: left;"><br />I certify the above to be true and correct to the best of my knowledge.<br /><br /></p>\n<table width="100%">\n<tbody>\n<tr>\n<td width="80">x&nbsp;</td>\n<td width="83"></td>\n<td width="89"></td>\n<td width="47"></td>\n<td width="80"></td>\n<td width="169" colspan="2">&nbsp;</td>\n</tr>\n<tr>\n<td colspan="2">[Typed Name]</td>\n<td>&nbsp;</td>\n<td>&nbsp;</td>\n<td></td>\n<td>Date</td>\n<td>&nbsp;</td>\n</tr>\n<tr>\n<td colspan="2">[Company Name]</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>\n<p style="text-align: left;"><br /><span style="font-size: 14pt;"><strong></strong></span></p>', NULL),
+(18, 'HĐ-00018', 22, 2, 1, 1, 0, '2017-09-06 00:00:00', '<span>Điều khoản thanh toán</span>', '<span>Điều khoản vận chuyển</span>', '<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 18pt;"><strong>{companyname}</strong></span></td>\r\n<td style="width: 50%; text-align: right;"><span style="font-family: arial, helvetica, sans-serif; font-size: 24pt;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="color: #800000;"><span style="color: #800000;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #c04e4e;"><span style="color: #ff0000;"><strong>PRO FORMA INVOICE</strong></span></span></span></span></span></span></span></span></span></span></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 50%; vertical-align: top;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_address}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">{invoice_company_city}</span><br /><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Phone: {invoice_company_phonenumber}</span><br /><br /></td>\r\n<td style="width: 50%; text-align: right;">\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Expiration Date</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Invoice #</strong></span></td>\r\n<td style="width: 50%; text-align: center;">{contract_id}</td>\r\n</tr>\r\n<tr>\r\n<td style="text-align: left; width: 50%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;"><strong>Customer ID</strong></span></td>\r\n<td style="width: 50%; text-align: center;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 14pt;"><strong>&nbsp;</strong></span></p>\r\n<table style="width: 100%; border-spacing: 10px 0;">\r\n<tbody>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px; background-color: #800000;"><span color="#ffffff" face="trebuchet ms, geneva, sans-serif" style="color: #ffffff; font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 16px;"><b>SUPPLIER</b></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIP TO</span></strong></span></span></span></td>\r\n<td style="height: 12px; width: 33.33%; background-color: #800000;"><span style="font-family: arial, helvetica, sans-serif; font-size: 12pt;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: arial, helvetica, sans-serif;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><strong><span style="color: #ffffff;">SHIPPING DETAILS</span></strong></span></span></span></span></td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;"></td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_name}</td>\r\n<td style="height: 12px; width: 33.33%;">Freight Type</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_name}</td>\r\n<td style="height: 12px; width: 33.33%;">{companyname}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Ship Date</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_address}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_address}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Gross Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_city}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_city}</td>\r\n<td style="height: 12px; width: 33.33%;">Est Cubic Weight</td>\r\n</tr>\r\n<tr style="height: 12px;">\r\n<td style="width: 33.33%; height: 12px;">{supplier_phone}</td>\r\n<td style="height: 12px; width: 33.33%;">{invoice_company_phonenumber}</td>\r\n<td style="height: 12px; width: 33.33%;">Total Packages</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"><span style="font-size: 14pt;"><strong><br /></strong></span>{contract_item_list}<br /><br /></span></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td style="width: 100%; background-color: #800000;"><span style="font-size: 12pt;"><strong><span style="font-family: arial, helvetica, sans-serif; color: #ffffff;"><span style="font-family: arial, helvetica, sans-serif;">TERMS OF SALE AND OTHER COMMENTS</span></span></strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 100%;">{terms_of_sale}<br /><br />{terms_of_payment}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: center;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif;"></span><br /><br /></p>\r\n<table style="width: 100%;">\r\n<tbody>\r\n<tr>\r\n<td colspan="2" style="background-color: #800000;"><span style="color: #ffffff; font-family: arial, helvetica, sans-serif; font-size: 12pt;"><strong>ADDITIONAL DETAILS</strong></span></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"><span style="font-family: ''trebuchet ms'', geneva, sans-serif; font-size: 10pt;">Country of Origin</span></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Embarkation</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Port of Discharge</td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;"></td>\r\n<td style="width: 70%;"></td>\r\n</tr>\r\n<tr>\r\n<td style="width: 30%;">Reason for Export:</td>\r\n<td style="width: 70%; border: 1px solid #000000; border-color: #000000;"></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br />I certify the above to be true and correct to the best of my knowledge.<br /><br /></p>\r\n<table width="100%">\r\n<tbody>\r\n<tr>\r\n<td width="80">x&nbsp;</td>\r\n<td width="83"></td>\r\n<td width="89"></td>\r\n<td width="47"></td>\r\n<td width="80"></td>\r\n<td colspan="2" width="169">&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Typed Name]</td>\r\n<td>&nbsp;</td>\r\n<td>&nbsp;</td>\r\n<td></td>\r\n<td>Date</td>\r\n<td>&nbsp;</td>\r\n</tr>\r\n<tr>\r\n<td colspan="2">[Company Name]</td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n<td></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p style="text-align: left;"><br /><span style="font-size: 14pt;"><strong></strong></span></p>', NULL);
 
 -- --------------------------------------------------------
 
@@ -7355,7 +8056,9 @@ CREATE TABLE IF NOT EXISTS `tblquotes` (
   `status` int(11) DEFAULT '0',
   `export_status` tinyint(4) DEFAULT '0',
   `shipping` decimal(25,0) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   `discount` decimal(25,0) DEFAULT NULL,
+  `adjustment` decimal(25,0) DEFAULT '0',
   `tax` decimal(25,0) DEFAULT NULL,
   `total` decimal(25,0) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -7365,9 +8068,9 @@ CREATE TABLE IF NOT EXISTS `tblquotes` (
 -- Dumping data for table `tblquotes`
 --
 
-INSERT INTO `tblquotes` (`id`, `prefix`, `code`, `customer_id`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `shipping`, `discount`, `tax`, `total`) VALUES
-(45, 'QU-', '00001', 9, 'Bảng báo giá', '', NULL, '2017-09-05 17:00:00', 1, 1, '2017-09-06 15:01:44', 1, '2017-09-06 15:01:44', NULL, 2, 1, NULL, NULL, NULL, '14406850000'),
-(46, 'QU-', '000046', 3, 'Bảng báo giá', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 09:40:56', 1, '2017-09-19 09:40:56', NULL, 2, 1, NULL, NULL, NULL, '308385000');
+INSERT INTO `tblquotes` (`id`, `prefix`, `code`, `customer_id`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `shipping`, `discount_percent`, `discount`, `adjustment`, `tax`, `total`) VALUES
+(45, 'QU-', '00001', 9, 'Bảng báo giá', '', NULL, '2017-09-05 17:00:00', 1, 1, '2017-09-06 15:01:44', 1, '2017-09-06 15:01:44', NULL, 2, 1, NULL, '0.00', NULL, '0', NULL, '14406850000'),
+(46, 'QU-', '000046', 3, 'Bảng báo giá', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 09:40:56', 1, '2017-09-19 09:40:56', NULL, 2, 1, NULL, '0.00', NULL, '0', NULL, '308385000');
 
 -- --------------------------------------------------------
 
@@ -7388,6 +8091,7 @@ CREATE TABLE IF NOT EXISTS `tblquote_items` (
   `tax_id` tinyint(4) DEFAULT NULL,
   `tax_rate` decimal(15,0) DEFAULT '0',
   `tax` decimal(25,0) DEFAULT '0',
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   `amount` decimal(25,0) DEFAULT '0',
   `warehouse_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -7397,11 +8101,11 @@ CREATE TABLE IF NOT EXISTS `tblquote_items` (
 -- Dumping data for table `tblquote_items`
 --
 
-INSERT INTO `tblquote_items` (`id`, `quote_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `discount`, `unit_cost`, `sub_total`, `tax_id`, `tax_rate`, `tax`, `amount`, `warehouse_id`) VALUES
-(62, 45, 55, NULL, 4, 100, '0', '57500000', '5750000000', 1, '5', '287500000', '6037500000', 1),
-(63, 45, 57, NULL, 4, 100, '0', '29370000', '2937000000', 1, '5', '146850000', '3083850000', 1),
-(64, 45, 56, NULL, 4, 100, '0', '48050000', '4805000000', 3, '10', '480500000', '5285500000', 1),
-(65, 46, 57, NULL, 4, 10, '0', '29370000', '293700000', 1, '5', '14685000', '308385000', 1);
+INSERT INTO `tblquote_items` (`id`, `quote_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `discount`, `unit_cost`, `sub_total`, `tax_id`, `tax_rate`, `tax`, `discount_percent`, `amount`, `warehouse_id`) VALUES
+(62, 45, 55, NULL, 4, 100, '0', '57500000', '5750000000', 1, '5', '287500000', '0.00', '6037500000', 1),
+(63, 45, 57, NULL, 4, 100, '0', '29370000', '2937000000', 1, '5', '146850000', '0.00', '3083850000', 1),
+(64, 45, 56, NULL, 4, 100, '0', '48050000', '4805000000', 3, '10', '480500000', '0.00', '5285500000', 1),
+(65, 46, 57, NULL, 4, 10, '0', '29370000', '293700000', 1, '5', '14685000', '0.00', '308385000', 1);
 
 -- --------------------------------------------------------
 
@@ -7447,7 +8151,7 @@ CREATE TABLE IF NOT EXISTS `tblreceipts` (
   `day_vouchers` date DEFAULT NULL COMMENT 'ngày chứng từ',
   `code_vouchers` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Số chứng từ',
   `currency` int(11) DEFAULT NULL COMMENT 'Loại tiền',
-  `id_contract` int(11) DEFAULT NULL,
+  `id_sales` int(11) DEFAULT NULL,
   `id_user_create` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   `date_create` date NOT NULL COMMENT 'Ngày tạo',
@@ -7458,7 +8162,7 @@ CREATE TABLE IF NOT EXISTS `tblreceipts` (
 -- Dumping data for table `tblreceipts`
 --
 
-INSERT INTO `tblreceipts` (`id`, `id_client`, `receiver`, `address`, `reason`, `id_staff`, `staff_browse`, `date_status`, `date_of_accounting`, `day_vouchers`, `code_vouchers`, `currency`, `id_contract`, `id_user_create`, `status`, `date_create`) VALUES
+INSERT INTO `tblreceipts` (`id`, `id_client`, `receiver`, `address`, `reason`, `id_staff`, `staff_browse`, `date_status`, `date_of_accounting`, `day_vouchers`, `code_vouchers`, `currency`, `id_sales`, `id_user_create`, `status`, `date_create`) VALUES
 (1, 9, 'trần văn A', 'địa chỉ', 'lý do', NULL, 1, '2017-09-12', '2017-09-12', '2017-09-12', 'PT-00001', NULL, NULL, NULL, 2, '2017-09-12'),
 (2, 3, 'Anh Mạnh', '', '', NULL, NULL, NULL, '2017-09-21', '2017-09-21', 'PT-00002', NULL, NULL, NULL, 0, '2017-09-21'),
 (3, 3, 'Anh Mạnh', '', '', NULL, NULL, NULL, '2017-09-21', '2017-09-21', 'PT-00002', NULL, NULL, NULL, 0, '2017-09-21'),
@@ -7477,7 +8181,7 @@ CREATE TABLE IF NOT EXISTS `tblreceipts_contract` (
   `tk_no` int(11) NOT NULL,
   `tk_co` int(11) NOT NULL,
   `currencies` int(11) NOT NULL,
-  `invoices` int(11) DEFAULT NULL COMMENT 'hoa don',
+  `sales` int(11) DEFAULT NULL COMMENT 'hoa don',
   `purchase_contracts` int(11) DEFAULT NULL COMMENT 'hợp đồng mua',
   `total` decimal(15,0) NOT NULL DEFAULT '0' COMMENT 'Tiền',
   `discount` decimal(15,0) DEFAULT NULL,
@@ -7490,7 +8194,7 @@ CREATE TABLE IF NOT EXISTS `tblreceipts_contract` (
 -- Dumping data for table `tblreceipts_contract`
 --
 
-INSERT INTO `tblreceipts_contract` (`id`, `note`, `id_receipts`, `tk_no`, `tk_co`, `currencies`, `invoices`, `purchase_contracts`, `total`, `discount`, `subtotal`, `tk_ck`) VALUES
+INSERT INTO `tblreceipts_contract` (`id`, `note`, `id_receipts`, `tk_no`, `tk_co`, `currencies`, `sales`, `purchase_contracts`, `total`, `discount`, `subtotal`, `tk_ck`) VALUES
 (1, '123123123123', 1, 8, 35, 3, 40, NULL, '999999999999999', '123', '13123123', 8),
 (2, 'diển giải', 1, 2, 6, 3, 43, NULL, '120123123', '14', '135', 3),
 (3, 'diển giải 2', 1, 2, 6, 3, 45, NULL, '123123123', '6', '60', 3),
@@ -7545,6 +8249,7 @@ INSERT INTO `tblreport_client` (`id`, `id_client`, `note`, `date`, `addedfrom`) 
 
 CREATE TABLE IF NOT EXISTS `tblreport_have` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_account_person` int(11) DEFAULT NULL,
   `receiver` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'người nhận',
   `address` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'địa chỉ',
   `reason` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'lý do chi',
@@ -7564,9 +8269,9 @@ CREATE TABLE IF NOT EXISTS `tblreport_have` (
 -- Dumping data for table `tblreport_have`
 --
 
-INSERT INTO `tblreport_have` (`id`, `receiver`, `address`, `reason`, `id_staff`, `staff_browse`, `date_status`, `date_of_accounting`, `day_vouchers`, `code_vouchers`, `id_user_create`, `status`, `date_create`) VALUES
-(1, ' Nộp vào tài khoản', NULL, 'Lý do Lưu', NULL, 1, '2017-09-12', '2017-09-12', '2017-09-12', 'PT-00001', NULL, 2, '2017-09-12'),
-(2, '1', NULL, '', NULL, NULL, NULL, '2017-09-21', '2017-09-21', 'PT-00002', NULL, 0, '2017-09-21');
+INSERT INTO `tblreport_have` (`id`, `id_account_person`, `receiver`, `address`, `reason`, `id_staff`, `staff_browse`, `date_status`, `date_of_accounting`, `day_vouchers`, `code_vouchers`, `id_user_create`, `status`, `date_create`) VALUES
+(1, NULL, ' Nộp vào tài khoản', NULL, 'Lý do Lưu', NULL, 1, '2017-09-12', '2017-09-12', '2017-09-12', 'PT-00001', NULL, 2, '2017-09-12'),
+(2, NULL, '1', NULL, '', NULL, NULL, NULL, '2017-09-21', '2017-09-21', 'PT-00002', NULL, 0, '2017-09-21');
 
 -- --------------------------------------------------------
 
@@ -7769,6 +8474,9 @@ CREATE TABLE IF NOT EXISTS `tblsales` (
   `delivery_status` int(11) DEFAULT '0',
   `shipping` decimal(25,0) DEFAULT NULL,
   `discount` decimal(25,0) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
+  `adjustment` decimal(25,0) DEFAULT '0',
+  `return_value` decimal(25,0) DEFAULT NULL,
   `tax` decimal(25,0) DEFAULT NULL,
   `payment_status` int(11) DEFAULT '0',
   `paid` decimal(25,0) DEFAULT NULL,
@@ -7782,23 +8490,23 @@ CREATE TABLE IF NOT EXISTS `tblsales` (
 -- Dumping data for table `tblsales`
 --
 
-INSERT INTO `tblsales` (`id`, `rel_type`, `rel_id`, `prefix`, `code`, `rel_code`, `customer_id`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `delivery_status`, `shipping`, `discount`, `tax`, `payment_status`, `paid`, `total`, `account_date`, `invoice_status`) VALUES
-(85, 'sale_order', NULL, 'SO-', '00085', NULL, 6, 'Phiếu Đặt Hàng', 'dhgdfh', NULL, '2017-07-27 17:00:00', 1, 1, '2017-07-31 15:56:54', 1, '2017-07-31 15:56:54', NULL, 2, 1, 0, NULL, NULL, NULL, 0, NULL, '15696800', NULL, 0),
-(86, 'sale_order', NULL, 'SO-', '00086', NULL, 4, 'Phiếu Đặt Hàng', 'dsfgvdgvdf &nbsp;dffrff', NULL, '2017-07-31 17:00:00', 1, 1, '2017-08-03 14:13:01', 1, '2017-08-03 14:13:01', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '13250000', NULL, 0),
-(87, 'sale_order', 103, 'SO-', '00087', 'PO-00103', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-23 17:00:00', 1, 1, '2017-08-24 10:15:25', 1, '2017-08-24 10:15:25', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '6711000000', NULL, 0),
-(88, 'sale_order', 122, 'SO-', '00088', 'PO-00104', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 15:50:04', 1, '2017-09-01 15:50:04', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '8513800000', NULL, 0),
-(89, 'sale_order', 122, 'SO-', '00089', 'PO-00104', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 15:50:06', 1, '2017-09-01 15:50:06', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '9873200000', NULL, 0),
-(90, 'sale_order_direct', NULL, 'SO-', '00090', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 18:36:48', 1, '2017-09-01 18:36:48', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '1263700000', NULL, 0),
-(91, 'sale_order_direct', NULL, 'SO-', '00091', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 16:36:21', 1, '2017-09-01 16:36:21', NULL, 2, 1, 0, NULL, NULL, NULL, 0, NULL, '13509100000', NULL, 0),
-(92, 'sale_order', 123, 'SO-', '00092', 'PO-00123', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-06 09:02:14', 1, '2017-09-06 09:02:14', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '135091000', NULL, 0),
-(93, 'sale_order', 124, 'SO-', '00093', 'PO-00124', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', 1, 1, '2017-09-22 09:05:20', 1, '2017-09-22 09:05:20', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '513975000', NULL, 0),
-(94, 'sale_order', 124, 'SO-', '00094', 'PO-00124', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3083850000', NULL, 0),
-(95, 'sale_order', 132, 'SO-', '000095', 'PO-000132', 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '308385000', NULL, 0),
-(96, 'sale_order', 133, 'SO-', '000096', 'PO-000133', 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-21 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '130938500', NULL, 0),
-(97, 'sale_order', 125, 'SO-', '000097', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '6768850000', NULL, 0),
-(98, 'sale_order', 125, 'SO-', '000098', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3162500000', NULL, 0),
-(99, 'sale_order', 125, 'SO-', '000099', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3162500000', NULL, 0),
-(100, 'sale_order', 126, 'SO-', '000100', 'PO-000126', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '669350000', NULL, 0);
+INSERT INTO `tblsales` (`id`, `rel_type`, `rel_id`, `prefix`, `code`, `rel_code`, `customer_id`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `delivery_status`, `shipping`, `discount`, `discount_percent`, `adjustment`, `return_value`, `tax`, `payment_status`, `paid`, `total`, `account_date`, `invoice_status`) VALUES
+(85, 'sale_order', NULL, 'SO-', '00085', NULL, 6, 'Phiếu Đặt Hàng', 'dhgdfh', NULL, '2017-07-27 17:00:00', 1, 1, '2017-07-31 15:56:54', 1, '2017-07-31 15:56:54', NULL, 2, 1, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '15696800', NULL, 0),
+(86, 'sale_order', NULL, 'SO-', '00086', NULL, 4, 'Phiếu Đặt Hàng', 'dsfgvdgvdf &nbsp;dffrff', NULL, '2017-07-31 17:00:00', 1, 1, '2017-08-03 14:13:01', 1, '2017-08-03 14:13:01', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '13250000', NULL, 0),
+(87, 'sale_order', 103, 'SO-', '00087', 'PO-00103', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-23 17:00:00', 1, 1, '2017-08-24 10:15:25', 1, '2017-08-24 10:15:25', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '6711000000', NULL, 0),
+(88, 'sale_order', 122, 'SO-', '00088', 'PO-00104', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 15:50:04', 1, '2017-09-01 15:50:04', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '8513800000', NULL, 0),
+(89, 'sale_order', 122, 'SO-', '00089', 'PO-00104', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 15:50:06', 1, '2017-09-01 15:50:06', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '9873200000', NULL, 0),
+(90, 'sale_order_direct', NULL, 'SO-', '00090', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 18:36:48', 1, '2017-09-01 18:36:48', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '1263700000', NULL, 0),
+(91, 'sale_order_direct', NULL, 'SO-', '00091', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 16:36:21', 1, '2017-09-01 16:36:21', NULL, 2, 1, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '13509100000', NULL, 0),
+(92, 'sale_order', 123, 'SO-', '00092', 'PO-00123', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-06 09:02:14', 1, '2017-09-06 09:02:14', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '135091000', NULL, 0),
+(93, 'sale_order', 124, 'SO-', '00093', 'PO-00124', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', 1, 1, '2017-09-22 09:05:20', 1, '2017-09-22 09:05:20', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '513975000', NULL, 0),
+(94, 'sale_order', 124, 'SO-', '00094', 'PO-00124', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '3083850000', NULL, 0),
+(95, 'sale_order', 132, 'SO-', '000095', 'PO-000132', 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '308385000', NULL, 0),
+(96, 'sale_order', 133, 'SO-', '000096', 'PO-000133', 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-21 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '130938500', NULL, 0),
+(97, 'sale_order', 125, 'SO-', '000097', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '6768850000', NULL, 0),
+(98, 'sale_order', 125, 'SO-', '000098', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '3162500000', NULL, 0),
+(99, 'sale_order', 125, 'SO-', '000099', 'PO-00125', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '3162500000', NULL, 0),
+(100, 'sale_order', 126, 'SO-', '000100', 'PO-000126', 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, NULL, 0, NULL, '669350000', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -7833,6 +8541,23 @@ INSERT INTO `tblsalesactivity` (`id`, `rel_type`, `rel_id`, `description`, `addi
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tblsale_details`
+--
+
+CREATE TABLE IF NOT EXISTS `tblsale_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rel_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rel_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `wp_detail_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `entered_price` decimal(25,0) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblsale_items`
 --
 
@@ -7843,15 +8568,22 @@ CREATE TABLE IF NOT EXISTS `tblsale_items` (
   `serial_no` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `unit_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
+  `quantity_return` int(11) DEFAULT NULL,
   `export_quantity` int(11) DEFAULT NULL,
+  `delivery_quantity` int(11) DEFAULT NULL,
   `tax_id` tinyint(4) DEFAULT NULL,
   `tax_rate` decimal(15,0) DEFAULT NULL,
   `tax` decimal(25,0) DEFAULT '0',
-  `discount` decimal(15,0) DEFAULT '0',
+  `discount` decimal(25,0) DEFAULT '0',
   `unit_cost` decimal(15,0) DEFAULT NULL,
   `sub_total` decimal(15,0) DEFAULT NULL,
   `amount` decimal(25,0) DEFAULT NULL,
   `warehouse_id` int(10) DEFAULT NULL,
+  `tk_thue` int(11) DEFAULT NULL,
+  `tk_ck` int(11) DEFAULT NULL,
+  `tk_gv` int(11) DEFAULT NULL,
+  `tk_kho` int(11) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   `reject_id` int(11) DEFAULT NULL,
   `tk_no` int(11) DEFAULT NULL,
   `tk_co` int(11) DEFAULT NULL,
@@ -7862,42 +8594,42 @@ CREATE TABLE IF NOT EXISTS `tblsale_items` (
 -- Dumping data for table `tblsale_items`
 --
 
-INSERT INTO `tblsale_items` (`id`, `sale_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `export_quantity`, `tax_id`, `tax_rate`, `tax`, `discount`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`, `reject_id`, `tk_no`, `tk_co`) VALUES
-(89, 85, 55, NULL, 1, 100, 100, NULL, NULL, '0', '0', '125000', '12500000', NULL, NULL, NULL, NULL, NULL),
-(90, 85, 54, NULL, 1, 150, 150, NULL, NULL, '0', '0', '21312', '3196800', NULL, NULL, NULL, NULL, NULL),
-(91, 86, 55, NULL, 1, 100, 0, NULL, NULL, '0', '0', '125000', '12500000', NULL, NULL, NULL, NULL, NULL),
-(92, 86, 53, NULL, 1, 50, 0, NULL, NULL, '0', '0', '15000', '750000', NULL, NULL, NULL, NULL, NULL),
-(93, 87, 56, NULL, 4, 20, 20, NULL, NULL, '0', '0', '48050000', '961000000', NULL, 1, NULL, NULL, NULL),
-(94, 87, 55, NULL, 4, 100, 100, NULL, NULL, '0', '0', '57500000', '5750000000', NULL, 1, NULL, NULL, NULL),
-(95, 88, 61, NULL, 4, 50, NULL, NULL, NULL, '0', '0', '48950000', '2447500000', NULL, NULL, NULL, NULL, NULL),
-(96, 88, 57, NULL, 4, 40, NULL, NULL, NULL, '0', '0', '29370000', '1174800000', NULL, NULL, NULL, NULL, NULL),
-(97, 88, 56, NULL, 4, 30, NULL, NULL, NULL, '0', '0', '48050000', '1441500000', NULL, NULL, NULL, NULL, NULL),
-(98, 88, 55, NULL, 4, 60, NULL, NULL, NULL, '0', '0', '57500000', '3450000000', NULL, NULL, NULL, NULL, NULL),
-(99, 89, 61, NULL, 4, 50, NULL, NULL, NULL, '0', '0', '48950000', '2447500000', NULL, NULL, NULL, NULL, NULL),
-(100, 89, 57, NULL, 4, 60, NULL, NULL, NULL, '0', '0', '29370000', '1762200000', NULL, NULL, NULL, NULL, NULL),
-(101, 89, 56, NULL, 4, 70, NULL, NULL, NULL, '0', '0', '48050000', '3363500000', NULL, NULL, NULL, NULL, NULL),
-(102, 89, 55, NULL, 4, 40, NULL, NULL, NULL, '0', '0', '57500000', '2300000000', NULL, NULL, NULL, NULL, NULL),
-(103, 90, 61, NULL, 4, 10, NULL, NULL, NULL, '0', '0', '48950000', '489500000', NULL, NULL, NULL, NULL, NULL),
-(104, 90, 57, NULL, 4, 10, NULL, NULL, NULL, '0', '0', '29370000', '293700000', NULL, NULL, NULL, NULL, NULL),
-(105, 90, 56, NULL, 4, 10, NULL, NULL, NULL, '0', '0', '48050000', '480500000', NULL, NULL, NULL, NULL, NULL),
-(106, 91, 61, NULL, 4, 100, 200, 1, '5', '244750000', '0', '48950000', '4895000000', '5139750000', 1, NULL, NULL, NULL),
-(107, 91, 57, NULL, 4, 100, 200, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL),
-(108, 91, 56, NULL, 4, 100, 200, 3, '10', '480500000', '0', '48050000', '4805000000', '5285500000', 1, NULL, NULL, NULL),
-(109, 92, 61, NULL, 4, 1, 1, 1, '5', '2447500', '0', '48950000', '48950000', '51397500', 1, NULL, NULL, NULL),
-(110, 92, 57, NULL, 4, 1, 1, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL),
-(111, 92, 56, NULL, 4, 1, 1, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL),
-(112, 93, 61, NULL, 4, 10, NULL, 1, '5', '24475000', '0', '48950000', '489500000', '513975000', 1, NULL, NULL, NULL),
-(113, 94, 57, NULL, 4, 100, NULL, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL),
-(114, 95, 57, NULL, 4, 10, NULL, 1, '5', '14685000', '0', '29370000', '293700000', '308385000', 1, NULL, NULL, NULL),
-(115, 96, 55, NULL, 4, 1, NULL, 3, '10', '5750000', '0', '57500000', '57500000', '63250000', 1, NULL, NULL, NULL),
-(116, 96, 57, NULL, 4, 1, NULL, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL),
-(117, 96, 56, NULL, 4, 1, NULL, 3, '10', '3350000', '0', '33500000', '33500000', '36850000', 1, NULL, NULL, NULL),
-(118, 97, 57, NULL, 4, 100, NULL, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL),
-(119, 97, 56, NULL, 4, 100, NULL, 3, '10', '335000000', '0', '33500000', '3350000000', '3685000000', 1, NULL, NULL, NULL),
-(120, 98, 55, NULL, 4, 50, NULL, 3, '10', '287500000', '0', '57500000', '2875000000', '3162500000', 1, NULL, NULL, NULL),
-(121, 99, 55, NULL, 4, 50, NULL, 3, '10', '287500000', '0', '57500000', '2875000000', '3162500000', 1, NULL, NULL, NULL),
-(122, 100, 55, NULL, 4, 10, NULL, 3, '10', '57500000', '0', '57500000', '575000000', '632500000', 1, NULL, NULL, NULL),
-(123, 100, 56, NULL, 4, 1, NULL, 3, '10', '3350000', '0', '33500000', '33500000', '36850000', 1, NULL, NULL, NULL);
+INSERT INTO `tblsale_items` (`id`, `sale_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `quantity_return`, `export_quantity`, `delivery_quantity`, `tax_id`, `tax_rate`, `tax`, `discount`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`, `tk_thue`, `tk_ck`, `tk_gv`, `tk_kho`, `discount_percent`, `reject_id`, `tk_no`, `tk_co`) VALUES
+(89, 85, 55, NULL, 1, 100, NULL, 100, NULL, NULL, NULL, '0', '0', '125000', '12500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(90, 85, 54, NULL, 1, 150, NULL, 150, NULL, NULL, NULL, '0', '0', '21312', '3196800', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(91, 86, 55, NULL, 1, 100, NULL, 0, NULL, NULL, NULL, '0', '0', '125000', '12500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(92, 86, 53, NULL, 1, 50, NULL, 0, NULL, NULL, NULL, '0', '0', '15000', '750000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(93, 87, 56, NULL, 4, 20, NULL, 20, NULL, NULL, NULL, '0', '0', '48050000', '961000000', NULL, 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(94, 87, 55, NULL, 4, 100, NULL, 100, NULL, NULL, NULL, '0', '0', '57500000', '5750000000', NULL, 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(95, 88, 61, NULL, 4, 50, NULL, NULL, NULL, NULL, NULL, '0', '0', '48950000', '2447500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(96, 88, 57, NULL, 4, 40, NULL, NULL, NULL, NULL, NULL, '0', '0', '29370000', '1174800000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(97, 88, 56, NULL, 4, 30, NULL, NULL, NULL, NULL, NULL, '0', '0', '48050000', '1441500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(98, 88, 55, NULL, 4, 60, NULL, NULL, NULL, NULL, NULL, '0', '0', '57500000', '3450000000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(99, 89, 61, NULL, 4, 50, NULL, NULL, NULL, NULL, NULL, '0', '0', '48950000', '2447500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(100, 89, 57, NULL, 4, 60, NULL, NULL, NULL, NULL, NULL, '0', '0', '29370000', '1762200000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(101, 89, 56, NULL, 4, 70, NULL, NULL, NULL, NULL, NULL, '0', '0', '48050000', '3363500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(102, 89, 55, NULL, 4, 40, NULL, NULL, NULL, NULL, NULL, '0', '0', '57500000', '2300000000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(103, 90, 61, NULL, 4, 10, NULL, NULL, NULL, NULL, NULL, '0', '0', '48950000', '489500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(104, 90, 57, NULL, 4, 10, NULL, NULL, NULL, NULL, NULL, '0', '0', '29370000', '293700000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(105, 90, 56, NULL, 4, 10, NULL, NULL, NULL, NULL, NULL, '0', '0', '48050000', '480500000', NULL, NULL, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(106, 91, 61, NULL, 4, 100, NULL, 200, NULL, 1, '5', '244750000', '0', '48950000', '4895000000', '5139750000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(107, 91, 57, NULL, 4, 100, NULL, 200, NULL, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(108, 91, 56, NULL, 4, 100, NULL, 200, NULL, 3, '10', '480500000', '0', '48050000', '4805000000', '5285500000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(109, 92, 61, NULL, 4, 1, NULL, 1, NULL, 1, '5', '2447500', '0', '48950000', '48950000', '51397500', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(110, 92, 57, NULL, 4, 1, NULL, 1, NULL, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(111, 92, 56, NULL, 4, 1, NULL, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(112, 93, 61, NULL, 4, 10, NULL, NULL, NULL, 1, '5', '24475000', '0', '48950000', '489500000', '513975000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(113, 94, 57, NULL, 4, 100, NULL, NULL, NULL, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(114, 95, 57, NULL, 4, 10, NULL, NULL, NULL, 1, '5', '14685000', '0', '29370000', '293700000', '308385000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(115, 96, 55, NULL, 4, 1, NULL, NULL, NULL, 3, '10', '5750000', '0', '57500000', '57500000', '63250000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(116, 96, 57, NULL, 4, 1, NULL, NULL, NULL, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(117, 96, 56, NULL, 4, 1, NULL, NULL, NULL, 3, '10', '3350000', '0', '33500000', '33500000', '36850000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(118, 97, 57, NULL, 4, 100, NULL, NULL, NULL, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(119, 97, 56, NULL, 4, 100, NULL, NULL, NULL, 3, '10', '335000000', '0', '33500000', '3350000000', '3685000000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(120, 98, 55, NULL, 4, 50, NULL, NULL, NULL, 3, '10', '287500000', '0', '57500000', '2875000000', '3162500000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(121, 99, 55, NULL, 4, 50, NULL, NULL, NULL, 3, '10', '287500000', '0', '57500000', '2875000000', '3162500000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(122, 100, 55, NULL, 4, 10, NULL, NULL, NULL, 3, '10', '57500000', '0', '57500000', '575000000', '632500000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL),
+(123, 100, 56, NULL, 4, 1, NULL, NULL, NULL, 3, '10', '3350000', '0', '33500000', '33500000', '36850000', 1, NULL, NULL, NULL, NULL, '0.00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -7918,6 +8650,7 @@ CREATE TABLE IF NOT EXISTS `tblsale_orders` (
   `reason` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `note` text COLLATE utf8_unicode_ci,
   `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_ht` date DEFAULT NULL,
   `create_by` int(11) DEFAULT NULL,
   `user_head_id` int(11) DEFAULT NULL,
   `user_head_date` datetime DEFAULT NULL,
@@ -7929,6 +8662,8 @@ CREATE TABLE IF NOT EXISTS `tblsale_orders` (
   `delivery_status` int(11) DEFAULT '0',
   `shipping` decimal(25,0) DEFAULT NULL,
   `discount` decimal(25,0) DEFAULT NULL,
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
+  `adjustment` decimal(25,0) DEFAULT '0',
   `tax` decimal(25,0) DEFAULT NULL,
   `payment_status` int(11) DEFAULT '0',
   `paid` decimal(25,0) DEFAULT NULL,
@@ -7940,20 +8675,20 @@ CREATE TABLE IF NOT EXISTS `tblsale_orders` (
 -- Dumping data for table `tblsale_orders`
 --
 
-INSERT INTO `tblsale_orders` (`id`, `rel_type`, `rel_id`, `rel_code`, `prefix`, `code`, `delivery_code`, `customer_id`, `name`, `reason`, `note`, `date`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `delivery_status`, `shipping`, `discount`, `tax`, `payment_status`, `paid`, `total`) VALUES
-(103, 'sale_order', 12, 'HĐ-00001', 'PO-', '00103', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-23 17:00:00', 1, 1, '2017-08-24 10:13:11', 1, '2017-08-24 10:13:11', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '6711000000'),
-(122, 'sale_order', 14, 'HĐ-00014', 'PO-', '00104', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 15:03:59', 1, '2017-09-01 15:03:59', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '19546600000'),
-(123, 'sale_order', 16, 'HĐ-00016', 'PO-', '00123', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', 1, 1, '2017-09-01 18:34:21', 1, '2017-09-01 18:34:21', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '135091000'),
-(124, 'sale_order', 13, 'HĐ-00013', 'PO-', '00124', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', 1, 1, '2017-09-06 14:01:41', 1, '2017-09-06 14:01:41', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '3597825000'),
-(125, 'sale_order', 22, 'HĐ-00001', 'PO-', '00125', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 17:00:00', 1, 1, '2017-09-22 09:05:30', 1, '2017-09-22 09:05:30', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '14406850000'),
-(126, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-22 09:19:05', 1, '2017-09-22 09:19:05', NULL, 2, 1, 0, NULL, NULL, NULL, 0, NULL, '3432070000'),
-(127, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3432070000'),
-(128, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3432070000'),
-(129, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3432070000'),
-(130, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, NULL, 0, NULL, '3432070000'),
-(131, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 09:55:25', 1, '2017-09-19 09:55:25', NULL, 2, 0, 0, NULL, NULL, NULL, 0, NULL, '810797500'),
-(132, 'sale_order', 23, 'HĐ-', 'PO-', '000132', NULL, 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', 1, 1, '2017-09-19 09:44:26', 1, '2017-09-19 09:44:26', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '308385000'),
-(133, 'sale_order', NULL, NULL, 'PO-', '000133', NULL, 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-21 04:00:00', 1, 1, '2017-09-21 15:17:25', 1, '2017-09-21 15:17:25', NULL, 2, 2, 0, NULL, NULL, NULL, 0, NULL, '130938500');
+INSERT INTO `tblsale_orders` (`id`, `rel_type`, `rel_id`, `rel_code`, `prefix`, `code`, `delivery_code`, `customer_id`, `name`, `reason`, `note`, `date`, `date_ht`, `create_by`, `user_head_id`, `user_head_date`, `user_admin_id`, `user_admin_date`, `total_items`, `status`, `export_status`, `delivery_status`, `shipping`, `discount`, `discount_percent`, `adjustment`, `tax`, `payment_status`, `paid`, `total`) VALUES
+(103, 'sale_order', 12, 'HĐ-00001', 'PO-', '00103', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-23 17:00:00', NULL, 1, 1, '2017-08-24 10:13:11', 1, '2017-08-24 10:13:11', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '6711000000'),
+(122, 'sale_order', 14, 'HĐ-00014', 'PO-', '00104', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', NULL, 1, 1, '2017-09-01 15:03:59', 1, '2017-09-01 15:03:59', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '19546600000'),
+(123, 'sale_order', 16, 'HĐ-00016', 'PO-', '00123', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-31 17:00:00', NULL, 1, 1, '2017-09-01 18:34:21', 1, '2017-09-01 18:34:21', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '135091000'),
+(124, 'sale_order', 13, 'HĐ-00013', 'PO-', '00124', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-08-25 17:00:00', NULL, 1, 1, '2017-09-06 14:01:41', 1, '2017-09-06 14:01:41', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3597825000'),
+(125, 'sale_order', 22, 'HĐ-00001', 'PO-', '00125', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-05 17:00:00', NULL, 1, 1, '2017-09-22 09:05:30', 1, '2017-09-22 09:05:30', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '14406850000'),
+(126, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, 1, '2017-09-22 09:19:05', 1, '2017-09-22 09:19:05', NULL, 2, 1, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3432070000'),
+(127, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3432070000'),
+(128, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3432070000'),
+(129, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3432070000'),
+(130, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '3432070000'),
+(131, 'sale_order', NULL, NULL, 'PO-', '000126', NULL, 9, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, 1, '2017-09-19 09:55:25', 1, '2017-09-19 09:55:25', NULL, 2, 0, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '810797500'),
+(132, 'sale_order', 23, 'HĐ-', 'PO-', '000132', NULL, 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-19 04:00:00', NULL, 1, 1, '2017-09-19 09:44:26', 1, '2017-09-19 09:44:26', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '308385000'),
+(133, 'sale_order', NULL, NULL, 'PO-', '000133', NULL, 3, 'Phiếu Đặt Hàng', '', NULL, '2017-09-21 04:00:00', NULL, 1, 1, '2017-09-21 15:17:25', 1, '2017-09-21 15:17:25', NULL, 2, 2, 0, NULL, NULL, '0.00', '0', NULL, 0, NULL, '130938500');
 
 -- --------------------------------------------------------
 
@@ -7973,11 +8708,18 @@ CREATE TABLE IF NOT EXISTS `tblsale_order_items` (
   `tax_id` int(11) DEFAULT NULL,
   `tax_rate` decimal(15,0) DEFAULT NULL,
   `tax` decimal(25,0) DEFAULT '0',
+  `discount_percent` decimal(11,2) DEFAULT '0.00',
   `discount` decimal(25,0) DEFAULT '0',
   `unit_cost` decimal(25,0) DEFAULT NULL,
   `sub_total` decimal(25,0) DEFAULT NULL,
   `amount` decimal(25,0) DEFAULT NULL,
   `warehouse_id` int(10) DEFAULT NULL,
+  `tk_no` int(11) DEFAULT NULL,
+  `tk_co` int(11) DEFAULT NULL,
+  `tk_thue` int(11) DEFAULT NULL,
+  `tk_ck` int(11) DEFAULT NULL,
+  `tk_gv` int(11) DEFAULT NULL,
+  `tk_kho` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=234 ;
 
@@ -7985,43 +8727,43 @@ CREATE TABLE IF NOT EXISTS `tblsale_order_items` (
 -- Dumping data for table `tblsale_order_items`
 --
 
-INSERT INTO `tblsale_order_items` (`id`, `sale_id`, `reject_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `export_quantity`, `tax_id`, `tax_rate`, `tax`, `discount`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`) VALUES
-(131, 103, NULL, 56, NULL, 4, 20, 20, NULL, NULL, '0', '0', '48050000', '961000000', NULL, 1),
-(132, 103, NULL, 55, NULL, 4, 100, 100, NULL, NULL, '0', '0', '57500000', '5750000000', NULL, 1),
-(181, 122, NULL, 61, NULL, 4, 100, 100, 1, '5', '244750000', '0', '48950000', '4895000000', '5139750000', 1),
-(182, 122, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1),
-(183, 122, NULL, 56, NULL, 4, 100, 100, 3, '10', '480500000', '0', '48050000', '4805000000', '5285500000', 1),
-(184, 122, NULL, 55, NULL, 4, 100, 100, 1, '5', '287500000', '0', '57500000', '5750000000', '6037500000', 1),
-(204, 123, NULL, 61, NULL, 4, 1, 1, 1, '5', '2447500', '0', '48950000', '48950000', '51397500', 1),
-(205, 123, NULL, 57, NULL, 4, 1, 1, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1),
-(206, 123, NULL, 56, NULL, 4, 1, 1, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(207, 124, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 2),
-(208, 124, NULL, 61, NULL, 4, 10, 10, 1, '5', '24475000', '0', '48950000', '489500000', '513975000', 2),
-(209, 125, NULL, 55, NULL, 4, 100, 100, 1, '5', '287500000', '0', '57500000', '5750000000', '6037500000', 1),
-(210, 125, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0', '29370000', '2937000000', '3083850000', 1),
-(211, 125, NULL, 56, NULL, 4, 100, 100, 3, '10', '480500000', '0', '48050000', '4805000000', '5285500000', 1),
-(212, 126, NULL, 55, NULL, 4, 10, 10, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(213, 126, NULL, 56, NULL, 4, 1, 1, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(214, 126, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0', '29370000', '2643300000', '2775465000', 1),
-(215, 127, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(216, 127, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(217, 127, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0', '29370000', '2643300000', '2775465000', 1),
-(218, 128, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(219, 128, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(220, 128, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0', '29370000', '2643300000', '2775465000', 1),
-(221, 129, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(222, 129, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(223, 129, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0', '29370000', '2643300000', '2775465000', 1),
-(224, 130, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(225, 130, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(226, 130, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0', '29370000', '2643300000', '2775465000', 1),
-(227, 131, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0', '57500000', '575000000', '603750000', 1),
-(228, 131, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0', '48050000', '48050000', '52855000', 1),
-(229, 131, NULL, 57, NULL, 4, 5, NULL, 1, '5', '7342500', '0', '29370000', '146850000', '154192500', 1),
-(230, 132, NULL, 57, NULL, 4, 10, 10, 1, '5', '14685000', '0', '29370000', '293700000', '308385000', 1),
-(231, 133, NULL, 55, NULL, 4, 1, 1, 3, '10', '5750000', '0', '57500000', '57500000', '63250000', 1),
-(232, 133, NULL, 57, NULL, 4, 1, 1, 1, '5', '1468500', '0', '29370000', '29370000', '30838500', 1),
-(233, 133, NULL, 56, NULL, 4, 1, 1, 3, '10', '3350000', '0', '33500000', '33500000', '36850000', 1);
+INSERT INTO `tblsale_order_items` (`id`, `sale_id`, `reject_id`, `product_id`, `serial_no`, `unit_id`, `quantity`, `export_quantity`, `tax_id`, `tax_rate`, `tax`, `discount_percent`, `discount`, `unit_cost`, `sub_total`, `amount`, `warehouse_id`, `tk_no`, `tk_co`, `tk_thue`, `tk_ck`, `tk_gv`, `tk_kho`) VALUES
+(131, 103, NULL, 56, NULL, 4, 20, 20, NULL, NULL, '0', '0.00', '0', '48050000', '961000000', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(132, 103, NULL, 55, NULL, 4, 100, 100, NULL, NULL, '0', '0.00', '0', '57500000', '5750000000', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(181, 122, NULL, 61, NULL, 4, 100, 100, 1, '5', '244750000', '0.00', '0', '48950000', '4895000000', '5139750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(182, 122, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0.00', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(183, 122, NULL, 56, NULL, 4, 100, 100, 3, '10', '480500000', '0.00', '0', '48050000', '4805000000', '5285500000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(184, 122, NULL, 55, NULL, 4, 100, 100, 1, '5', '287500000', '0.00', '0', '57500000', '5750000000', '6037500000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(204, 123, NULL, 61, NULL, 4, 1, 1, 1, '5', '2447500', '0.00', '0', '48950000', '48950000', '51397500', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(205, 123, NULL, 57, NULL, 4, 1, 1, 1, '5', '1468500', '0.00', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(206, 123, NULL, 56, NULL, 4, 1, 1, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(207, 124, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0.00', '0', '29370000', '2937000000', '3083850000', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(208, 124, NULL, 61, NULL, 4, 10, 10, 1, '5', '24475000', '0.00', '0', '48950000', '489500000', '513975000', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+(209, 125, NULL, 55, NULL, 4, 100, 100, 1, '5', '287500000', '0.00', '0', '57500000', '5750000000', '6037500000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(210, 125, NULL, 57, NULL, 4, 100, 100, 1, '5', '146850000', '0.00', '0', '29370000', '2937000000', '3083850000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(211, 125, NULL, 56, NULL, 4, 100, 100, 3, '10', '480500000', '0.00', '0', '48050000', '4805000000', '5285500000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(212, 126, NULL, 55, NULL, 4, 10, 10, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(213, 126, NULL, 56, NULL, 4, 1, 1, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(214, 126, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0.00', '0', '29370000', '2643300000', '2775465000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(215, 127, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(216, 127, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(217, 127, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0.00', '0', '29370000', '2643300000', '2775465000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(218, 128, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(219, 128, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(220, 128, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0.00', '0', '29370000', '2643300000', '2775465000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(221, 129, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(222, 129, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(223, 129, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0.00', '0', '29370000', '2643300000', '2775465000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(224, 130, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(225, 130, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(226, 130, NULL, 57, NULL, 4, 90, NULL, 1, '5', '132165000', '0.00', '0', '29370000', '2643300000', '2775465000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(227, 131, NULL, 55, NULL, 4, 10, NULL, 1, '5', '28750000', '0.00', '0', '57500000', '575000000', '603750000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(228, 131, NULL, 56, NULL, 4, 1, NULL, 3, '10', '4805000', '0.00', '0', '48050000', '48050000', '52855000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(229, 131, NULL, 57, NULL, 4, 5, NULL, 1, '5', '7342500', '0.00', '0', '29370000', '146850000', '154192500', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(230, 132, NULL, 57, NULL, 4, 10, 10, 1, '5', '14685000', '0.00', '0', '29370000', '293700000', '308385000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(231, 133, NULL, 55, NULL, 4, 1, 1, 3, '10', '5750000', '0.00', '0', '57500000', '57500000', '63250000', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(232, 133, NULL, 57, NULL, 4, 1, 1, 1, '5', '1468500', '0.00', '0', '29370000', '29370000', '30838500', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(233, 133, NULL, 56, NULL, 4, 1, 1, 3, '10', '3350000', '0.00', '0', '33500000', '33500000', '36850000', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8054,17 +8796,18 @@ CREATE TABLE IF NOT EXISTS `tblsessions` (
 --
 
 INSERT INTO `tblsessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('28643e8293424dcf49bdec84d0a30cb26a3f9439', '14.169.251.100', 1506042824, 0x636b696b78796f6c555056566f7a6c653833797877716c4f7061753552345f6d46456c3632486c593057627a784d41754f5a346657714c596272446b6771487432595546435356654e6c566649547a4b686c526b4b5138744b454343546b686a746142707343764d56326f2e),
-('931c65bbb73f30f2ccaa1951bededae5f59c294c', '113.161.38.95', 1506044401, 0x646d6b772d4254657431366e7264683546634372666b7937342d4444326c5146757935416b443273417373723449346761566d33685534704461505f42516642424d6856434e394e4852646246475a59544578357242744164512d6570455f4a633869754a6542484f724a2d635733667176314272734975323747775947334c32354f76594c533268556343414165494634534830772e2e),
-('c7ccda0335ae1ff90a8743329e80a7bb9f483abf', '113.161.38.95', 1506045395, 0x7a6543756334687777527a4b594b58776a463843595f6338356c5742694e36306c346757425778772d576d6b7950666f4f3659733674505a7652746e78746257674458584977796d6a69624a62736461716c466c753459634a367a4d5a707a3247635f536d306a774d6b50365f5862556e4b36483856744b4d7376397359755974384c754663692d39633464334d426268486e306d412e2e),
-('553303b9d72e4f755e2dd15b5f999d5fcaa0bc11', '14.169.251.100', 1506045369, 0x4a587170674e46486c5557565f574944637137745a427850715a2d34575f367262446475655858446c6b42505752785350396b33314d644b7747695830374770786779737a417879742d56683638616c665f6a6c5f39755147333365302d56713761745a6f32726e78586b2e),
-('27f85e69e46ad3e7401791473eb89c5270e97800', '113.161.38.95', 1506045931, 0x4441364f4c615969334535425252487941676938787978686c555f3578485f446c62757159735f546a5633747a4a737839733437306830644b793374705a53524c396c56392d4865596c52532d415470734b79564a3266415a496c367670316c4d396d6f4c6e4b747a35786977307045615f735546556a5268496a5a6c5a61615a652d7158523466704c62614e523362707a483166412e2e),
-('a241db5e28a3f39b74c06b86f3f3e535de33fee9', '113.161.38.95', 1506046256, 0x30444a4937754f5f675f467236556d34455f58467369444d527968334f466b504a5f7743344b43416d396f4f314f35696c7232577a4231685264365770395a6b6f3967554b7742533755756776594761796432575071524c4a6750717142564151626e5868447343506431656e48395555625a314765746371725242375079756b59544d474a5f3072507a775764344242386d3854512e2e),
-('053ec4fa4353c79625c5e991b8e9be18248450d1', '113.161.38.95', 1506046439, 0x396b6c5037647a37426a62346367354a3058336671796a4e6a77754a3444706f39716c3677386a42306e436244626269734c7047366a7830695353696c503978364e756b32424233694962307a7061594f7568675771697767362d67304646373354507738476d7445366161764e467a4b366149464c6853385f4475656776616f35736e5a4546344b563944476c6b3034766e7843672e2e),
-('617667b1673d64c0736bfd0f008ba99c7f155a31', '113.161.38.95', 1506047029, 0x486354303362437035556e75316830712d785a7a4f2d694f656339744934675f69745266686d334a4376566941556e48426f34466f7a513454796d76594e4a6b3964706e464c615152595452376d416150492d5f644b6258346445707052594439576559503957724f58753649776377596f41494276386d32303758455a48577766386976557a4b33464c6b774142564e71514654772e2e),
-('97de4dd28fb22cf65eb1fc09386def1ed603d62a', '113.161.38.95', 1506047066, 0x78587a386773373349652d6d5f6b34314959395447626d70374c757358785f37502d68744742384c427463366c6b7852665a4b474d5a646871303055455f6a35796d676369776c67435866435f6764765053396578424166496678783864673657516d4d6a553457693458365a535845454b59574770547549484f46664250705a7a716f6c49557a4c32646c596e636571446f7178512e2e),
-('a8948b0f7fda1437fd63e067427eeb0d829e1412', '113.161.38.95', 1506048770, 0x6c7334614c4541575858623642582d75336b465a674148636b39432d6e583432656f66477145366861654f393877587379354d5a49492d2d636e756465787771444637445959414a70734762474f54306c6347616132684c7762686f4c43447152534c3131594839706d6d4c5362684171764579703152475f714c346e61694736764a694d4f6b573157724d6e48672d4f344c312d512e2e),
-('76ff92d313d372628c2a3cfffb3d27a1253c8848', '113.161.38.95', 1506049468, 0x6f4c7a562d2d4b764834646e38453166447852466c79636f4f715862483333505f6f6534512d54666a4c6c37505f30576b4172392d4b795243666b456f37794631554f5252784f465044397675777a734c77764d6d6559574f39764c5363305f74594f626258456d63554c562d62385a346d77536e3063684c594c5f6b3370686a33426b54547a7338674e546f5745664e574b6b4c78785a54527a5276494b5962664b35424d47483561672e);
+('5ff85ec1f6439b6c7ae3993ff2c587f0af1384ca', '14.169.240.198', 1507709003, 0x697737666c466d3971457065616f7a5a6766464451506a6b67796145673145466d37314533703965336e776b78515341326369433155335572625534506d746673394b6e42597a593255324c74666b796b34434375612d42577377316d7a712d66364c573735416158696e545f495636766438347276305549517846626f2d4a43356e6170587a35586a716f3132795641562d705a772e2e),
+('4a6a6fa342b923af11cddb3a3d7fe072810752e3', '183.81.14.143', 1507734002, 0x35523155636279776d76634a7646323458426c45634b637550436e687647456c3531716c6355455434354842476271776a6136433471336b495555534776585a6236316c7077357a7a676e425575665843306b335f6863574f5551494764537457394c6f3855526a796f43317261694834746e6c54443943475657735f76706367334e636950716e5844554637643943503341426c512e2e),
+('66cc397a879c0d0a6fc6414adf51113b619773be', '183.81.14.143', 1507733252, 0x364c55326c387a6f793756305f6f4f693978426c573332624e7079444f674b37314853474c654f2d544a2d6a6b7348626957786d623375542d583431364d546c6f453549317865546f3652336e324e3837516e4d744e5a6f484c63676147563076347a464643446b59305232396377646376422d777438575f54384e4165374c5862615570485f505f50737a6e48375364547a7a58416d757134584152595772466276596c7a7363684c776e3953696175336d6a646f3948534a766a565f72435333635f334830674a6f31756c4a4249664d4842304846507a79676d7661514d5936346a71457535724d6230504a6a59627541536963466f36335574496b6e2d6c326f74346a707946444371327a4c4341752d6f716e706a64553761322d614c577362325145396662576b2e),
+('53a163125ef730b5b866d6601ea74a360ff5657a', '183.81.14.143', 1507734433, 0x325f4862484a466c714a5041684e5754506863746f695f4546476f364a4b6a4d516d504f4e4b2d4b477577486a37743570534f6a61514b72346233716c354633714841564143434d77777252455672614137467671796c5463556273695f44556a56584e2d4e356a566b516d57486c676f527830726256654452332d5a6a374d427a49675245457a57476f6b746f4a78634a69376d672e2e),
+('f8521e4354ed72b0b169e601f43d8bf2598b2a58', '183.81.14.143', 1507734864, 0x3943796463585a354230696577476b4165393154576f577a433372364b36455246574c2d5241553855637968674169774270455758446c31674d6c79733353664577517734515156462d446d316b2d48424f4f326e7a4f535634644175755733623635366c71706c422d52765656747555704272557355494a3372555750713976613244715a4a4b397544526836746c596b724336772e2e),
+('83a1a4f4f2c15f3fe87b5a4d25bbea8325601f41', '183.81.14.143', 1507735777, 0x734b66657874414c3841397a494a615a3830335f453433477844376f516d6a66386432515534595554497431444d39616b335f473350374e39327162534c35636a4f6d7852485f4d4b4c79576d62744764335673497a537a626b5638734569366d3945714a623759575347395149396d4a667469665733456448524c4d5a655766386a63444a3332795f35757a5f7a3844516e6330412e2e),
+('b4bffd6aa3bbdf936278577110f662a466985143', '183.81.14.143', 1507736495, 0x43796b722d755268775173475538794a786a58374a3550637971463559487678575571473239703447544a627833676d6b4c37706238417350486535652d37774b426d3237686c51516557517839743948706b5865617a4e6a7574504e474b6c723139326450516d78493178312d47777a73374b684b76686a33484770724e6a45765953525a303371474d5139753677626272706e412e2e),
+('b7beea60c15c3e13d1540d10d5a0720f9cac5076', '183.81.14.143', 1507736187, 0x4e727a68435832384544394c664f656f4467457450766145796566447847713053384a73746a2d654b597053504653656e66685a73554943594c504e6656456a6a48546c667066755a39444c785a7338552d614565726a4c68675a766b495f497a756e383468784e453767474a464c724e4647434d6c5a455f7a495350474652722d49616e4653423949677934316f6b3462434c44754d5544565f47794b6747425150376e7955774a57617674623236696349536c5a7462676330396950416a434773714c55644e756c7963787a6b786d5f49776e53456531417a7236324e38305258314368395f6a6d796a77764d565175333634417935625a2d4e5137464c5032394658544d4b7a786f74756356394a554472534f677635366f566933706651644944624b55446441552e),
+('3f0c166f5dc83927b5d86ed336a2a2d8c1213859', '183.81.14.143', 1507736914, 0x3175675a596c696a6f47795273384b4f556c742d65613377574754365536435454756e364d5a716f582d62485831486b7650584351544c4a3041666c3636753966395f50774b565342795a34623879397862745735696e6363674c4e77383463644f64754d506337756843784874426b4e754945537641693476444c754a796453756c4a347239564344375951706c78455a415f4e412e2e),
+('7fa8d108884f5ec96d9a412c8c70e7806f7f70eb', '183.81.14.143', 1507736917, 0x777935585a394e63456c4b4d2d5a4379343257325537635f48576944494f4c33413358413762364c5341575a6730714c51547a4b334e6635704f5a496930664b5a5236366c3044544d426b785376744234326c62334d51446a386f6c56362d44665a476f43546a52706276475f6479626b76465f2d5953666a6a7a64596c43516733526669566e5630794545696f422d332d624d506b52766e6a776a41596f70564c432d426b432d524a4f386f394d696654326d57564d436b767471466d59577741486a6e5a56356a75554e617674776661664267536d4b6a74314d2d6756436762774d75544130576441786847573978636e357837346c79506f45302d553547786f4d6e35725552525a5873574c41546e784f4e68736738667345785739713874425363726953516d6f2e),
+('a5dfc24d18903eeade172364698895dee104c133', '183.81.14.143', 1507737310, 0x6d646e423659693156305773444c6c59394d364d535456394948706372526d67527749555f64536c4e72624a5956686854546f595842395a545039663859366e484e396e6b723230556e6876774944304468384d305a6d4a473645736a746135686f4162676d4f365f6245445251785252613157464d304b733237326766664d6b69584d4554482d6d6e776150674c734378735a76412e2e),
+('f6889d0798c4f9fd9f7198fda5e42a62c621f97c', '183.81.14.143', 1507737338, 0x62346a6c714a63534b5a5f3973503550484d337368415479557238394e674565616847372d44444775776e5549634b306572436b764b6376787866466d3653627432324f793835786c30434a4b54506b426b5f472d70576a5276795a506f5a69317351584b62556b6c6a385f6e66505a3359734947346a4c427537436b5078327843787a3074434b426e50764f47394f4f42433659412e2e);
 
 -- --------------------------------------------------------
 
@@ -8145,19 +8888,39 @@ CREATE TABLE IF NOT EXISTS `tblstaff` (
   `hourly_rate` decimal(11,2) DEFAULT '0.00',
   `salary` decimal(15,0) DEFAULT NULL,
   `email_signature` text,
+  `last_active_time` int(11) NOT NULL,
   `bank_account` varchar(255) DEFAULT NULL,
   `internal_phone` varchar(255) DEFAULT NULL,
   `date_work` date DEFAULT NULL,
   `place_work` int(11) DEFAULT NULL,
+  `email_marketing` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `password_email_marketing` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`staffid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
 -- Dumping data for table `tblstaff`
 --
 
-INSERT INTO `tblstaff` (`staffid`, `email`, `staff_code`, `position_id`, `staff_manager`, `fullname`, `firstname`, `lastname`, `gender`, `date_birth`, `place_birth`, `permanent_residence`, `current_address`, `passport_id`, `issued_by`, `issued_on`, `hobbies`, `height`, `weight`, `marial_status`, `emergency_contact`, `education`, `foreign_languge_skills`, `other_certificates`, `facebook`, `linkedin`, `phonenumber`, `skype`, `password`, `datecreated`, `profile_image`, `last_ip`, `last_login`, `last_password_change`, `new_pass_key`, `new_pass_key_requested`, `admin`, `role`, `rule`, `active`, `default_language`, `direction`, `media_path_slug`, `is_not_staff`, `hourly_rate`, `salary`, `email_signature`, `bank_account`, `internal_phone`, `date_work`, `place_work`) VALUES
-(1, 'amin@admin.com', NULL, 0, '', 'admin', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2a$08$9uFKA7CEZjqLO3zSOQfPBul5FwOw8Xwj6pJs4onV4gHAn9Tlcv762', '2017-03-30 09:24:10', NULL, '113.161.38.95', '2017-09-22 08:39:29', NULL, NULL, NULL, 1, NULL, 1, 1, 'vietnamese', NULL, NULL, 0, '0.00', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tblstaff` (`staffid`, `email`, `staff_code`, `position_id`, `staff_manager`, `fullname`, `firstname`, `lastname`, `gender`, `date_birth`, `place_birth`, `permanent_residence`, `current_address`, `passport_id`, `issued_by`, `issued_on`, `hobbies`, `height`, `weight`, `marial_status`, `emergency_contact`, `education`, `foreign_languge_skills`, `other_certificates`, `facebook`, `linkedin`, `phonenumber`, `skype`, `password`, `datecreated`, `profile_image`, `last_ip`, `last_login`, `last_password_change`, `new_pass_key`, `new_pass_key_requested`, `admin`, `role`, `rule`, `active`, `default_language`, `direction`, `media_path_slug`, `is_not_staff`, `hourly_rate`, `salary`, `email_signature`, `last_active_time`, `bank_account`, `internal_phone`, `date_work`, `place_work`, `email_marketing`, `password_email_marketing`) VALUES
+(1, 'amin@admin.com', NULL, 0, '', 'admin', '', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2a$08$9uFKA7CEZjqLO3zSOQfPBul5FwOw8Xwj6pJs4onV4gHAn9Tlcv762', '2017-03-30 09:24:10', NULL, '14.169.240.198', '2017-10-11 14:59:45', NULL, NULL, NULL, 1, NULL, 1, 1, 'vietnamese', NULL, NULL, 0, '0.00', NULL, NULL, 1507531196, NULL, NULL, NULL, NULL, '', ''),
+(24, 'sales.hoangthong@dudoff.vn', 'NV-000024', 0, '', 'Sale Thông', 'Sale', ' Thông', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$ge3VyDVq7KJntJ1lI8dTXeHFJ4kQSRcJFr/Vm3ty4GSA5wxfm5.JO', '2017-09-22 17:12:08', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sale-thong', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(17, 'showroom@dudoff.vn', 'NV-000002', 0, '', 'SR Nhung', 'SR', ' Nhung', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$nlKPTf6jiDRS/y8WZctFieoJxtAaCNm40a9hMcatJJgNlcXHUKzxO', '2017-09-22 16:30:25', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sr-nhung', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 1, '', ''),
+(18, 'showroom1@dudoff.vn', 'NV-000018', 0, '', 'SR Vân', 'SR', ' Vân', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$H/PpvMQqCl4EqGDMq9HFb.zRb63XsnxT7aIDDeANSSBo.KVdnYhkG', '2017-09-22 16:47:22', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sr-van', 0, '0.00', '0', '', 0, '', '000', '2017-09-22', 0, '', ''),
+(19, 'showroom2@dudoff.vn', 'NV-000019', 0, '', 'SR Bảo Vy', 'SR Bảo', ' Vy', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$N9HUwZbtR22AE0O/.T7rOuR9mg6Qvn786Ws0vD8eg.6WNdYLcqTR.', '2017-09-22 16:49:25', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sr-bảo-vy', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(20, 'showroom3@dudoff.vn', 'NV-000020', 0, '', 'SR Tường Vy', 'SR Tường', ' Vy', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$z0XhyYkFPhcwYeUAdD6Gi.zGJdmJAV19aZw6bYzdQbV34topde/Hq', '2017-09-22 16:51:07', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sr-tường-vy', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(21, 'hr@dudooff.vn', 'NV-000021', 0, '', 'HR Như', 'HR', ' Như', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$Go4TtbHwTSLMTevnw1Zz7.FZTyc61.5Zz0Bt/0NPzEapmNiTE4Sbi', '2017-09-22 16:53:00', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'hr-như', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(22, 'sales.baoquoc@dudoff.vn', 'NV-000022', 0, '', 'Sale Quốc', 'Sale', ' Quốc', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$F3WzVyn53AYgJCLJy340VuBKMsI7lP2rs.VdOWt85kgceJOsceoP6', '2017-09-22 17:09:21', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sale-quốc', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(23, 'sales.thatdinh@dudoff.vn', 'NV-000023', 0, '', 'Sale Đình', 'Sale', ' Đình', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$Y7aReQZzGwvYYVwYCykSFeQeXkVUqVwzfDOJVqXfHypVZiKMQpObS', '2017-09-22 17:10:48', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sale-đinh', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(25, 'sales.quoctoan@dudoff.vn', 'NV-000025', 0, '', 'Sale Toản', 'Sale', ' Toản', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$BKVsz2U0J4YhaE2cU7vvZ.B.yq2awmfiMoD2gu9ljMboaV0yveOa.', '2017-09-22 17:14:04', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sale-toản', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(26, 'ceo@dudoff.vn', 'NV-000026', 0, '', 'CEO', '', 'CEO', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$Wc0ATages/iIGNihWHbhgeArAXXh.gozEo3NE2uYpadYXVCbVCH.W', '2017-09-22 17:15:27', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'ceo', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(27, 'purchaser@dudoff.com', 'NV-000027', 0, '', 'PC Hoà', 'PC', ' Hoà', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$nDrjbTcTodn2VBh8VbYADewJCqNG4XtwJM.8zQFNOj52Qa0XmiLfW', '2017-09-22 17:17:34', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'pc-hoa', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(28, 'accountant@dudoff.vn', 'NV-000028', 0, '', 'AC Hường', 'AC', ' Hường', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$vkt37skW0prV6IHfcfMK1OFZt7GNXvqLGlkwjUhF6bLbTRUFxtLCq', '2017-09-22 17:19:39', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'ac-hường', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(29, 'quanlybanhang@dudoff.vn', 'NV-000029', 0, '', 'SM Thuận', 'SM', ' Thuận', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$XCzvzzgCS6sOTQixcbovRuUJDZngDFbwnyOo008ICBme6y9j7zJgu', '2017-09-22 17:21:13', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'sm-thuận', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(30, 'hoa.nguyen@dudoff.vn', 'NV-000030', 0, '', 'TL Hoa', 'TL', ' Hoa', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$S6WSShAkM.zJ2JGp1W8OM.JLteOpds25cGZYQ6GaAUqaQR8JJayaG', '2017-09-22 17:22:24', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'tl-hoa', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(31, 'designer3d@dudoff.vn', 'NV-000031', 0, '', 'TK Giang', 'TK', ' Giang', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$FRcFOLLCNS8dhdT6PukmrOKsSPAi39JLPLBV7j2nKlrIakJLKVx0K', '2017-09-22 17:25:26', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'tk-giang', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(32, 'designer@dudoff.vn', 'NV-000032', 0, '', 'TK Quốc', 'TK', ' Quốc', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$wCF1fmrG2z8vDCBG16wNFetPuA4gyyKjJPH0AaCi/YI.Ijzu8/0Gq', '2017-09-22 17:27:29', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'tk-quốc', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', ''),
+(33, 'marketing02@dudoff.vn', 'NV-000033', 0, '', 'MA Oanh', 'MA', ' Oanh', 0, '2017-09-22', '', '', '', '', '', '2017-09-22', '', 0, 0, 'single', '', NULL, NULL, NULL, NULL, NULL, 'amin@admin.com', NULL, '$2a$08$0bz.4BKfiYTgV4Z/t8z7uOQZMyR4ORX60TWVblybx40ZXxPfdyNHi', '2017-09-22 17:30:49', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, NULL, 1, NULL, NULL, 'ma-oanh', 0, '0.00', '0', '', 0, '', '', '2017-09-22', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -8195,13 +8958,70 @@ CREATE TABLE IF NOT EXISTS `tblstaffpermissions` (
   `can_delete` tinyint(1) NOT NULL DEFAULT '0',
   `staffid` int(11) NOT NULL,
   PRIMARY KEY (`staffpermid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=480 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=837 ;
 
 --
 -- Dumping data for table `tblstaffpermissions`
 --
 
 INSERT INTO `tblstaffpermissions` (`staffpermid`, `permissionid`, `can_view`, `can_view_own`, `can_edit`, `can_create`, `can_delete`, `staffid`) VALUES
+(616, 12, 1, 0, 0, 0, 0, 23),
+(615, 19, 1, 0, 0, 0, 0, 23),
+(614, 18, 0, 0, 0, 0, 0, 23),
+(613, 20, 0, 0, 0, 0, 0, 23),
+(612, 14, 1, 0, 0, 0, 0, 23),
+(611, 15, 0, 0, 0, 0, 0, 23),
+(610, 11, 0, 0, 0, 0, 0, 23),
+(609, 9, 1, 0, 0, 0, 0, 23),
+(608, 8, 1, 0, 0, 0, 0, 23),
+(607, 1, 1, 0, 0, 0, 0, 23),
+(606, 16, 1, 0, 0, 0, 0, 23),
+(605, 2, 1, 0, 0, 0, 0, 22),
+(604, 6, 1, 0, 0, 0, 0, 22),
+(603, 7, 0, 0, 0, 0, 0, 22),
+(602, 4, 1, 0, 0, 0, 0, 22),
+(601, 10, 1, 0, 0, 0, 0, 22),
+(600, 3, 1, 0, 0, 0, 0, 22),
+(599, 21, 0, 0, 0, 0, 0, 22),
+(598, 13, 1, 0, 0, 0, 0, 22),
+(498, 7, 0, 0, 0, 0, 0, 17),
+(497, 4, 1, 0, 0, 0, 0, 17),
+(496, 10, 1, 0, 0, 0, 0, 17),
+(495, 3, 1, 0, 0, 0, 0, 17),
+(494, 21, 0, 0, 0, 0, 0, 17),
+(493, 13, 1, 0, 0, 0, 0, 17),
+(492, 5, 0, 0, 0, 0, 0, 17),
+(491, 17, 1, 0, 0, 0, 0, 17),
+(490, 12, 1, 0, 0, 0, 0, 17),
+(489, 19, 1, 0, 0, 0, 0, 17),
+(488, 18, 0, 0, 0, 0, 0, 17),
+(487, 20, 0, 0, 0, 0, 0, 17),
+(486, 14, 1, 0, 0, 0, 0, 17),
+(485, 15, 0, 0, 0, 0, 0, 17),
+(484, 11, 0, 0, 0, 0, 0, 17),
+(483, 9, 1, 0, 0, 0, 0, 17),
+(482, 8, 1, 0, 0, 0, 0, 17),
+(481, 1, 1, 0, 0, 0, 0, 17),
+(480, 16, 1, 0, 0, 0, 0, 17),
+(596, 17, 1, 0, 0, 0, 0, 22),
+(595, 12, 1, 0, 0, 0, 0, 22),
+(594, 19, 1, 0, 0, 0, 0, 22),
+(593, 18, 0, 0, 0, 0, 0, 22),
+(592, 20, 0, 0, 0, 0, 0, 22),
+(591, 14, 1, 0, 0, 0, 0, 22),
+(590, 15, 0, 0, 0, 0, 0, 22),
+(589, 11, 0, 0, 0, 0, 0, 22),
+(588, 9, 1, 0, 0, 0, 0, 22),
+(587, 8, 1, 0, 0, 0, 0, 22),
+(586, 1, 1, 0, 0, 0, 0, 22),
+(585, 16, 1, 0, 0, 0, 0, 22),
+(584, 2, 1, 0, 0, 0, 0, 21),
+(583, 6, 1, 0, 0, 0, 0, 21),
+(582, 7, 0, 0, 0, 0, 0, 21),
+(581, 4, 1, 0, 0, 0, 0, 21),
+(580, 10, 1, 0, 0, 0, 0, 21),
+(579, 3, 1, 0, 0, 0, 0, 21),
+(578, 21, 0, 0, 0, 0, 0, 21),
 (58, 16, 1, 0, 0, 0, 0, 5),
 (59, 1, 1, 0, 0, 0, 0, 5),
 (60, 8, 1, 0, 0, 0, 0, 5),
@@ -8239,7 +9059,307 @@ INSERT INTO `tblstaffpermissions` (`staffpermid`, `permissionid`, `can_view`, `c
 (384, 9, 1, 0, 0, 0, 0, 12),
 (383, 8, 1, 0, 0, 0, 0, 12),
 (382, 1, 1, 0, 0, 0, 0, 12),
-(381, 16, 1, 0, 0, 0, 0, 12);
+(381, 16, 1, 0, 0, 0, 0, 12),
+(577, 13, 1, 0, 0, 0, 0, 21),
+(576, 5, 0, 0, 0, 0, 0, 21),
+(575, 17, 1, 0, 0, 0, 0, 21),
+(574, 12, 1, 0, 0, 0, 0, 21),
+(573, 19, 1, 0, 0, 0, 0, 21),
+(572, 18, 0, 0, 0, 0, 0, 21),
+(571, 20, 0, 0, 0, 0, 0, 21),
+(570, 14, 1, 0, 0, 0, 0, 21),
+(569, 15, 0, 0, 0, 0, 0, 21),
+(568, 11, 0, 0, 0, 0, 0, 21),
+(567, 9, 1, 0, 0, 0, 0, 21),
+(566, 8, 1, 0, 0, 0, 0, 21),
+(565, 1, 1, 0, 0, 0, 0, 21),
+(564, 16, 1, 0, 0, 0, 0, 21),
+(563, 2, 1, 0, 0, 0, 0, 20),
+(562, 6, 1, 0, 0, 0, 0, 20),
+(561, 7, 0, 0, 0, 0, 0, 20),
+(560, 4, 1, 0, 0, 0, 0, 20),
+(559, 10, 1, 0, 0, 0, 0, 20),
+(558, 3, 1, 0, 0, 0, 0, 20),
+(557, 21, 0, 0, 0, 0, 0, 20),
+(556, 13, 1, 0, 0, 0, 0, 20),
+(555, 5, 0, 0, 0, 0, 0, 20),
+(554, 17, 1, 0, 0, 0, 0, 20),
+(553, 12, 1, 0, 0, 0, 0, 20),
+(552, 19, 1, 0, 0, 0, 0, 20),
+(551, 18, 0, 0, 0, 0, 0, 20),
+(550, 20, 0, 0, 0, 0, 0, 20),
+(549, 14, 1, 0, 0, 0, 0, 20),
+(548, 15, 0, 0, 0, 0, 0, 20),
+(547, 11, 0, 0, 0, 0, 0, 20),
+(546, 9, 1, 0, 0, 0, 0, 20),
+(545, 8, 1, 0, 0, 0, 0, 20),
+(544, 1, 1, 0, 0, 0, 0, 20),
+(543, 16, 1, 0, 0, 0, 0, 20),
+(542, 2, 1, 0, 0, 0, 0, 19),
+(541, 6, 1, 0, 0, 0, 0, 19),
+(540, 7, 0, 0, 0, 0, 0, 19),
+(597, 5, 0, 0, 0, 0, 0, 22),
+(539, 4, 1, 0, 0, 0, 0, 19),
+(518, 4, 1, 0, 0, 0, 0, 18),
+(517, 10, 1, 0, 0, 0, 0, 18),
+(516, 3, 1, 0, 0, 0, 0, 18),
+(515, 21, 0, 0, 0, 0, 0, 18),
+(514, 13, 1, 0, 0, 0, 0, 18),
+(513, 5, 0, 0, 0, 0, 0, 18),
+(512, 17, 1, 0, 0, 0, 0, 18),
+(511, 12, 1, 0, 0, 0, 0, 18),
+(510, 19, 1, 0, 0, 0, 0, 18),
+(509, 18, 0, 0, 0, 0, 0, 18),
+(508, 20, 0, 0, 0, 0, 0, 18),
+(507, 14, 1, 0, 0, 0, 0, 18),
+(506, 15, 0, 0, 0, 0, 0, 18),
+(505, 11, 0, 0, 0, 0, 0, 18),
+(504, 9, 1, 0, 0, 0, 0, 18),
+(503, 8, 1, 0, 0, 0, 0, 18),
+(502, 1, 1, 0, 0, 0, 0, 18),
+(501, 16, 1, 0, 0, 0, 0, 18),
+(500, 2, 1, 0, 0, 0, 0, 17),
+(499, 6, 1, 0, 0, 0, 0, 17),
+(538, 10, 1, 0, 0, 0, 0, 19),
+(537, 3, 1, 0, 0, 0, 0, 19),
+(536, 21, 0, 0, 0, 0, 0, 19),
+(535, 13, 1, 0, 0, 0, 0, 19),
+(534, 5, 0, 0, 0, 0, 0, 19),
+(533, 17, 1, 0, 0, 0, 0, 19),
+(532, 12, 1, 0, 0, 0, 0, 19),
+(531, 19, 1, 0, 0, 0, 0, 19),
+(530, 18, 0, 0, 0, 0, 0, 19),
+(529, 20, 0, 0, 0, 0, 0, 19),
+(528, 14, 1, 0, 0, 0, 0, 19),
+(527, 15, 0, 0, 0, 0, 0, 19),
+(526, 11, 0, 0, 0, 0, 0, 19),
+(525, 9, 1, 0, 0, 0, 0, 19),
+(524, 8, 1, 0, 0, 0, 0, 19),
+(523, 1, 1, 0, 0, 0, 0, 19),
+(522, 16, 1, 0, 0, 0, 0, 19),
+(521, 2, 1, 0, 0, 0, 0, 18),
+(520, 6, 1, 0, 0, 0, 0, 18),
+(519, 7, 0, 0, 0, 0, 0, 18),
+(617, 17, 1, 0, 0, 0, 0, 23),
+(618, 5, 0, 0, 0, 0, 0, 23),
+(619, 13, 1, 0, 0, 0, 0, 23),
+(620, 21, 0, 0, 0, 0, 0, 23),
+(621, 3, 1, 0, 0, 0, 0, 23),
+(622, 10, 1, 0, 0, 0, 0, 23),
+(623, 4, 1, 0, 0, 0, 0, 23),
+(624, 7, 0, 0, 0, 0, 0, 23),
+(625, 6, 1, 0, 0, 0, 0, 23),
+(626, 2, 1, 0, 0, 0, 0, 23),
+(627, 16, 1, 0, 0, 0, 0, 24),
+(628, 1, 1, 0, 0, 0, 0, 24),
+(629, 8, 1, 0, 0, 0, 0, 24),
+(630, 9, 1, 0, 0, 0, 0, 24),
+(631, 11, 0, 0, 0, 0, 0, 24),
+(632, 15, 0, 0, 0, 0, 0, 24),
+(633, 14, 1, 0, 0, 0, 0, 24),
+(634, 20, 0, 0, 0, 0, 0, 24),
+(635, 18, 0, 0, 0, 0, 0, 24),
+(636, 19, 1, 0, 0, 0, 0, 24),
+(637, 12, 1, 0, 0, 0, 0, 24),
+(638, 17, 1, 0, 0, 0, 0, 24),
+(639, 5, 0, 0, 0, 0, 0, 24),
+(640, 13, 1, 0, 0, 0, 0, 24),
+(641, 21, 0, 0, 0, 0, 0, 24),
+(642, 3, 1, 0, 0, 0, 0, 24),
+(643, 10, 1, 0, 0, 0, 0, 24),
+(644, 4, 1, 0, 0, 0, 0, 24),
+(645, 7, 0, 0, 0, 0, 0, 24),
+(646, 6, 1, 0, 0, 0, 0, 24),
+(647, 2, 1, 0, 0, 0, 0, 24),
+(648, 16, 1, 0, 0, 0, 0, 25),
+(649, 1, 1, 0, 0, 0, 0, 25),
+(650, 8, 1, 0, 0, 0, 0, 25),
+(651, 9, 1, 0, 0, 0, 0, 25),
+(652, 11, 0, 0, 0, 0, 0, 25),
+(653, 15, 0, 0, 0, 0, 0, 25),
+(654, 14, 1, 0, 0, 0, 0, 25),
+(655, 20, 0, 0, 0, 0, 0, 25),
+(656, 18, 0, 0, 0, 0, 0, 25),
+(657, 19, 1, 0, 0, 0, 0, 25),
+(658, 12, 1, 0, 0, 0, 0, 25),
+(659, 17, 1, 0, 0, 0, 0, 25),
+(660, 5, 0, 0, 0, 0, 0, 25),
+(661, 13, 1, 0, 0, 0, 0, 25),
+(662, 21, 0, 0, 0, 0, 0, 25),
+(663, 3, 1, 0, 0, 0, 0, 25),
+(664, 10, 1, 0, 0, 0, 0, 25),
+(665, 4, 1, 0, 0, 0, 0, 25),
+(666, 7, 0, 0, 0, 0, 0, 25),
+(667, 6, 1, 0, 0, 0, 0, 25),
+(668, 2, 1, 0, 0, 0, 0, 25),
+(669, 16, 1, 0, 0, 0, 0, 26),
+(670, 1, 1, 0, 0, 0, 0, 26),
+(671, 8, 1, 0, 0, 0, 0, 26),
+(672, 9, 1, 0, 0, 0, 0, 26),
+(673, 11, 0, 0, 0, 0, 0, 26),
+(674, 15, 0, 0, 0, 0, 0, 26),
+(675, 14, 1, 0, 0, 0, 0, 26),
+(676, 20, 0, 0, 0, 0, 0, 26),
+(677, 18, 0, 0, 0, 0, 0, 26),
+(678, 19, 1, 0, 0, 0, 0, 26),
+(679, 12, 1, 0, 0, 0, 0, 26),
+(680, 17, 1, 0, 0, 0, 0, 26),
+(681, 5, 0, 0, 0, 0, 0, 26),
+(682, 13, 1, 0, 0, 0, 0, 26),
+(683, 21, 0, 0, 0, 0, 0, 26),
+(684, 3, 1, 0, 0, 0, 0, 26),
+(685, 10, 1, 0, 0, 0, 0, 26),
+(686, 4, 1, 0, 0, 0, 0, 26),
+(687, 7, 0, 0, 0, 0, 0, 26),
+(688, 6, 1, 0, 0, 0, 0, 26),
+(689, 2, 1, 0, 0, 0, 0, 26),
+(690, 16, 1, 0, 0, 0, 0, 27),
+(691, 1, 1, 0, 0, 0, 0, 27),
+(692, 8, 1, 0, 0, 0, 0, 27),
+(693, 9, 1, 0, 0, 0, 0, 27),
+(694, 11, 0, 0, 0, 0, 0, 27),
+(695, 15, 0, 0, 0, 0, 0, 27),
+(696, 14, 1, 0, 0, 0, 0, 27),
+(697, 20, 0, 0, 0, 0, 0, 27),
+(698, 18, 0, 0, 0, 0, 0, 27),
+(699, 19, 1, 0, 0, 0, 0, 27),
+(700, 12, 1, 0, 0, 0, 0, 27),
+(701, 17, 1, 0, 0, 0, 0, 27),
+(702, 5, 0, 0, 0, 0, 0, 27),
+(703, 13, 1, 0, 0, 0, 0, 27),
+(704, 21, 0, 0, 0, 0, 0, 27),
+(705, 3, 1, 0, 0, 0, 0, 27),
+(706, 10, 1, 0, 0, 0, 0, 27),
+(707, 4, 1, 0, 0, 0, 0, 27),
+(708, 7, 0, 0, 0, 0, 0, 27),
+(709, 6, 1, 0, 0, 0, 0, 27),
+(710, 2, 1, 0, 0, 0, 0, 27),
+(711, 16, 1, 0, 0, 0, 0, 28),
+(712, 1, 1, 0, 0, 0, 0, 28),
+(713, 8, 1, 0, 0, 0, 0, 28),
+(714, 9, 1, 0, 0, 0, 0, 28),
+(715, 11, 0, 0, 0, 0, 0, 28),
+(716, 15, 0, 0, 0, 0, 0, 28),
+(717, 14, 1, 0, 0, 0, 0, 28),
+(718, 20, 0, 0, 0, 0, 0, 28),
+(719, 18, 0, 0, 0, 0, 0, 28),
+(720, 19, 1, 0, 0, 0, 0, 28),
+(721, 12, 1, 0, 0, 0, 0, 28),
+(722, 17, 1, 0, 0, 0, 0, 28),
+(723, 5, 0, 0, 0, 0, 0, 28),
+(724, 13, 1, 0, 0, 0, 0, 28),
+(725, 21, 0, 0, 0, 0, 0, 28),
+(726, 3, 1, 0, 0, 0, 0, 28),
+(727, 10, 1, 0, 0, 0, 0, 28),
+(728, 4, 1, 0, 0, 0, 0, 28),
+(729, 7, 0, 0, 0, 0, 0, 28),
+(730, 6, 1, 0, 0, 0, 0, 28),
+(731, 2, 1, 0, 0, 0, 0, 28),
+(732, 16, 1, 0, 0, 0, 0, 29),
+(733, 1, 1, 0, 0, 0, 0, 29),
+(734, 8, 1, 0, 0, 0, 0, 29),
+(735, 9, 1, 0, 0, 0, 0, 29),
+(736, 11, 0, 0, 0, 0, 0, 29),
+(737, 15, 0, 0, 0, 0, 0, 29),
+(738, 14, 1, 0, 0, 0, 0, 29),
+(739, 20, 0, 0, 0, 0, 0, 29),
+(740, 18, 0, 0, 0, 0, 0, 29),
+(741, 19, 1, 0, 0, 0, 0, 29),
+(742, 12, 1, 0, 0, 0, 0, 29),
+(743, 17, 1, 0, 0, 0, 0, 29),
+(744, 5, 0, 0, 0, 0, 0, 29),
+(745, 13, 1, 0, 0, 0, 0, 29),
+(746, 21, 0, 0, 0, 0, 0, 29),
+(747, 3, 1, 0, 0, 0, 0, 29),
+(748, 10, 1, 0, 0, 0, 0, 29),
+(749, 4, 1, 0, 0, 0, 0, 29),
+(750, 7, 0, 0, 0, 0, 0, 29),
+(751, 6, 1, 0, 0, 0, 0, 29),
+(752, 2, 1, 0, 0, 0, 0, 29),
+(753, 16, 1, 0, 0, 0, 0, 30),
+(754, 1, 1, 0, 0, 0, 0, 30),
+(755, 8, 1, 0, 0, 0, 0, 30),
+(756, 9, 1, 0, 0, 0, 0, 30),
+(757, 11, 0, 0, 0, 0, 0, 30),
+(758, 15, 0, 0, 0, 0, 0, 30),
+(759, 14, 1, 0, 0, 0, 0, 30),
+(760, 20, 0, 0, 0, 0, 0, 30),
+(761, 18, 0, 0, 0, 0, 0, 30),
+(762, 19, 1, 0, 0, 0, 0, 30),
+(763, 12, 1, 0, 0, 0, 0, 30),
+(764, 17, 1, 0, 0, 0, 0, 30),
+(765, 5, 0, 0, 0, 0, 0, 30),
+(766, 13, 1, 0, 0, 0, 0, 30),
+(767, 21, 0, 0, 0, 0, 0, 30),
+(768, 3, 1, 0, 0, 0, 0, 30),
+(769, 10, 1, 0, 0, 0, 0, 30),
+(770, 4, 1, 0, 0, 0, 0, 30),
+(771, 7, 0, 0, 0, 0, 0, 30),
+(772, 6, 1, 0, 0, 0, 0, 30),
+(773, 2, 1, 0, 0, 0, 0, 30),
+(774, 16, 1, 0, 0, 0, 0, 31),
+(775, 1, 1, 0, 0, 0, 0, 31),
+(776, 8, 1, 0, 0, 0, 0, 31),
+(777, 9, 1, 0, 0, 0, 0, 31),
+(778, 11, 0, 0, 0, 0, 0, 31),
+(779, 15, 0, 0, 0, 0, 0, 31),
+(780, 14, 1, 0, 0, 0, 0, 31),
+(781, 20, 0, 0, 0, 0, 0, 31),
+(782, 18, 0, 0, 0, 0, 0, 31),
+(783, 19, 1, 0, 0, 0, 0, 31),
+(784, 12, 1, 0, 0, 0, 0, 31),
+(785, 17, 1, 0, 0, 0, 0, 31),
+(786, 5, 0, 0, 0, 0, 0, 31),
+(787, 13, 1, 0, 0, 0, 0, 31),
+(788, 21, 0, 0, 0, 0, 0, 31),
+(789, 3, 1, 0, 0, 0, 0, 31),
+(790, 10, 1, 0, 0, 0, 0, 31),
+(791, 4, 1, 0, 0, 0, 0, 31),
+(792, 7, 0, 0, 0, 0, 0, 31),
+(793, 6, 1, 0, 0, 0, 0, 31),
+(794, 2, 1, 0, 0, 0, 0, 31),
+(795, 16, 1, 0, 0, 0, 0, 32),
+(796, 1, 1, 0, 0, 0, 0, 32),
+(797, 8, 1, 0, 0, 0, 0, 32),
+(798, 9, 1, 0, 0, 0, 0, 32),
+(799, 11, 0, 0, 0, 0, 0, 32),
+(800, 15, 0, 0, 0, 0, 0, 32),
+(801, 14, 1, 0, 0, 0, 0, 32),
+(802, 20, 0, 0, 0, 0, 0, 32),
+(803, 18, 0, 0, 0, 0, 0, 32),
+(804, 19, 1, 0, 0, 0, 0, 32),
+(805, 12, 1, 0, 0, 0, 0, 32),
+(806, 17, 1, 0, 0, 0, 0, 32),
+(807, 5, 0, 0, 0, 0, 0, 32),
+(808, 13, 1, 0, 0, 0, 0, 32),
+(809, 21, 0, 0, 0, 0, 0, 32),
+(810, 3, 1, 0, 0, 0, 0, 32),
+(811, 10, 1, 0, 0, 0, 0, 32),
+(812, 4, 1, 0, 0, 0, 0, 32),
+(813, 7, 0, 0, 0, 0, 0, 32),
+(814, 6, 1, 0, 0, 0, 0, 32),
+(815, 2, 1, 0, 0, 0, 0, 32),
+(816, 16, 1, 0, 0, 0, 0, 33),
+(817, 1, 1, 0, 0, 0, 0, 33),
+(818, 8, 1, 0, 0, 0, 0, 33),
+(819, 9, 1, 0, 0, 0, 0, 33),
+(820, 11, 0, 0, 0, 0, 0, 33),
+(821, 15, 0, 0, 0, 0, 0, 33),
+(822, 14, 1, 0, 0, 0, 0, 33),
+(823, 20, 0, 0, 0, 0, 0, 33),
+(824, 18, 0, 0, 0, 0, 0, 33),
+(825, 19, 1, 0, 0, 0, 0, 33),
+(826, 12, 1, 0, 0, 0, 0, 33),
+(827, 17, 1, 0, 0, 0, 0, 33),
+(828, 5, 0, 0, 0, 0, 0, 33),
+(829, 13, 1, 0, 0, 0, 0, 33),
+(830, 21, 0, 0, 0, 0, 0, 33),
+(831, 3, 1, 0, 0, 0, 0, 33),
+(832, 10, 1, 0, 0, 0, 0, 33),
+(833, 4, 1, 0, 0, 0, 0, 33),
+(834, 7, 0, 0, 0, 0, 0, 33),
+(835, 6, 1, 0, 0, 0, 0, 33),
+(836, 2, 1, 0, 0, 0, 0, 33);
 
 -- --------------------------------------------------------
 
@@ -8450,6 +9570,7 @@ CREATE TABLE IF NOT EXISTS `tblsuppliers` (
   `address_town` text NOT NULL,
   `address_ward` text NOT NULL,
   `address_landline_number` text NOT NULL,
+  `debt` decimal(20,2) DEFAULT NULL,
   PRIMARY KEY (`userid`),
   KEY `country` (`country`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
@@ -8458,12 +9579,12 @@ CREATE TABLE IF NOT EXISTS `tblsuppliers` (
 -- Dumping data for table `tblsuppliers`
 --
 
-INSERT INTO `tblsuppliers` (`userid`, `supplier_code`, `company`, `vat`, `phonenumber`, `country`, `city`, `zip`, `state`, `address`, `address_home_number`, `dkkd_city`, `dkkd_state`, `dkkd_ward`, `dkkd_area`, `dkkd_room_number`, `dkkd_building`, `dkkd_home_number`, `dkkd_street`, `dkkd_town`, `dkkd_address`, `dkkd_zip`, `dkkd_country`, `dkkd_client_address_town`, `billing_room_number`, `billing_building`, `billing_home_number`, `billing_town`, `billing_ward`, `billing_area`, `shipping_room_number`, `shipping_building`, `shipping_home_number`, `shipping_town`, `shipping_ward`, `shipping_area`, `website`, `datecreated`, `active`, `leadid`, `billing_street`, `billing_city`, `billing_state`, `billing_zip`, `billing_country`, `shipping_street`, `shipping_city`, `shipping_state`, `shipping_zip`, `shipping_country`, `longitude`, `latitude`, `default_language`, `default_currency`, `show_primary_contact`, `short_name`, `name_title`, `type_of_organization`, `mobilephone_number`, `birthday`, `id_card`, `bussiness_registration_number`, `legal_representative`, `email`, `source_approach`, `cooperative_day`, `client_type`, `address_room_number`, `address_building`, `address_area`, `address_town`, `address_ward`, `address_landline_number`) VALUES
-(1, 'NCC-00001', 'FOSO', '123456789', '0126479974', 243, 'TP.HCM', '', '', 'Cao thắng', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-03-30 14:30:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 1, 0, 0, '', '', '', '0000-00-00', '', '', '', 'tvtan06@gmail.com', 0, '0000-00-00', 0, '', '', '', '', '', ''),
-(3, NULL, 'Cty TNHH MTV Tân Phong', '12345678', '0974497157', 243, 'Bến Tre', '', '', 'Chợ Lách Bến Tre', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-05-26 16:38:24', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', ''),
-(4, NULL, 'Cty TNHH MTV A', NULL, '0869019421', 0, 'HCM', 'HCM', 'NCT', 'Q1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-14 11:28:10', 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', ''),
-(5, NULL, 'Cty TNHH TT', '12345678', '0974497157', 0, 'HCM', '', 'HCM', 'HCM', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-27 16:51:00', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', ''),
-(6, NULL, 'Kieu Tien', '1234', '0974497157', 243, 'HCM', '', 'HCM', 'HCM', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-27 16:56:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', '');
+INSERT INTO `tblsuppliers` (`userid`, `supplier_code`, `company`, `vat`, `phonenumber`, `country`, `city`, `zip`, `state`, `address`, `address_home_number`, `dkkd_city`, `dkkd_state`, `dkkd_ward`, `dkkd_area`, `dkkd_room_number`, `dkkd_building`, `dkkd_home_number`, `dkkd_street`, `dkkd_town`, `dkkd_address`, `dkkd_zip`, `dkkd_country`, `dkkd_client_address_town`, `billing_room_number`, `billing_building`, `billing_home_number`, `billing_town`, `billing_ward`, `billing_area`, `shipping_room_number`, `shipping_building`, `shipping_home_number`, `shipping_town`, `shipping_ward`, `shipping_area`, `website`, `datecreated`, `active`, `leadid`, `billing_street`, `billing_city`, `billing_state`, `billing_zip`, `billing_country`, `shipping_street`, `shipping_city`, `shipping_state`, `shipping_zip`, `shipping_country`, `longitude`, `latitude`, `default_language`, `default_currency`, `show_primary_contact`, `short_name`, `name_title`, `type_of_organization`, `mobilephone_number`, `birthday`, `id_card`, `bussiness_registration_number`, `legal_representative`, `email`, `source_approach`, `cooperative_day`, `client_type`, `address_room_number`, `address_building`, `address_area`, `address_town`, `address_ward`, `address_landline_number`, `debt`) VALUES
+(1, 'NCC-00001', 'FOSO', '123456789', '0126479974', 243, 'TP.HCM', '', '', 'Cao thắng', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-03-30 14:30:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 1, 0, 0, '', '', '', '0000-00-00', '', '', '', 'tvtan06@gmail.com', 0, '0000-00-00', 0, '', '', '', '', '', '', NULL),
+(3, NULL, 'Cty TNHH MTV Tân Phong', '12345678', '0974497157', 243, 'Bến Tre', '', '', 'Chợ Lách Bến Tre', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-05-26 16:38:24', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', '', NULL),
+(4, NULL, 'Cty TNHH MTV A', NULL, '0869019421', 0, 'HCM', 'HCM', 'NCT', 'Q1', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-14 11:28:10', 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', '', NULL),
+(5, NULL, 'Cty TNHH TT', '12345678', '0974497157', 0, 'HCM', '', 'HCM', 'HCM', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-27 16:51:00', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', '', NULL),
+(6, NULL, 'Kieu Tien', '1234', '0974497157', 243, 'HCM', '', 'HCM', 'HCM', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-06-27 16:56:34', 1, NULL, '', '', '', '', 0, '', '', '', '', 0, '', '', '', 0, 0, 0, '', '', '', '0000-00-00', '', '', '', '', 0, '0000-00-00', 0, '', '', '', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -8837,7 +9958,8 @@ INSERT INTO `tbluserautologin` (`key_id`, `user_id`, `user_agent`, `last_ip`, `l
 ('c036f90a0ecd6fc4c0841dc17ff01db2', 1, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36', '::1', '2017-06-29 01:11:32', 1),
 ('557b85d6870bcef5ce4c93e2536dd73b', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '::1', '2017-07-24 01:17:13', 1),
 ('aee4f4036ea640a73ccc64f4efcfdda8', 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36', '192.168.1.18', '2017-07-26 01:17:50', 1),
-('c0d7ace781cda65d491bed68ba26ba60', 1, 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G610F Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.116 Mobile Safari/537.36', '115.79.213.75', '2017-09-16 11:32:23', 1);
+('c0d7ace781cda65d491bed68ba26ba60', 1, 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G610F Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.116 Mobile Safari/537.36', '115.79.213.75', '2017-09-16 11:32:23', 1),
+('55c9c06b7956c82f4c67a920a832620f', 1, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) coc_coc_browser/66.4.120 Chrome/60.4.3112.120 Safari/537.36', '14.169.196.140', '2017-10-07 08:19:08', 1);
 
 -- --------------------------------------------------------
 
@@ -8985,6 +10107,22 @@ INSERT INTO `tblwarehouses_products` (`id`, `product_id`, `warehouse_id`, `produ
 (4, 57, 1, 20, NULL, NULL),
 (5, 56, 1, 20, NULL, NULL),
 (6, 55, 2, 10, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblwarehouse_product_details`
+--
+
+CREATE TABLE IF NOT EXISTS `tblwarehouse_product_details` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `entered_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `entered_quantity` int(11) DEFAULT '0',
+  `entered_price` float DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

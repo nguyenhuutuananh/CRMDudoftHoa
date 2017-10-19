@@ -66,7 +66,7 @@ $invoice_info = '';
 // $pdf->ln(2);
 $y            = $pdf->getY();
 $pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-$pdf->ln(20);
+$pdf->ln(23);
 // Set Head
 $plan_name=_l('sales');
 
@@ -142,11 +142,25 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
     $tblhtml.='</tr>';
 }
-
+    $total_fees=$invoice->transport_fee+$invoice->installation_fee;
+    $grand_total_plus=$grand_total+$total_fees-$invoice->discount;
 
     $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="4" align="right">'._l('amount').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total,get_option('default_currency')).'</td>';
+    $tblhtml.='<td colspan="4" align="right">'._l('discount').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($invoice->discount,get_option('default_currency'));
+    $tblhtml.='</td>';
+    $tblhtml.='</tr>';    
+
+    $tblhtml.='<tr>';
+    $tblhtml.='<td colspan="4" align="right">'._l('total_fees').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($total_fees,get_option('default_currency'));
+    $tblhtml.='</td>';
+    $tblhtml.='</tr>';
+
+    $tblhtml.='<tr>';
+    $tblhtml.='<td colspan="4" align="right">'._l('total_amount').'</td>';
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_plus,get_option('default_currency'));
+    $tblhtml.='</td>';
     $tblhtml.='</tr>';
 
     $tblhtml.='<tr>';
@@ -157,9 +171,10 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
 
     $tblhtml.='<tr>';
     $tblhtml.='<td colspan="4" align="right">'._l('left_amount').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total-$invoice->payment_amount,get_option('default_currency'));
+    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_plus-$invoice->payment_amount,get_option('default_currency'));
     $tblhtml.='</td>';
     $tblhtml.='</tr>';
+
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
 $pdf->writeHTML($tblhtml, true, false, false, false, '');

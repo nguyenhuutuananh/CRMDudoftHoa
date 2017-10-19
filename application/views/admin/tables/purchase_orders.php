@@ -56,6 +56,10 @@ foreach ($rResult as $aRow) {
                 $_data = "";
             }
         }
+        if($aColumns[$i]=='tblorders.date_create')
+        {
+            $_data=_d($aRow['tblorders.date_create']);
+        }
         if($aColumns[$i] == 'IF(tblorders.user_head_id>0,1,0)') {
             if($aRow['IF(tblorders.user_head_id>0,1,0)']==0)
             {
@@ -68,7 +72,8 @@ foreach ($rResult as $aRow) {
                 $status='Đã duyệt';
             }
 
-            // print_r($rResult);die;
+
+            
 
             $_data = '<span class="inline-block label label-'.$type.'" task-status-table="'.$aRow['IF(tblorders.user_head_id>0,1,0)'].'">' . $status.'';
             if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))

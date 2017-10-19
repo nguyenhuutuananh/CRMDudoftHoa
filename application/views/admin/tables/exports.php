@@ -196,6 +196,13 @@ foreach ($rResult as $aRow) {
     } else {
         $row[] = '';
     }
+
+    // if(!empty($aRow['rel_id'])){
+    //     if(total_rows('tblsales',array('id'=>$aRow['rel_id']))==0){
+    //         $row['DT_RowClass'] = 'alert-danger';
+    //     }
+    // }
+
     $output['aaData'][] = $row;
 }
 

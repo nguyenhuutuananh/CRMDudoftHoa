@@ -282,9 +282,9 @@
                                                             $max=$value->quantity-$value->export_quantity;
                                                             $export=(empty($value->export_quantity) ? 0 : $value->export_quantity);
                                                             $sub_total=$max*$value->unit_cost;
-                                                            $tax=$sub_total*$value->tax_rate/100;
+                                                            $tax=$sub_total-$sub_total/($value->tax_rate*0.01+1);
                                                             $discount=$sub_total*$value->discount_percent/100;
-                                                            $amount=$sub_total+$tax-$discount;
+                                                            $amount=$sub_total-$discount;
                                                         
                                                         $strexport='('.$export.'/'.$value->quantity.')';
                                                     ?>
@@ -352,15 +352,18 @@
                                                         $i++;
                                                     }
                                                     }
-                                                    $discount=$item->discount;
+                                                    $discount=$item->discount_percent*$totalPrice/100;
                                                     $adjustment=$item->adjustment;
-                                                    $grand_total=$totalPrice+$adjustment-$discount;
+                                                    $transport_fee=$item->transport_fee;
+                                                    $installation_fee=$item->installation_fee;
+                                                    $adjustment=$item->adjustment;
+                                                    $grand_total=$totalPrice+$transport_fee+$installation_fee-$discount;
                                                 }
                                                 ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                     <div class="col-md-10 col-md-offset-2">
+                                     <div class="col-md-8 col-md-offset-4">
                                         <table class="table text-right">
                                             <tbody>
                                                 <tr>
@@ -375,32 +378,44 @@
                                                     </td>
                                                     <td>
                                                         <div class="input-group">
-                                                          <input type="text" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm giảm giá" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
+                                                          <input type="number" name="discount_percent" id="discount_percent" min="0" class="form-control" placeholder="Phần trăm chiết khấu" aria-describedby="basic-addon2" value="<?=$item->discount_percent?$item->discount_percent:0?>">
                                                           <span class="input-group-addon" id="basic-addon2">%</span>
                                                         </div>
                                                     </td>
-                                                    <td class="discount_percent_total">
-                                                        <?=format_money($discount?$discount:0)?>
+                                                    <td class="discount_total">
+                                                        <input type="number" min="0" name="discount" id="discount" class="form-control" placeholder="Giá trị chiết khấu" aria-describedby="basic-addon2" value="<?=($discount?$discount:0)?>">
+                                                        <!-- <?=format_money($discount?$discount:0)?> -->
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="bold"><?php echo _l('adjustment_total'); ?> :</span>
+                                                    <td><span class="bold"><?php echo _l('transport_fee'); ?> :</span>
                                                     </td>
                                                     <td>
-                                                        <div class="form-group">
-                                                          <input type="number" name="adjustment" id="adjustment" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($adjustment?$adjustment:0)?>">
-                                                          <!-- <span class="input-group-addon" id="basic-addon2"><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?></span> -->
+                                                        <div class="form-group no-mbot">
+                                                          <input type="number" min="0" name="transport_fee" id="transport_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($transport_fee?$transport_fee:0)?>">
                                                         </div>
                                                     </td>
-                                                    <td class="adjustment_total">
-                                                        <?=format_money($adjustment?$adjustment:0)?>
+                                                    <td class="transport_fee">
+                                                        <?=format_money($transport_fee?$transport_fee:0)?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="bold"><?php echo _l('installation_fee'); ?> :</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group no-mbot">
+                                                          <input type="number" min="0" name="installation_fee" id="installation_fee" class="form-control" placeholder="Giá trị điều chỉnh" aria-describedby="basic-addon2" value="<?=($installation_fee?$installation_fee:0)?>">
+                                                        </div>
+                                                    </td>
+                                                    <td class="installation_fee">
+                                                        <?=format_money($installation_fee?$installation_fee:0)?>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td><span class="bold"><?php echo _l('purchase_total_price'); ?> :</span>
                                                     </td>
                                                     <td colspan="2" class="totalPrice">
-                                                        <?php echo number_format($grand_total) ?><?=($currency->symbol)?$currency->symbol:_l('VNĐ')?>
+                                                        <?php echo number_format($grand_total) ?> <!-- <?=($currency->symbol)?$currency->symbol:_l('VNĐ')?> -->
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -890,10 +905,16 @@
 
         var discount=discount_percent*totalPrice/100;
         
-        var adjustment=parseFloat($('#adjustment').val());
-        if(isNaN(adjustment)) adjustment=0;
-        var grand_total=totalPrice-discount+adjustment;
-        $('.discount_percent_total').text(formatNumber(discount));
+        var transport_fee=parseFloat($('#transport_fee').val());
+        if(isNaN(transport_fee)) transport_fee=0;
+        var grand_total=totalPrice-discount+transport_fee;
+
+        var installation_fee=parseFloat($('#installation_fee').val());
+        if(isNaN(installation_fee)) installation_fee=0;
+
+        var grand_total=totalPrice-discount+transport_fee+installation_fee;
+        
+        $('#discount').val(discount);
         $('.totalPrice').text(formatNumber(grand_total));
     };
     $('#custom_item_select').change((e)=>{
@@ -912,7 +933,7 @@
             trBar.find('td:nth-child(7)').text(formatNumber(itemFound.price));
             trBar.find('td:nth-child(8)').text(formatNumber(itemFound.price*1));
             trBar.find('td:nth-child(9) select').val('92').selectpicker('refresh');            
-            var taxValue = (parseFloat(itemFound.tax_rate)*parseFloat(itemFound.price)/100);
+            var taxValue = parseFloat(itemFound.price)-(parseFloat(itemFound.price)/(parseFloat(itemFound.tax_rate)*0.01+1));
             var inputTax = $('<input type="hidden" id="tax" data-taxrate="'+itemFound.tax_rate+'" value="'+itemFound.tax+'" />');
             trBar.find('td:nth-child(10)').text(formatNumber(taxValue));
             trBar.find('td:nth-child(10)').append(inputTax);
@@ -1096,7 +1117,7 @@
 
         let taxTd=amountTd.find('+ td + td');
         var inputTax=taxTd.find('input')
-        var tax=parseFloat(inputTax.data('taxrate'))/100*parseFloat(amount);
+        var tax = parseFloat(amount)-(parseFloat(amount)/(parseFloat(inputTax.data('taxrate'))*0.01+1));
         taxTd.text(formatNumber(tax));
         taxTd.append(inputTax);
 
@@ -1108,7 +1129,7 @@
         discount.val(discountValue);
 
         let subTotalTd=discountTd.find('+ td');
-        subTotalTd.text(formatNumber(amount+tax-discountValue));
+        subTotalTd.text(formatNumber(amount-discountValue));
 
         refreshTotal();
     };
@@ -1192,15 +1213,34 @@
         $('.adjustment_total').text(formatNumber(adjustment));
         calculateTotal(e.currentTarget);
     });
+    $(document).on('change', '#transport_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var transport_fee=parseFloat(currentInput.val());
+        if(isNaN(transport_fee)) transport_fee=0;
+        $('.transport_fee').text(formatNumber(transport_fee));
+        calculateTotal(e.currentTarget);
+    });
+    $(document).on('change', '#installation_fee', (e)=>{
+        var currentInput = $(e.currentTarget);
+        var installation_fee=parseFloat(currentInput.val());
+        if(isNaN(installation_fee)) installation_fee=0;
+        $('.installation_fee').text(formatNumber(installation_fee));
+        calculateTotal(e.currentTarget);
+    });
     $(document).on('change', '#discount_percent', (e)=>{
         var currentInput = $(e.currentTarget);
         calculateTotal(e.currentTarget);
     });
-    // $(document).ready(function(){
-    //     var str='items[0][exports][0][quantity]';
-    //     console.log(str.split('][')[0].split('[')[1]);
-    // });
-
+    $(document).on('change', '#discount', (e)=>{
+        var currentDiscountInput = $(e.currentTarget);
+        var discount_percent=$('#discount_percent');
+        var transport_fee=$('#transport_fee');
+        var installation_fee=$('#installation_fee');
+        var grand_total=parseFloat($('.totalPrice').text().replace(/\,/g, ''))-transport_fee.val()-installation_fee.val();
+        discount_percent.val(roundNumber(currentDiscountInput.val()*100/(grand_total),3))
+        var pc=currentDiscountInput.val()*100/grand_total;
+        calculateTotal(e.currentTarget);
+    });
     $(document).on('change', '.mainQuantity', (e)=>{
         var currentInput = $(e.currentTarget);
         var product_id=currentInput.parents('tr').find('td:nth-child(1) > input').val();

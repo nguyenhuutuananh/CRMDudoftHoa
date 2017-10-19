@@ -110,9 +110,11 @@ class Exports_model extends CRM_Model
         $count=0;
         if($export)
         {
+            $warehouse_id_temp=get_option('default_PSO_warehouse');
             foreach ($export->items as $key => $value) 
-            {
-                $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
+            {   
+                $warehouse_id=$value->warehouse_id;
+                $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$warehouse_id_temp))->row();
 
                 if($item)
                 {
@@ -128,7 +130,7 @@ class Exports_model extends CRM_Model
                     //Temp: ko co hang(Thieu hang <0)
                     $data=array(
                         'product_id'=>$value->product_id,
-                        'warehouse_id'=>$value->warehouse_id,
+                        'warehouse_id'=>$warehouse_id_temp,
                         'product_quantity'=>$value->quantity*(-1)
                         );
                     $this->db->insert('tblwarehouses_products',$data);
@@ -150,13 +152,17 @@ class Exports_model extends CRM_Model
 
     public function increaseWarehouse($id)
     {
+
         $exports=$this->getExportByID($id);
         $count=0;
         if($exports)
-        {
+        {   
+            $warehouse_id_temp=get_option('default_PSO_warehouse');
             foreach ($exports->items as $key => $value) 
             {
-                $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$value->warehouse_id))->row();
+                $warehouse_id=$value->warehouse_id;
+                $item=$this->db->get_where('tblwarehouses_products',array('product_id'=>$value->product_id,'warehouse_id'=>$warehouse_id_temp))->row();
+
                 if($item)
                 {
                     $total_quantity=$value->quantity+$item->product_quantity;
@@ -168,7 +174,7 @@ class Exports_model extends CRM_Model
                 {
                     $data=array(
                         'product_id'=>$value->product_id,
-                        'warehouse_id'=>$value->warehouse_id,
+                        'warehouse_id'=>$warehouse_id_temp,
                         'product_quantity'=>$value->quantity
                         );
                     $this->db->insert('tblwarehouses_products',$data);
@@ -201,10 +207,14 @@ class Exports_model extends CRM_Model
             'receiver_id'=>$data['receiver_id'],
             'reason'=>$data['reason'],
             'date'=>to_sql_date($data['date']),
-            'create_by'=>get_staff_user_id()
+            'create_by'=>get_staff_user_id(),
+            'transport_fee'=>$data['transport_fee'],
+            'installation_fee'=>$data['installation_fee'],
+            'delivery_fee'=>$data['delivery_fee']
             );
         $this->db->insert('tblexports', $export);        
         $insert_id = $this->db->insert_id();
+        
         if ($insert_id) {
             logActivity('New Export Added [ID:' . $insert_id . ', ' . $data['date'] . ']');
             $items=$data['items'];
@@ -215,8 +225,9 @@ class Exports_model extends CRM_Model
 
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $tax=$sub_total-$sub_total/($product->tax_rate*0.01+1);
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total-$discount;
                 $total+=$amount;
                 
                 $item_data=array(
@@ -231,7 +242,9 @@ class Exports_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
                  $this->db->insert('tblexport_items', $item_data);
                  // var_dump($data);die();
@@ -250,6 +263,8 @@ class Exports_model extends CRM_Model
             }
                 
             $this->checkExportSale($data['rel_id']);
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment']+$data['transport_fee']+$data['installation_fee']+$data['delivery_fee'];
             $this->db->update('tblexports',array('total'=>$total),array('id'=>$insert_id));
             return $insert_id;
         }
@@ -340,12 +355,15 @@ class Exports_model extends CRM_Model
             'customer_id'=>$data['customer_id'],
             'receiver_id'=>$data['receiver_id'],
             'reason'=>$data['reason'],
-            'date'=>to_sql_date($data['date'])
+            'date'=>to_sql_date($data['date']),
+            'transport_fee'=>$data['transport_fee'],
+            'installation_fee'=>$data['installation_fee'],
+            'delivery_fee'=>$data['delivery_fee']
             );
 
 
 
-        
+        $export_detail=$this->getExportByID($id);
         if($this->db->update('tblexports',$export,array('id'=>$id)) && $this->db->affected_rows()>0)
         {
             logActivity('Edit Export Updated [ID:' . $id . ', ' . date('Y-m-d') . ']');
@@ -360,8 +378,9 @@ class Exports_model extends CRM_Model
                 $affected_id[]=$item['id'];
                 $product=$this->getProductById($item['id']);
                 $sub_total=$product->price*$item['quantity'];
-                $tax=$sub_total*$product->tax_rate/100;
-                $amount=$sub_total+$tax;
+                $tax=$sub_total-$sub_total/($product->tax_rate*0.01+1);
+                $discount=$sub_total*$item['discount_percent']/100;
+                $amount=$sub_total+$discount;
                 $total+=$amount;
                 $itm=$this->getExportItem($id,$item['id']);
                 $item_data=array(
@@ -376,8 +395,11 @@ class Exports_model extends CRM_Model
                     'tax_rate'=>$product->tax_rate,
                     'tax'=>$tax,
                     'amount'=>$amount,
-                    'warehouse_id'=>$data['warehouse_name']
+                    'warehouse_id'=>$data['warehouse_name'],
+                    'discount'=>$item['discount'],
+                    'discount_percent'=>$item['discount_percent']
                     );
+                $export_quantity=$item['quantity']-$itm->quantity;
                 if($itm)
                 {
                     $this->db->update('tblexport_items', $item_data,array('id'=>$itm->id));
@@ -394,16 +416,50 @@ class Exports_model extends CRM_Model
                         logActivity('Insert Export Item Added [ID:' . $id . ', Item ID' . $item['id'] . ']');
                      }
                 }
+                if(isset($export_detail->rel_id))
+                {
+                    $this->updateSOExportQuantity($export_detail->rel_id,$item['id'],$export_quantity);
+                }
+
             }
                 if(!empty($affected_id))
                 {
+                    if(isset($export_detail->rel_id))
+                    {
+                        $this->db->where('export_id', $id);
+                        $this->db->where_not_in('product_id', $affected_id);
+                        $del_items=$this->db->get('tblexport_items')->result();
+                        $sale_id=$export_detail->rel_id;
+                        foreach ($del_items as $key => $item) {
+                            $this->updateSOExportQuantity($sale_id,$item->product_id,(-1)*$item->quantity);
+                        }
+                        
+                    }
+
                     $this->db->where('export_id', $id);
                     $this->db->where_not_in('product_id', $affected_id);
                     $this->db->delete('tblexport_items');
                 }
-
+            $total_discount=$data['discount_percent']*$total/100;
+            $total=$total-$total_discount+$data['adjustment']+$data['transport_fee']+$data['installation_fee']+$data['delivery_fee'];
             $this->db->update('tblexports',array('total'=>$total),array('id'=>$id));
             return $id;
+        }
+        return false;
+    }
+
+    public function updateSOExportQuantity($sale_id=NULL,$product_id=NULL,$quantity)
+    {
+
+        if(is_numeric($sale_id) && is_numeric($product_id) && is_numeric($quantity))
+        {
+            $item=$this->db->get_where('tblsale_items',array('sale_id'=>$sale_id,'product_id'=>$product_id))->row();
+            $total_quantity_export=$quantity+$item->export_quantity;
+            $this->db->update('tblsale_items',array('export_quantity'=>$total_quantity_export),array('id'=>$item->id));  
+            if($this->db->affected_rows()>0)
+            {
+                return true;
+            }  
         }
         return false;
     }
@@ -509,7 +565,7 @@ class Exports_model extends CRM_Model
         }
         return false;
     }
-    public function calcel($id)
+    public function cancel($id)
     {
         $export=$this->getExportByID($id);
         $data=array('canceled_at'=>date('Y-m-d H:i:s'));
@@ -519,6 +575,11 @@ class Exports_model extends CRM_Model
             if($export->status==2)
             {
                 $this->increaseWarehouse($id);
+            }
+            $del_items=$export->items;
+            $sale_id=$export->rel_id;
+            foreach ($del_items as $key => $item) {
+                $this->updateSOExportQuantity($sale_id,$item->product_id,(-1)*$item->quantity);
             }
             // $this->db->where('export_id', $id);
             // $this->db->delete('tblexport_items');
@@ -537,6 +598,11 @@ class Exports_model extends CRM_Model
             if($export->status==2)
             {
                 $this->decreaseWarehouse($id);
+            }
+            $del_items=$export->items;
+            $sale_id=$export->rel_id;
+            foreach ($del_items as $key => $item) {
+                $this->updateSOExportQuantity($sale_id,$item->product_id,$item->quantity);
             }
             // $this->db->where('export_id', $id);
             // $this->db->delete('tblexport_items');

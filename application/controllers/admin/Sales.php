@@ -14,6 +14,11 @@ class Sales extends Admin_controller
 
     }
     
+    public function test($id=NULL)
+    {
+        var_dump(updateALLSalesToWWH('SO'));die;
+        var_dump(updateSaleToWWH($id,'SO'));die;
+    }
 
     public function index($order_id=NULL)
     {

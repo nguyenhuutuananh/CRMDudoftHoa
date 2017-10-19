@@ -92,7 +92,7 @@ class Imports extends Admin_controller
         $data['suppliers']=$this->suppliers_model->get();
         $data['customers'] = $this->clients_model->get('', $where_clients);
         $data['contracts']=$this->purchase_contacts_model->get();
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['items']= $this->invoice_items_model->get_full('');    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         if($data['warehouse_id'])
@@ -179,7 +179,7 @@ class Imports extends Admin_controller
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['suppliers']=$this->suppliers_model->get();
         $data['contracts']=$this->purchase_contacts_model->get();
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);
+        $data['items']= $this->invoice_items_model->get_full('');
         $data['money']=get_table_where('tblwarehouse_product_details');
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
@@ -196,6 +196,12 @@ class Imports extends Admin_controller
         $result=$this->db->get('tblwarehouse_product_details')->result_array();
         echo json_encode($result);
 
+    }
+
+    public function teest($id=82,$product_id=162,$warehouse_id=1,$quantity=155,$entered_price=555,$date='2017-10-19')
+    {
+
+        var_dump(increaseWarehouseProductDetail($id,$product_id,$warehouse_id,$quantity,$entered_price,$date));
     }
 
 
@@ -272,7 +278,7 @@ class Imports extends Admin_controller
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['suppliers']=$this->suppliers_model->get();
         $data['contracts']=$this->purchase_contacts_model->get();
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['items']= $this->invoice_items_model->get_full('');    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
 
@@ -345,7 +351,7 @@ class Imports extends Admin_controller
 
         $data['accounts_no'] = $this->accounts_model->get_tk_no();
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['items']= $this->invoice_items_model->get_full('');    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
 
@@ -419,7 +425,7 @@ class Imports extends Admin_controller
         $data['accounts_no'] = $this->accounts_model->get_tk_no();
         $data['accounts_co'] = $this->accounts_model->get_tk_co();
         $data['delivers'] = $this->staff_model->get('','',array('staffid<>'=>1));
-        $data['items']= $this->invoice_items_model->get_full('',$data['warehouse_id']);    
+        $data['items']= $this->invoice_items_model->get_full('');    
         $data['warehouse_types']= $this->imports_model->getWarehouseTypes();
         $data['warehouses']= $this->warehouse_model->getWarehouses();
         $data['title'] = $title;
@@ -515,22 +521,23 @@ class Imports extends Admin_controller
         }
 
         $success=false;
-        
         if(is_admin() || is_head($inv->create_by))
         {
-            $update_quantity=$this->imports_model->update_warehouse_product($id);
-            if(!$update_quantity)
-            {
-                echo json_encode(array(
-                    'success' => $success,
-                    'result'=>false,
-                    'message' => _l('Số lượng sản phẩm trong kho không đũ để chuyển kho')
-                ));die();
-            }
-            else
-            {
-                $success=$this->imports_model->update_status($id,$data);
-            }
+            // $update_quantity=$this->imports_model->update_warehouse_product($id);
+            // if(!$update_quantity)
+            // {
+            //     echo json_encode(array(
+            //         'success' => $success,
+            //         'result'=>false,
+            //         'message' => _l('Số lượng sản phẩm trong kho không đũ để chuyển kho')
+            //     ));die();
+            // }
+            // else
+            // {
+            //     $success=$this->imports_model->update_status($id,$data);
+            // }
+
+            $success=$this->imports_model->update_status($id,$data);
 
         }
         if($success) {

@@ -63,12 +63,16 @@ class Warehouse_model extends CRM_Model
         return false;
     }
 
-    public function getWarehouses($id = '')
+    public function getWarehouses($id = '',$incluedAll=false)
     {
         
         $this->db->select('tblwarehouses.*,tbl_kindof_warehouse.name as kindof_warehouse_name');
         $this->db->join('tbl_kindof_warehouse', 'tbl_kindof_warehouse.id = tblwarehouses.kindof_warehouse', 'left');
         $this->db->from('tblwarehouses');
+        if($incluedAll==false)
+        {
+            $this->db->where('warehouseid <>', 12);
+        }
         if (is_numeric($id)) 
         {
             $this->db->where('warehouseid', $id);
@@ -182,6 +186,7 @@ class Warehouse_model extends CRM_Model
     public function getProductQuantity($warehouse_id = '', $product_id='')
     {
         $this->db->select('tblwarehouses_products.*');
+        $this->db->select_sum('tblwarehouses_products.product_quantity');
         $this->db->from('tblwarehouses_products');
         $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
         $this->db->where('tblwarehouses_products.product_id', $product_id);
@@ -193,11 +198,11 @@ class Warehouse_model extends CRM_Model
 
     public function getProductsByWarehouseID($warehouse_id = '')
     {
-
-        $this->db->select('tblwarehouses_products.*,tblitems.name,tblitems.code');
+        $this->db->select('tblwarehouses_products.id,tblwarehouses_products.product_id,tblwarehouses_products.product_quantity,tblwarehouses_products.warehouse_id,tblitems.name,tblitems.code');
         $this->db->from('tblwarehouses_products');
         $this->db->join('tblitems', 'tblitems.id = tblwarehouses_products.product_id', 'left');
         $this->db->where('tblwarehouses_products.warehouse_id', $warehouse_id);
+        // $this->db->group_by('tblwarehouses_products.product_id');
         if (is_numeric($warehouse_id)) 
         {
             $products = $this->db->get()->result();

@@ -4882,8 +4882,8 @@ div.dataTables_wrapper div.dataTables_paginate {
 }
 
 .table-image {
-    height: 75px;
-    width: 250px;
+    height: auto;
+    width: 100px;
     margin: 15px 0px;
 }
 .btn-default-dt-options {
