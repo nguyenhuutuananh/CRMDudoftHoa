@@ -11,12 +11,13 @@ class Clients extends Admin_controller
     /* List all clients */
     public function index()
     {
-
-        if (!has_permission('customers', '', 'view')) {
-            if (!have_assigned_customers() && !has_permission('customers','','create')) {
-                access_denied('customers');
-            }
-        }
+        // var_dump(have_assigned_customers());
+        // exit();
+        // if (!has_permission('customers', '', 'view')) {
+        //     if (!have_assigned_customers() && !has_permission('customers','','create')) {
+        //         access_denied('customers');
+        //     }
+        // }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('clients');
         }
@@ -93,11 +94,7 @@ class Clients extends Admin_controller
     }
     public function client($id = '')
     {
-        if (!has_permission('customers', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('customers');
-            }
-        }
+        
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
                 if (!has_permission('customers', '', 'create')) {
@@ -117,7 +114,7 @@ class Clients extends Admin_controller
                 }
                 if ($id) {
                     set_alert('success', _l('added_successfuly', _l('client')));
-                    if(get_option('prefix_add_continuous ')==0)
+                    if(get_option('prefix_add_continuous')==0)
                     {
                         if ($save_and_add_contact == false) {
                             redirect(admin_url('clients/client/' . $id));
@@ -148,8 +145,16 @@ class Clients extends Admin_controller
             }
         }
         if ($id == '') {
+            if (!has_permission('customers', '', 'create')) {
+                access_denied('customers');
+            }
             $title = _l('add_new', _l('client_lowercase'));
         } else {
+            if (!has_permission('customers', '', 'edit')) {
+                if ($id != '' && !is_customer_admin($id)) {
+                    access_denied('customers');
+                }
+            }
             $client = $this->clients_model->get($id);
 
             if (!$client) {

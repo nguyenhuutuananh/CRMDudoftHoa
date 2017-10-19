@@ -158,10 +158,12 @@ foreach ($rResult as $aRow) {
             $_data .= icon_btn('deliveries/delivery_detail/'. $aRow['id'] , 'eye', 'btn-default',array('data-toggle'=>'tooltip',
             'title'=>_l('view'),
             'data-placement'=>'top'));
-        }      
-        $row[] =$_data.icon_btn('deliveries/delete/'. $aRow['id'] , 'remove', 'btn-danger delete-remind',array('data-toggle'=>'tooltip',
-            'title'=>_l('delete'),
-            'data-placement'=>'top'));
+        }
+        if (has_permission('export_items', '', 'delete')) {
+            $row[] =$_data.icon_btn('deliveries/delete/'. $aRow['id'] , 'remove', 'btn-danger delete-remind',array('data-toggle'=>'tooltip',
+                'title'=>_l('delete'),
+                'data-placement'=>'top'));
+        }
     } else {
         $row[] = '';
     }

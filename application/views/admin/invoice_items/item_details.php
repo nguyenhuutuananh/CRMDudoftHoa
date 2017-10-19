@@ -76,8 +76,8 @@
                             <div class="display-block contract-attachment-wrapper img-1">
                                 <div class="col-md-6 col-md-offset-3">
                                     <a href="<?php echo (isset($item) && file_exists($item->avatar) ? base_url($item->avatar) : base_url('assets/images/preview_no_available.jpg')) ?>" data-lightbox="customer-profile" class="display-block mbot5">
-                                        <div class="table-image">
-                                            <img style="width: auto;height: 100%;min-height: 300px;" src="<?php echo (isset($item) && file_exists($item->avatar) ? base_url($item->avatar) : base_url('assets/images/preview_no_available.jpg')) ?>">
+                                        <div class="">
+                                            <img style="max-width: 200px;max-height: 300px;" src="<?php echo (isset($item) && file_exists($item->avatar) ? base_url($item->avatar) : base_url('assets/images/preview_no_available.jpg')) ?>">
                                         </div>
                                     </a>
                                 </div>

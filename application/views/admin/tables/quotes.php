@@ -65,7 +65,8 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where
     'prefix',
     'export_status',
     'tblstaff.fullname',
-    'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
+    'CONCAT(user_head_id,",",user_admin_id) as confirm_ids',
+    'create_by'
 ));
 $output       = $result['output'];
 $rResult      = $result['rResult'];
@@ -95,7 +96,7 @@ foreach ($rResult as $aRow) {
         // var_dump($aRow);die;
         if ($aColumns[$i] == 'tblquotes.status') {
             $_data='<span class="inline-block label label-'.get_status_label($aRow['tblquotes.status']).'" task-status-table="'.$aRow['tblquotes.status'].'">' . format_status_quote($aRow['tblquotes.status'],false,true).'';
-            if(has_permission('invoices', '', 'view') && has_permission('invoices', '', 'view_own'))
+            if(is_admin())
             {
                 if($aRow['tblquotes.status']!=2){
                     $_data.='<a href="javacript:void(0)" onclick="var_status('.$aRow['tblquotes.status'].','.$aRow['id'].')">';
@@ -152,7 +153,6 @@ foreach ($rResult as $aRow) {
                 'title'=>_l('create_contract'),
                 'data-placement'=>'top'
             ));
-
         }
 
         $_data .= icon_btn('quotes/quote_detail/'. $aRow['id'] , 'edit','btn-default',array('data-toggle'=>'tooltip',

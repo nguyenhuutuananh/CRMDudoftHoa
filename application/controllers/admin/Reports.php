@@ -25,7 +25,7 @@ class Reports extends Admin_controller
         $data['title']  = _l('kb_reports');
         $this->load->view('admin/reports/knowledge_base_articles', $data);
     }
-/*
+    /*
     public function tax_summary(){
        $this->load->model('taxes_model');
        $this->load->model('payments_model');

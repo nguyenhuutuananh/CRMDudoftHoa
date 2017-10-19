@@ -1,7 +1,14 @@
 <?php
 $dimensions = $pdf->getPageDimensions();
 
-
+// function xHeader() {
+    // set bacground image
+    // $img_file = FCPATH.'uploads/company/background_pdf.png';
+    // exit($img_file);
+    // $pdf->Image('E:\xampp\htdocs\01917F\uploads/company/logo2.png', 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+// }
+// xHeader();
+// exit(K_PATH_IMAGES);
 function mb_ucfirst($string, $encoding)
 {
     return mb_convert_case($string, MB_CASE_TITLE, $encoding);
@@ -22,6 +29,8 @@ if ($tag != '') {
     $pdf->setX(10);
     $pdf->setY(10);
 }
+
+
 
 $pdf_text_color_array = hex2rgb(get_option('pdf_text_color'));
 if (is_array($pdf_text_color_array) && count($pdf_text_color_array) == 3) {

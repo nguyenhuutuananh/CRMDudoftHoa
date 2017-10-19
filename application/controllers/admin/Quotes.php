@@ -14,6 +14,9 @@ class Quotes extends Admin_controller
     }
     public function index() 
     {
+        if (!has_permission('quote_items', '', 'view')) {
+            access_denied('import_items');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('quotes');die();
         }
@@ -31,7 +34,6 @@ class Quotes extends Admin_controller
     {
         if(!$id)
         {
-            
             set_alert('warning', _l('info_not_found'));
             redirect(admin_url('quotes'));
         }
@@ -81,9 +83,7 @@ class Quotes extends Admin_controller
     public function quote_detail($id='') 
     {
         if (!has_permission('quote_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('quote_items');
-            }
+            access_denied('quote_items');
         }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
@@ -119,6 +119,9 @@ class Quotes extends Admin_controller
             }
         }
         if ($id == '') {
+            if (!has_permission('quote_items', '', 'create')) {
+                access_denied('quote_items');
+            }
             $title = _l('add_new', _l('quote'));
 
         } else {

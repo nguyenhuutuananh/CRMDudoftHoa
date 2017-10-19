@@ -1,10 +1,21 @@
 <div role="tabpanel" class="tab-pane" id="client_report">
     <?php if($_client) $client->userid=$_client;?>
-    <?php echo form_open(admin_url('clients/add_report_client/'.$client->userid),array('id'=>'client-report')); ?>
-        <?php echo render_textarea('note'); ?>
-        <button type="button" onclick="addreport_client(<?=$client->userid?>)" class="btn btn-info pull-right"><?php echo _l('lead_add_edit_add_note'); ?></button>
-        <div class="clearfix"></div>
-    <?php echo form_close(); ?>
+    <?php
+        if (has_permission('customers', '', 'edit')) 
+        {
+        ?>
+            
+        <?php echo form_open(admin_url('clients/add_report_client/'.$client->userid),array('id'=>'client-report')); ?>
+            <?php echo render_textarea('note'); ?>
+            <button type="button" onclick="addreport_client(<?=$client->userid?>)" class="btn btn-info pull-right"><?php echo _l('lead_add_edit_add_note'); ?></button>
+            <div class="clearfix"></div>
+        <?php echo form_close(); ?>
+            
+        <?php
+        }
+    ?>
+    
+    
     <hr />
     <div class="panel_s mtop20 view_report">
         <?php $notes=$this->clients_model->get_table_where('tblreport_client','id_client='.$client->userid,'id desc')?>

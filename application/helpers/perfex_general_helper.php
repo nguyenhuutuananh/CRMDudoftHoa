@@ -596,7 +596,7 @@ function true_small_admin($id)
         }
         else
             return false;
-        }
+    }
 }
 
 

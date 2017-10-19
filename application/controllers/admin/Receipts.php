@@ -12,10 +12,8 @@ class Receipts extends Admin_controller
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('receipts');
         }
-        if (!has_permission('customers', '', 'view')) {
-            if (!is_customer_admin(get_staff_user_id())) {
-                access_denied('customers');
-            }
+        if (!has_permission('receipts', '', 'view')) {
+            access_denied('receipts'); 
         }
         $data['title'] = _l('receipts');
         $this->load->view('admin/receipts/manage', $data);
@@ -26,6 +24,9 @@ class Receipts extends Admin_controller
         {
             if($id=="")
             {
+                if (!has_permission('receipts', '', 'create')) {
+                    access_denied('receipts'); 
+                }
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
@@ -52,6 +53,9 @@ class Receipts extends Admin_controller
             }
             else
             {
+                if (!has_permission('receipts', '', 'edit')) {
+                    access_denied('receipts'); 
+                }
                 $data=$this->input->post();
                 $_data['item']=$data['item'];
                 $_data['items']=$data['items'];
@@ -72,6 +76,9 @@ class Receipts extends Admin_controller
         {
             if($id=="")
             {
+                if (!has_permission('receipts', '', 'create')) {
+                    access_denied('receipts'); 
+                }
                 $data['heading']=_l('receipts_add_heading');
                 $data['title']=_l('receipts_add_heading');
                 $data['client']=$this->receipts_model->get_table_where('tblclients');
@@ -84,6 +91,9 @@ class Receipts extends Admin_controller
             }
             else
             {
+                if (!has_permission('receipts', '', 'view')) {
+                    access_denied('receipts'); 
+                }
                 $data['heading']=_l('receipts_update_heading');
                 $data['title']=_l('receipts_update_heading');
                 $data['client']=$this->receipts_model->get_table_where('tblclients');
@@ -147,8 +157,6 @@ class Receipts extends Admin_controller
         }
         $pdf->Output(slug_it($receipts->code_vouchers) . '.pdf', $type);
     }
-
-
     public function update_status()
     {
         $id=$this->input->post('id');
