@@ -52,8 +52,16 @@
         top: 69px;
         left: 10px;
     }
+     body.hide-sidebar #wrapper #side-menu li:hover {
+     margin-left: 0px; 
+    }
 
+    #side-menu li .nav-second-level li a:hover {
+    padding: 8px 10px 8px 45px;
+}
 </style>
+
+
 <div id="wrapper">
     <div class="content">
         <?php

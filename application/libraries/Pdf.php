@@ -32,16 +32,19 @@ class Pdf extends TCPDF
 		$myPageWidth = $this->getPageWidth();
 		$myPageHeight = $this->getPageHeight();
 		// Find the middle of the page and adjust.
-		$myX = ( $myPageWidth / 2 ) - 75;
-		$myY = ( $myPageHeight / 2 ) + 25;
+		$myX = ( $myPageWidth / 2 ) - 85;
+		$myY = ( $myPageHeight / 2 )-45;
 		// Set the transparency of the text to really light
-		$this->SetAlpha(0.5);
+		$this->SetAlpha(0.1);
 		// Rotate 45 degrees and write the watermarking text
 		$this->StartTransform();
 		// $this->Rotate(45, $myX, $myY);
-		// $this->SetFont("courier", "", 40);
-		$this->Text($myX, $myY,"DUDOFF<br/>London"); 
-		$this->writeHTML("DUDOFF<br/>London", true, false, true, false, '');
+		$this->SetFont("helveticaB", "B", 80);
+		$this->writeHTMLCell('', '', $myX, $myY, "<b>DUDOFF</b>", 0, 0, false, true, ('C'), true);
+		$this->ln(30);
+		$y=$this->getY();
+		$this->SetFont("helveticaB", "B", 50);
+		$this->writeHTMLCell('', '', $myX, $y, "London</b>", 0, 0, false, true, ('C'), true);
 		$this->StopTransform();
 		// Reset the transparency to default
 		$this->SetAlpha(1);

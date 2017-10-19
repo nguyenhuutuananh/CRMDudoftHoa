@@ -339,4 +339,3 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
 
-$pdf->WatermarkText();
