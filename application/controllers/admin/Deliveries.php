@@ -13,6 +13,9 @@ class Deliveries extends Admin_controller
     }
     public function index($sale_id=NULL)
     {
+        if (!has_permission('export_items', '', 'view')) {
+            access_denied('export_items');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('deliveries',array('sale_id'=>$sale_id));
         }
@@ -23,9 +26,7 @@ class Deliveries extends Admin_controller
     public function delivery_detail($id='') 
     {
         if (!has_permission('export_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('export_items');
-            }
+            access_denied('export_items');
         }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {

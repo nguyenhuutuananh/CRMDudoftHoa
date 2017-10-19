@@ -1,7 +1,15 @@
 
 <div class="row">
     <div class="col-md-6">
-        <a href="#add_care_of" class="btn btn-info mbot15" data-toggle="collapse">Thêm</a>
+    <?php
+        if (has_permission('customers', '', 'edit')) 
+        {
+        ?>
+            <a href="#add_care_of" class="btn btn-info mbot15" data-toggle="collapse">Thêm</a>
+        <?php
+        }
+    ?>
+        
     </div>
     <div class="col-md-12">
         <form id="add_care_of" action="<?=admin_url()?>clients/care_of" class="collapse">

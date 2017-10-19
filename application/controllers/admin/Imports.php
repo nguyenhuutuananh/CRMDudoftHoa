@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Imports extends Admin_controller
 {
+
     function __construct()
     {
         
@@ -12,6 +13,7 @@ class Imports extends Admin_controller
         $this->load->model('accounts_model');
         $this->load->model('purchase_contacts_model');
         $this->load->model('suppliers_model');
+    
     }
     public function index($id=NULL) {
         // var_dump($this->imports_model->getImportByID(64));die();
@@ -21,6 +23,9 @@ class Imports extends Admin_controller
 
     public function imp_return() 
     {
+        if (!has_permission('import_items', '', 'view')) {
+            access_denied('customers');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'return'));
         }
@@ -104,6 +109,9 @@ class Imports extends Admin_controller
 
     public function imp_transfer() 
     {
+        if (!has_permission('import_items', '', 'view')) {
+            access_denied('customers');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'transfer'));
         }
@@ -207,6 +215,10 @@ class Imports extends Admin_controller
 
     public function imp_contract() 
     {
+        
+        if (!has_permission('import_items', '', 'view')) {
+            access_denied('customers');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'contract'));
         }
@@ -216,11 +228,6 @@ class Imports extends Admin_controller
 
     public function contract_detail($id='') 
     {
-        if (!has_permission('import_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('import_items');
-            }
-        }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             $data                 = $this->input->post();
             if ($id == '') {
@@ -256,7 +263,9 @@ class Imports extends Admin_controller
         }
         if ($id == '') {
             $title = _l('add_new', _l('adjustments'));
-
+            if (!has_permission('import_items', '', 'create')) {
+                access_denied('import_items');
+            }
         } else {
             $data['item'] = $this->imports_model->getImportByID($id);
             $data['warehouse_id']=$data['item']->items[0]->warehouse_id;
@@ -288,6 +297,9 @@ class Imports extends Admin_controller
 
     public function imp_adjustment() 
     {
+        if (!has_permission('import_items', '', 'view')) {
+            access_denied('customers');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'adjustment'));
         }
@@ -300,9 +312,7 @@ class Imports extends Admin_controller
     public function adjustment_detail($id='') 
     {
         if (!has_permission('import_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('import_items');
-            }
+            access_denied('import_items');
         }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
@@ -321,9 +331,8 @@ class Imports extends Admin_controller
                     redirect(admin_url('imports/imp_adjustment'));
                 }
             } else {
-
                 if (!has_permission('import_items', '', 'edit')) {
-                        access_denied('import_items');
+                    access_denied('import_items');
                 }
                 $success = $this->imports_model->update($this->input->post(), $id);
                 if ($success == true) {
@@ -363,6 +372,9 @@ class Imports extends Admin_controller
 
     public function imp_internal() 
     {
+        if (!has_permission('import_items', '', 'view')) {
+            access_denied('customers');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('adjustments',array('rel_type'=>'internal'));
         }
@@ -373,9 +385,7 @@ class Imports extends Admin_controller
     public function internal_detail($id='') 
     {
         if (!has_permission('import_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('import_items');
-            }
+            access_denied('import_items');
         }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {

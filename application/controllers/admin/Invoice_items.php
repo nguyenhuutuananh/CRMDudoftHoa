@@ -51,7 +51,7 @@ class Invoice_items extends Admin_controller
     /* Edit client or add new client*/
     public function item($id = '')
     {
-        if (!has_permission('items', '', 'view')) {
+        if (!has_permission('items', '', 'edit')) {
             if ($id != '' && !is_customer_admin($id)) {
                 access_denied('customers');
             }

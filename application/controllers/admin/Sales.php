@@ -22,6 +22,9 @@ class Sales extends Admin_controller
 
     public function index($order_id=NULL)
     {
+        if (!has_permission('sale_items', '', 'view')) {
+            access_denied('sale_items');
+        }
         // var_dump($order_id);die();
         $this->list_sales($order_id);
         $data['title'] = _l('sale_orders');
@@ -47,9 +50,7 @@ class Sales extends Admin_controller
     public function sale_detail($id='') 
     {
         if (!has_permission('sale_items', '', 'view')) {
-            if ($id != '' && !is_customer_admin($id)) {
-                access_denied('sale_items');
-            }
+            access_denied('sale_items');
         }
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
@@ -89,8 +90,10 @@ class Sales extends Admin_controller
             }
         }
         if ($id == '') {
+            if (!has_permission('sale_items', '', 'create')) {
+                access_denied('sale_items');
+            }
             $title = _l('add_new', _l('sales'));
-
         } else {
 
             $data['item'] = $this->sales_model->getSaleByID($id);

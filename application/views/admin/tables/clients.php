@@ -143,6 +143,8 @@ $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ar
     'firstname',
     'lastname'
 ),$sTable.$sIndexColumn.' DESC');
+
+
 $output  = $result['output'];
 $rResult = $result['rResult'];
 $j=count($rResult);

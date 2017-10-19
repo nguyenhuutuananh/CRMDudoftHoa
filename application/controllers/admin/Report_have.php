@@ -9,14 +9,13 @@ class Report_have extends Admin_controller
     }
     public function index()
     {
+        if (!has_permission('report_have', '', 'view')) {
+            access_denied('report_have');
+        }
         if ($this->input->is_ajax_request()) {
             $this->perfex_base->get_table_data('report_have');
         }
-        if (!has_permission('customers', '', 'view')) {
-            if (!is_customer_admin(get_staff_user_id())) {
-                access_denied('customers');
-            }
-        }
+
         $data['title'] = _l('report_have');
         $this->load->view('admin/report_have/manage', $data);
     }
@@ -26,6 +25,9 @@ class Report_have extends Admin_controller
         {
             if($id=="")
             {
+                if (!has_permission('report_have', '', 'create')) {
+                    access_denied('report_have');
+                }
                 $data=$this->input->post();
                 $_data=$data['items'];
                 unset($data['items']);
@@ -52,6 +54,9 @@ class Report_have extends Admin_controller
             }
             else
             {
+                if (!has_permission('report_have', '', 'edit')) {
+                    access_denied('report_have');
+                }
                 $data=$this->input->post();
                 $_data['item']=$data['item'];
                 $_data['items']=$data['items'];
@@ -72,6 +77,9 @@ class Report_have extends Admin_controller
         {
             if($id=="")
             {
+                if (!has_permission('report_have', '', 'create')) {
+                    access_denied('report_have');
+                }
                 $data['heading']=_l('report_have_add_heading');
                 $data['title']=_l('report_have_add_heading');
                 $data['client']=$this->report_have_model->get_table_where('tblclients');
@@ -84,6 +92,9 @@ class Report_have extends Admin_controller
             }
             else
             {
+                if (!has_permission('report_have', '', 'view')) {
+                    access_denied('report_have');
+                }
                 $data['heading']=_l('report_have_update_heading');
                 $data['title']=_l('report_have_update_heading');
                 $data['client']=$this->report_have_model->get_table_where('tblclients');

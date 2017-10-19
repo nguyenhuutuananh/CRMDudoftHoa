@@ -192,6 +192,12 @@
                 </div>
                 <div class="panel_s">
                     <div class="panel-body">
+                        <?php
+                            if (has_permission('customers', '', 'delete')) 
+                            {
+                            ?>
+                                
+                            
                         <a href="#" data-toggle="modal" data-target="#customers_bulk_action" class="btn btn-info mbot15"><?php echo _l('bulk_actions'); ?></a>
                         <div class="modal fade bulk_actions" id="customers_bulk_action" tabindex="-1" role="dialog">
                             <div class="modal-dialog" role="document">
@@ -220,7 +226,9 @@
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
                         </div><!-- /.modal -->
-
+                            <?php
+                                }
+                            ?>
                         <div class="clearfix"></div>
                         <a href="<?php echo admin_url('clients/exportexcel'); ?>" class="btn mright5 btn-info pull-left display-block"><?php echo _l('Xuất Excel'); ?></a>
                         <?php
