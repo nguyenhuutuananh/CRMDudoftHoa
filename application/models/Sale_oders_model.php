@@ -71,7 +71,7 @@ class Sale_oders_model extends CRM_Model
 
     public function getSaleItems($id)
     {
-        $this->db->select('tblsale_order_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,');
+        $this->db->select('tblsale_order_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,tblitems.short_name');
         $this->db->from('tblsale_order_items');
         $this->db->join('tblitems','tblitems.id=tblsale_order_items.product_id','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');

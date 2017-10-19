@@ -3727,8 +3727,8 @@ $lang['purchase_cost_information'] = 'Thông tin phiếu chi phí mua hàng';
 $lang['sale_orders'] = "Đơn đặt hàng";
 $lang['add_sale_order_'] = "Thêm đơn hàng bán";
 $lang['add_sale_order_so'] = "Thêm đơn hàng bán(SO)";
-$lang['sales'] = "Đơn hàng bán(SO)";
-$lang['sales_po'] = "Đơn hàng bán(PO)";
+$lang['sales'] = "Đơn hàng bán (SO)";
+$lang['sales_po'] = "Đơn hàng bán (PO)";
 $lang['sale'] = "Đơn đặt hàng";
 $lang['sale_detail'] = "Chi tiết đơn hàng";
 $lang['sale_code'] = "Mã chứng từ";
@@ -4311,20 +4311,37 @@ $lang['total_fees']="Chi phí vận chuyển/Lắp đặt";
 $lang['delivery_fee']="Phí giao hàng";
 $lang['adjustment_total']="Điều chỉnh";
 $lang['internal_code']="Mã phiếu nhập kho";
-$lang['adjustment_total']="Điều chỉnh";
+$lang['total_amount_money']="Tổng thành tiền";
+$lang['total_discount_money']="Tổng chiết khấu";
+$lang['total_transport_installation_money']="Phí giao hàng - Lắp đặt";
+$lang['total_payment_money']="Tổng giá trị thanh toán";
+$lang['total_paid_money']="Đã thanh toán";
+$lang['total_paid_amount_money']="Đã thanh toán";
+$lang['total_left_amount']="Còn lại";
 
-$lang['adjustment_total']="Điều chỉnh";
+$lang['billers_']="Người bán hàng";
 
-$lang['adjustment_total']="Điều chỉnh";
-
-$lang['adjustment_total']="Điều chỉnh";
-
-$lang['adjustment_total']="Điều chỉnh";
-
-$lang['adjustment_total']="Điều chỉnh";
-
-
-$lang['adjustment_total']="Điều chỉnh";
+$lang['lead_sale_department']="TBP.Quản lý bán hàng";
+$lang['check_note2'] = '<ul>							
+							<li>
+								Phiếu đặt hàng chỉ có giá trị khi có mộc tròn của công ty.
+							</li>
+							<li>
+								Khách hàng cần thanh toán 30%% tổng giá trị Đơn đặt hàng.
+							</li>
+							<li>
+								Khách hàng thanh toán đủ số tiền còn lại khi nhận hàng.
+							</li>
+							<li>
+								Nếu có bất kỳ thay đổi hàng hoá đã đặt, Quý khách vui lòng liên hệ trong vòng 24h.
+							</li>
+							<li>
+								Phiếu đặt hàng có giá trị trong vòng 30 ngày, Khách hàng có nhu cầu lưu kho hơn 30 ngày, vui lòng liên hệ tại Công ty Dudoff London . 
+							</li>
+							<li>
+								Công ty sẽ không hoàn lại tiền với  bất kì lí do nào.
+							</li>							
+						</ul>';
 
 
 
