@@ -8,9 +8,11 @@ class Pdf extends TCPDF
 	protected $last_page_flag = false;
 	private $pdf_type = '';
 
-	function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false,$pdf_type = '')
+	function __construct($orientation='P', $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false,$pdf_type = '', $has_background=false)
 	{
 		parent::__construct($orientation, $unit, $format, $unicode, $encoding, $diskcache, $pdfa);
+		$this->has_background = $has_background;
+
 		$this->SetTopMargin(PDF_MARGIN_TOP);
 
 		$this->pdf_type = $pdf_type;
@@ -80,12 +82,47 @@ class Pdf extends TCPDF
 		$this->SetAlpha(1);
 	}
 
+	public function WatermarkImage2() {
+		// get the current page break margin
+        $bMargin = $this->getBreakMargin();
+        // get current auto-page-break mode
+        $auto_page_break = $this->AutoPageBreak;
+        // disable auto-page-break
+        $this->SetAutoPageBreak(false, 0);
+        // set bacground image
+        $this->Image(K_PATH_IMAGES.'background_pdf.png', 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+        // restore auto-page-break status
+        $this->SetAutoPageBreak($auto_page_break, $bMargin);
+        // set the starting point for the page content
+        $this->setPageMark();
+	}
+
+
 	public function Header() {
+
+		if($this->has_background)
+		{
+
+			// get the current page break margin
+	        $bMargin = $this->getBreakMargin();
+	        // get current auto-page-break mode
+	        $auto_page_break = $this->AutoPageBreak;
+	        // disable auto-page-break
+	        $this->SetAutoPageBreak(false, 0);
+	        // set bacground image
+	        $this->Image(K_PATH_IMAGES.'background_pdf.png', 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+	        // restore auto-page-break status
+	        $this->SetAutoPageBreak($auto_page_break, $bMargin);
+	        // set the starting point for the page content
+	        $this->setPageMark();
+    	}
+
+
 		$this->SetFont('helvetica', 'B', 20);
 		 if(get_option('prefix_header_pdf') !=""){
 		 	$this->SetTextColor(142,142,142);
 		 	$y            = $this->getY();
-		 $this->writeHTMLCell('', '', '', $y, '<img src="'.get_option('prefix_header_pdf').'">', 0, 0, false, true, 'J', true);
+		 $this->writeHTMLCell('', '', '', $y+7, '<img src="'.get_option('prefix_header_pdf').'">', 0, 0, false, true, 'J', true);
 		 	// $this->Cell(0, 15, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		 }
 	}

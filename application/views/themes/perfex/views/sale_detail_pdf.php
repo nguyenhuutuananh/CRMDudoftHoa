@@ -9,7 +9,7 @@ function mb_ucfirst($string, $encoding)
 // Tag - used in BULK pdf exporter
 if ($tag != '') {
     $pdf->SetFillColor(240, 240, 240);
-    $pdf->SetDrawColor(245, 245, 245);
+    $pdf->SetDrawColor(245, 245, 245);    
     $pdf->SetXY(0, 0);
     $pdf->SetFont($font_name, 'B', 15);
     $pdf->SetTextColor(0);
@@ -106,11 +106,11 @@ $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
         <th scope="col"  width="5%" align="center">STT</th>
-        <th scope="col"  width="25%" align="center">' . _l('Sản phẩm') . '</th>
+        <th scope="col"  width="33%" align="center">' . _l('Sản phẩm') . '</th>
         <th scope="col"  width="10%" align="center">' . _l('Mã số') . '</th>        
-        <th scope="col"  width="15%" align="center">' . _l('Số lượng') . '</th>';
+        <th scope="col"  width="7%" align="center">' . _l('Số lượng') . '</th>';
 $tblhtml .='<th  width="15%" align="center">' . _l('Đơn giá') . '</th>
-            <th  width="15%" align="center">' . _l('Chiết khấu/Khuyến mãi') . '</th>
+            <th  width="15%" align="center">' . _l('Chiết khấu/ Khuyến mãi') . '</th>
             <th  width="15%" align="center">' . _l('Thành tiền') . '</th>';
 $tblhtml .= '</tr>';
 // Items
@@ -121,72 +121,77 @@ $grand_tran_ins=0;
 $grand_total_payment=0;
 $grand_total_paid=0;
 $grand_total_left=0;
-
-for ($i=0; $i < count($invoice->items) ; $i++) { 
-
+for ($i=0; $i < count($invoice->items) ; $i++) {
     $grand_total+=$invoice->items[$i]->sub_total;
     $grand_discount+=$invoice->items[$i]->discount;
-
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->short_name.'</td>';
-    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
+    $tblhtml.='<td align="center">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->discount).'</td>';
-    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
+    $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
     $grand_tran_ins=$invoice->transport_fee+$invoice->installation_fee;
     $grand_total_payment=$grand_total+$grand_tran_ins-$invoice->discount-$grand_discount;
     $grand_total_paid=0;
     $grand_total_left=$grand_total_payment-$grand_total_paid;
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_amount_money').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';    
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_discount_money').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_discount+$invoice->discount,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_transport_installation_money').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_tran_ins,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_payment_money').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_payment,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_paid_money').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_paid,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';
-
-    $tblhtml.='<tr>';
-    $tblhtml.='<td colspan="5" align="right">'._l('total_left_amount').'</td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_left,get_option('default_currency'));
-    $tblhtml.='</td>';
-    $tblhtml.='</tr>';
-
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
-$pdf->writeHTML($tblhtml, true, false, false, false, '');
+$pdf->writeHTML($tblhtml, false, false, false, false, '');
+    
+    $tblhtml_bottom='<table width="100%" style="float: right">';
+    $tblhtml_bottom.='<tr style="border:none !important">';
+    $tblhtml_bottom.='<td align="right">'._l('total_amount_money').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_total,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';    
 
-$pdf->Ln(1);
-$check_note='<div style="width:100%"><b>'._l('invoice_note').'</b>'._l('check_note2').'</div>';
-$pdf->writeHTML($check_note, true, false, false, false, '');
+    $tblhtml_bottom.='<tr>';
+    $tblhtml_bottom.='<td align="right">'._l('total_discount_money').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_discount+$invoice->discount,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';
 
-$pdf->Ln(1);
+    $tblhtml_bottom.='<tr>';
+    $tblhtml_bottom.='<td align="right">'._l('total_transport_installation_money').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_tran_ins,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';
+
+    $tblhtml_bottom.='<tr>';
+    $tblhtml_bottom.='<td align="right">'._l('total_payment_money').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_total_payment,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';
+
+    $tblhtml_bottom.='<tr>';
+    $tblhtml_bottom.='<td align="right">'._l('total_paid_money').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_total_paid,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';
+
+    $tblhtml_bottom.='<tr>';
+    $tblhtml_bottom.='<td align="right">'._l('total_left_amount').'</td>';
+    $tblhtml_bottom.='<td align="right">'.format_money($grand_total_left,get_option('default_currency'));
+    $tblhtml_bottom.='</td>';
+    $tblhtml_bottom.='</tr>';
+    $tblhtml_bottom.='</table>';
+
+$pdf->Ln(3);    
+$x=$pdf->getX();
+$y=$pdf->getY();
+$pdf->SetFont($font_name, '', $font_size-1);
+$note='<div style="width:100%"><b>'._l('invoice_note').'</b>'.$invoice->reason.'</div>';
+$pdf->writeHTML($note, true, false, false, false, '');
+
+$x=$pdf->getX();
+$pdf->writeHTMLCell('', '', $x+120, $y, $tblhtml_bottom, 0, 0, false, true, ('R'), true);
+
+$pdf->SetFont($font_name, '', $font_size);
+$pdf->Ln(30);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td><b>" . (_l('buyers')) . "</b></td>
@@ -208,6 +213,14 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         </tr>
 </table>";
 // var_dump($invoice);die();
-$pdf->writeHTML($table, true, false, false, false, '');
+$y=$pdf->getY();
+$pdf->writeHTMLCell('', '', '', $y, $table, 0, 0, false, true, ('L'), true);
 
+$pdf->SetFont($font_name, '', $font_size-2);
+$pdf->Ln(35);
+$check_note='<div style="width:100%">'._l('check_note2').'</div>';
+$y=$pdf->getY();
+$pdf->writeHTMLCell('', '', '', '', $check_note, 0, 0, false, true, ('L'), true);
+// $pdf->writeHTML($check_note, true, false, false, false, '');
 $pdf->WatermarkText();
+
