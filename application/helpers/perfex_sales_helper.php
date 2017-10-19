@@ -1294,7 +1294,7 @@ function sale_detail_pdf($invoice, $tag = '')
     $formatArray = get_pdf_format('pdf_format_invoice');
 
     $pdf         = new Pdf($formatArray['orientation'], 'mm', $formatArray['format'], true, 'UTF-8', false,false,'invoice', true);
-
+    
     $pdf->SetTitle($invoice_number);
     $CI->pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
 
@@ -1362,7 +1362,7 @@ function sale_order_detail_pdf($invoice, $tag = '')
     $formatArray = get_pdf_format('pdf_format_invoice');
 
     $pdf         = new Pdf($formatArray['orientation'], 'mm', $formatArray['format'], true, 'UTF-8', false,false,'invoice', true);
-    
+
     $pdf->SetTitle($invoice_number);
     $CI->pdf->SetMargins(PDF_MARGIN_LEFT, 25, PDF_MARGIN_RIGHT);
 
