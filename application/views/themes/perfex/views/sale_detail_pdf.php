@@ -25,7 +25,7 @@ if ($tag != '') {
     $pdf->Rotate(-35, 109, 235);
     $pdf->Cell(100, 1, mb_strtoupper($tag, 'UTF-8'), 'TB', 0, 'C', '1');
     $pdf->StopTransform();
-    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->SetFont($font_name, '', $font_size-1);
     $pdf->setX(10);
     $pdf->setY(10);
 }
@@ -77,40 +77,31 @@ $pdf->SetFont($font_name, 'I', $font_size);
 $pdf->Cell(0, 0, _l('view_date').': '._d($invoice->date) , 0, 1, 'C', 0, '', 0);
 $pdf->ln(4);
 //Set detail
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->Cell(0, 0, _l('customer_name').': '.$customer->company , 0, 1, 'L', 0, '', 0);
-$pdf->ln(2);
-$adress1='';
-$adress2=array();
-if($customer->address_building){$adress2[]=_l('Tòa nhà ').$customer->address_building;}
-if($customer->address_home_number){$adress2[]=_l('Số ').$customer->address_home_number;}
-if($customer->address_town){$adress2[]=_l('Đường ').$customer->address_town;}
-if($customer->address_ward){$adress2[]=_l('Phường/xã ').getWard($customer->address_ward)->name;}
-if($customer->state){$adress2[]=_l('Quận/huyện ').getDistrict($customer->state)->name;}
-if($customer->city){$adress2[]=_l('Tỉnh/tp ').getProvince($customer->city)->name;}
-$address=($adress1)? $adress1 : implode(', ', $adress2);
-$shipping_address=array();
-if($customer->shipping_building){$adress2[]=_l('Tòa nhà ').$customer->shipping_building;}
-if($customer->shipping_home_number){$adress2[]=_l('Số ').$customer->shipping_home_number;}
-if($customer->shipping_street){$adress2[]=_l('Đường ').$customer->shipping_street;}
-if($customer->shipping_ward){$adress2[]=_l('Phường/xã ').getWard($customer->shipping_ward)->name;}
-if($customer->shipping_state){$adress2[]=_l('Quận/huyện ').getDistrict($customer->shipping_state)->name;}
-if($customer->shipping_city){$adress2[]=_l('Tỉnh/tp ').getProvince($customer->shipping_city);}
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->ln(1);
+$address=getClient($invoice->customer_id,1);
+$shipping_address=getClient($invoice->customer_id,2);
 
-$pdf->writeHTMLCell(0, '', '', '', '<div width="100%">'._l('address').': '.$address.'</div>', 0, 1, false, true, 'L', true);
-$pdf->ln(2);
 
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->Cell(0, 0, _l('tel').': '.$customer->phonenumber.'     '. _l('fax').':'.$customer->fax , 0, 1, 'L', 0, '', 0);
-$pdf->ln(2);
+$pdf->SetFont($font_name, '', $font_size-1);
 
-$pdf->Cell(0, 0, _l('shipping_address').': '.implode(', ', $shipping_address) , 0, 1, 'L', 0, '', 0);
+$pdf->writeHTMLCell(0, '', '', '', '<div width="100%">'._l('address').': '.($address?$address:_l('dot_blank')).'</div>', 0, 1, false, true, 'L', true);
+$pdf->ln(1);
+
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->Cell(0, 0, _l('tel').': '.($customer->phonenumber?$customer->phonenumber:_l('dot_blank')).'     '. _l('fax').':'.($customer->fax?$customer->fax:_l('dot_blank')) , 0, 1, 'L', 0, '', 0);
+$email=$customer->email?$customer->email:get_contact_primary($invoice->customer_id)->email;
+$pdf->ln(1);
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->Cell(0, 0, _l('email').': '.($email?$email:l('dot_blank')) , 0, 1, 'L', 0, '', 0);
+
+$pdf->ln(1);
+$pdf->Cell(0, 0, _l('shipping_address').': '.($shipping_address?$shipping_address:_l('dot_blank')) , 0, 1, 'L', 0, '', 0);
 $pdf->ln(2);
 
 // Bill to
 // The Table
-$pdf->Ln(5);
 $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
@@ -131,11 +122,17 @@ $grand_total_payment=0;
 $grand_total_paid=0;
 $grand_total_left=0;
 for ($i=0; $i < count($invoice->items) ; $i++) {
+    $categories=get_product_category($invoice->items[$i]->product_id);
+    $product_name=$invoice->items[$i]->product_name;
+    if(count($categories)>0)
+    {
+         $product_name=$categories[0]->category;
+    }
     $grand_total+=$invoice->items[$i]->sub_total;
     $grand_discount+=$invoice->items[$i]->discount;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
+    $tblhtml.='<td>'.$product_name.'</td>';
     $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->short_name.'</td>';
     $tblhtml.='<td align="center">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
@@ -143,12 +140,24 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
+    for ($j=$i; $j <=11 ; $j++) { 
+        $tblhtml.='<tr>';
+        $tblhtml.='<td align="center">'.($j+1).'</td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td align="center"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='</tr>';
+    }
     $grand_tran_ins=$invoice->transport_fee+$invoice->installation_fee;
     $grand_total_payment=$grand_total+$grand_tran_ins-$invoice->discount-$grand_discount;
     $grand_total_paid=0;
     $grand_total_left=$grand_total_payment-$grand_total_paid;
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->writeHTML($tblhtml, false, false, false, false, '');
     
     $tblhtml_bottom='<table width="100%" style="float: right">';
@@ -199,7 +208,7 @@ $pdf->writeHTML($note, true, false, false, false, '');
 $x=$pdf->getX();
 $pdf->writeHTMLCell('', '', $x+120, $y, $tblhtml_bottom, 0, 0, false, true, ('R'), true);
 
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->Ln(30);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>

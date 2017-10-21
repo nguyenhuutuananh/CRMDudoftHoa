@@ -18,7 +18,7 @@ if ($tag != '') {
     $pdf->Rotate(-35, 109, 235);
     $pdf->Cell(100, 1, mb_strtoupper($tag, 'UTF-8'), 'TB', 0, 'C', '1');
     $pdf->StopTransform();
-    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->SetFont($font_name, '', $font_size-1);
     $pdf->setX(10);
     $pdf->setY(10);
 }
@@ -54,20 +54,10 @@ $invoice_info = '';
         $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
     }
 
-// write the first column
-// $info_left_column .= pdf_logo_url();
-// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
-// // write the second column
-// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
-// $divide=_l('divider');
-// $pdf->ln(6);
-// $y            = $pdf->getY();
-// $pdf->writeHTMLCell('', '', '', $y, $divide, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-// $pdf->ln(2);
-$y            = $pdf->getY();
 
-$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
-$pdf->ln(25);
+// $y            = $pdf->getY();
+
+// $pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
 // Set Head
 $plan_name=_l('deliveries');
 
@@ -84,28 +74,27 @@ $pdf->ln(4);
 
 
 //Set detail
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->Cell(0, 0, _l('client').': '.$invoice->customer_name , 0, 1, 'L', 0, '', 0);
-$pdf->ln(2);
+$pdf->ln(1);
 $address=getClient($invoice->customer_id,1);
 $fone_fax_email='';
-$fone_fax_email.=$customer->phonenumber._l('more_blank')._l('Fax: ').$customer->fax._l('more_blank')._l('Email: ').$contact->email;
+$fone_fax_email.=($customer->phonenumber?$customer->phonenumber:_l('dot_blank'))._l('more_blank')._l('Fax: ').($customer->fax?$customer->fax:_l('dot_blank'))._l('more_blank')._l('Email: ').($contact->email?$contact->email:_l('dot_blank'));
 $shipping_address=getClient($invoice->customer_id,2);
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->writeHTMLCell(0, '', '', '', _l('address').': '.$address , 0, 1, false, true, 'L', true);
-$pdf->ln(2);
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->writeHTMLCell(0, '', '', '', _l('address').': '.($address?$address:_l('dot_blank')) , 0, 1, false, true, 'L', true);
+$pdf->ln(1);
 // var_dump($customer);die();
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->writeHTMLCell(0, '', '', '', _l('clients_phone').': '.$fone_fax_email , 0, 1, false, true, 'L', true);
-$pdf->ln(2);
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->writeHTMLCell(0, '', '', '', _l('clients_phone').': '.($fone_fax_email?$fone_fax_email:_l('dot_blank')) , 0, 1, false, true, 'L', true);
+$pdf->ln(1);
 
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->writeHTMLCell(0, '', '', '', _l('shipping_address').': '.$shipping_address , 0, 1, false, true, 'L', true);
-$pdf->ln(2);
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->writeHTMLCell(0, '', '', '', _l('shipping_address').': '.($shipping_address?$shipping_address:_l('dot_blank')) , 0, 1, false, true, 'L', true);
 
 
 // The Table
-$pdf->Ln(5);
+$pdf->Ln(3);
 $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
@@ -122,12 +111,17 @@ $tblhtml .= '</tr>';
 $tblhtml .= '<tbody>';
 $grand_total=0;
 for ($i=0; $i < count($invoice->items) ; $i++) { 
-    // var_dump($invoice->items[$i]);die();
+    $categories=get_product_category($invoice->items[$i]->product_id);
+    $product_name=$invoice->items[$i]->product_name;
+    if(count($categories)>0)
+    {
+         $product_name=$categories[0]->category;
+    }
     $grand_total+=$invoice->items[$i]->amount;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
+    $tblhtml.='<td>'.$product_name.'</td>';
+    $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->short_name.'</td>';
     $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
@@ -135,7 +129,18 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
      $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->amount).'</td>';
     $tblhtml.='</tr>';
 }
-
+    for ($j=$i; $j <=11 ; $j++) { 
+        $tblhtml.='<tr>';
+        $tblhtml.='<td align="center">'.($j+1).'</td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td align="center"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='</tr>';
+    }
 
     $tblhtml.='<tr>';
     $tblhtml.='<td colspan="6" align="right">'._l('total_amount').'</td>';
@@ -150,9 +155,13 @@ $strmoney.='<li>'._l('certificate_root').($invoice->certificate_root?$invoice->c
 $strmoney.='</ul>';
 // $pdf->writeHTMLCell(0, '', '', '', $strmoney, 0, 1, false, true, 'L', true);
 $pdf->writeHTML($strmoney, true, false, false, false, 'L');
-$pdf->Ln(5);
-$pdf->writeHTML('<b>'._l('note').'</b>'.':'._l('check_note'), true, false, false, false, 'L');
-$pdf->Ln(5);
+$pdf->Ln(3);
+if($invoice->note)
+{
+    $pdf->writeHTML('<b>'._l('note').': </b>'.':'.$invoice->note, true, false, false, false, 'L');
+    $pdf->Ln(3);
+}
+
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td><b>" . mb_ucfirst(_l('buyer'), "UTF-8") . "</b></td>
@@ -179,4 +188,8 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
 
+$check_note='<div style="width:100%">'._l('check_note').'</div>';
+$pdf->writeHTMLCell('', '', '', '', $check_note, 0, 0, false, true, ('L'), true);
+
+$pdf->WatermarkText();
 

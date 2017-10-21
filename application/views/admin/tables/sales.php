@@ -12,7 +12,7 @@ $aColumns     = array(
     'rel_code',  
     'company',
     'total',
-    '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid)',
+    'create_by',
     'status',
     'CONCAT((SELECT fullname FROM tblstaff  WHERE user_head_id=tblstaff.staffid),",",(SELECT fullname FROM tblstaff  WHERE user_admin_id=tblstaff.staffid)) as confirm',
     'date'
@@ -70,7 +70,8 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable,$join, $where
     'rel_id',
     'export_status',
     'tblstaff.fullname',
-    'CONCAT(user_head_id,",",user_admin_id) as confirm_ids'
+    'CONCAT(user_head_id,",",user_admin_id) as confirm_ids',
+    '(SELECT fullname FROM tblstaff WHERE create_by=tblstaff.staffid) as creater'
 ));
 $output       = $result['output'];
 $rResult      = $result['rResult'];
@@ -87,7 +88,12 @@ foreach ($rResult as $aRow) {
             $_data=$j;
         }
         if ($aColumns[$i] == 'tblsales.code') {
-            $_data=$aRow['prefix'].$aRow['tblsales.code'];
+            $_data='<a href='.admin_url("sales/sale_detail/").$aRow['id'].' >'.$aRow['prefix'].$aRow['tblsales.code'].'</a>';
+            
+        }
+        if ($aColumns[$i] == 'rel_code') {
+            $_data='<a href='.admin_url("sale_orders/sale_detail").$aRow['rel_id'].' >'.$aRow['rel_code'].'</a>';
+            
         }
         if ($aColumns[$i] == 'date') {
             $_data=_d($aRow['date']);
@@ -120,6 +126,14 @@ foreach ($rResult as $aRow) {
                 $_data.='<i class="fa fa-check task-icon task-finished-icon" data-toggle="tooltip" title="' . _l( $plan_status[$aRow['status']]) . '"></i>
                     </a>
                 </span>';
+        }
+        if ($aColumns[$i] == 'create_by') {
+            $_data='<a href='.admin_url("profile/").$aRow['create_by'].' >'.staff_profile_image($aRow['create_by'], array(
+                        'staff-profile-image-small mright5'
+                    ), 'small', array(
+                        'data-toggle' => 'tooltip',
+                        'data-title' => $aRow['creater']
+                    )).'</a>';
         }
         if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
             $_data = $aRow['confirm'];

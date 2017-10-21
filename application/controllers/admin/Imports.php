@@ -578,8 +578,10 @@ class Imports extends Admin_controller
         }
         $invoice        = $this->imports_model->getImportByID($id);
         $invoice_number = $invoice->prefix.$invoice->code;
-
+        
+// var_dump($invoice);die;
         $pdf            = import_detail_pdf($invoice);
+        
         $type           = 'D';
         if ($this->input->get('pdf') || $this->input->get('print')) {
             $type = 'I';

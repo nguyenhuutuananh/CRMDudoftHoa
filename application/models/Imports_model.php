@@ -124,7 +124,7 @@ class Imports_model extends CRM_Model
 
     public function getImportItems($id)
     {
-        $this->db->select('tblimport_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,tblwarehouses.warehouse as warehouse_name');
+        $this->db->select('tblimport_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,tblwarehouses.warehouse as warehouse_name,tblitems.short_name');
         $this->db->from('tblimport_items');
         $this->db->join('tblitems','tblitems.id=tblimport_items.product_id','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');

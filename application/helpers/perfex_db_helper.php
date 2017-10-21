@@ -482,6 +482,62 @@ function get_contact_full_name($userid = '')
     }
 
 }
+
+/**
+ * Get client full name
+ * @param  string $userid Optional
+ * @return string Firstname and Lastname
+ */
+function get_contact_primary($userid = '')
+{
+    $CI =& get_instance();
+    $CI->db->where('userid', $userid);
+    $CI->db->where('is_primary', 1);
+    $client = $CI->db->from('tblcontacts')->get()->row();
+    if ($client) {
+        return $client;
+    } else {
+        return '';
+    }
+
+}
+
+/**
+ * Get item category
+ * @param  string $userid Optional
+ * @return string Firstname and Lastname
+ */
+function get_product_category($product_id='',$category_id = '')
+{
+    $CI =& get_instance();
+    $CI->db->select('tblcategories.*');
+    if($product_id)
+    {
+        $CI->db->where('tblitems.id', $product_id);
+    }
+    if($category_id)
+    {
+        $CI->db->where('tblcategories.id', $category_id);
+    }
+    $CI->db->join('tblitems', 'tblitems.category_id=tblcategories.id');
+    $category = $CI->db->from('tblcategories')->get()->row();
+    $cats=array();
+    if($category)
+    {
+        $cats[]=$category;
+        if($category->category_parent)
+        {
+            $cats[]=get_product_category('',$category->category_parent);
+        }
+    }
+    if ($cats) {
+        return $cats;
+    } else {
+        return array();
+    }
+
+}
+
 /**
  * This function currently is used in search for contact, ticket add for contacts and ticket edit for contacts
  * @param  [type] $userid [description]

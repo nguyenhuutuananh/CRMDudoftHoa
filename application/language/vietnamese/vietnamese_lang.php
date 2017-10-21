@@ -45,7 +45,7 @@ $lang['invoice_data_date']                     = 'Ngày Hóa Đơn:';
 $lang['invoice_data_duedate']                  = 'Ngày Đáo Hạn:';
 $lang['invoice_received_payments']             = 'Giao dịch';
 $lang['invoice_no_payments_found']             = 'Không tìm thấy khoản thanh toán cho hoá đơn này';
-$lang['invoice_note']                          = 'Ghi chú:';
+$lang['invoice_note']                          = 'Ghi chú: ';
 $lang['invoice_payments_table_number_heading'] = 'Thanh toán #';
 $lang['invoice_payments_table_mode_heading']   = 'Chế độ thanh toán';
 $lang['invoice_payments_table_date_heading']   = 'Ngày';
@@ -3699,6 +3699,7 @@ $lang['warehouse_name'] = "Kho hàng";
 $lang['item_name'] = "Sản phẩm";
 $lang['supplier_profile_details'] = "Chi tiết nhà cung cấp";
 $lang['import_name'] = "Tên phiếu điều chỉnh";
+$lang['import_name_internal'] = "Tên phiếu nhập kho";
 $lang['adjustments'] = "Phiếu điều chỉnh kho";
 $lang['internals'] = "Phiếu nhập kho";
 $lang['adjustment_code'] = "Mã phiếu điều chỉnh";
@@ -3724,10 +3725,10 @@ $lang['cost_add_heading'] = "Thêm Phiếu chi phí mua hàng";
 $lang['cost_edit_heading'] = "Sửa Phiếu chi phí mua hàng";
 $lang['cost_code'] = "Mã phiếu chi phí";
 $lang['purchase_cost_information'] = 'Thông tin phiếu chi phí mua hàng';
-$lang['sale_orders'] = "Đơn đặt hàng";
+$lang['sale_orders'] = "Phiếu Đặt Hàng";
 $lang['add_sale_order_'] = "Thêm đơn hàng bán";
 $lang['add_sale_order_so'] = "Thêm đơn hàng bán(SO)";
-$lang['sales'] = "Đơn hàng bán (SO)";
+$lang['sales'] = "Phiếu Giao Hàng";
 $lang['sales_po'] = "Đơn hàng bán (PO)";
 $lang['sale'] = "Đơn đặt hàng";
 $lang['sale_detail'] = "Chi tiết đơn hàng";
@@ -3880,7 +3881,7 @@ $lang['buyer'] = "Người mua hàng";
 $lang['biller'] = "Lập biểu";
 $lang['saler'] = "Người bán hàng";
 $lang['blank___'] = "..........................................................................................................................................................";
-
+$lang['dot_blank'] = ".......................................................";
 $lang['blank10']='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 $lang['chief_accountant'] = "Kế toán trưởng";
 
@@ -4342,11 +4343,26 @@ $lang['check_note2'] = '<ul>
 								Công ty sẽ không hoàn lại tiền với  bất kì lí do nào.
 							</li>							
 						</ul>';
-
-
-
-
-
-
-
-
+$lang['purchases_reports']="Báo cáo mua hàng";
+$lang['warehouses_reports']="Báo cáo kho";
+$lang['purchase_summary_report']="Báo cáo tổng hợp mua hàng";
+$lang['purchase_detail_report']="Báo cáo chi tiết mua hàng";
+$lang['stock_card']="Thẻ kho";
+$lang['warehouse_sumary_report']="Báo cáo Nhập - Xuất - Tồn tổng hợp";
+$lang['warehouse_detail_report']="Báo cáo Nhập - Xuất - Tồn chi tiết";
+$lang['detail_goods_book']="Sổ chi tiết vật tư";
+$lang['inventory_report']="Báo cáo tồn kho";
+$lang['max_min_inventory_report']="Báo cáo tồn kho dưới mức tối thiểu và trên mức tối đa";
+$lang['stock_card']="Thẻ kho";
+$lang['report_date']="Ngày";
+$lang['certificate_code']="Số hiệu chứng từ";
+$lang['import']="Nhập";
+$lang['export']="Xuất";
+$lang['report_dateIE']="Ngày nhập/xuất";
+$lang['report_quantity']="Số lượng";
+// $lang['report_quantity']="Số lượng";
+$lang['report_revenue']="Tồn";
+$lang['report_quantity']="Số lượng";
+$lang['report_quantity']="Số lượng";
+$lang['report_quantity']="Số lượng";
+$lang['report_quantity']="Số lượng";

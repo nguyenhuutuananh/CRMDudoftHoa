@@ -97,7 +97,7 @@
                                     $number=sprintf('%06d',getMaxID('id','tblimports')+1);
                                 }
                             ?>
-                            <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
+                            <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>">
                           </div>
                     </div>
 
@@ -109,7 +109,7 @@
                     
                     <?php
                     $default_name = (isset($item) ? $item->name : "");
-                    echo render_input('name', _l('import_name'), $default_name);
+                    echo render_input('name', _l('import_name_internal'), $default_name);
                     ?>
 
                     <!-- <?php 

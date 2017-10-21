@@ -48,6 +48,17 @@ $(function() {
         price: 'required',
         price_buy: 'required',
         unit: 'required',
+        "category_id[]": 'required',
+    });
+    $('.customer-form-submiter').on('click', function(e) {
+        // Customer
+        let category_level_2 = $('[name="category_id[]"]:eq(1)');
+        if(!category_level_2.val()) {
+            alert_float('danger', 'Vui lòng chọn danh mục cấp 2!');
+            category_level_2.focus();
+            category_level_2.selectpicker('toggle');
+            e.preventDefault();
+        }
     });
 });
 </script>

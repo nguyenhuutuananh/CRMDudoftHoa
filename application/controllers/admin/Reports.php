@@ -86,16 +86,18 @@ class Reports extends Admin_controller
     }
 
     /* Purchases reports */
-    // public function purchases()
-    // {
-    //     var_dump(expression);
-    // }
+    public function purchases()
+    {
+        $data['title']                 = _l('purchases_reports');
+        $this->load->view('admin/reports/purchases', $data);
+    }
 
     /* Warehouse reports */
-    // public function warehouses()
-    // {
-    //     var_dump(expression);
-    // }
+    public function warehouses()
+    {
+        $data['title']                 = _l('warehouses_reports');
+        $this->load->view('admin/reports/warehouses', $data);
+    }
 
     /* Debts reports */
     public function debts()
@@ -4024,6 +4026,106 @@ class Reports extends Admin_controller
                 return $output;
             }
 
+            die();
+        }
+    }
+
+    public function stock_card_report($pdf=false)
+    {
+        if ($this->input->is_ajax_request()||$pdf==true)
+        {
+            $this->load->model('currencies_model');
+            
+            //Thu
+            $mounth_report=$this->input->post('report_months');
+            if ($mounth_report != ''&&$mounth_report) {
+                if (is_numeric($mounth_report)) {
+                    $minus_months       = date('Y-m-d', strtotime("-$mounth_report MONTH"));
+                    $start_date=$minus_months;
+                    $start_end=date('Y-m-d');
+
+                }
+                else if ($mounth_report == 'custom') {
+                    $start_date = to_sql_date($this->input->post('report_from'));
+                    $start_end   = to_sql_date($this->input->post('report_to'));
+                }
+            }
+
+            $select = array(
+                'id',
+                'name',
+                'short_name',
+                'code',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8'
+            );
+
+            
+            $where  = array(
+            );
+            $aColumns     = $select;
+            $sIndexColumn = "id";
+            $sTable       = 'tblitems';
+            $join         = array(
+            );
+            $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+            ));
+            $output  = $result['output'];
+            $rResult = $result['rResult'];
+
+            // print_r($rResult);die;
+
+            $x       = 0;
+
+            $footer_data = array(
+                'SPSN' => 0,
+                'SPSC' => 0,
+                'ST' => 0
+            );
+            $product_name='';
+            foreach ($rResult as $key=> $aRow) {
+                
+                $row = array();
+                if($key==0)
+                {
+                    $product_name=$aRow['id'];
+                    $col=count($aColumns);
+                    $row=array('Mã sản phẩm: '.$aRow['short_name'].'('.$aRow['code'].')','STT: '.($key+1));
+                    $row['DT_RowClass'] = 'alert-header';
+                    for ($i=0 ; $i<count($aColumns) ; $i++ ){
+                        $row[]="";
+                    }
+                    $output['aaData'][] = $row;
+                }
+                else
+                {
+                    if($product_name!=$aRow['id'])
+                    {
+                        $product_name=$aRow['short_name'];
+                        $col=count($aColumns);
+                        $row=array('Mã sản phẩm: '.$aRow['short_name'].'('.$aRow['code'].')','STT: '.($key+1));
+                        $row['DT_RowClass'] = 'alert-header';
+                        for ($i=0 ; $i<count($aColumns) ; $i++ ){
+                            $row[]="";
+                        }
+                        $row[]="";
+                        $output['aaData'][] = $row;
+                    }
+                }
+               
+            }
+            $output['sums'] = $footer_data;
+            
+            if($pdf==false){
+                echo json_encode($output);
+            }
+            else
+            {
+                return $output;
+            }
             die();
         }
     }

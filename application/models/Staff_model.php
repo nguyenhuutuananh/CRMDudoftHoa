@@ -672,6 +672,11 @@ class Staff_model extends CRM_Model
                 }
             }
         }
+        
+        $data['date_work']=to_sql_date($data['date_work']);
+        $data['date_birth']=to_sql_date($data['date_birth']);
+        $data['issued_on']=to_sql_date($data['issued_on']);
+
         $this->db->where('staffid', $id);
         $this->db->update('tblstaff', $data);
         if ($this->db->affected_rows() > 0) {

@@ -76,6 +76,7 @@
 		var headers_staff = $('.table-staff').find('th');
 		var not_sortable_staff = (headers_staff.length - 1);
 		initDataTable('.table-staff', window.location.href, [not_sortable_staff], [not_sortable_staff]);
+		// ,'undefined', [$('table thead .ticket_created_column').index(), 'DESC']
 	});
 	function delete_staff_member(id){
 		$('#delete_staff').modal('show');

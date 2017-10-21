@@ -31,7 +31,7 @@ class Exports_model extends CRM_Model
 
     public function getExportItems($id)
     {
-        $this->db->select('tblexport_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,');
+        $this->db->select('tblexport_items.*,tblitems.name as product_name,tblitems.description,tblunits.unit as unit_name,tblunits.unitid as unit_id,tblitems.prefix,tblitems.code,tblitems.short_name');
         $this->db->from('tblexport_items');
         $this->db->join('tblitems','tblitems.id=tblexport_items.product_id','left');
         $this->db->join('tblunits','tblunits.unitid=tblitems.unit','left');

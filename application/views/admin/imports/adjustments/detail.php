@@ -86,7 +86,7 @@
                     $attrs_not_select = array('data-none-selected-text' => _l('system_default_string'));
                     ?>
                     <div class="form-group">
-                         <label for="number"><?php echo _l('code_noo'); ?></label>
+                         <label for="code"><?php echo _l('code_noo'); ?></label>
                          <div class="input-group">
                           <span class="input-group-addon">
                           <?php $prefix =($item) ? $item->prefix : get_option('prefix_adjustment'); ?>
@@ -104,7 +104,7 @@
                                     $number=sprintf('%06d',getMaxID('id','tblimports')+1);
                                 }
                             ?>
-                            <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>" readonly>
+                            <input type="text" name="code" class="form-control" value="<?=$number ?>" data-isedit="<?php echo $isedit; ?>" data-original-number="<?php echo $data_original_number; ?>">
                           </div>
                     </div>
 
@@ -317,7 +317,7 @@
         $('table tr.sortable.item').remove();
         total=0;
         var warehouse_id=$(this).val();
-        loadProductsInWarehouse(warehouse_id)
+        // loadProductsInWarehouse(warehouse_id);
         refreshAll();
         refreshTotal();
     });

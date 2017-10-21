@@ -554,6 +554,7 @@ class Imports extends Admin_controller
     
     public function detail_pdf($id)
     {
+        var_dump($id);die;
         if (!has_permission('import_items', '', 'view') && !has_permission('import_items', '', 'view_own')) {
             access_denied('import_items');
         }
@@ -561,6 +562,7 @@ class Imports extends Admin_controller
             redirect($_SERVER["HTTP_REFERER"]);
         }
         $invoice        = $this->imports_model->getImportByID($id);
+
         $invoice_number = $invoice->prefix.$invoice->code;
 
         $pdf            = import_detail_pdf($invoice);

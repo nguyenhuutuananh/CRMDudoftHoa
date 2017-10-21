@@ -175,7 +175,7 @@ $selected=(isset($member) ? $member->gender : '');
 
 
 <?php $value = (isset($member) ? $member->email_marketing : ''); ?>
-<?php echo render_input('_email_marketing','email_marketing',$value); ?>
+<?php echo render_input('email_marketing','email_marketing',$value); ?>
 <?php $value = (isset($member) ? $member->password_email_marketing : ''); ?>
 <?php echo render_input('password_email_marketing','password_email_marketing',$value,'password'); ?>
 

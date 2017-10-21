@@ -95,6 +95,8 @@ class Pdf extends TCPDF
         $this->SetAutoPageBreak($auto_page_break, $bMargin);
         // set the starting point for the page content
         $this->setPageMark();
+
+
 	}
 
 
@@ -102,7 +104,6 @@ class Pdf extends TCPDF
 
 		if($this->has_background)
 		{
-
 			// get the current page break margin
 	        $bMargin = $this->getBreakMargin();
 	        // get current auto-page-break mode

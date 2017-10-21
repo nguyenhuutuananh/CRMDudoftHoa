@@ -238,9 +238,10 @@ class Perfex_Base
             $client=$this->_instance->db->where('userid',$id)->get('tblclients')->row();
             if($address_type==1)
             {
+                $address[]=$client->address_building ? _l('Tòa nhà '.$client->address_building) : '' ;
                 $address[]=$client->address_home_number ? _l('Số '.$client->address_home_number) : '' ;
                 $address[]=$client->address ? _l('Đường '.$client->address) : '' ;
-                $address[]=$client->address_town ? _l('Khu phố/thôn/ấp '.$client->address_town) : '' ;
+                // $address[]=$client->address_town ? _l('Khu phố/thôn/ấp '.$client->address_town) : '' ;
                 $ward=getWard($client->address_ward);
                 $address[]=$client->address_ward ? _l("$ward->type ".$ward->name) : '' ;
                 $district=getDistrict($client->state);
@@ -248,11 +249,12 @@ class Perfex_Base
                 $province=getProvince($client->city);
                 $address[]=$client->city ? _l("$province->type ".$province->name) : '' ;
             }
-            elseif($address_type==2)
+            if($address_type==2)
             {
+                $address[]=$client->shipping_building ? _l('Tòa nhà '.$client->shipping_building) : '' ;
                 $address[]=$client->shipping_home_number ? _l('Số '.$client->shipping_home_number) : '' ;
                 $address[]=$client->shipping_street ? _l('Đường '.$client->shipping_street) : '' ;
-                $address[]=$client->shipping_town ? _l('Khu phố/thôn/ấp '.$client->shipping_town) : '' ;
+                // $address[]=$client->shipping_town ? _l('Khu phố/thôn/ấp '.$client->shipping_town) : '' ;
                 $ward=getWard($client->shipping_ward);
                 $address[]=$client->address_ward ? _l("$ward->type ".$ward->name) : '' ;
                 $district=getDistrict($client->shipping_state);
@@ -260,6 +262,7 @@ class Perfex_Base
                 $province=getProvince($client->shipping_city);
                 $address[]=$client->city ? _l("$province->type ".$province->name) : '' ;
             }
+
             foreach ($address as $key => $value) {
                 if(empty($value) || empty(trim($value))) unset($address[$key]);
             }

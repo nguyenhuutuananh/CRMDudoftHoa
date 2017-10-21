@@ -1,7 +1,6 @@
 <?php
 $dimensions = $pdf->getPageDimensions();
 
-
 function mb_ucfirst($string, $encoding)
 {
     return mb_convert_case($string, MB_CASE_TITLE, $encoding);
@@ -19,7 +18,7 @@ if ($tag != '') {
     $pdf->Rotate(-35, 109, 235);
     $pdf->Cell(100, 1, mb_strtoupper($tag, 'UTF-8'), 'TB', 0, 'C', '1');
     $pdf->StopTransform();
-    $pdf->SetFont($font_name, '', $font_size);
+    $pdf->SetFont($font_name, '', $font_size-1);
     $pdf->setX(10);
     $pdf->setY(10);
 }
@@ -121,17 +120,12 @@ foreach ($accountCo as $key => $account) {
         $invoice_info .= _l('Website') . ': ' . get_option('main_domain');
     }
 
-// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['lm'], 0, $info_left_column, 0, 'J', 0, 0, '', '', true, 0, true, true, 0);
-// write the second column
-// $pdf->MultiCell(($dimensions['wk'] / 2) - $dimensions['rm'], 0, $info_right_column, 0, 'R', 0, 1, '', '', true, 0, true, false, 0);
-// $pdf->MultiCell(0, 0, $invoice_info, 0, 'C', 0, 1, '', '', true, 0, true, false, 0);
-// $y            = $pdf->getY();
 
-$pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
+// $pdf->writeHTMLCell((true ? ($dimensions['wk']) - ($dimensions['lm'] * 2) : ($dimensions['wk'] / 2) - $dimensions['lm']), '', '', 20, $invoice_info, 0, 0, false, true, ($swap == '1' ? 'R' : 'J'), true);
 
-$pdf->writeHTMLCell(200, '', '', 20, $info_right, 0, 0, false, true, ('R'), true);
+$pdf->writeHTMLCell(200, '', '', 25, $info_right, 0, 0, false, true, ('R'), true);
 
-$pdf->ln(25);
+$pdf->ln(13);
 // Set Head
 if($invoice->rel_type=='adjustment')
 {
@@ -152,30 +146,31 @@ if($invoice->rel_type=='contract')
 
 
 
+
 $pdf->SetFont($font_name, 'B', 20);
 $pdf->Cell(0, 0, mb_strtoupper($plan_name, 'UTF-8') , 0, 1, 'C', 0, '', 0);
 
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->writeHTMLCell('', '', '', '', '<i>'.getStrDate($invoice->date).'</i>', 0, 1, false, true, 'C', true);
 
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->writeHTMLCell('', '', '', '', _l('no').$invoice_number, 0, 1, false, true, 'C', true);
-$pdf->ln(10);
+$pdf->ln(5);
 
 // //Set detail
-// $pdf->SetFont($font_name, '', $font_size);
+// $pdf->SetFont($font_name, '', $font_size-1);
 // $pdf->Cell(0, 0, _l('Mã phiếu: ').$invoice_number , 0, 1, 'L', 0, '', 0);
 // $pdf->ln(4);
 
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->writeHTMLCell('', '', '', '', _l('Họ tên người giao hàng: ').'<b>'.$invoice->deliver_name.'</b>', 0, 1, false, true, 'L', true);
-$pdf->ln(2);
+$pdf->ln(1);
 
 $contract=getContractByImportID($invoice->id);
 $strHD='';
 if($contract) $strHD=_l('blank10').$contract->code._l('blank10').mb_strtolower(getStrDate($contract->date_create),'UTF-8')._l(' của ').$contract->supplier_name;
 $pdf->writeHTMLCell('', '', '', '', _l('Theo HĐ số ').$strHD , 0, 1, false, true, 'L', true);
-$pdf->ln(2);
+$pdf->ln(1);
 
 $warehouse=getWarehouseByID($warehouse_id);
 $strWH=_l('blank10')._l('blank10')._l('blank10')._l('blank10');
@@ -186,30 +181,9 @@ if($warehouse)
 
 $pdf->writeHTMLCell('', '', '', '', _l('Nhập tại kho ').$strWH._l('Địa điểm')._l('blank10').$warehouse->address, 0, 1, false, true, 'L', true);
 
-$pdf->ln(4);
+$pdf->SetFont($font_name, '', $font_size-1);
+$pdf->Ln(3);
 
-
-
-// $pdf->setPage( 1 );
-// // Get the page width/height
-// $myPageWidth = $pdf->getPageWidth();
-// $myPageHeight = $pdf->getPageHeight();
-// // Find the middle of the page and adjust.
-// $myX = ( $myPageWidth / 2 ) - 75;
-// $myY = ( $myPageHeight / 2 ) + 25;
-// // Set the transparency of the text to really light
-// $pdf->SetAlpha(0.09);
-// // Rotate 45 degrees and write the watermarking text
-// $pdf->StartTransform();
-// $pdf->Rotate(45, $myX, $myY);
-// $pdf->SetFont($font_name, "", 30);
-// $pdf->Text($myX, $myY,"PROPERTY OF LOCALHOST CORPORATION"); 
-// $pdf->StopTransform();
-// // Reset the transparency to default
-// $pdf->SetAlpha(1);
-
-$pdf->SetFont($font_name, '', $font_size);
-$pdf->Ln(5);
 $tblhtml = '
 <table width="100%" bgcolor="#fff" cellspacing="0" cellpadding="5" border="1px">
     <tr height="30" bgcolor="' . get_option('pdf_table_heading_color') . '" style="color:' . get_option('pdf_table_heading_text_color') . ';">
@@ -236,60 +210,94 @@ $tblhtml.='<th align="center">5</th>';
 $tblhtml.='</tr>';
 
 
+
 // Items
 $tblhtml .= '<tbody>';
 $grand_total=0;
 $grand_total_tax=0;
 $grand_total_discount=0;
+$rowspan=count($invoice->items);
 for ($i=0; $i < count($invoice->items) ; $i++) {
+    $categories=get_product_category($invoice->items[$i]->product_id);
+    $product_name=$invoice->items[$i]->product_name;
+    if(count($categories)>0)
+    {
+         $product_name=$categories[0]->category;
+    }
 
      $unit_cost=$invoice->items[$i]->unit_cost;
      $sub_total=$invoice->items[$i]->sub_total;
 
      if($invoice->rel_type=='contract') 
-        {
-            $unit_cost=$invoice->items[$i]->exchange_rate*$invoice->items[$i]->unit_cost;
-            $sub_total=$unit_cost*$invoice->items[$i]->quantity_net;
-            $tax=$sub_total*$invoice->items[$i]->tax_rate/100;
-            $discount=$sub_total*$invoice->items[$i]->discount_percent/100;
-            // var_dump($invoice->items[$i]->discount_percent);die;
-            $grand_total_tax+=$tax;
-            $grand_total_discount+=$discount;
-        }
-    $rowspan=count($invoice->items);
+    {
+        $unit_cost=$invoice->items[$i]->exchange_rate*$invoice->items[$i]->unit_cost;
+        $sub_total=$unit_cost*$invoice->items[$i]->quantity_net;
+        $tax=$sub_total*$invoice->items[$i]->tax_rate/100;
+        $discount=$sub_total*$invoice->items[$i]->discount_percent/100;
+        // var_dump($invoice->items[$i]->discount_percent);die;
+        $grand_total_tax+=$tax;
+        $grand_total_discount+=$discount;
+    }
+    
+
     $grand_total+=$sub_total;
     $tblhtml.='<tr>';
     $tblhtml.='<td align="center">'.($i+1).'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->product_name.'</td>';
-    $tblhtml.='<td>'.$invoice->items[$i]->prefix.$invoice->items[$i]->code.'</td>';
-    $tblhtml.='<td align="right">'.$invoice->items[$i]->unit_name.'</td>';
-    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity).'</td>';    
-    $tblhtml.='<td align="right">'._format_number($invoice->items[$i]->quantity_net).'</td>';
+    $tblhtml.='<td >'.$product_name.'</td>';
+    $tblhtml.='<td >'.$invoice->items[$i]->prefix.$invoice->items[$i]->short_name.'</td>';
+    $tblhtml.='<td align="center">'.strip_tags($invoice->items[$i]->unit_name).'</td>';
+    $tblhtml.='<td align="center">'._format_number($invoice->items[$i]->quantity).'</td>';
+    $tblhtml.='<td align="center">'._format_number($invoice->items[$i]->quantity_net).'</td>';
     $tblhtml.='<td align="right">'.format_money($unit_cost).'</td>';
     $tblhtml.='<td align="right">'.format_money($invoice->items[$i]->sub_total).'</td>';
-    $tblhtml.='<td  rowspan="'.$rowspan.'" align="left">'.$invoice->reason.'</td>';
+    if($i==0)
+    {
+        $tblhtml.='<td rowspan="'.($rowspan+1).'">'.$invoice->reason.'</td>';    
+    }
+    
     $tblhtml.='</tr>';
+
+    
 
 }
+
+    $row=9;
+    if($invoice->rel_type=='contract') $row=6;
+    for ($j=$i; $j <=$row ; $j++) { 
+        $tblhtml.='<tr>';
+        $tblhtml.='<td align="center">'.($j+1).'</td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td></td>';
+        $tblhtml.='<td align="center"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td align="right"></td>';
+        // $tblhtml.='<td rowspan="12" align="right"></td>';
+        $tblhtml.='</tr>';
+    }
+
+
+
     $relsult=$grand_total+$grand_total_tax-$grand_total_discount;
-    if($invoice->rel_type='contract'){
-    $tblhtml.='<tr>';
-    // $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng tiền').'</b></td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total).'</td>';
-    $tblhtml.='</tr>';
+    if($invoice->rel_type=='contract'){
+        $tblhtml.='<tr>';
+        // $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng tiền').'</b></td>';
+        $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total).'</td>';
+        $tblhtml.='</tr>';
 
-    $tblhtml.='<tr>';
-    // $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng thuế').'</b></td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_tax).'</td>';
-    $tblhtml.='</tr>';
+        $tblhtml.='<tr>';
+        // $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng thuế').'</b></td>';
+        $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_tax).'</td>';
+        $tblhtml.='</tr>';
 
-    $tblhtml.='<tr>';
-    // $tblhtml.='<td align="right"></td>';
-    $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng chiết khấu').'</b></td>';
-    $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_discount).'</td>';
-    $tblhtml.='</tr>';
+        $tblhtml.='<tr>';
+        // $tblhtml.='<td align="right"></td>';
+        $tblhtml.='<td colspan="6" align="right"><b>'._l('Tổng chiết khấu').'</b></td>';
+        $tblhtml.='<td colspan="2" align="right">'.format_money($grand_total_discount).'</td>';
+        $tblhtml.='</tr>';
     }
 
     $tblhtml.='<tr>';
@@ -298,21 +306,30 @@ for ($i=0; $i < count($invoice->items) ; $i++) {
     $tblhtml.='<td colspan="2" align="right">'.format_money($relsult).'</td>';
     $tblhtml.='</tr>';
 
+
 $tblhtml .= '</tbody>';
 $tblhtml .= '</table>';
+
+           // var_dump($tblhtml);die;
+
+// $pdf->writeHTML('<table></table>', true, false, false, false, '');
 $pdf->writeHTML($tblhtml, true, false, false, false, '');
+
+// $pdf->writeHTML($table, true, false, false, false, '');
+
+// var_dump(expression);die;
 $certificate_root=_l('certificate_root').($contract->code?_l('blank10').$contract->code:_l('blank___'));
 $strmoney='<ul>';
 $strmoney.='<li>'._l('str_money').'<i>'.$CI->numberword->convert($relsult,get_option('default_currency')).'</i>'.'</li>';
 $strmoney.='<li>'.$certificate_root.'</li>';;
 $strmoney.='</ul>';
-$pdf->writeHTML($strmoney, true, false, false, false, 'L');
-$pdf->Ln(5);
+$pdf->writeHTML($strmoney, false, false, false, false, 'L');
+$pdf->Ln(3);
 
-$pdf->SetFont($font_name, '', $font_size);
+$pdf->SetFont($font_name, '', $font_size-1);
 $pdf->writeHTMLCell('', '', '', '', '<i>'.getStrDate($invoice->date).'</i>', 0, 1, false, true, 'R', true);
 
-$pdf->Ln(5);
+$pdf->Ln(3);
 $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
         <tr>
             <td><b>" . mb_ucfirst(_l('creater'), "UTF-8") . "</b></td>
@@ -338,4 +355,4 @@ $table = "<table style=\"width: 100%;text-align: center\" border=\"0\">
 
 </table>";
 $pdf->writeHTML($table, true, false, false, false, '');
-
+$pdf->WatermarkText();
