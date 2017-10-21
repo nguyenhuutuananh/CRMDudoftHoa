@@ -11,36 +11,19 @@
       <table class="table table table-striped table-stock-card-report">
          <thead>
             <tr class="bold" style="text-align: center;font-weight: bold;">
-               <th style="text-align: center;" rowspan="2"><?php echo _l('STT'); ?></th>
-               <th style="text-align: center;" rowspan="2"><?php echo _l('report_date'); ?></th>
-               <th style="text-align: center;" colspan="2"><?php echo _l('certificate_code'); ?></th>
-               <th style="text-align: center;" rowspan="2"><?php echo _l('orders_explan'); ?></th>
-               <th style="text-align: center;" rowspan="2"><?php echo _l('report_dateIE'); ?></th>
-               <th style="text-align: center;" colspan="3"><?php echo _l('report_quantity'); ?></th>
-            </tr>
-            <tr>
-               <th style="text-align: center;"><?php echo _l('import'); ?></th>
-               <th style="text-align: center;"><?php echo _l('export'); ?></th>
-               <th style="text-align: center;"><?php echo _l('import'); ?></th>
-               <th style="text-align: center;"><?php echo _l('export'); ?></th>
-               <th style="text-align: center;"><?php echo _l('report_revenue'); ?></th>
-            </tr>
-            <tr>
-               <th style="text-align: center;">A</th>
-               <th style="text-align: center;">B</th>
-               <th style="text-align: center;">C</th>
-               <th style="text-align: center;">D</th>
-               <th style="text-align: center;">E</th>
-               <th style="text-align: center;">F</th>
-               <th style="text-align: center;">1</th>
-               <th style="text-align: center;">2</th>
-               <th style="text-align: center;">3</th>
+               <th style="text-align: center;"><?php echo _l('stock_card_date'); ?></th>
+               <th style="text-align: center;"><?php echo _l('view_date'); ?></th>
+               <th style="text-align: center;"><?php echo _l('code_noo'); ?></th>
+               <th style="text-align: center;"><?php echo _l('orders_explan'); ?></th>
+               <th style="text-align: center;"><?php echo _l('short_unit_name'); ?></th>
+               <th style="text-align: center;"><?php echo _l('import_quantity'); ?></th>
+               <th style="text-align: center;"><?php echo _l('export_quantity'); ?></th>
+               <th style="text-align: center;"><?php echo _l('revenue_quantity'); ?></th>
             </tr>
          </thead>
          <tbody></tbody>
          <tfoot>
             <tr>
-               <td></td>
                <td></td>
                <td></td>
                <td></td>

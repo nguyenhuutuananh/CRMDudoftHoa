@@ -4035,44 +4035,53 @@ class Reports extends Admin_controller
         if ($this->input->is_ajax_request()||$pdf==true)
         {
             $this->load->model('currencies_model');
-            
-            //Thu
-            $mounth_report=$this->input->post('report_months');
-            if ($mounth_report != ''&&$mounth_report) {
-                if (is_numeric($mounth_report)) {
-                    $minus_months       = date('Y-m-d', strtotime("-$mounth_report MONTH"));
-                    $start_date=$minus_months;
-                    $start_end=date('Y-m-d');
+            //San pham
+            // $select = array(
+            //     'tblitems.id',
+            //     'tblitems.name',
+            //     'tblitems.short_name',
+            //     'tblitems.code',
+            //     'tblcategories.category',
+            //     '5',
+            //     '6',
+            //     '7'
+            // );
+            // $where  = array(
+            // );
+            // $aColumns     = $select;
+            // $sIndexColumn = "id";
+            // $sTable       = 'tblitems';
+            // $join         = array(
+            //    'LEFT JOIN tblcategories ON tblcategories.id = tblitems.category_id', 
+            // );
+            // $order_by='order by id asc';
+            // $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
+            // ),$order_by);
+            // $output  = $result['output'];
+            // $rResult = $result['rResult'];
 
-                }
-                else if ($mounth_report == 'custom') {
-                    $start_date = to_sql_date($this->input->post('report_from'));
-                    $start_end   = to_sql_date($this->input->post('report_to'));
-                }
-            }
-
+            //Nhap kho
             $select = array(
-                'id',
-                'name',
-                'short_name',
-                'code',
-                '4',
+                'tblitems.id',
+                'tblitems.name',
+                'tblitems.short_name',
+                'tblitems.code',
+                'tblcategories.category',
                 '5',
                 '6',
-                '7',
-                '8'
+                '7'
             );
-
-            
             $where  = array(
             );
             $aColumns     = $select;
             $sIndexColumn = "id";
-            $sTable       = 'tblitems';
+            $sTable       = 'tblimports';
             $join         = array(
+                'LEFT JOIN tblimport_items ON tblimport_items.import_id = tblimports.id', 
             );
+            $order_by='order by id asc';
             $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, array(
-            ));
+            ),$order_by);
             $output  = $result['output'];
             $rResult = $result['rResult'];
 
@@ -4080,11 +4089,11 @@ class Reports extends Admin_controller
 
             $x       = 0;
 
-            $footer_data = array(
-                'SPSN' => 0,
-                'SPSC' => 0,
-                'ST' => 0
-            );
+            // $footer_data = array(
+            //     'SPSN' => 0,
+            //     'SPSC' => 0,
+            //     'ST' => 0
+            // );
             $product_name='';
             foreach ($rResult as $key=> $aRow) {
                 
@@ -4092,7 +4101,6 @@ class Reports extends Admin_controller
                 if($key==0)
                 {
                     $product_name=$aRow['id'];
-                    $col=count($aColumns);
                     $row=array('Mã sản phẩm: '.$aRow['short_name'].'('.$aRow['code'].')','STT: '.($key+1));
                     $row['DT_RowClass'] = 'alert-header';
                     for ($i=0 ; $i<count($aColumns) ; $i++ ){
@@ -4105,7 +4113,6 @@ class Reports extends Admin_controller
                     if($product_name!=$aRow['id'])
                     {
                         $product_name=$aRow['short_name'];
-                        $col=count($aColumns);
                         $row=array('Mã sản phẩm: '.$aRow['short_name'].'('.$aRow['code'].')','STT: '.($key+1));
                         $row['DT_RowClass'] = 'alert-header';
                         for ($i=0 ; $i<count($aColumns) ; $i++ ){
@@ -4117,7 +4124,7 @@ class Reports extends Admin_controller
                 }
                
             }
-            $output['sums'] = $footer_data;
+            // $output['sums'] = $footer_data;
             
             if($pdf==false){
                 echo json_encode($output);
